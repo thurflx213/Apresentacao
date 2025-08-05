@@ -179,3 +179,9 @@ body {
 .botao-fechar{
   z-index: 2000;
 }
+.manutencao{
+  display: block;
+  margin: 40px auto; /* Espaço acima e abaixo */
+  max-width: 90%;    /* Responsivo */
+  height: 600px;
+}
