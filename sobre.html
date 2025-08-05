@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sobre</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="footer.css">
+  <link rel="stylesheet" href="duvidas.css">
+  <link rel="stylesheet" href="sobre.css  ">
+</head>
+<body>
+    <header>
+        <!-- Navbar personalizada -->
+        <nav id="navbar" class="navbar d-flex align-items-center px-4 sticky-top">
+          <!-- Esquerda: Menu e Pesquisa -->
+          <div class="navbar-section d-flex align-items-center">
+            <button class="btn btn-link text-white d-flex align-items-center p-0 me-3" data-bs-toggle="offcanvas" data-bs-target="#menuOffcanvas">
+              <i class="bi bi-list fs-5"></i> <span class="ms-1">Menu</span>
+            </button>
+      
+          </div>
+      
+          <!-- Centro: Logo -->
+          <div class="navbar-center">
+            <img src="/img/logo.png" alt="Logo COMP" class="logo" />
+          </div>
+      
+          <!-- Direita: Login e Carrinho -->
+          <div class="navbar-end d-flex justify-content-end align-items-center">
+            <a href="login.html" class="icon-link"><i class="bi bi-person"></i> Login</a>
+            <a href="https://instagram.com" class="icon-button"><i class="bi bi-bag"></i> Carrinho</a>
+          </div>
+        </nav>
+
+         <!-- Menu lateral interativo -->
+  <div class="offcanvas offcanvas-start" tabindex="-1" id="menuOffcanvas">
+    <div class="offcanvas-header justify-content-end">
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Fechar"></button>
+    </div>
+    <div class="offcanvas-body">
+      <ul class="list-unstyled">
+        <li><a class="text-white text-decoration-none d-block py-2" href="index.html">Início</a></li>
+        <li><a class="text-white text-decoration-none d-block py-2" href="produto.html">Produtos</a></li>
+        <li><a class="text-white text-decoration-none d-block py-2" href="sobre.html">Sobre</a></li>
+        <li><a class="text-white text-decoration-none d-block py-2" href="#">Contato</a></li>
+      </ul>
+    </div>
+        </header>
+        <div class="sidebar">
+            <ul>
+              <li><a href="index.html">Início</a></li>
+              <li><a href="sobre.html">Sobre a Koketsu</a></li>
+              <li><a href="duvidas.html">Dúvidas Frequentes</a></li>
+              <li><a href="Trocas.html">Trocas e Devoluções</a></li>
+              <li><a href="politica.html">Política de Privacidade</a></li>
+              <li><a href="#contato">Frete e Entrega</a></li>
+              <li><a href="#">Minha Conta</a></li>
+              <li><a href="login.html">Carrinho</a></li>
+              <li><a href="login.html">Programa de Fidelidade</a></li>
+            </ul>
+          </div>
+          
+          <section class="container my-5 text-center">
+            <h2 class="fw-bold text-dark">Quem Somos</h2>
+            <h1 class="fw-bold text-warning mb-4">Koketsu Grife</h1>
+            
+            <div class="texto-sobre">
+            <p class="text-muted mb-4">
+              Na Loja Koketsu, acreditamos que a moda vai muito além de roupas — ela é uma poderosa forma de expressão que conecta pessoas, conta histórias e inspira confiança. Fundada em 2015, nossa trajetória começou com a paixão de um grupo de amigos por tendências urbanas e um desejo genuíno de transformar o jeito como as pessoas se vestem no Brasil.
+            </p>
+            
+            <p class="text-muted mb-4">
+              A Koketsu valoriza a sustentabilidade e a responsabilidade social. Por isso, trabalhamos com fornecedores que compartilham nosso compromisso ambiental e investimos em processos que minimizam o impacto no planeta. Além disso, nosso atendimento é pensado para criar uma experiência única e personalizada, porque acreditamos que cada cliente merece atenção especial.
+            </p>
+            
+            <p class="text-muted">
+              Somos movidos pela criatividade, pela inovação e pelo desejo de contribuir para uma moda mais consciente e inclusiva. Queremos que cada peça Koketsu faça parte da sua história, ajudando você a se sentir bem, confiante e livre para ser quem realmente é.
+            </p>
+            <p class="text-muted">
+              Mais do que uma loja, a Koketsu é uma comunidade que celebra a diversidade, o estilo e o espírito jovem. Junte-se a nós e descubra um universo onde seu estilo ganha voz e atitude.
+            </p>
+          </div>
+          </section>
+          
+        
+  <footer>
+    <div class="container">
+        <div class="coluna-footer">
+            <h3 class="titulo">FAÇA PARTE DA NOSSA FAMILIA</h3>
+            <p>Inscreva-se para ter acesso a exclusivo á venda antecipada, novidades promoções.</p>
+            <form action="mailto:seuemail@exemplo.com" method="POST" enctype="text/plain" class="form-email">
+              <label for="email">Digite seu e-mail:</label>
+              <input type="email" id="email" name="email" placeholder="E-mail" required>
+              <button type="submit">Confirmar</button>
+            </form>
+
+        </div>
+        <div class="coluna-footer">
+            <h3 class="titulo">INSTITUCIONAL</h3>
+            <p><a href="sobre.html" class="hover-destaque">Sobre a Koketsu</a></p>
+        </div>
+
+        <div class="coluna-footer">
+            <h3 class="titulo">ATENDIMENTO AO CLIENTE</h3>
+            <a href="duvidas.html"><p>Dúvidas Frequentes</p></a>
+            <a href="#"><P>Trocas e Devoluções</P></a>
+            <a href="politica.html"><P>Politica de Privacidade</P></a>
+            <a href="#"><P>Frete e Entrega</P></a>
+        </div>
+
+        <div class="coluna-footer">
+          <h3 class="titulo">MINHA CONTA</h3>
+          <a href="#"><p>Minha Conta</p></a>
+          <a href="#"><p>Carrinho</p></a>
+          <a href="#"><p>Programa de Fidelidade</p></a>
+          
+
+        <h3 class="titulo fale-conosco">FALE CONOSCO</h3>
+        <p>Atendimento:</p>
+        <p>Segunda a Sabado (exceto feriados) das 09h ás 19h</p>
+        <p>E-mail: sac@Koketsu.com.br</p>
+        <A href="https://WhatsApp.com" target="_blank"><button type="button" class="btn3">WhatsApp</button></A>
+       </div>
+       <div class="copyright">
+        <p>© 2025 Koketsu Grife. Todos os direitos reservados. Koketsu comércio de roupas. calçados e acessorios ltda.</p>
+        <p></p>
+      </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

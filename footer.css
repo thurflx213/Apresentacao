@@ -1,0 +1,110 @@
+.titulo{
+    color: #f1cd2f;
+ }
+
+footer{
+    background-color: rgb(0, 0, 0);
+    width: 100%;   
+}
+
+footer a{
+    text-decoration: none;
+    cursor: pointer;
+    color: rgb(255, 255, 255);
+}
+
+footer .container{
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 50px;
+    gap: 37px;
+}
+
+.coluna-footer{
+    display: flex;
+    position: relative;
+    padding-bottom: 40px;
+    flex-direction: column;
+    color: rgb(255, 255, 255);
+    gap: 10px;
+    flex: 5;
+}
+.coluna-footer p{
+    margin: 4px 0;
+    line-height: 1;
+}
+
+.redes-sociais{
+    width: 70px;
+    padding: 10px;
+    color: #00ffff;
+}
+
+.form-email {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    gap: 10px;
+    font-family: Arial, sans-serif;
+  }
+
+  .form-email input[type="email"] {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  .form-email button {
+    padding: 10px;
+    background-color: #af9626;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .fale-conosco{
+    margin-top: 50px;
+  }
+  .copyright {
+    margin-top: auto;
+    font-size: 14px;
+    color: #999;
+    padding-top: 30px;
+  }
+  a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+.btn3{
+    color: rgb(0, 0, 0);
+    background-color: rgb(255, 255, 255);
+    border: 2px solid black;
+    border-radius: 5px;
+    padding: 10px;
+    padding-left: 10px;
+    padding-right: 40px;
+    background-image: url(../img/icons/whatsapp.svg);
+    background-repeat: no-repeat;
+    background-position: calc(100% - 15px) center;
+    background-size: 19px;
+    text-align: left;
+}
+.hover-destaque:hover p {
+  color: rgb(158, 148, 58);
+}
+
+.btn3:hover{
+    background-color: rgb(72, 129, 54);
+    color: rgb(255, 255, 255);
+}
+.form-email button:hover {
+    background-color: rgb(158, 148, 58);
+  }
+  a:hover {
+    color: rgb(223, 217, 169); 
+  }
+ 
