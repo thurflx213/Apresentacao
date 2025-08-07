@@ -13,7 +13,7 @@ faqs.forEach((btn) => {
 
 const produtos = [
   {
-    categoria: "Camisetas",
+    categoria: "CAMISETAS",
     itens: [
       { id: "camiseta1", nome: "CAMISETA OVERSIZED - ESSENCE", preco: "100,00", img: "img/Captura de tela 2025-08-04 093118.png", alt: "Camiseta preta" },
       { id: "camiseta2", nome: "CAMISETA OVERSIZED - STREET", preco: "20,00", img: "img/NOCAP.png", alt: "Camiseta branca" },
@@ -22,7 +22,7 @@ const produtos = [
     ]
   },
   {
-    categoria: "Calças",
+    categoria: "CALÇAS",
     itens: [
       { id: "calca1", nome: "CALÇA DE MOLETOM - FREEDOM", preco: "200,00", img: "img/carca.png", alt: "Calça jeans azul" },
       { id: "calca2", nome: "CALÇA DE MOLETOM - FREEDOM", preco: "200,00", img: "img/calça 2.png", alt: "Calça jeans azul" },
@@ -32,7 +32,7 @@ const produtos = [
     ]
   },
   {
-    categoria: "Blusas",
+    categoria: "BLUSAS",
     itens: [
       { id: "blusa1", nome: "ZIP UP - FREEDOMA", preco: "180,00", img: "img/moletom.png", alt: "Blusa preta" },
       { id: "blusa1", nome: "MOLETOM GOLA CARECA - FACE", preco: "180,00", img: "img/moletom 2.png", alt: "Blusa preta" },
@@ -41,7 +41,7 @@ const produtos = [
     ]
   },
   {
-    categoria: "Sapatos",
+    categoria: "SAPATOS",
     itens: [
       { id: "sapato1", nome: "Tênis Nike Air Max Dn Feminino", preco: "250,00", img: "img/dn.png", alt: "Sapato casual" },
       { id: "sapato1", nome: "Air Max DN", preco: "250,00", img: "img/dn vermelho.png", alt: "Sapato casual" },
@@ -50,7 +50,7 @@ const produtos = [
     ]
   },
   {
-    categoria: "Bonés",
+    categoria: "CAMISAS - POLO",
     itens: [
       { id: "bone1", nome: "Camisa Polo Nike Court Dri-FIT Masculina", preco: "80,00", img: "img/polo .png", alt: "Boné preto" },
       { id: "bone1", nome: "Camisa Polo Nike Court Dri-FIT Masculina", preco: "80,00", img: "img/polo 2.png", alt: "Boné preto" },
