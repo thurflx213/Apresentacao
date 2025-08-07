@@ -76,6 +76,7 @@ body {
     padding: 30px 40px;
     gap: 20px;
     flex-wrap: wrap;
+    color: black;
   }
   
   .info-box {
