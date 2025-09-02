@@ -76,6 +76,21 @@ body {
     padding: 0;
     box-sizing: border-box;
 }
+.linha-interativa {
+  border: none;
+  height: 3px;
+  background-color: rgb(224, 215, 87);
+  width: 20%;
+  margin: 0 auto;
+  transition: width 1s ease, background-color 1s ease;
+  opacity: .50;
+}
+
+.linha-interativa:hover {
+  width: 30%;
+  background-color: #FFD700; /* tom dourado */
+}
+
 .top-bar {
     display: flex;
     justify-content: space-around;

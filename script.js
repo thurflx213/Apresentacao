@@ -67,8 +67,8 @@ produtos.forEach(secao => {
   section.classList.add("mb-5");
 
   const titulo = document.createElement("h2");
-  titulo.className = "text-center mb-4";
-  titulo.textContent = secao.categoria;
+  titulo.className = "text-center mb-5";
+  titulo.innerHTML = `${secao.categoria} <hr class="linha-interativa">`;
   section.appendChild(titulo);
 
   const row = document.createElement("div");

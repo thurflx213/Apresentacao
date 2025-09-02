@@ -6,19 +6,24 @@
 }
 
 .about-section h1 {
-  font-size: 2.5rem;
-  margin-bottom: 15px;
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  background: linear-gradient(to right, #8d8181, #f5b300);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
 }
 
+
 .about-section .highlight {
-  color: #e6b800; /* amarelo dourado */
+  color: #f5b300; /* amarelo dourado */
 }
 
 .about-section .about-text {
   font-size: 1.1rem;
   max-width: 800px;
   margin: 0 auto 50px;
-  color: #444;
+  color: #444444;
 }
 
 .cards {
@@ -46,7 +51,7 @@
 
 .icon-circle {
   background: #fff3cd;
-  color: #e6b800;
+  color: #f5b300;
   font-size: 2rem;
   width: 60px;
   height: 60px;
@@ -57,7 +62,7 @@
 
 .community-text {
   font-size: 1.2rem;
-  color: #e6b800;
+  color: #f5b300;
   margin-bottom: 30px;
 }
 
@@ -70,6 +75,7 @@
   border-radius: 25px;
   text-decoration: none;
   transition: background 0.3s ease;
+  margin-top: 30px;
 }
 
 .btn-explore:hover {
@@ -87,6 +93,14 @@
 .store {
   background: #000;
   color: #fff;
-  padding: 10px 20px;
-  border-radius: 12px;
+  padding: 5px 15px;
+  border-radius: 5px;
+}
+.card h3 {
+  color: #f5b300; /* mais contraste no título */
+  font-weight: bold;
+}
+
+.card p {
+  color: #555; /* cinza mais visível */
 }
