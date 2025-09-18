@@ -6,8 +6,6 @@
   <title>Sobre</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="footer.css">
   <link rel="stylesheet" href="duvidas.css">
@@ -27,7 +25,9 @@
       
           <!-- Centro: Logo -->
           <div class="navbar-center">
-            <img src="img/logo.png" alt="Logo COMP" class="logo" />
+            <a href="index.html">
+            <img src="img/icons/logo.png" alt="Logo COMP" class="logo" />
+            </a>
           </div>
       
           <!-- Direita: Login e Carrinho -->
@@ -43,92 +43,47 @@
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Fechar"></button>
     </div>
     <div class="offcanvas-body">
-      <ul class="list-unstyled">
-        <li><a class="text-white text-decoration-none d-block py-2" href="index.html">Início</a></li>
-        <li><a class="text-white text-decoration-none d-block py-2" href="produto.html">Produtos</a></li>
-        <li><a class="text-white text-decoration-none d-block py-2" href="sobre.html">Sobre</a></li>
-        <li><a class="text-white text-decoration-none d-block py-2" href="#">Contato</a></li>
-      </ul>
+      
+         <div class="sidebar">
+            <ul>
+              <li><a href="index.html">Início</a></li>
+              <li><a href="produto.html">Produtos</a></li>
+              <li><a href="sobre.html">Sobre a Koketsu</a></li>
+              <li><a href="duvidas.html">Dúvidas Frequentes</a></li>
+              <li><a href="Trocas.html">Trocas e Devoluções</a></li>
+              <li><a href="politica.html">Política de Privacidade</a></li>
+              <li><a href="frete.html">Frete e Entrega</a></li>
+              <li><a href="#">Minha Conta</a></li>
+              <li><a href="login.html">Carrinho</a></li>
+              <li><a href="fidelidade.html">Programa de Fidelidade</a></li>
+            </ul>
+          </div>
+    </div>
     </div>
         </header>
-        
+      
           
-          <section class="about-section">
-  <h1>Quem Somos – <span class="highlight">Koketsu Grife</span></h1>
-  <p class="about-text">
-    A Koketsu é uma loja de roupas que une estilo, qualidade e autenticidade. Com peças versáteis e bem-acabadas, 
-    a marca aposta em coleções exclusivas que seguem as tendências da moda sem abrir mão do conforto. 
-    Vestir Koketsu é expressar personalidade com elegância.
-  </p>
-
-  <div class="cards">
-    <div class="card">
-      <div class="icon-circle">🌱</div>
-      <h3>Sustentabilidade</h3>
-      <p>Buscamos impactar positivamente o mundo com práticas responsáveis, usando materiais e processos que respeitam o meio ambiente.</p>
-    </div>
-
-    <div class="card">
-      <div class="icon-circle">🤝</div>
-      <h3>Atendimento Único</h3>
-      <p>Cada cliente é especial. Oferecemos um atendimento personalizado para que cada peça seja parte da sua história.</p>
-    </div>
-
-    <div class="card">
-      <div class="icon-circle">⚡</div>
-      <h3>Moda com Atitude</h3>
-      <p>Criatividade, inclusão e estilo em coleções que refletem liberdade, autenticidade e confiança.</p>
-    </div>
-  </div>
-
-  <p class="community-text">
-    <em>Mais que uma loja, somos uma comunidade.<br>Descubra um universo onde estilo ganha voz e atitude.</em>
-  </p>
-
-  <a href="#" class="btn-explore">Explore a coleção</a>
-         
-          
-          
-
-          <div class="container my-5">
-            <div class="row g-4 justify-content-center">
-              <!-- Loja 1 -->
-              <div class="col-md-6 text-center">
-                <h2 class="mb-3" 
-                    style="color: #ebcf32; background: rgb(0, 0, 0); 
-                           border-radius: 10px; padding: 6px 20px; display: inline-block;">
-                  Loja 1 (masculina)
-                </h2>
-                <iframe 
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3659.3027172274296!2d-46.38349142398743!3d-23.485603558814674!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce63426bf6a443%3A0x74541d8e80b6b607!2sAvenida%20Marechal%20Tito%2C%207579%20-%20Jardim%20das%20Oliveiras%2C%20S%C3%A3o%20Paulo%20-%20SP%2C%2008115-100!5e0!3m2!1spt-BR!2sbr!4v1755602349685!5m2!1spt-BR!2sbr" 
-                    class="w-100"
-                    height="300"
-                    style="border:0; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);"
-                    allowfullscreen="" loading="lazy">
-                </iframe>
-              </div>
-          
-              <!-- Loja 2 -->
-              <div class="col-md-6 text-center">
-                <h2 class="mb-3" 
-                    style="color: #ebcf32; background: rgb(0, 0, 0); 
-                           border-radius: 10px; padding: 6px 20px; display: inline-block;">
-                  Loja 2 (feminina)
-                </h2>
-                <iframe 
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3659.351021759512!2d-46.3533518239874!3d-23.483862858751053!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce7ca66154c8ab%3A0x1fee5dd8b0c3cd59!2sAv.%20Italo%20Adami%2C%20379%20-%20Vila%20Zeferina%2C%20Itaquaquecetuba%20-%20SP%2C%2008574-020!5e0!3m2!1spt-BR!2sbr!4v1755602276429!5m2!1spt-BR!2sbr"
-                    class="w-100"
-                    height="300"
-                    style="border:0; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.2);"
-                    allowfullscreen="" loading="lazy">
-                </iframe>
-              </div>
-            </div>
+          <section class="container my-5 text-center">
+            <h2 class="fw-bold text-dark">Quem Somos</h2>
+            <h1 class="fw-bold text-warning mb-4">Koketsu Grife</h1>
+            
+            <div class="texto-sobre">
+            <p class="text-muted mb-4">
+              Na Loja Koketsu, acreditamos que a moda vai muito além de roupas — ela é uma poderosa forma de expressão que conecta pessoas, conta histórias e inspira confiança. Fundada em 2015, nossa trajetória começou com a paixão de um grupo de amigos por tendências urbanas e um desejo genuíno de transformar o jeito como as pessoas se vestem no Brasil.
+            </p>
+            
+            <p class="text-muted mb-4">
+              A Koketsu valoriza a sustentabilidade e a responsabilidade social. Por isso, trabalhamos com fornecedores que compartilham nosso compromisso ambiental e investimos em processos que minimizam o impacto no planeta. Além disso, nosso atendimento é pensado para criar uma experiência única e personalizada, porque acreditamos que cada cliente merece atenção especial.
+            </p>
+            
+            <p class="text-muted">
+              Somos movidos pela criatividade, pela inovação e pelo desejo de contribuir para uma moda mais consciente e inclusiva. Queremos que cada peça Koketsu faça parte da sua história, ajudando você a se sentir bem, confiante e livre para ser quem realmente é.
+            </p>
+            <p class="text-muted">
+              Mais do que uma loja, a Koketsu é uma comunidade que celebra a diversidade, o estilo e o espírito jovem. Junte-se a nós e descubra um universo onde seu estilo ganha voz e atitude.
+            </p>
           </div>
-
-        </section>
-          
-
+          </section>
           
         
   <footer>
@@ -153,14 +108,14 @@
             <a href="duvidas.html"><p>Dúvidas Frequentes</p></a>
             <a href="#"><P>Trocas e Devoluções</P></a>
             <a href="politica.html"><P>Politica de Privacidade</P></a>
-            <a href="#"><P>Frete e Entrega</P></a>
+            <a href="frete.html"><P>Frete e Entrega</P></a>
         </div>
 
         <div class="coluna-footer">
           <h3 class="titulo">MINHA CONTA</h3>
           <a href="#"><p>Minha Conta</p></a>
           <a href="#"><p>Carrinho</p></a>
-          <a href="#"><p>Programa de Fidelidade</p></a>
+          <a href="fidelidade.html"><p>Programa de Fidelidade</p></a>
           
 
         <h3 class="titulo fale-conosco">FALE CONOSCO</h3>

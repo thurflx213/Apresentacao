@@ -16,42 +16,114 @@
     background-color: black;
     z-index: 999;
   }
-  .sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 200px;
-    height: 100%;
-    background-color: #000; /* preto igual ao seu cabeçalho */
-    padding-top: 140px;
-    z-index: 500;
+/* Faz a sidebar cobrir toda a altura e largura definida */
+.sidebar {
+  position: absolute;       /* fica preso dentro do offcanvas-body */
+  top: 0;
+  left: 0;
+  width: 240px;
+  height: 100vh;            /* altura total da janela */
+  background: linear-gradient(180deg, #000 0%, #111 100%);
+  padding-top: 120px;
+  box-shadow: 3px 0 15px rgba(0, 0, 0, 0.5);
+  overflow-y: auto;
+  z-index: 500;
+}
+
+/* Remove espaçamento do offcanvas-body que cria a borda */
+.offcanvas-body {
+  padding: 0;
+  position: relative;
+}
+
+
+
+/* Remove bullets */
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar ul li {
+  position: relative;
+}
+
+/* LINKS */
+.sidebar ul li a {
+  display: flex;
+  align-items: center;
+  color: #f9f9f9;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 15px;
+  padding: 14px 22px 14px 28px;
+  letter-spacing: 0.4px;
+  transition: all 0.3s ease;
+}
+
+/* MARCADOR LATERAL AO HOVER */
+.sidebar ul li a::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 4px;
+  background-color: #f1cd2f;
+  transform: scaleY(0);
+  transition: transform 0.3s ease;
+  border-radius: 0 4px 4px 0;
+}
+
+/* EFEITO AO HOVER */
+.sidebar ul li a:hover {
+  background-color: rgba(241, 205, 47, 0.1);
+  color: #f1cd2f;
+  padding-left: 34px;
+}
+.sidebar ul li a:hover::before {
+  transform: scaleY(1);
+}
+
+/* ESTILO DO LINK ATIVO */
+.sidebar ul li a.active {
+  color: #f1cd2f;
+  font-weight: 600;
+}
+.sidebar ul li a.active::before {
+  transform: scaleY(1);
+}
+
+/* SCROLLBAR DISCRETA */
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+.sidebar::-webkit-scrollbar-thumb {
+  background-color: #333;
+  border-radius: 3px;
+}
+
+/* PEQUENO EFEITO DE APARIÇÃO */
+@keyframes slideIn {
+  0% {
+    transform: translateX(-40px);
+    opacity: 0;
   }
-  
-  .sidebar ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
+  100% {
+    transform: translateX(0);
+    opacity: 1;
   }
-  
-  .sidebar ul li {
-    padding: 15px 20px;
-    border-bottom: 1px solid #222;
-  }
-  
-  .sidebar ul li a {
-    color: #fff;
-    text-decoration: none;
-    font-weight: bold;
-    display: block;
-    transition: background 0.3s ease;
-  }
-  
-  .sidebar ul li a:hover {
-    background-color: #f1cd2f;
-    color: #000;
-    border-radius: 4px;
-  }
-    
+}
+.sidebar ul li {
+  animation: slideIn 0.5s ease forwards;
+}
+.sidebar ul li:nth-child(odd) {
+  animation-delay: 0.05s;
+}
+.sidebar ul li:nth-child(even) {
+  animation-delay: 0.1s;
+}
   footer {
     display: flex;
     flex-wrap: wrap;
@@ -61,8 +133,93 @@
     background-color: #000;
     color: #fff;
   }
-    .texto-sobre{
-      font-size: 30px;
-      color: black;
-      font-family:'Times New Roman', Times, serif
-    }
+  /* Container principal */
+.conteudo-principal {
+  max-width: 850px;
+  margin: 60px auto;
+  padding: 0 20px;
+  font-family: 'Inter', sans-serif;
+  background-color: #f7f8fa;
+}
+
+/* Card de conteúdo */
+.card-conteudo {
+  background: #ffffff;
+  padding: 50px 40px;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  line-height: 1.8;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card-conteudo:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* Título principal */
+.card-conteudo h1 {
+  font-size: 2.2rem;
+  color: #f5b300;
+  margin-bottom: 25px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Títulos secundários */
+.card-conteudo h2 {
+  font-size: 1.5rem;
+  margin-top: 30px;
+  margin-bottom: 12px;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-left: 4px solid #f5b300;
+  padding-left: 10px;
+}
+
+/* Parágrafos */
+.card-conteudo p {
+  margin-bottom: 18px;
+  color: #555;
+  font-size: 1rem;
+}
+
+/* Listas */
+.card-conteudo ul {
+  margin: 12px 0 22px 20px;
+  padding-left: 20px;
+}
+
+.card-conteudo ul li {
+  margin-bottom: 10px;
+  position: relative;
+  padding-left: 8px;
+}
+
+.card-conteudo ul li::before {
+  color: #f5b300;
+  position: absolute;
+  left: 0;
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+/* Ícones */
+.card-conteudo i {
+  font-size: 1.4rem;
+  color: #f5b300;
+  transition: transform 0.3s;
+}
+
+.card-conteudo i:hover {
+  transform: rotate(15deg);
+}
+
+/* Destaque em strong */
+.card-conteudo strong {
+  color: #222;
+  font-weight: 600;
+}
