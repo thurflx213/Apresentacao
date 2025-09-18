@@ -23,7 +23,7 @@ class Cor {
   }
 
   // Método para buscar cores por produto
-  function buscarCoresPorProduto($id_produto) {
+  function buscarCoresPorIdProduto($id_produto) {
     $sql = "SELECT * FROM tbl_cores WHERE id_produto = :id_produto AND excluido_em IS NULL";
     $stmt = $this->db->prepare($sql);
     $stmt->bindParam(':id_produto', $id_produto);
@@ -61,8 +61,13 @@ class Cor {
     $stmt->bindParam(':cor', $cor);
     $stmt->bindParam(':quantidade', $quantidade);
     $stmt->bindParam(':atualizado', $dataAtual);
-    return $stmt->execute();
+     if($stmt->execute()) {
+      return true;
+    } else {
+      return false;
+    }
   }
+  
 
   // Método para deletar (soft delete) uma cor
   function deletarCor($id_cores) {

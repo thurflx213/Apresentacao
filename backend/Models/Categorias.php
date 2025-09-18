@@ -51,13 +51,17 @@ class Categoria {
             nome_categorias = :nome, 
             descricao_categorias = :descricao, 
             atualizado_em = :atualizado 
-            WHERE id_categoria = :id AND excluido_em IS NULL";
+            WHERE id_categorias = :id AND excluido_em IS NULL";
     $stmt = $this->db->prepare($sql);
     $stmt->bindParam(':id', $id);
     $stmt->bindParam(':nome', $nome);
     $stmt->bindParam(':descricao', $descricao);
     $stmt->bindParam(':atualizado', $dataAtual);
-    return $stmt->execute();
+    if($stmt->execute()) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   // Método para excluir (soft delete) uma categoria
