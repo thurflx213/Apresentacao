@@ -1,10 +1,10 @@
 <?php
-require_once __DIR__.'/../model/estoque_movimentacao.php';
+require_once __DIR__.'/../model/imagem.php';
 require_once __DIR__.'/../Database/Database.php';
 
-$estoqueMovimentacao = new EstoqueMovimentacao($db);
+$imagem = new Imagem($db);
 
-$resultado = $estoqueMovimentacao->atualizarMovimentacao(1);
+$resultado = $imagem->inserirImagem(1);
 var_dump($resultado);
 
 
