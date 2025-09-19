@@ -23,6 +23,22 @@ class Perfil {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
+  function buscarUsuariosInativos($id_perfil){
+   $sql = "SELECT * FROM tbl_perfil where excluido_em IS NOT NULL";
+   $stmt = $this->db->prepare($sql);
+   $stmt->bindParam(':id_perfil', $id_perfil);
+   $stmt->execute();
+   return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+  // Contar perfis inativos
+  function contarPerfisInativos() {
+    $sql = "SELECT COUNT(*) as total FROM tbl_perfil WHERE excluido_em IS NOT NULL";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+}
+
   // Buscar perfil por ID de usuário
   function buscarPerfilPorUsuario($id_usuarios) {
     $sql = "SELECT * FROM tbl_perfil 
