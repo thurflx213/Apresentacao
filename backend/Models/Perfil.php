@@ -16,19 +16,32 @@ class Perfil {
   }
 
   // Buscar todos os perfis não excluídos
-  function buscarPerfis() {
+  function buscarPerfis($id_perfil) {
     $sql = "SELECT * FROM tbl_perfil WHERE excluido_em IS NULL";
     $stmt = $this->db->prepare($sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
-  function buscarUsuariosInativos($id_perfil){
-   $sql = "SELECT * FROM tbl_perfil where excluido_em IS NOT NULL";
-   $stmt = $this->db->prepare($sql);
-   $stmt->bindParam(':id_perfil', $id_perfil);
-   $stmt->execute();
-   return $stmt->fetchAll(PDO::FETCH_ASSOC);
+  function restaurarPerfil($id_perfil) {
+    $sql = "UPDATE tbl_perfil 
+            SET excluido_em = NULL 
+            WHERE id_perfil = :id_perfil";
+    $stmt = $this->db->prepare($sql);
+    $stmt->bindParam(':id_perfil', $id_perfil);
+    if ($stmt->execute()) {
+    echo "Perfil restaurado com sucesso!";
+} else {
+    echo "Erro ao restaurar perfil.";
+}
+}
+
+  function buscarUsuarioInativoPorId($id_perfil) {
+    $sql = "SELECT * FROM tbl_perfil WHERE excluido_em IS NOT NULL AND id_perfil = :id_perfil";
+    $stmt = $this->db->prepare($sql);
+    $stmt->bindParam(':id_perfil', $id_perfil);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
   // Contar perfis inativos
@@ -99,5 +112,20 @@ class Perfil {
     $stmt->bindParam(':id_perfil', $id_perfil);
     $stmt->bindParam(':excluido', $dataAtual);
     return $stmt->execute();
+  }
+  function ativarPerfil($id_perfil){
+    $dataatual = NULL;
+    $sql = "UPDATE tbl_perfil SET 
+    excluido_em = :atual
+    WHERE id_perfil = :id";
+    $stmt = $this->db->prepare($sql);
+    $stmt->bindParam(':id', $id);
+    $stmt->bindParam(':atual', $dataatual);
+    if($stmt->execute()){
+        return true;
+    }else{
+        return false;
+    }
+
   }
 }
