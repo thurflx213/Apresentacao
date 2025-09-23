@@ -1,0 +1,132 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f7f8fa;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 50px auto;
+      padding: 0 20px;
+    }
+
+    .carrinho-card {
+      background-color: #fff;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    }
+
+    .carrinho-card h1 {
+      font-size: 2rem;
+      margin-bottom: 30px;
+      color: #f5b300;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+
+    th, td {
+      padding: 15px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f1f1f1;
+      color: #333;
+      font-weight: 600;
+    }
+
+    tr:nth-child(even) {
+      background-color: #fafafa;
+    }
+
+    td img {
+      width: 60px;
+      border-radius: 8px;
+    }
+
+    .quantidade input {
+      width: 60px;
+      padding: 5px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+
+    .remove-btn {
+      color: #fff;
+      background-color: #ff4d4f;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .remove-btn:hover {
+      background-color: #e53935;
+    }
+
+    .resumo-pedido {
+      text-align: right;
+      margin-top: 20px;
+    }
+
+    .resumo-pedido h2 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+      color: #333;
+    }
+
+    .resumo-pedido p {
+      font-size: 1rem;
+      color: #555;
+      margin: 5px 0;
+    }
+
+    .checkout-btn {
+      display: inline-block;
+      padding: 15px 30px;
+      background: #f5b300;
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+      margin-top: 15px;
+    }
+
+    .checkout-btn:hover {
+      background: #e0a800;
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+      .carrinho-card {
+        padding: 30px 20px;
+      }
+
+      th, td {
+        padding: 12px;
+      }
+
+      .checkout-btn {
+        width: 100%;
+        text-align: center;
+      }
+    }
