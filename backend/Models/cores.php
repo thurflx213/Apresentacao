@@ -1,4 +1,6 @@
 <?php
+namespace App\Koketsu\Models;
+use PDO;
 
 class Cor {
   private $id_cores;

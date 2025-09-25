@@ -1,10 +1,10 @@
 <?php
-namespace Fast\Back\Database;
+namespace App\Koketsu\Database;
 
 use PDO;
 use PDOException;
 use Exception;
-use Fast\Back\Database\Config;
+use App\Koketsu\Database\Config;
 
 class Database {
     private static $instance = null;

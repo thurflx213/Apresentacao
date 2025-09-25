@@ -1,6 +1,6 @@
 <?php
 
-namespace Fast\Back\Database;
+namespace App\Koketsu\Database;
 
 class Config
 {
@@ -12,7 +12,7 @@ class Config
   'mysql' => 
   array (
     'host' => 'localhost',
-    'db_name' => 'kipedreiro',
+    'db_name' => 'Koketsu',
     'username' => 'root',
     'password' => NULL,
     'charset' => 'utf8',

@@ -1,4 +1,6 @@
 <?php 
+namespace App\Koketsu\Models;
+use PDO;
 
 class Perfil {
   private $id_perfil;

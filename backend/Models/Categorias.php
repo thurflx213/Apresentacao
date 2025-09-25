@@ -1,4 +1,6 @@
 <?php
+namespace App\Koketsu\Models;
+use PDO;
 
 class Categoria {
   private $id_categoria;
