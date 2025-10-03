@@ -12,6 +12,7 @@ class Perfil {
   private $excluido_em;
   private $id_usuarios;
   private $db;
+  private $id;
 
   public function __construct($db) {
     $this->db = $db;
@@ -121,7 +122,7 @@ class Perfil {
     excluido_em = :atual
     WHERE id_perfil = :id";
     $stmt = $this->db->prepare($sql);
-    $stmt->bindParam(':id', $id);
+    $stmt->bindParam(':id', $id_perfil);
     $stmt->bindParam(':atual', $dataatual);
     if($stmt->execute()){
         return true;
