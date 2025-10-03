@@ -1,4 +1,12 @@
 <?php
+namespace App\backend\Database;
+
+class Database {
+    public static function getInstance() {
+        // implementação...
+    }
+}
+
 $username = 'root';
 $password ='';
 $host = 'localhost';

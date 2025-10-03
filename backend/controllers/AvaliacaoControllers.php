@@ -1,8 +1,8 @@
 <?php
-namespace App\apresentacao\controllers;
+namespace App\backend\controllers;
 
-use App\apresentacao\Models\avaliacao;
-use App\apresentacao\Database\database;
+use App\backend\model\Avaliacao;
+use App\backend\database\Database;
 
 class AvaliacaoController {
     public $avaliacao;

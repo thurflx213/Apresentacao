@@ -1,5 +1,6 @@
 <?php
-
+namespace App\backend\model;
+use PDO;
 class Imagem {
     private $id_imagem;
     private $id_produto;

@@ -1,6 +1,7 @@
 <?php
-
-class EstoqueMovimentacao {
+namespace App\backend\model;
+use PDO;
+ class EstoqueMovimentacao {
     private $id_estoque_movimentacao;
     private $id_produto;
     private $tipo_estoque_movimentacao;

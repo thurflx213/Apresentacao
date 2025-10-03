@@ -1,19 +1,19 @@
 <?php
-namespace App\apresentacao\controllers;
+namespace App\backend\controllers;
 
-use App\apresenacao\Models\estoque_movimentacao;
-use App\apresentacao\Database\database;
+use App\backend\model\EstoqueMovimentacao;
+use App\backend\database\Database;
 
 class EstoqueMovimentacaoController {
-    public $estoque_movimentacao;
+    public $Estoque_Movimentacao;
     public $db;
     public function __construct() {
         $this->db = Database::getInstance();
-        $this->estoque_movimentacao  = new estoque_movimentacao($this->db);
+        $this->Estoque_Movimentacao  = new EstoqueMovimentacao($this->db);
     }
     // index
     public function index() {
-        $resultado = $this->estoque_movimentacao->buscarEstoqueMovimentacoes();
+        $resultado = $this->Estoque_Movimentacao->buscarMovimentacoes();
         return $resultado;
     }
 

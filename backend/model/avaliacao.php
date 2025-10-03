@@ -1,5 +1,6 @@
 <?php
-
+namespace App\backend\model;
+use PDO;
 class Avaliacao {
     private $id_avaliacoes;
     private $id_produto;

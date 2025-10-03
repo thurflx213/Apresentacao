@@ -1,8 +1,8 @@
 <?php
-namespace App\apresentacao\controllers;
+namespace App\backend\controllers;
 
-use App\apresentacao\Models\Imagem;
-use App\apresentacao\Database\Database;
+use App\backend\model\Imagem;
+use App\backend\database\Database;
 
 class ImagemController {
     public $imagem;

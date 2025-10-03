@@ -1,29 +1,19 @@
 <?php
-namespace App\apresentacao\controllers;
+namespace App\backend\controllers;
 
-use App\apresenacao\Models\Carrinho;
-use App\apresentacao\Database\database;
+use App\backend\model\Carrinho;
+use App\backend\database\Database;
 
 class CarrinhoController {
-    public $Carrinho;
-    public $db;
+    private $carrinho;
+    private $db;
+
     public function __construct() {
         $this->db = Database::getInstance();
-        $this->Carrinho  = new Carrinho($this->db);
+        $this->carrinho = new Carrinho($this->db);
     }
-    // index
+
     public function index() {
-        $resultado = $this->Carrinho->buscarCarrinhos();
-        return $resultado;
+        return $this->carrinho->buscarCarrinhos();
     }
-
-    //registrar
-
-    // login
-
-    //atualizar
-
-    //deletar
-
-    //
 }
