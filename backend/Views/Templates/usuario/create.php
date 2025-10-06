@@ -12,10 +12,10 @@
     <input type="password" id="senha_usuario" name="senha_usuario" required>
     <br>
 
-    <label for="tipo_usuario">Tipo:</label>
-    <select id="tipo_usuario" name="tipo_usuario" required>
-        <option value="user">Usuario</option>
-        <option value="admin">Administrador</option>
+    <label for="nivel_acesso">Tipo:</label>
+    <select id="nivel_acesso" name="nivel_acesso" required>
+        <option value="Vendedor">Vendedor</option>
+        <option value="Admin">Admin</option>
     </select><br>
 
    <button type="submit">Salvar</button>

@@ -34,4 +34,16 @@ class CoresController {
     public function viewExcluirCor(){
          view::render("cores/delete");
     }
+    public function salvarCor(){
+       if($this->cores->inserirCor(
+            $_POST["id_produto"],
+            $_POST["cor_cores"],
+            $_POST["quantidade_cores"],
+            "Ativo"
+        )){
+            Redirect::redirecionarComMensagem("cor/listar", "success", "Cor criada com sucesso!");
+        }else{
+            Redirect::redirecionarComMensagem("cor/create", "error", "Erro ao criar cor. Tente novamente.");
+        }
+    }
 }

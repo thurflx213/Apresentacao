@@ -1,5 +1,5 @@
 <div>Sou o create</div>
-<form action="/backend/cores/salvar" method="post">
+<form action="/backend/cor/salvar" method="post">
     <label for="id_produto">ID do Produto:</label>
     <input type="number" id="id_produto" name="id_produto" required>
     <br>

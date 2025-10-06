@@ -34,4 +34,16 @@ class TamanhoController {
     public function viewExcluirTamanho(){
          view::render("tamanho/delete");
     }
+    public function salvarTamanho(){
+       if($this->tamanho->inserirTamanho(
+            $_POST["id_produto"],
+            $_POST["tamanho_tamanhos"],
+            $_POST["quantidade_tamanho"],
+            "Ativo"
+        )){
+            Redirect::redirecionarComMensagem("tamanho/listar", "success", "Tamanho criado com sucesso!");
+        }else{
+            Redirect::redirecionarComMensagem("tamanho/create", "error", "Erro ao criar tamanho. Tente novamente.");
+        }
+    }
 }

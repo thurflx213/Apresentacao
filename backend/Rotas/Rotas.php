@@ -46,13 +46,13 @@ class Rotas
                 "/backend/usuario/atualizar" => "UsuarioController@atualizarUsuario",
                 "/backend/usuario/deletar" => "UsuarioController@deletarUsuario",
                 // Categorias
-                "/backend/categoria/salvar"    => "CategoriaController@salvarCategoria",
-                "/backend/categoria/atualizar" => "CategoriaController@atualizarCategoria",
-                "/backend/categoria/deletar"   => "CategoriaController@deletarCategoria",
+                "/backend/categoria/salvar"    => "CategoriasController@salvarCategoria",
+                "/backend/categoria/atualizar" => "CategoriasController@atualizarCategoria",
+                "/backend/categoria/deletar"   => "CategoriasController@deletarCategoria",
                 // Cor
-                "/backend/cor/salvar"    => "CorController@salvarCor",
-                "/backend/cor/atualizar" => "CorController@atualizarCor",
-                "/backend/cor/deletar"   => "CorController@deletarCor",
+                "/backend/cor/salvar"    => "CoresController@salvarCor",
+                "/backend/cor/atualizar" => "CoresController@atualizarCor",
+                "/backend/cor/deletar"   => "CoresController@deletarCor",
                 // Perfil
                   "/backend/perfil/salvar"    => "PerfilController@salvarPerfil",
                 "/backend/perfil/atualizar" => "PerfilController@atualizarPerfil",

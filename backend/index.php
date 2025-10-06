@@ -20,7 +20,9 @@ if(array_key_exists($rota, $rotas[$metodohttp]) == false){
 $partes = explode("@", $rotas [$metodohttp] [$rota]);
 $nomeController = $partes[0];
 $metodoController = $partes[1];
+
 $nomeCompletoController = "App\\Koketsu\\Controles\\". $nomeController;
+
 if(!class_exists($nomeCompletoController )){
     http_response_code(500);
     echo "O controlador não encontrado";

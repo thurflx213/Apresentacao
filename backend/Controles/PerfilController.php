@@ -34,4 +34,16 @@ class PerfilController {
     public function viewExcluirPerfil(){
          view::render("perfil/delete");
     }
+    public function salvarPerfil(){
+       if($this->perfil->inserirPerfil(
+            $_POST["telefone_perfil"],
+            $_POST["endereco_perfil"],
+            $_POST["data_cadastro"],
+            "Ativo"
+        )){
+            Redirect::redirecionarComMensagem("perfil/listar", "success", "perfil criado com sucesso!");
+        }else{
+            Redirect::redirecionarComMensagem("perfil/create", "error", "Erro ao criar perfil. Tente novamente.");
+        }
+    }
 }

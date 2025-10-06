@@ -35,5 +35,18 @@ class UsuarioController {
     public function viewExcluirUsuarios(){
          view::render("usuario/delete");
     }
+    public function salvarUsuario(){
+       if($this->usuario->inserirUsuario(
+            $_POST["nome_usuario"],
+            $_POST["email_usuario"],
+            $_POST["senha_usuario"],
+            $_POST["tipo_usuario"],
+            "Ativo"
+        )){
+            Redirect::redirecionarComMensagem("usuario/listar", "success", "Usuário criado com sucesso!");
+        }else{
+            Redirect::redirecionarComMensagem("usuario/create", "error", "Erro ao criar usuário. Tente novamente.");
+        }
+    }
 
 }

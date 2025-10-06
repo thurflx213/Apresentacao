@@ -1,5 +1,5 @@
 <div class="container-form-tamanhos">
-    <form action="/backend/tamanhos/salvar" method="post"> 
+    <form action="/backend/tamanho/salvar" method="post"> 
         <h3>Cadastrar Novo Tamanho</h3>
         
         <label for="id_produto">ID do Produto:</label>
