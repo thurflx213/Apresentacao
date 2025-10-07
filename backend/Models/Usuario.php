@@ -8,6 +8,7 @@ class Usuario {
   private $email_usuarios;
   private $senha_usuarios;
   private $nivel_acesso;
+  private $foto_usuario;
   private $criado_em;
   private $atualizado_em;
   private $excluido_em;
@@ -24,6 +25,13 @@ class Usuario {
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
+  function buscarUsuariosInativos($email){
+   $sql = "SELECT * FROM tbl_usuario where excluido_em IS NOT NULL";
+   $stmt = $this->db->prepare($sql);
+   $stmt->bindParam(':email', $email);
+   $stmt->execute();
+   return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 
   // Buscar usuários por email
   function buscarUsuariosPorEmail($email){
@@ -33,17 +41,29 @@ class Usuario {
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
+   function buscarUsuariosPorId($id){
+   $sql = "SELECT * FROM tbl_usuario where id_usuario = :id_usuario and excluido_em IS NULL";
+   $stmt = $this->db->prepare($sql);
+   $stmt->bindParam(':id_usuario', $id);
+   $stmt->execute();
+   return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 
   // Inserir novo usuário
-  function inserirUsuario($nome, $email, $senha, $nivel){
+  function inserirUsuario($nome, 
+  $email, 
+  $senha, 
+  $nivel,
+  $foto){
     $senha = password_hash($senha, PASSWORD_DEFAULT);
     $sql = "INSERT INTO tbl_usuarios (nome_usuarios, email_usuarios, senha_usuarios, nivel_acesso)
-            VALUES (:nome, :email, :senha, :nivel)";
+            VALUES (:nome, :email, :senha, :nivel, :foto)";
     $stmt = $this->db->prepare($sql);
     $stmt->bindParam(':nome', $nome);
     $stmt->bindParam(':email', $email);
     $stmt->bindParam(':senha', $senha);
     $stmt->bindParam(':nivel', $nivel);
+    $stmt->bindParam(':foto', $foto);
 
     if($stmt->execute()){
         return $this->db->lastInsertId();

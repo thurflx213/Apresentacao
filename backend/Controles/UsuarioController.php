@@ -5,18 +5,21 @@ use App\Koketsu\Models\Usuario;
 use App\Koketsu\Database\Database;
 use App\Koketsu\Core\View;
 use App\Koketsu\Core\Redirect;
+use App\Koketsu\Core\FileManager;
 
 class UsuarioController {
     public $usuario;
     public $db;
+    public $gerenciarImagem;
     public function __construct() {
         $this->db = Database::getInstance();
         $this->usuario = new Usuario($this->db);
+        $this->gerenciarImagem = new FileManager('upload');
     }
     // index
     public function index(){
         $resultado = $this->usuario->buscarUsuarios();
-        return $resultado;
+        var_dump($resultado);
     }
     
     public function viewListarUsuarios(){
@@ -28,20 +31,32 @@ class UsuarioController {
         view::render("usuario/create");
     }
 
-    public function viewEditarUsuarios(){
-         view::render("usuario/edit");
+    public function viewEditarUsuarios(int $id){
+        $dados = $this->usuario->buscarUsuariosPorId($id);
+       var_dump($dados);
+       foreach($dados as $usuario){
+        $dados = $usuario;
+       }
+       view::render("usuario/edit", ["usuario" => $dados]);
     }
 
-    public function viewExcluirUsuarios(){
-         view::render("usuario/delete");
+    public function viewExcluirUsuarios($id){
+         view::render("usuario/delete",["id_usuario" => $id]);
+    }
+    public function relatorioUsuario($id, $data1, $data2){
+     view::render("usuario/relatorio",
+           ["id" => $id, "data1" => $data1, "data2" => $data2]
+      );
     }
     public function salvarUsuario(){
+        $imagem = $this->gerenciarImagem->salvarArquivo($_FILES['imagem'], 'usuario');
        if($this->usuario->inserirUsuario(
             $_POST["nome_usuario"],
             $_POST["email_usuario"],
             $_POST["senha_usuario"],
-            $_POST["tipo_usuario"],
-            "Ativo"
+            $_POST["nivel_acesso"],
+            "Ativo",
+            $imagem
         )){
             Redirect::redirecionarComMensagem("usuario/listar", "success", "Usuário criado com sucesso!");
         }else{

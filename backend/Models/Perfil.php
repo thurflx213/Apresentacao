@@ -66,7 +66,10 @@ class Perfil {
   }
 
   // Inserir novo perfil
-  function inserirPerfil($telefone, $endereco, $data_cadastro, $id_usuarios) {
+  function inserirPerfil($telefone, 
+  $endereco, 
+  $data_cadastro, 
+  $id_usuarios) {
     $sql = "INSERT INTO tbl_perfil (telefone_perfil, endereco_perfil, data_cadastro, id_usuarios) 
             VALUES (:telefone, :endereco, :data_cadastro, :id_usuarios)";
     $stmt = $this->db->prepare($sql);
