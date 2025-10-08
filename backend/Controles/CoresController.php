@@ -5,13 +5,16 @@ use App\Koketsu\Models\Cor;
 use App\Koketsu\Database\Database;
 use App\Koketsu\Core\View;
 use App\Koketsu\Core\Redirect;
+use App\Koketsu\Core\FileManager;
 
 class CoresController {
     public $cores;
     public $db;
+    public $gerenciarImagem;
     public function __construct() {
         $this->db = Database::getInstance();
         $this->cores = new Cor($this->db);
+        $this->gerenciarImagem = new FileManager('upload');
     }
     // index
     public function index(){
@@ -27,13 +30,25 @@ class CoresController {
         view::render("cores/create");
     }
 
-    public function viewEditarCor(){
-         view::render("cores/edit");
+    public function viewEditarCor(int $id){
+        $dados = $this->cores->buscarCoresPorIdProduto($id);
+       var_dump($dados);
+       foreach($dados as $cores){
+        $dados = $cores;
+       }
+       view::render("cores/edit", ["cor" => $dados]);
     }
 
-    public function viewExcluirCor(){
-         view::render("cores/delete");
+    public function viewExcluirCor(int $id){
+         view::render("cores/delete", ["id_cores" => $id]);
     }
+
+    public function relatorioCores($id, $data1, $data2){
+     view::render("cores/relatorio",
+           ["id" => $id, "data1" => $data1, "data2" => $data2]
+      );
+    }
+
     public function salvarCor(){
        if($this->cores->inserirCor(
             $_POST["id_produto"],
@@ -46,4 +61,10 @@ class CoresController {
             Redirect::redirecionarComMensagem("cor/create", "error", "Erro ao criar cor. Tente novamente.");
         }
     }
+    public function atualizarCor(){
+        echo "Atualizar cor";
+    }
+    public function deletarCor(){
+        echo "Deletar cor";
+    }  
 }

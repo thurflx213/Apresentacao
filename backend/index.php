@@ -3,11 +3,11 @@ namespace App\Koketsu;
 require_once __DIR__ . '/../vendor/autoload.php';
 use App\Koketsu\Rotas\Rotas;
 
-use Bramus\Router\Router;        
+use Bramus\Router\Router;     
 $router = new Router();
 
 $rotas = Rotas::get();
-$router->setNamespace('App\Koketsu\Controllers');
+$router->setNamespace('App\Koketsu\Controles');
 
 foreach ($rotas as $metodohttp => $rota) {
     foreach ($rota as $uri => $acao) {

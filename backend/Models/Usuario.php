@@ -26,7 +26,7 @@ class Usuario {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
   function buscarUsuariosInativos($email){
-   $sql = "SELECT * FROM tbl_usuario where excluido_em IS NOT NULL";
+   $sql = "SELECT * FROM tbl_usuarios where excluido_em IS NOT NULL";
    $stmt = $this->db->prepare($sql);
    $stmt->bindParam(':email', $email);
    $stmt->execute();
@@ -42,9 +42,16 @@ class Usuario {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
    function buscarUsuariosPorId($id){
-   $sql = "SELECT * FROM tbl_usuario where id_usuario = :id_usuario and excluido_em IS NULL";
+   $sql = "SELECT * FROM tbl_usuarios where id_usuarios = :id_usuarios and excluido_em IS NULL";
    $stmt = $this->db->prepare($sql);
-   $stmt->bindParam(':id_usuario', $id);
+   $stmt->bindParam(':id_usuarios', $id);
+   $stmt->execute();
+   return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+function buscarUsuariosPorEmailInativos($email){
+   $sql = "SELECT * FROM tbl_usuarios where email_usuarios = :email and excluido_em IS NOT NULL";
+   $stmt = $this->db->prepare($sql);
+   $stmt->bindParam(':email', $email);
    $stmt->execute();
    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }

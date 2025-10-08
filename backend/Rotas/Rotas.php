@@ -21,12 +21,14 @@ class Rotas
                  "/categoria/listar"  => "CategoriasController@viewListarCategoria",
                  "/categoria/editar/{id}"  => "CategoriasController@viewEditarCategoria",
                  "/categoria/excluir/{id}" => "CategoriasController@viewExcluirCategoria",
+                 "/categoria/{id}/relatorio/{data1}/{data2}" => "CategoriasController@relatorioCategoria",
               // Cor
                  "/cores"        => "CoresController@index",
                  "/cor/criar"    => "CoresController@viewCriarCor",
                  "/cor/listar"   => "CoresController@viewListarCores",
                  "/cor/editar/{id}"   => "CoresController@viewEditarCor",
                  "/cor/excluir/{id}"  => "CoresController@viewExcluirCor",
+                 "/cor/{id}/relatorio/{data1}/{data2}" => "CoresController@relatorioCores",
               // Perfil
                  "/perfis"        => "PerfilController@index",
                  "/perfil/criar"  => "PerfilController@viewCriarPerfil",

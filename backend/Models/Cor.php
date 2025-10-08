@@ -34,7 +34,9 @@ class Cor {
   }
 
   // Método para inserir uma nova cor
-  function inserirCor($id_produto, $cor, $quantidade) {
+  function inserirCor($id_produto, 
+  $cor, 
+  $quantidade) {
     $sql = "INSERT INTO tbl_cores (id_produto, cor_cores, quantidade_cores) 
             VALUES (:id_produto, :cor, :quantidade)";
     $stmt = $this->db->prepare($sql);

@@ -63,5 +63,11 @@ class UsuarioController {
             Redirect::redirecionarComMensagem("usuario/create", "error", "Erro ao criar usuário. Tente novamente.");
         }
     }
+       public function atualizarUsuario(){
+        echo "Atualizar usuario";
+    }
+    public function deletarUsuario(){
+        echo "Deletar usuario";
+    }  
 
 }

@@ -3,9 +3,9 @@ namespace App\Koketsu\Models;
 use PDO;
 
 class Categoria {
-  private $id_categoria;
-  private $nome_categoria;
-  private $descricao_categoria;
+  private $id_categorias;
+  private $nome_categorias;
+  private $descricao_categorias;
   private $criado_em;
   private $atualizado_em;
   private $excluido_em;
