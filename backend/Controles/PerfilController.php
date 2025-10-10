@@ -18,17 +18,34 @@ class PerfilController {
         $resultado = $this->perfil->buscarPerfis(2);
         return $resultado;
     }
-     public function viewListarPerfis(){
-        $dados = $this->perfil->buscarPerfis(2);
-        view::render("perfil/index",["perfis" => $dados]);
-    }
+     public function viewListarPerfis($pagina){
+        $dados = $this->perfil->paginacao($pagina);
+    $total = $this->perfil->totalDePerfis($pagina);
+    $total_inativos = $this->perfil->buscarPerfisInativos($pagina);
+    $total_ativos = $this->perfil->buscarPerfisAtivos($pagina);
+    view::render('perfil/index', 
+    [
+        "perfil" => $dados['data'],
+        "total_perfil" => $total,
+        "total_inativos" => $total_inativos,
+        "total_ativos" => $total_ativos,
+        'paginacao' => $dados
+    ] 
+  );
+}
 
     public function viewCriarPerfil(){
         view::render("perfil/create");
     }
 
-    public function viewEditarPerfil(){
-         view::render("perfil/edit");
+    public function viewEditarPerfil(int $id){
+         $dados = $this->perfil->buscarPerfisPorId($id);
+       
+    //    foreach($dados as $perfil){
+    //     $dados = $perfil;
+    //    }
+       var_dump($dados);
+       view::render("perfil/edit", ["perfil" => $dados]);
     }
 
     public function viewExcluirPerfil(){

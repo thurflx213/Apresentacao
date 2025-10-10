@@ -18,10 +18,21 @@ class CategoriasController {
         $resultado = $this->categoria->buscarCategorias();
         return $resultado;
     }
-     public function viewListarCategoria(){
-        $dados = $this->categoria->buscarCategorias();
-        view::render("categoria/index",["categoria" => $dados]);
-    }
+     public function viewListarCategoria($pagina){
+    $dados = $this->categoria->paginacao($pagina);
+    $total = $this->categoria->totalDeCategorias($pagina);
+    $total_inativos = $this->categoria->buscarCategoriasInativos($pagina);
+    $total_ativos = $this->categoria->buscarCategoriasAtivos($pagina);
+    view::render('categoria/index', 
+    [
+        "categorias" => $dados['data'],
+        "total_categorias" => $total,
+        "total_inativos" => $total_inativos,
+        "total_ativos" => $total_ativos,
+        'paginacao' => $dados
+    ] 
+  );
+}
 
     public function viewCriarCategoria(){
         view::render("categoria/create");

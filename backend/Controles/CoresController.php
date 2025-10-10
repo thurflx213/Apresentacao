@@ -21,10 +21,21 @@ class CoresController {
         $resultado = $this->cores->buscarCores();
         return $resultado;
     }
-     public function viewListarCores(){
-        $dados = $this->cores->buscarCores();
-        view::render("cores/index",["cores" => $dados]);
-    }
+     public function viewListarCores($pagina){
+        $dados = $this->cores->paginacao($pagina);
+        $total = $this->cores->totalDeCores($pagina);
+        $total_inativos = $this->cores->buscarCoresInativos($pagina);
+        $total_ativos = $this->cores->buscarCoresAtivos($pagina);
+         view::render('cores/index', 
+    [
+        "cores" => $dados['data'],
+        "total_cores" => $total,
+        "total_inativos" => $total_inativos,
+        "total_ativos" => $total_ativos,
+        'paginacao' => $dados
+    ] 
+  );
+}
 
     public function viewCriarCor(){
         view::render("cores/create");
