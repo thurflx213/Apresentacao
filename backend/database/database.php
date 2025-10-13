@@ -1,5 +1,5 @@
 <?php
-namespace App\backend\Database;
+namespace App\Koketsu\Database;
 
 class Database {
     public static function getInstance() {

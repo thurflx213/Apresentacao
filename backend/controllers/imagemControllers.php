@@ -1,29 +1,180 @@
 <?php
-namespace App\backend\controllers;
+namespace App\apresentacao\controllers;
 
 use App\backend\model\Imagem;
-use App\backend\database\Database;
+use App\Koketsu\Database\Database;
+use App\Koketsu\Core\View;
+use App\Koketsu\Core\Redirect;
+use App\Koketsu\Core\FileManager;
 
-class ImagemController {
-    public $imagem;
+class ImagemControllers {
+    public Imagem $imagem;
     public $db;
+    public $gerenciarImagens;
+
     public function __construct() {
         $this->db = Database::getInstance();
-        $this->imagem  = new Imagem($this->db);
+        $this->imagem = new Imagem($this->db);
+        $this->gerenciarImagens = new FileManager("uploads/imagens"); 
     }
-    // index
-    public function index() {
+
+    public function index(){
         $resultado = $this->imagem->buscarImagens();
         return $resultado;
     }
 
-    //registrar
+    public function viewListarImagens($pagina){
+        $dados = $this->imagem->paginacao($pagina); 
+        View::render('imagem/index', [
+            "imagens" => $dados['data'],
+            'paginacao' => $dados
+        ]);
+    }
 
-    // login
+    public function viewCriarImagem(){
+        View::render("imagem/create");
+    }
 
-    //atualizar
+    public function viewEditarImagem(int $id){
+       $dados = $this->imagem->buscarImagemPorId($id);
 
-    //deletar
+       if (empty($dados)) {
+           Redirect::redirecionarComMensagem("imagem/listar", "error", "Imagem não encontrada.");
+           return;
+       }
 
-    //
+       View::render("imagem/edit", ["imagem" => $dados]);
+    }
+
+    public function viewExcluirImagem($id){
+          View::render("imagem/delete", ["id_imagem" => $id]);
+    }
+
+    /**
+     * Processa o upload do arquivo e salva o caminho no banco de dados.
+     */
+    public function salvarImagem() {
+        if (empty($_FILES['caminho_imagem']) || $_FILES['caminho_imagem']['error'] === UPLOAD_ERR_NO_FILE) {
+            Redirect::redirecionarComMensagem("imagem/create", "error", "Nenhum arquivo de imagem enviado.");
+            return;
+        }
+
+        try {
+            // 1. Tenta fazer o upload do arquivo usando o método correto (salvarArquivo)
+            // Define um subdiretório baseado no ano/mês para organização
+            $subDiretorio = date('Y/m');
+            $caminho_imagem = $this->gerenciarImagens->salvarArquivo($_FILES['caminho_imagem'], $subDiretorio);
+            
+            // 2. Coleta os dados do formulário
+            // Usa 0 para IDs que podem ser nulos no banco, se não forem enviados
+            $id_produto = $_POST["id_produto"] ?? 0;
+            $id_cor = $_POST["id_cor"] ?? 0;
+            $id_tamanho = $_POST["id_tamanho"] ?? 0;
+            $descricao = $_POST["descricao_imagem"] ?? null;
+
+            // 3. Insere o caminho e metadados no banco de dados
+            $novoId = $this->imagem->inserirImagem(
+                $id_produto,
+                $id_cor,
+                $id_tamanho,
+                $caminho_imagem, // Caminho salvo no banco (Ex: 2024/10/nome_unico.jpg)
+                $descricao
+            );
+
+            if ($novoId !== false) {
+                Redirect::redirecionarComMensagem("imagem/listar", "success", "Imagem enviada e registrada com sucesso!");
+            } else {
+                // Se falhar no DB, exclui o arquivo físico
+                $this->gerenciarImagens->delete($caminho_imagem);
+                Redirect::redirecionarComMensagem("imagem/create", "error", "Erro ao registrar no banco. Arquivo excluído.");
+            }
+        } catch (\Exception $e) {
+            // Captura erros de validação (tamanho, tipo) ou falha de escrita
+            Redirect::redirecionarComMensagem("imagem/create", "error", "Falha no upload: " . $e->getMessage());
+        }
+    }
+    
+    /**
+     * Atualiza os metadados da imagem no banco de dados.
+     */
+    public function atualizarImagem() {
+        if (empty($_POST["id_imagem"])) {
+            Redirect::redirecionarComMensagem("imagem/listar", "error", "ID da imagem não fornecido para atualização.");
+            return;
+        }
+        
+        $id_imagem = (int)$_POST["id_imagem"];
+        $dadosAtuais = $this->imagem->buscarImagemPorId($id_imagem);
+
+        if (!$dadosAtuais) {
+            Redirect::redirecionarComMensagem("imagem/listar", "error", "Imagem não encontrada.");
+            return;
+        }
+
+        $caminho_imagem = $dadosAtuais['caminho_imagem'];
+        $id_produto = $_POST["id_produto"] ?? 0;
+        $id_cor = $_POST["id_cor"] ?? 0;
+        $id_tamanho = $_POST["id_tamanho"] ?? 0;
+        $descricao = $_POST["descricao_imagem"] ?? null;
+
+        // Tenta fazer o upload do novo arquivo, se houver
+        if (!empty($_FILES['caminho_imagem']) && $_FILES['caminho_imagem']['error'] == UPLOAD_ERR_OK) {
+            try {
+                $subDiretorio = date('Y/m');
+                $novoCaminho = $this->gerenciarImagens->salvarArquivo($_FILES['caminho_imagem'], $subDiretorio);
+                
+                // Exclui o arquivo antigo e atualiza o caminho
+                $this->gerenciarImagens->delete($dadosAtuais['caminho_imagem']); 
+                $caminho_imagem = $novoCaminho;
+
+            } catch (\Exception $e) {
+                 Redirect::redirecionarComMensagem("imagem/edit/{$id_imagem}", "error", "Falha no upload do novo arquivo: " . $e->getMessage());
+                return;
+            }
+        }
+
+        $sucesso = $this->imagem->atualizarImagem(
+            $id_imagem,
+            $id_produto,
+            $id_cor,
+            $id_tamanho,
+            $caminho_imagem,
+            $descricao
+        );
+
+        if ($sucesso) {
+            Redirect::redirecionarComMensagem("imagem/listar", "success", "Imagem atualizada com sucesso!");
+        } else {
+            Redirect::redirecionarComMensagem("imagem/edit/{$id_imagem}", "error", "Erro ao atualizar a imagem.");
+        }
+    }
+    
+    /**
+     * Exclui o registro do banco de dados e o arquivo físico.
+     */
+    public function deletarImagem() {
+        if (empty($_POST["id_imagem"])) {
+            Redirect::redirecionarComMensagem("imagem/listar", "error", "ID da imagem não fornecido para exclusão.");
+            return;
+        }
+        
+        $id_imagem = (int)$_POST["id_imagem"];
+        $dadosAtuais = $this->imagem->buscarImagemPorId($id_imagem);
+        
+        if (!$dadosAtuais) {
+            Redirect::redirecionarComMensagem("imagem/listar", "error", "Imagem não encontrada.");
+            return;
+        }
+        
+        // 1. Tenta excluir o registro do banco
+        $sucesso = $this->imagem->excluirImagem($id_imagem);
+
+        if ($sucesso) {
+            // 2. Se o DB foi excluído, exclui o arquivo físico
+            $this->gerenciarImagens->delete($dadosAtuais['caminho_imagem']); 
+            Redirect::redirecionarComMensagem("imagem/listar", "success", "Imagem e arquivo excluídos com sucesso!");
+        } else {
+            Redirect::redirecionarComMensagem("imagem/delete/{$id_imagem}", "error", "Erro ao excluir a imagem do banco.");
+        }
+    }
 }

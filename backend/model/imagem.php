@@ -1,6 +1,7 @@
 <?php
 namespace App\backend\model;
 use PDO;
+
 class Imagem {
     private $id_imagem;
     private $id_produto;
@@ -31,8 +32,8 @@ class Imagem {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Buscar imagem por ID
-    public function buscarPorId($id_imagem) {
+    // Buscar imagem por ID (Renomeado para consistência)
+    public function buscarImagemPorId($id_imagem) {
         $sql = "SELECT * FROM tbl_imagem WHERE id_imagem = :id_imagem";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':id_imagem', $id_imagem);
@@ -46,9 +47,10 @@ class Imagem {
                 (id_produto, id_cor, id_tamanho, caminho_imagem, descricao_imagem)
                 VALUES (:id_produto, :id_cor, :id_tamanho, :caminho, :descricao)";
         $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':id_produto', $id_produto);
-        $stmt->bindParam(':id_cor', $id_cor);
-        $stmt->bindParam(':id_tamanho', $id_tamanho);
+        // Garante que IDs não nulos sejam tratados corretamente, usando NULL se 0 ou vazio for passado
+        $stmt->bindValue(':id_produto', $id_produto > 0 ? $id_produto : null, PDO::PARAM_INT);
+        $stmt->bindValue(':id_cor', $id_cor > 0 ? $id_cor : null, PDO::PARAM_INT);
+        $stmt->bindValue(':id_tamanho', $id_tamanho > 0 ? $id_tamanho : null, PDO::PARAM_INT);
         $stmt->bindParam(':caminho', $caminho);
         $stmt->bindParam(':descricao', $descricao);
 
@@ -69,9 +71,9 @@ class Imagem {
                 WHERE id_imagem = :id_imagem";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':id_imagem', $id_imagem);
-        $stmt->bindParam(':id_produto', $id_produto);
-        $stmt->bindParam(':id_cor', $id_cor);
-        $stmt->bindParam(':id_tamanho', $id_tamanho);
+        $stmt->bindValue(':id_produto', $id_produto > 0 ? $id_produto : null, PDO::PARAM_INT);
+        $stmt->bindValue(':id_cor', $id_cor > 0 ? $id_cor : null, PDO::PARAM_INT);
+        $stmt->bindValue(':id_tamanho', $id_tamanho > 0 ? $id_tamanho : null, PDO::PARAM_INT);
         $stmt->bindParam(':caminho', $caminho);
         $stmt->bindParam(':descricao', $descricao);
 
@@ -84,5 +86,32 @@ class Imagem {
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':id_imagem', $id_imagem);
         return $stmt->execute();
+    }
+    
+    public function paginacao(int $pagina = 1, int $por_pagina = 10): array{
+        $totalQuery = "SELECT COUNT(*) FROM `tbl_imagem`";
+        $totalStmt = $this->db->query($totalQuery);
+        $total_de_registros = $totalStmt->fetchColumn();
+        
+        $offset = ($pagina - 1) * $por_pagina;
+
+        $dataQuery = "SELECT * FROM `tbl_imagem` LIMIT :limit OFFSET :offset";
+        $dataStmt = $this->db->prepare($dataQuery);
+        $dataStmt->bindValue(':limit', $por_pagina, PDO::PARAM_INT);
+        $dataStmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $dataStmt->execute();
+        $dados = $dataStmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        $lastPage = ceil($total_de_registros / $por_pagina);
+ 
+        return [
+            'data' => $dados,
+            'total' => (int) $total_de_registros,
+            'por_pagina' => (int) $por_pagina,
+            'pagina_atual' => (int) $pagina,
+            'ultima_pagina' => (int) $lastPage,
+            'de' => $offset + 1,
+            'para' => $offset + count($dados)
+        ];
     }
 }
