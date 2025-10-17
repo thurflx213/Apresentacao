@@ -36,38 +36,78 @@ html, body {
   line-height: 60px;
 }
 
-/* ======= SIDEBAR ======= */
+/* ====== MENU LATERAL ====== */
 .w3-sidebar {
-  background-color: #111111 !important;
+  background-color: #111 !important;
   color: #f5f5f5 !important;
   width: 260px !important;
   position: fixed !important;
-  top: 60px; /* fica abaixo do topo amarelo */
+  top: 0;
   left: 0;
-  height: calc(100vh - 60px) !important;
+  height: 100vh !important;
   overflow-y: auto;
+  padding-top: 60px;
   border-right: 1px solid #222;
 }
 
 .w3-sidebar a {
-  color: #f5f5f5 !important;
-  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #fff !important;
+  background-color: transparent !important;
+  padding: 12px 20px !important;
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: all 0.25s ease-in-out;
+  margin: 4px 12px;
 }
 
 .w3-sidebar a:hover {
   background-color: #ffcc00 !important;
   color: #000 !important;
+  transform: translateX(4px);
+  box-shadow: 0 0 8px #ffcc00aa;
 }
 
-/* ======= CONTEÚDO PRINCIPAL ======= */
+/* Ícones do menu */
+.w3-sidebar a i {
+  font-size: 18px;
+  width: 24px;
+  text-align: center;
+}
+
+/* ====== BOTÃO SAIR ====== */
+.logout-btn {
+  display: inline-block;
+  background-color: #e74c3c !important;
+  color: #fff !important;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.logout-btn:hover {
+  background-color: #ff6b5a !important;
+  color: #fff !important;
+  text-decoration: none;
+  box-shadow: 0 0 10px #ff6b5a66;
+}
+
+/* ====== CONTEÚDO ====== */
 .w3-main {
   margin-left: 260px !important;
   margin-top: 60px !important;
-  padding: 40px !important;
-  background-color: #111111 !important;
+  padding: 30px !important;
+  background-color: #111 !important;
   color: #f5f5f5 !important;
-  min-height: calc(100vh - 100px);
+  min-height: 100vh;
+  transition: all 0.3s ease-in-out;
 }
+
 
 /* ======= BOTÕES ======= */
 button, .w3-button {
