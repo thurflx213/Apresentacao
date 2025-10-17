@@ -42,7 +42,13 @@ class Rotas
                  "/tamanho/editar/{id}"  => "TamanhoController@viewEditarTamanho",
                  "/tamanho/excluir/{id}" => "TamanhoController@viewExcluirTamanho",
 
-    ],
+              // Login
+                 '/register' => 'AuthController@register',
+                 '/login' => 'AuthController@login',
+                 '/logout' => 'AuthController@logout',
+                 '/admin/dashboard' => 'Admin\DashboardController@index',
+          ],
+
         "POST" => [
                 // Usuarios 
                 "/usuario/salvar" => "UsuarioController@salvarUsuario",
@@ -64,6 +70,10 @@ class Rotas
                 "/tamanho/salvar"    => "TamanhoController@salvarTamanho",
                 "/tamanho/atualizar/{id}" => "TamanhoController@atualizarTamanho",
                 "/tamanho/deletar/{id}"   => "TamanhoController@deletarTamanho",
+                // Login
+                '/register' => 'AuthController@cadastrarUsuario',
+                '/login' => 'AuthController@authenticar',
+                
             ]
         ];
     }

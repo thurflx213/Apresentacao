@@ -1,3 +1,8 @@
+<?php
+use App\Koketsu\Core\Flash;
+use App\Koketsu\Core\Session;
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,13 +13,133 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
-html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
-.w3-theme {background-color: #ffcc00 !important; color: #000 !important;}
-.w3-hover-theme:hover {background-color: #ffdb4d !important; color: #000 !important;}
-.w3-text-theme {color: #ffcc00 !important;}
+
+/* ======= RESET GERAL ======= */
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: #111111 !important; /* tom preto padrão */
+  color: #f5f5f5 !important;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* ======= TOPO ======= */
+.w3-top, .w3-bar.w3-top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #ffcc00 !important; /* amarelo padrão */
+  color: #000 !important;
+  z-index: 1000;
+  height: 60px;
+  line-height: 60px;
+}
+
+/* ======= SIDEBAR ======= */
+.w3-sidebar {
+  background-color: #111111 !important;
+  color: #f5f5f5 !important;
+  width: 260px !important;
+  position: fixed !important;
+  top: 60px; /* fica abaixo do topo amarelo */
+  left: 0;
+  height: calc(100vh - 60px) !important;
+  overflow-y: auto;
+  border-right: 1px solid #222;
+}
+
+.w3-sidebar a {
+  color: #f5f5f5 !important;
+  transition: all 0.2s ease;
+}
+
+.w3-sidebar a:hover {
+  background-color: #ffcc00 !important;
+  color: #000 !important;
+}
+
+/* ======= CONTEÚDO PRINCIPAL ======= */
+.w3-main {
+  margin-left: 260px !important;
+  margin-top: 60px !important;
+  padding: 40px !important;
+  background-color: #111111 !important;
+  color: #f5f5f5 !important;
+  min-height: calc(100vh - 100px);
+}
+
+/* ======= BOTÕES ======= */
+button, .w3-button {
+  background-color: #ffcc00 !important;
+  color: #000 !important;
+  border: none !important;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+button:hover, .w3-button:hover {
+  background-color: #ffd633 !important;
+}
+
+/* ======= CARDS / CONTAINERS ======= */
+.w3-card, .w3-white, .w3-light-grey {
+  background-color: #1a1a1a !important;
+  color: #f5f5f5 !important;
+  border: 1px solid #222 !important;
+}
+
+/* ======= INPUTS ======= */
+input, select, textarea {
+  background-color: #222 !important;
+  color: #fff !important;
+  border: 1px solid #555 !important;
+  border-radius: 4px;
+  padding: 8px;
+}
+
+input::placeholder {
+  color: #aaa !important;
+}
+
+/* ======= FOOTER ======= */
+footer {
+  background-color: #111111 !important;
+  color: #aaa !important;
+  text-align: center;
+  padding: 20px 0;
+  font-size: 14px;
+  border-top: 1px solid #222;
+  position: fixed;
+  bottom: 0;
+  left: 260px; /* alinhado com a sidebar */
+  width: calc(100% - 260px);
+}
+
+/* ======= SCROLLBAR (opcional) ======= */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #333;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}
+
+
+
 </style>
 </head>
 <body class="w3-light-grey">
+
+  <?php
+    $session = new Session();
+    if($session->has('usuario_id')):
+  ?>
 
 <!-- Top container -->
 <div class="w3-bar w3-top w3-theme w3-large" style="z-index:4">
@@ -44,19 +169,22 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
     <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-tags fa-fw"></i>  Produtos</a>
     <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-shopping-cart fa-fw"></i>  Pedidos</a>
     <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i>  Clientes</a>
+    
+    <?php if ($session->get('usuario_tipo') == 'admin'){ ?>
     <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-star fa-fw"></i>  Avaliações</a>
     <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bar-chart fa-fw"></i>  Relatórios</a>
     <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-cog fa-fw"></i>  Configurações</a><br><br>
+     <?php } ?>
   </div>
 </nav>
 
 <!-- Overlay -->
 <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" id="myOverlay"></div>
-<div class="w3-main" style="margin-left:20%;margin-top:43px;">
+<div class="w3-main" style="margin-left:300px;margin-top:50px; padding:20px;">
+
 
     <?php
-    
-use App\Koketsu\Core\Flash;
+    endif;
 $mensagem = Flash::get();
 if(isset($mensagem)){
 foreach($mensagem as $key => $value){

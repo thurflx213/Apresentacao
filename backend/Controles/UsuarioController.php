@@ -1,17 +1,21 @@
 <?php
 namespace App\Koketsu\controles;
 
+use App\Koketsu\Controles\Admin\AdminController;
 use App\Koketsu\Models\Usuario;
 use App\Koketsu\Database\Database;
 use App\Koketsu\Core\View;
 use App\Koketsu\Core\Redirect;
 use App\Koketsu\Core\FileManager;
+use App\Koketsu\Validadores\UsuarioValidador;
+use App\Koketsu\Controles\Admin\AuthenticatedController;
 
-class UsuarioController {
+class UsuarioController extends AdminController{
     public $usuario;
     public $db;
     public $gerenciarImagem;
     public function __construct() {
+        parent::__construct();
         $this->db = Database::getInstance();
         $this->usuario = new Usuario($this->db);
         $this->gerenciarImagem = new FileManager('upload');
@@ -49,12 +53,17 @@ class UsuarioController {
       );
     }
     public function salvarUsuario(){
+        $erros = UsuarioValidador::ValidarEntradas($_POST);
+        if(!empty($erros)){
+            Redirect::redirecionarComMensagem("usuario/criar", "error", implode("<br>", $erros));
+            
+        }
         $imagem = $this->gerenciarImagem->salvarArquivo($_FILES['imagem'], 'usuario');
        if($this->usuario->inserirUsuario(
-            $_POST["nome_usuario"],
-            $_POST["email_usuario"],
-            $_POST["senha_usuario"],
-            $_POST["nivel_acesso"],
+            $_POST["nome_usuarios"],
+            $_POST["email_usuarios"],
+            $_POST["senha_usuarios"],
+            $_POST["nivel_acessos"],
             "Ativo",
             $imagem
         )){

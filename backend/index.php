@@ -2,6 +2,9 @@
 namespace App\Koketsu;
 require_once __DIR__ . '/../vendor/autoload.php';
 use App\Koketsu\Rotas\Rotas;
+if (!isset($_SESSION)) {
+    session_start();
+}
 
 use Bramus\Router\Router;     
 $router = new Router();

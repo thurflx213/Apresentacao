@@ -63,7 +63,7 @@ function buscarUsuariosPorEmailInativos($email){
   $nivel,
   $foto){
     $senha = password_hash($senha, PASSWORD_DEFAULT);
-    $sql = "INSERT INTO tbl_usuarios (nome_usuarios, email_usuarios, senha_usuarios, nivel_acesso)
+    $sql = "INSERT INTO tbl_usuarios (nome_usuarios, email_usuarios, senha_usuarios, nivel_acesso, foto_usuario)
             VALUES (:nome, :email, :senha, :nivel, :foto)";
     $stmt = $this->db->prepare($sql);
     $stmt->bindParam(':nome', $nome);
@@ -114,5 +114,18 @@ function buscarUsuariosPorEmailInativos($email){
     $stmt->bindParam(':atual', $dataatual);
 
     return $stmt->execute();
+  }
+  
+  public function checarCredenciais(string $email,string $senha) {
+    $usuario = $this->buscarUsuariosPorEmail($email);
+    if (count($usuario) !== 1){
+        return false;
+    }
+   
+    $usuario = $usuario[0];
+    if (password_verify($senha, $usuario['senha_usuarios'])){
+        return $usuario;
+    }
+    return false;
   }
 }
