@@ -1,7 +1,7 @@
 <?php
-namespace App\apresentacao\controllers;
+namespace App\Koketsu\controllers;
 
-use App\backend\model\EstoqueMovimentacao; 
+use App\Koketsu\model\EstoqueMovimentacao; 
 use App\Koketsu\Database\Database;
 use App\Koketsu\Core\View;
 use App\Koketsu\Core\Redirect;
@@ -17,92 +17,54 @@ class Estoque_MovimentacaoControllers {
         $this->estoque_movimentacao = new EstoqueMovimentacao($this->db);
         $this->gerenciarImagens = new FileManager("upload");
     }
+    public function salvarEstoqueMovimentacao() {
+       $id_produto = $_POST["id_produto"] ?? null;
+       $tipo = $_POST["tipo_estoque_movimentacao"] ?? null;
+       $quantidade = $_POST["quantidade_estoque_movimentacao"] ?? null;
+       $data = $_POST["data_movimentacao_estoque_movimentacao"] ?? null;
+       $descricao = $_POST["descricao_estoque_movimentacao"] ?? null;
 
-    // index
-    public function index(){
-        $resultado = $this->estoque_movimentacao->buscarEstoqueMovimentacao();
-        return $resultado;
-    }
-
-    public function viewListarEstoqueMovimentacao($pagina){
-        // Exemplo de uso de paginação (você deve usar $pagina aqui)
-        $dados = $this->estoque_movimentacao->paginacao($pagina); 
-        View::render('estoque_movimentacao/index', [
-            "estoque_movimentacao" => $dados['data'],
-            'paginacao' => $dados
-        ]);
-    }
-
-    public function viewCriarEstoqueMovimentacao(){
-        View::render("estoque_movimentacao/create");
-    }
-
-    public function viewEditarEstoqueMovimentacao(int $id){
-       $dados = $this->estoque_movimentacao->buscarEstoqueMovimentacaoPorId($id);
-
-       if (empty($dados)) {
-           Redirect::redirecionarComMensagem("estoque_movimentacao/listar", "error", "Movimentação não encontrada.");
+       if (is_null($id_produto) || is_null($tipo) || is_null($quantidade) || is_null($data)) {
+           Redirect::redirecionarComMensagem("estoque_movimentacao/create", "error", "Todos os campos são obrigatórios.");
            return;
        }
 
-       View::render("estoque_movimentacao/edit", ["estoque_movimentacao" => $dados]);
-    }
-
-
-    public function viewExcluirEstoqueMovimentacao($id){
-          View::render("estoque_movimentacao/delete", ["id_estoque_movimentacao" => $id]);
-    }
-    
-    public function relatorioEstoqueMovimentacao($id, $data1, $data2){
-        View::render("estoque_movimentacao/relatorio",
-            ["id" => $id, "data1" => $data1, "data2" => $data2]
-        );
-    }
-    
-    // MÉTODO RENOMEADO: Corrigido para corresponder à chamada da rota/view.
-    /**
-     * Processa a submissão do formulário e salva a nova movimentação.
-     */
-    public function salvarEstoqueMovimentacao() {
-        // Verifica se os campos obrigatórios estão presentes
-        if (
-            empty($_POST["id_produto"]) ||
-            empty($_POST["tipo_estoque_movimentacao"]) ||
-            empty($_POST["quantidade_estoque_movimentacao"])
-        ) {
-            Redirect::redirecionarComMensagem("estoque_movimentacao/create", "error", "Preencha todos os campos obrigatórios.");
-            return;
-        }
-
-        // Sanitiza e coleta os dados
-        $id_produto = (int)$_POST["id_produto"];
-        $tipo = $_POST["tipo_estoque_movimentacao"]; // 'ENTRADA' ou 'SAIDA'
-        $quantidade = (int)$_POST["quantidade_estoque_movimentacao"];
-        // Descrição é opcional
-        $descricao = !empty($_POST["descricao_estoque_movimentacao"]) ? $_POST["descricao_estoque_movimentacao"] : null;
-
-        // Chama o método de inserção do modelo
-        $novoId = $this->estoque_movimentacao->inserirMovimentacao(
-            $id_produto,
-            $tipo,
-            $quantidade,
-            $descricao
-        );
-
-        if ($novoId !== false) {
-            Redirect::redirecionarComMensagem("estoque_movimentacao/listar", "success", "Movimentação registrada com sucesso (ID: {$novoId})!");
-        } else {
-            Redirect::redirecionarComMensagem("estoque_movimentacao/create", "error", "Erro ao registrar a movimentação. Tente novamente.");
-        }
+       if ($this->estoque_movimentacao->salvarMovimentacao($id_produto, $tipo, $quantidade, $data, $descricao)) {
+           Redirect::redirecionarComMensagem("estoque_movimentacao/listar", "success", "Movimentação de estoque salva com sucesso!");
+       } else {
+           Redirect::redirecionarComMensagem("estoque_movimentacao/create", "error", "Erro ao salvar movimentação de estoque.");
+       }
     }
     
     public function atualizarEstoqueMovimentacao(){
-        // Lógica de atualização a ser implementada, se necessário
-        echo "Lógica de atualização (PUT/POST) de Estoque Movimentacao.";
+        $id_movimentacao = $_POST["id_estoque_movimentacao"] ?? null;
+        $quantidade = $_POST["quantidade_estoque_movimentacao"] ?? null;
+        $descricao = $_POST["descricao_estoque_movimentacao"] ?? null;
+        
+        if (is_null($id_movimentacao)) {
+            Redirect::redirecionarComMensagem("estoque_movimentacao/listar", "error", "ID da movimentação não fornecido.");
+            return;
+        }
+
+        if ($this->estoque_movimentacao->atualizarMovimentacao((int)$id_movimentacao, $quantidade, $descricao)) {
+            Redirect::redirecionarComMensagem("estoque_movimentacao/listar", "success", "Movimentação ID {$id_movimentacao} atualizada com sucesso!");
+        } else {
+            Redirect::redirecionarComMensagem("estoque_movimentacao/edit/{$id_movimentacao}", "error", "Erro ao atualizar a movimentação.");
+        }
     }
     
-    public function deletarEstoqueMovimentacao(){
-        // Lógica de exclusão a ser implementada, se necessário
-        echo "Lógica de exclusão (DELETE/POST) de Estoque Movimentacao.";
+        public function deletarEstoqueMovimentacao(){
+        $id_movimentacao = $_POST['id_estoque_movimentacao'] ?? null;
+
+        if (is_null($id_movimentacao)) {
+            Redirect::redirecionarComMensagem("estoque_movimentacao/listar", "error", "ID da movimentação não fornecido para exclusão.");
+            return;
+        }
+
+        if ($this->estoque_movimentacao->excluirMovimentacao((int)$id_movimentacao)) {
+            Redirect::redirecionarComMensagem("estoque_movimentacao/listar", "success", "Movimentação ID {$id_movimentacao} excluída (inativada) com sucesso!");
+        } else {
+            Redirect::redirecionarComMensagem("estoque_movimentacao/delete/{$id_movimentacao}", "error", "Erro ao excluir movimentação.");
+        }
     }
 }

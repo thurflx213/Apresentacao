@@ -1,14 +1,14 @@
 <div>Sou o index</div>
 
-<?php foreach ($produtos as $produtos): ?>
-    <p><?= $produtos['id_produto'] ?></p>
-    <p><?= $produtos['nome_produtos'] ?></p>
-    <p><?= $produtos['descricao_produtos'] ?></p>
-    <p><?= $produtos['preco_produtos'] ?></p>
-    <p><?= $produtos['estoque_produtos'] ?></p>
-    <p><?= $produtos['imagem_produtos'] ?></p>
-    <p><?= $produtos['id_categoria'] ?></p>
-    <p><?= $produtos['criado_em'] ?></p>
-    <p><?= $produtos['atualizado_em'] ?></p>
-    <p><?= $produtos['excluido_em'] ?></p>
+<?php 
+foreach ($estoque_movimentacao as $movimentacao): ?>
+    <p><?= $movimentacao['id_estoque_movimentacao'] ?></p>
+    <p><?= $movimentacao['id_produto'] ?></p>
+    <p><?= $movimentacao['tipo_estoque_movimentacao'] ?></p>
+    <p><?= $movimentacao['quantidade_estoque_movimentacao'] ?></p>
+    <p><?= $movimentacao['data_movimentacao_estoque_movimentacao'] ?></p>
+    <p><?= $movimentacao['descricao_estoque_movimentacao'] ?></p>
+    <p><?= $movimentacao['criado_em'] ?></p>
+    <p><?= $movimentacao['atualizado_em'] ?></p>
+    <p><?= $movimentacao['excluido_em'] ?></p>
 <?php endforeach; ?>

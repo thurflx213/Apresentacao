@@ -1,5 +1,5 @@
 <?php
-namespace App\backend\model;
+namespace App\Koketsu\model;
 use PDO;
 class EstoqueMovimentacao {
     private $id_estoque_movimentacao;
@@ -17,9 +17,6 @@ class EstoqueMovimentacao {
         $this->db = $db;
     }
 
-    /**
-     * Busca todas as movimentações ATIVAS (não excluídas).
-     */
     public function buscarEstoqueMovimentacao() {
         $sql = "SELECT * FROM tbl_estoque_movimentacao WHERE excluido_em IS NULL";
         $stmt = $this->db->prepare($sql);
@@ -27,9 +24,6 @@ class EstoqueMovimentacao {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Busca movimentações de um produto específico (ativas).
-     */
     public function buscarPorProduto($id_produto) {
         $sql = "SELECT * FROM tbl_estoque_movimentacao 
                 WHERE id_produto = :id_produto AND excluido_em IS NULL";

@@ -1,7 +1,7 @@
 <?php
 namespace App\Koketsu\controllers;
 
-use App\Koketsu\Model\Avaliacao;
+use App\Koketsu\model\Avaliacao; 
 use App\Koketsu\Database\Database;
 use App\Koketsu\Core\View;
 use App\Koketsu\Core\Redirect;
@@ -63,11 +63,22 @@ class AvaliacaoController {
     }
 
     public function salvarAvaliacao(){
-       if($this->avaliacao->inserirAvaliacao(
-            $_POST["nome_avaliacoes"],
-            $_POST["descricao_avaliacoes"],
-            "Ativo",
-            date('Y-m-d H:i:s')
+        $id_produto = $_POST["id_produto"] ?? null;
+        $id_cliente = $_POST["id_cliente"] ?? null;
+        $nota = $_POST["nota_avaliacoes"] ?? null;
+        $comentario = $_POST["comentario_avaliacoes"] ?? null;
+        
+        // Verificação mínima
+        if (is_null($id_produto) || is_null($id_cliente) || is_null($nota)) {
+             Redirect::redirecionarComMensagem("avaliacao/create", "error", "Produto, cliente e nota são obrigatórios.");
+             return;
+        }
+        
+        if($this->avaliacao->inserirAvaliacao(
+            (int)$id_produto,
+            (int)$id_cliente,
+            (float)$nota,
+            $comentario
         )){
             Redirect::redirecionarComMensagem("avaliacao/listar", "success", "Avaliação criada com sucesso!");
         }else{

@@ -1,7 +1,7 @@
 <?php
-namespace App\apresentacao\controllers;
+namespace App\Koketsu\controllers;
 
-use App\backend\model\Imagem;
+use App\Koketsu\model\Imagem;
 use App\Koketsu\Database\Database;
 use App\Koketsu\Core\View;
 use App\Koketsu\Core\Redirect;

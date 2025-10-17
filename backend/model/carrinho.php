@@ -1,11 +1,7 @@
 <?php
-namespace App\backend\model;
+namespace App\Koketsu\model;
 use PDO;
 
-/**
- * Classe Modelo Carrinho (Pedido)
- * Responsável pela comunicação com a tabela 'tbl_carrinho'.
- */
 class Carrinho {
     private $id_carrinho;
     private $id_cliente;

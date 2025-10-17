@@ -1,5 +1,5 @@
 <?php
-namespace App\backend\model;
+namespace App\Koketsu\model;
 use PDO;
 
 class Imagem {
