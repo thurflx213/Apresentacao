@@ -1,8 +1,8 @@
 <?php 
-namespace App\Koketsu\Controllers\Admin;
+namespace App\Koketsu\Controles\Admin;
 use App\Koketsu\Core\Redirect;
 
-abstract class PedreiroController extends AuthenticatedController{
+abstract class FuncionarioController extends AuthenticatedController{
     public function __construct(){
         parent::__construct();
             if ($this->session->get('usuario_tipo') !== 'Pedreiro'){

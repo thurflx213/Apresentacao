@@ -37,7 +37,6 @@ class UsuarioController extends AdminController{
 
     public function viewEditarUsuarios(int $id){
         $dados = $this->usuario->buscarUsuariosPorId($id);
-       var_dump($dados);
        foreach($dados as $usuario){
         $dados = $usuario;
        }
