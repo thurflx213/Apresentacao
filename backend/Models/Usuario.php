@@ -61,16 +61,19 @@ function buscarUsuariosPorEmailInativos($email){
   $email, 
   $senha, 
   $nivel,
-  $foto){
+  $foto,){
     $senha = password_hash($senha, PASSWORD_DEFAULT);
-    $sql = "INSERT INTO tbl_usuarios (nome_usuarios, email_usuarios, senha_usuarios, nivel_acesso, foto_usuario)
-            VALUES (:nome, :email, :senha, :nivel, :foto)";
+    $sql = "INSERT INTO tbl_usuarios 
+(nome_usuarios, email_usuarios, senha_usuarios, nivel_acesso, foto_usuario)
+VALUES (:nome, :email, :senha, :nivel, :foto)";
+
     $stmt = $this->db->prepare($sql);
     $stmt->bindParam(':nome', $nome);
     $stmt->bindParam(':email', $email);
     $stmt->bindParam(':senha', $senha);
     $stmt->bindParam(':nivel', $nivel);
     $stmt->bindParam(':foto', $foto);
+
 
     if($stmt->execute()){
         return $this->db->lastInsertId();
