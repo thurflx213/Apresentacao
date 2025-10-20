@@ -8,11 +8,11 @@ abstract class AuthenticatedController{
     protected Session $session;
     public function __construct(){
         $this->session = new Session();
-        if (!$this->session->has('usuario_id')) {
-            redirect::redirecionarComMensagem(
+        if (!$this->session->has('usuario_id')){
+            Redirect::redirecionarComMensagem(
                 'login',
-                'error',
-                'Você precisa estar logado para acessar a página.'
+                'Por favor, faça login para acessar esta área.',
+                'error'
             );
         }
     }

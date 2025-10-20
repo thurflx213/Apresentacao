@@ -41,9 +41,9 @@ class AuthController{
         $this->session->set('usuario_id', $usuario['id_usuarios']);
         $this->session->set('usuario_nome', $usuario['nome_usuarios']);
         $this->session->set('usuario_tipo', $usuario['nivel_acesso']);
-        redirect::redirectPara('/admin/dashboard');
+        Redirect::redirecionarPara('/admin/dashboard');
     } else {
-        redirect::redirecionarComMensagem('/login', 'error', 'E-mail ou senha incorretos.');
+        Redirect::redirecionarComMensagem('/login', 'error', 'E-mail ou senha incorretos.');
     }
 }
 
@@ -59,7 +59,6 @@ class AuthController{
     $email = $_POST['email_usuarios'] ?? null;
     $senha = $_POST['senha_usuarios'] ?? null;
     $senha_confirm = $_POST['senha_confirm'] ?? null;
-//var_dump($_POST);exit;
   if ($senha !== $senha_confirm) {
     Redirect::redirecionarComMensagem('/register', 'erros', 'As senhas não conferem.');
   }
