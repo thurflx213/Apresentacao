@@ -29,7 +29,7 @@ class Estoque_MovimentacaoControllers {
            return;
        }
 
-       if ($this->estoque_movimentacao->salvarMovimentacao($id_produto, $tipo, $quantidade, $data, $descricao)) {
+       if ($this->estoque_movimentacao->inserirMovimentacao($id_produto, $tipo, $quantidade, $data, $descricao)) {
            Redirect::redirecionarComMensagem("estoque_movimentacao/listar", "success", "Movimentação de estoque salva com sucesso!");
        } else {
            Redirect::redirecionarComMensagem("estoque_movimentacao/create", "error", "Erro ao salvar movimentação de estoque.");

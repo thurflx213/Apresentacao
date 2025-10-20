@@ -1,6 +1,7 @@
 <?php
 namespace App\Koketsu\model;
 use PDO;
+
 class EstoqueMovimentacao {
     private $id_estoque_movimentacao;
     private $id_produto;
@@ -33,10 +34,7 @@ class EstoqueMovimentacao {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Busca movimentação específica por ID (ativa).
-     * Renomeado para consistência com o Controller.
-     */
+    
     public function buscarEstoqueMovimentacaoPorId($id_estoque_movimentacao) {
         $sql = "SELECT * FROM tbl_estoque_movimentacao 
                 WHERE id_estoque_movimentacao = :id AND excluido_em IS NULL";
@@ -46,9 +44,7 @@ class EstoqueMovimentacao {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Inserir nova movimentação.
-     */
+    
     public function inserirMovimentacao($id_produto, $tipo, $quantidade, $descricao = null) {
         $sql = "INSERT INTO tbl_estoque_movimentacao 
                 (id_produto, tipo_estoque_movimentacao, quantidade_estoque_movimentacao, 
@@ -66,9 +62,7 @@ class EstoqueMovimentacao {
         return false;
     }
 
-    /**
-     * Atualizar movimentação (apenas descrição ou quantidade).
-     */
+    
     public function atualizarMovimentacao($id_estoque_movimentacao, $quantidade = null, $descricao = null) {
         $updates = [];
 
@@ -79,7 +73,6 @@ class EstoqueMovimentacao {
             $updates[] = "descricao_estoque_movimentacao = :descricao";
         }
 
-        // Se não houver nada para atualizar, retorne true para evitar query SQL vazia
         if (empty($updates)) {
             return true;
         }
@@ -100,9 +93,6 @@ class EstoqueMovimentacao {
         return $stmt->execute();
     }
 
-    /**
-     * Exclusão lógica da movimentação.
-     */
     public function excluirMovimentacao($id_estoque_movimentacao) {
         $sql = "UPDATE tbl_estoque_movimentacao SET excluido_em = NOW() WHERE id_estoque_movimentacao = :id";
         $stmt = $this->db->prepare($sql);
@@ -111,11 +101,31 @@ class EstoqueMovimentacao {
     }
 
     /**
-     * Paginação das movimentações ATIVAS.
-     * CORRIGIDO: Agora usa 'tbl_estoque_movimentacao' e filtro 'excluido_em IS NULL'.
+     * @deprecated Use inserirMovimentacao() em vez disso.
+     * Esta função estava aninhada incorretamente.
      */
+    public function salvarMovimentacao($id_produto, $tipo, $quantidade, $data, $descricao = null) {
+        $sql = "INSERT INTO tbl_estoque_movimentacao 
+                (id_produto, tipo_estoque_movimentacao, quantidade_estoque_movimentacao, 
+                 data_movimentacao_estoque_movimentacao, descricao_estoque_movimentacao, criado_em)
+                VALUES (:id_produto, :tipo, :quantidade, :data, :descricao, NOW())";
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':id_produto', $id_produto);
+        $stmt->bindParam(':tipo', $tipo);
+        $stmt->bindParam(':quantidade', $quantidade);
+        $stmt->bindParam(':data', $data);
+        $stmt->bindParam(':descricao', $descricao);
+
+        if ($stmt->execute()) {
+            return $this->db->lastInsertId();
+        }
+        return false;
+    }
+    
+   
     public function paginacao(int $pagina = 1, int $por_pagina = 10): array{
-        // Contagem total de registros ATIVOS para cálculo da última página
+       
         $totalQuery = "SELECT COUNT(*) FROM `tbl_estoque_movimentacao` WHERE excluido_em IS NULL";
         $totalStmt = $this->db->query($totalQuery);
         $total_de_registros = $totalStmt->fetchColumn();
@@ -131,7 +141,7 @@ class EstoqueMovimentacao {
         $dados = $dataStmt->fetchAll(PDO::FETCH_ASSOC);
         
         $lastPage = ceil($total_de_registros / $por_pagina);
- 
+    
         return [
             'data' => $dados,
             'total' => (int) $total_de_registros,
