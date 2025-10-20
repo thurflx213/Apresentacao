@@ -1,5 +1,8 @@
 <?php
 
+namespace App\Koketsu\Models;
+use PDO;
+
 class Produtos {
   private $id_produto;
   private $nome_produtos;
@@ -25,16 +28,46 @@ class Produtos {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
-  // Buscar produto específico pelo ID
-  function buscarProdutoPorId($id_produto) {
-    $sql = "SELECT * FROM tbl_produtos 
-            WHERE id_produto = :id AND excluido_em IS NULL";
+ function buscarProdutoPorId($id) {
+    $sql = "SELECT * FROM tbl_produtos
+            WHERE id_produto = :id_produto AND excluido_em IS NULL"; 
     $stmt = $this->db->prepare($sql);
-    $stmt->bindParam(':id', $id_produto);
+    $stmt->bindParam(':id_produto', $id, PDO::PARAM_INT);
     $stmt->execute();
-    return $stmt->fetch(PDO::FETCH_ASSOC);
-  }
 
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+public function paginacao(int $pagina = 1, int $por_pagina = 10): array{
+        $totalQuery = "SELECT COUNT(*) FROM `tbl_produtos`";
+        $totalStmt = $this->db->query($totalQuery);
+        $total_de_registros = $totalStmt->fetchColumn();
+        $offset = ($pagina - 1) * $por_pagina;
+        $dataQuery = "SELECT * FROM `tbl_produtos` LIMIT :limit OFFSET :offset";
+        $dataStmt = $this->db->prepare($dataQuery);
+        $dataStmt->bindValue(':limit', $por_pagina, PDO::PARAM_INT);
+        $dataStmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $dataStmt->execute();
+        $dados = $dataStmt->fetchAll(PDO::FETCH_ASSOC);
+        $lastPage = ceil($total_de_registros / $por_pagina);
+ 
+        return [
+            'data' => $dados,
+            'total' => (int) $total_de_registros,
+            'por_pagina' => (int) $por_pagina,
+            'pagina_atual' => (int) $pagina,
+            'ultima_pagina' => (int) $lastPage,
+            'de' => $offset + 1,
+            'para' => $offset + count($dados)
+        ];
+    }
+
+    function totalDeProdutos() {
+    $sql = "SELECT COUNT(*) AS total FROM tbl_produtos";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_COLUMN);
+}
   // Inserir novo produto
   function inserirProduto($nome, $descricao, $preco, $estoque, $imagem, $id_categoria) {
     $sql = "INSERT INTO tbl_produtos 

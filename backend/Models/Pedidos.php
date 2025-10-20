@@ -1,5 +1,8 @@
 <?php
 
+namespace App\Koketsu\Models;
+use PDO;
+
 class Pedidos {
   private $id_pedido;
   private $id_cliente;
@@ -24,11 +27,11 @@ class Pedidos {
   }
 
   // Buscar pedido por ID
-  function buscarPedidoPorId($id_pedido) {
+  function buscarPedidoPorId($id) {
     $sql = "SELECT * FROM tbl_pedidos 
-            WHERE id_pedido = :id AND excluido_em IS NULL";
+            WHERE id_pedido = :id_pedido AND excluido_em IS NULL";
     $stmt = $this->db->prepare($sql);
-    $stmt->bindParam(':id', $id_pedido);
+    $stmt->bindParam(':id_pedido', $id, PDO::PARAM_INT);
     $stmt->execute();
     return $stmt->fetch(PDO::FETCH_ASSOC);
   }
@@ -42,7 +45,36 @@ class Pedidos {
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
+public function paginacao(int $pagina = 1, int $por_pagina = 10): array{
+        $totalQuery = "SELECT COUNT(*) FROM `tbl_pedidos`";
+        $totalStmt = $this->db->query($totalQuery);
+        $total_de_registros = $totalStmt->fetchColumn();
+        $offset = ($pagina - 1) * $por_pagina;
+        $dataQuery = "SELECT * FROM `tbl_pedidos` LIMIT :limit OFFSET :offset";
+        $dataStmt = $this->db->prepare($dataQuery);
+        $dataStmt->bindValue(':limit', $por_pagina, PDO::PARAM_INT);
+        $dataStmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $dataStmt->execute();
+        $dados = $dataStmt->fetchAll(PDO::FETCH_ASSOC);
+        $lastPage = ceil($total_de_registros / $por_pagina);
+ 
+        return [
+            'data' => $dados,
+            'total' => (int) $total_de_registros,
+            'por_pagina' => (int) $por_pagina,
+            'pagina_atual' => (int) $pagina,
+            'ultima_pagina' => (int) $lastPage,
+            'de' => $offset + 1,
+            'para' => $offset + count($dados)
+        ];
+    }
 
+    function totalDePedidos() {
+    $sql = "SELECT COUNT(*) AS total FROM tbl_pedidos";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_COLUMN);
+}
   // Inserir novo pedido
   function inserirPedido($id_cliente, $data_pedido, $total_pedido, $status_pedido) {
     $sql = "INSERT INTO tbl_pedidos 
