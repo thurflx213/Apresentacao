@@ -220,7 +220,7 @@ footer {
 
 <!-- Overlay -->
 <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" id="myOverlay"></div>
-<div class="w3-main" style="margin-left:300px;margin-top:50px; padding:20px;">
+<div class="w3-main" style="margin-left:300px;margin-top:50px; padding-bottom:70px;">
 
 
     <?php

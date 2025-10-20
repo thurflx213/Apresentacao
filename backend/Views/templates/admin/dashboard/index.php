@@ -40,7 +40,7 @@
       </div>
     </div>
   </div>
-
+<main>
 <div class="w3-container w3-padding-32">
     <h3><i class="fa fa-dashboard"></i> Meu Painel</h3>
     <h2>Bem-vindo de volta, <?= htmlspecialchars($nomeUsuario); ?>!</h2>
@@ -52,8 +52,23 @@
   <header class="w3-container" style="padding-top:22px">
     <h5><b><i class="fa fa-dashboard"></i> Painel de Controle - Koketsu</b></h5>
   </header>
-<?php if (isset($usuarios) && count($usuario) > 0): ?>
- <table border="1" cellpadding="5" cellspacing="0" class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white">
+<?php if (isset($usuarios) && count($usuarios) > 0): ?>
+<table id="usuarios" class="w3-table w3-striped w3-border w3-hoverable w3-black">
+
+<style>
+  main {
+    padding-bottom: 70px;
+  }
+#usuarios tr:nth-child(even),
+#usuarios tr:nth-child(odd) {
+  background-color: #000 !important;
+  color: #f5f5f5 !important;
+}
+#usuarios tr:hover {
+  background-color: #222 !important;
+}
+</style>
+<tr style="background-color: <?= empty($usuario['excluido_em']) ? '#000' : '#331111' ?>;">
      <thead>
          <tr>
             <th>Id-Usuarios</th>
@@ -66,7 +81,7 @@
         </tr>
      </thead>
      <tbody>
-         <?php foreach ($usuario as $usuario): ?>
+         <?php foreach ($usuarios as $usuario): ?>
         <tr>
             <td><?= htmlspecialchars($usuario['id_usuarios']) ?></td>
             <td><?= htmlspecialchars($usuario['nome_usuarios']) ?></td>
@@ -91,17 +106,22 @@
         <?php endforeach; ?>
      </tbody>
  </table>
+ </main>
  <div class="paginacao-controls" style="display:flex; justify-content:space-between; align-items:center; margin-top:20px;">
     <div class="page-selector" style="display:flex; align-items:center;">
-        <div class="page-nav">
-            <?php if ($paginacao['pagina_atual'] > 1): ?>
-                <a href="/backend/usuario/listar/<?= $paginacao['pagina_atual'] - 1 ?>">Anterior</a>
-            <?php endif; ?>
-            <span style="margin:0 10px;">Página <?= $paginacao['pagina_atual'] ?> de <?= $paginacao['ultima_pagina'] ?></span>
-            <?php if ($paginacao['pagina_atual'] < $paginacao['ultima_pagina']): ?>
-                <a href="/backend/usuario/listar/<?= $paginacao['pagina_atual'] + 1 ?>">Próximo</a>
-            <?php endif; ?>
-        </div>
+       <div class="page-nav">
+    <?php if (!empty($paginacao) && $paginacao['pagina_atual'] > 1): ?>
+        <a href="/backend/usuario/listar/<?= $paginacao['pagina_atual'] - 1 ?>">Anterior</a>
+    <?php endif; ?>
+
+    <span style="margin:0 10px;">
+        Página <?= $paginacao['pagina_atual'] ?? 1 ?> de <?= $paginacao['ultima_pagina'] ?? 1 ?>
+    </span>
+
+    <?php if (!empty($paginacao) && $paginacao['pagina_atual'] < $paginacao['ultima_pagina']): ?>
+        <a href="/backend/usuario/listar/<?= $paginacao['pagina_atual'] + 1 ?>">Próximo</a>
+    <?php endif; ?>
+</div>
     </div>
 </div>
   <?php else: ?>
