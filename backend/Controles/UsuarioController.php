@@ -28,11 +28,11 @@ class UsuarioController extends AdminController{
     
     public function viewListarUsuarios(){
         $dados = $this->usuario->buscarUsuarios();
-        view::render("usuario/index",["usuarios" => $dados]);
+        View::render("usuario/index",["usuarios" => $dados]);
     }
 
     public function viewCriarUsuarios(){
-        view::render("usuario/create");
+        View::render("usuario/create");
     }
 
     public function viewEditarUsuarios(int $id){
@@ -40,14 +40,14 @@ class UsuarioController extends AdminController{
        foreach($dados as $usuario){
         $dados = $usuario;
        }
-       view::render("usuario/edit", ["usuario" => $dados]);
+       View::render("usuario/edit", ["usuario" => $dados]);
     }
 
     public function viewExcluirUsuarios($id){
-         view::render("usuario/delete",["id_usuario" => $id]);
+         View::render("usuario/delete",["id_usuario" => $id]);
     }
     public function relatorioUsuario($id, $data1, $data2){
-     view::render("usuario/relatorio",
+     View::render("usuario/relatorio",
            ["id" => $id, "data1" => $data1, "data2" => $data2]
       );
     }
