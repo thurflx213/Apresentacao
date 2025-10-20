@@ -1,0 +1,75 @@
+<?php
+namespace App\Koketsu\Controles;
+
+use App\Koketsu\Models\ItensPedidos;
+use App\Koketsu\Database\Database;
+use App\Koketsu\Core\View;
+use App\Koketsu\Core\Redirect;
+
+
+class ItensPedidosController {
+    public $itenspedidos;
+    public $db;
+
+    public function __construct() {
+        $this->db = Database::getInstance();
+        $this->itenspedidos = new ItensPedidos($this->db);
+    }
+
+    // index - Retorna todos os itens 
+    public function index() {
+        $resultado = $this->itenspedidos->buscarItensPedidos();
+        return $resultado;
+    } 
+
+    // Exibe detalhes de um único item de pedido
+    public function viewItemPedidoUnico($id) {
+        $dados = $this->itenspedidos->buscarItemPedidoPorId($id);
+
+        if ($dados) {
+            View::render('itenspedidos/detalhes', ['itempedido' => $dados]);
+        } else {
+            header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
+            echo 'Item de Pedido não encontrado.';
+        }
+    }
+
+    // Exibe a lista de itens de pedidos com paginação
+    public function viewListarItemPedido($pagina){
+        $pagina = filter_var($pagina, FILTER_VALIDATE_INT) ? (int) $pagina : 1;
+
+        $dados = $this->itenspedidos->paginacao($pagina);
+        $total = $this->itenspedidos->totalDeItensPedidos(); 
+
+        View::render("itenspedidos/index",
+            [
+                "itenspedidos" => $dados['data'],
+                "total_itens_pedidos" => $total, 
+                "total_inativos" => 0,
+                "Total_ativos" => 0, 
+                'paginacao' => $dados
+            ]
+        );
+    }
+
+    // Exibe o formulário para criar um novo item de pedido
+    public function viewCriarItemPedido() {
+        View::render("itenspedidos/create");
+    }
+
+
+   public function viewEditarItemPedido($id) {
+        $item = $this->itenspedidos->buscarItemPedidoPorId($id);
+        if ($item) {
+             View::render("itenspedidos/edit", ["itenspedidos" => $item]);
+        } else {
+            header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
+            echo 'Item de Pedido não encontrado.';
+        }
+    }
+
+  
+    public function atualizarItensPedidos($id) {
+       
+        }
+}
