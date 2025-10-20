@@ -1,5 +1,5 @@
 <?php 
-namespace App\Koketsu\Controllers\Admin;
+namespace App\Koketsu\Controles\Admin;
 use App\Koketsu\Core\Redirect;
 
 abstract class AdminController extends AuthenticatedController{

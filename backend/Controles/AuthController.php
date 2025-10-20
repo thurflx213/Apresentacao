@@ -1,5 +1,5 @@
 <?php
-namespace App\Koketsu\Controllers;
+namespace App\Koketsu\Controles;
 
 use App\Koketsu\Models\Usuario;
 use App\Koketsu\Core\Flash;
