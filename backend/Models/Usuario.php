@@ -25,12 +25,47 @@ class Usuario {
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
+  function totalDeUsuarios() {
+    $sql = "SELECT COUNT(*) AS total FROM tbl_usuarios";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_COLUMN);
+}
+function buscarUsuariosAtivos() {
+    $sql = "SELECT COUNT(*) AS total_ativos FROM tbl_usuarios WHERE excluido_em IS NULL";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_COLUMN);
+}
+
+  public function paginacao(int $pagina = 1, int $porPagina = 50){
+        $offset = ($pagina - 1) * $porPagina;
+        $sql = "SELECT id_usuarios,nome_usuarios,email_usuarios,nivel_acesso,excluido_em FROM tbl_usuarios 
+                LIMIT :offset, :porPagina";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $stmt->bindParam(':porPagina', $porPagina, PDO::PARAM_INT);
+        $stmt->execute();
+        $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $totalStmt = $this->db->query("SELECT COUNT(*) FROM tbl_usuarios");
+        $total = $totalStmt->fetchColumn();
+        $totalPaginas = ceil($total / $porPagina);
+
+        return [
+            'data' => $dados,
+            'total' => (int) $total,
+            'por_pagina' => (int) $porPagina,
+            'pagina_atual' => (int) $pagina,
+            'total_paginas' => (int) $totalPaginas
+        ];
+    }
+
   function buscarUsuariosInativos($email){
-   $sql = "SELECT * FROM tbl_usuarios where excluido_em IS NOT NULL";
-   $stmt = $this->db->prepare($sql);
-   $stmt->bindParam(':email', $email);
-   $stmt->execute();
-   return $stmt->fetchAll(PDO::FETCH_ASSOC);
+   $sql = "SELECT COUNT(*) AS total_inativos FROM tbl_usuarios WHERE excluido_em IS NOT NULL";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_COLUMN);
 }
 
   // Buscar usuários por email
@@ -39,7 +74,9 @@ class Usuario {
     $stmt = $this->db->prepare($sql);
     $stmt->bindParam(':email', $email);
     $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    return $resultado;
   }
    function buscarUsuariosPorId($id){
    $sql = "SELECT * FROM tbl_usuarios where id_usuarios = :id_usuarios and excluido_em IS NULL";
@@ -74,7 +111,6 @@ VALUES (:nome, :email, :senha, :nivel, :foto)";
     $stmt->bindParam(':nivel', $nivel);
     $stmt->bindParam(':foto', $foto);
 
-
     if($stmt->execute()){
         return $this->db->lastInsertId();
     } else {
@@ -82,7 +118,14 @@ VALUES (:nome, :email, :senha, :nivel, :foto)";
     }
   }
 
-  // Atualizar usuário
+  public function buscarPorID(int $id){
+        $sql = "SELECT * FROM tbl_usuarios WHERE id_usuarios = :id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
   function atualizarUsuario($id, $nome, $email, $senha, $nivel){
     $senha = password_hash($senha, PASSWORD_DEFAULT);
     $dataatual = date('Y-m-d H:i:s');
@@ -109,17 +152,18 @@ VALUES (:nome, :email, :senha, :nivel, :foto)";
   }
 
   // Excluir usuário (soft delete)
-  function excluirUsuario($id){
-    $dataatual = date('Y-m-d H:i:s');
-    $sql = "UPDATE tbl_usuarios SET excluido_em = :atual WHERE id_usuarios = :id";
-    $stmt = $this->db->prepare($sql);
-    $stmt->bindParam(':id', $id);
-    $stmt->bindParam(':atual', $dataatual);
+  function deletarUsuario(int $id){
+        $status = $this->buscarPorID($id);
+        $status = $status['excluido_em'] == 'ativo' ? 'Inativo' : 'ativo';
 
-    return $stmt->execute();
-  }
-  
-  public function checarCredenciais(string $email,string $senha) {
+        $sql = "UPDATE tbl_usuarios SET excluido_em = :status WHERE id_usuarios = :id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':status', $status);
+        return $stmt->execute();
+    }
+
+    public function checarCredenciais(string $email,string $senha) {
     $usuario = $this->buscarUsuariosPorEmail($email);
     if (count($usuario) !== 1){
         return false;

@@ -21,14 +21,21 @@ class UsuarioController extends AdminController{
         $this->gerenciarImagem = new FileManager('upload');
     }
     // index
-    public function index(){
-        $resultado = $this->usuario->buscarUsuarios();
-        var_dump($resultado);
-    }
-    
-    public function viewListarUsuarios(){
-        $dados = $this->usuario->buscarUsuarios();
-        View::render("usuario/index",["usuarios" => $dados]);
+
+    public function viewListarUsuarios($pagina = 1){
+    $dados = $this->usuario->paginacao($pagina);
+    $total = $this->usuario->totalDeUsuarios();
+    $total_inativos = $this->usuario->buscarUsuariosInativos($pagina);
+    $total_ativos = $this->usuario->buscarUsuariosAtivos($pagina);
+    view::render('usuario/index', 
+    [
+        "usuarios" => $dados['data'],
+        "total_usuarios" => $total,
+        "total_inativos" => $total_inativos,
+        "total_ativos" => $total_ativos,
+        'paginacao' => $dados
+    ] 
+  );
     }
 
     public function viewCriarUsuarios(){
@@ -59,10 +66,10 @@ class UsuarioController extends AdminController{
         }
         $imagem = $this->gerenciarImagem->salvarArquivo($_FILES['imagem'], 'usuario');
        if($this->usuario->inserirUsuario(
-            $_POST["nome_usuarios"],
-            $_POST["email_usuarios"],
-            $_POST["senha_usuarios"],
-            $_POST["nivel_acessos"],
+            $_POST["nome_usuario"],
+            $_POST["email_usuario"],
+            $_POST["senha_usuario"],
+            $_POST["nivel_acesso"],
             "Ativo",
             $imagem
         )){
@@ -71,11 +78,45 @@ class UsuarioController extends AdminController{
             Redirect::redirecionarComMensagem("usuario/create", "error", "Erro ao criar usuário. Tente novamente.");
         }
     }
+    public function viewEditarUsuario(int $id) {
+        $usuario = $this->usuario->buscarPorID($id);
+        if (!$usuario) {
+            Redirect::redirecionarComMensagem("usuario/listar", "error", "Serviço não encontrado.");
+        }
+        
+        View::render("usuario/edit", ["usuario" => $usuario]);
+    }
        public function atualizarUsuario(){
-        echo "Atualizar usuario";
+        $id = (int)$_POST['id_usuarios'];
+        $nome = $_POST['nome_usuarios'];
+        $email = $_POST['email_usuarios'];
+        $senha = $_POST['senha_usuarios'];
+        $tipo = $_POST['nivel_acesso'];
+        $imagem = null;
+
+        if (isset($_FILES['foto_usuario']) && $_FILES['foto_usuario']['error'] == 0 && !empty($_FILES['foto_usuario']['name'])) {
+            $imagem = $this->gerenciarImagem->salvarArquivo($_FILES['foto_usuario'], 'usuarios');
+        }
+        if ($this->usuario->atualizarUsuario($id, $nome, $email, $senha, $tipo, $imagem)) {
+            Redirect::redirecionarComMensagem("/usuario/listar", "success", "Usuário atualizado com sucesso!");
+        } else {
+            Redirect::redirecionarComMensagem("/usuario/editar" . $id, "error", "Erro ao atualizar usuário.");
+        }
+    }
+    public function viewExcluirUsuario(int $id) {
+        $usuario = $this->usuario->buscarPorID($id);
+        if (!$usuario) {
+            Redirect::redirecionarComMensagem("/usuario/listar", "error", "Serviço não encontrado.");
+        }
+
+        View::render("/usuario/delete", ["usuario" => $usuario]);
     }
     public function deletarUsuario(){
-        echo "Deletar usuario";
-    }  
-
+        $id = (int)$_POST['id_usuarios'];
+        if ($this->usuario->deletarUsuario($id)) {
+            Redirect::redirecionarComMensagem("/usuario/listar", "success", "Serviço inativado com sucesso!");
+        } else {
+            Redirect::redirecionarComMensagem("/usuario/listar", "error", "Erro ao inativar serviço.");
+        }
+    }
 }

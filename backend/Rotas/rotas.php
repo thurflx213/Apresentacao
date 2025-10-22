@@ -9,9 +9,9 @@ class Rotas
         return [ 
             "GET" => [
               // Usuarios
-                 "/usuarios" => "UsuarioController@index",
-                 "/usuario/criar" => "UsuarioController@viewCriarUsuarios",
                  "/usuario/listar" => "UsuarioController@viewListarUsuarios",
+                 "/usuario/criar" => "UsuarioController@viewCriarUsuarios",
+                 "/usuario/listar/{pagina}" => "UsuarioController@viewListarUsuarios",
                  "/usuario/editar/{id}" => "UsuarioController@viewEditarUsuarios",
                  "/usuario/excluir/{id}" => "UsuarioController@viewExcluirUsuarios",
                  "/usuario/{id}/relatorio/{data1}/{data2}" => "UsuarioController@relatorioUsuario",
@@ -99,8 +99,8 @@ class Rotas
         "POST" => [
                 // Usuarios 
                 "/usuario/salvar" => "UsuarioController@salvarUsuario",
-                "/usuario/atualizar/{id}" => "UsuarioController@atualizarUsuario",
-                "/usuario/deletar/{id}" => "UsuarioController@deletarUsuario",
+                "/usuario/atualizar" => "UsuarioController@atualizarUsuario",
+                "/usuario/deletar" => "UsuarioController@deletarUsuario",
                 // Categorias
                 "/categoria/salvar"    => "CategoriasController@salvarCategoria",
                 "/categoria/atualizar/{id}" => "CategoriasController@atualizarCategoria",

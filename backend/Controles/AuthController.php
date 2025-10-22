@@ -48,13 +48,13 @@ class AuthController{
 }
 
   public function cadastrarUsuario(): void {
-    
     $erros = UsuarioValidador::validarEntradas($_POST);
 
+    
     if (!empty($erros)) {
         Redirect::redirecionarComMensagem('/register', 'erros', implode("<br>", $erros));
     }
-
+    
     $nome = $_POST['nome_usuarios'] ?? null;
     $email = $_POST['email_usuarios'] ?? null;
     $senha = $_POST['senha_usuarios'] ?? null;
@@ -63,10 +63,11 @@ class AuthController{
     Redirect::redirecionarComMensagem('/register', 'erros', 'As senhas não conferem.');
   }
 
+
   if (!empty($this->usuarioModel->buscarUsuariosPorEmail($email))) {
+
     Redirect::redirecionarComMensagem('/register', 'erros', 'Erro ao cadastrar, problema no seu e-mail.');
   }
- 
   $novoUsuarioId = $this->usuarioModel->inserirUsuario($nome, $email, $senha, 'usuario', 'Ativo', 'null');
 
   if ($novoUsuarioId) {
