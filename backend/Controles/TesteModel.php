@@ -12,7 +12,7 @@ $produto->inserirProduto(20);
 $resultado = $produto->buscarProdutoPorId("william.reis@emailpro.com");
 //$resultado = $usuario->buscarUsuariosInativos("william.reis@emailpro.com");
 //$resultado = $usuario->deletarUsuario(20);
-var_dump($resultado);
+
 // $id = $usuario->inserirUsuario("Arthur felix", "Arthur.f213@emailpro.com", "654321", "cliente", "ativo");
 // $resultado = $endereco->inserirEndereco(
 //     $id, 

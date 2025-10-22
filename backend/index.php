@@ -15,17 +15,17 @@ $rotas = [
    //usuarios
   "/usuarios" => "UsuarioController@index",
   "/usuario/criar" => "UsuarioController@viewCriarUsuarios",
-   "/usuario/listar/{pagina}" => "UsuarioController@viewListarUsuarios",
-   "/usuario/editar/{id}" => "UsuarioController@viewEditarUsuarios",
-    "/usuario/excluir/{id}" => "UsuarioController@viewExcluirUsuarios",
-    "/usuario/{id}/relatorio/{data1}/{data2}" => "UsuarioController@relatorioUsuario",
-    '/register' => 'AuthController@register',
-    '/login' => 'AuthController@login',
-    '/logout' => 'AuthController@logout',
-     '/admin/dashboard' => 'Admin\DashboardController@index',
+  "/usuario/listar/{pagina}" => "UsuarioController@viewListarUsuarios",
+  "/usuario/editar/{id}" => "UsuarioController@viewEditarUsuarios",
+  "/usuario/excluir/{id}" => "UsuarioController@viewExcluirUsuarios",
+  "/usuario/{id}/relatorio/{data1}/{data2}" => "UsuarioController@relatorioUsuario",
+  '/register' => 'AuthController@register',
+  '/login' => 'AuthController@login',
+  '/logout' => 'AuthController@logout',
+  '/admin/dashboard' => 'Admin\DashboardController@index',
  //Itens pedidos
  "/itenspedidos" => "ItensPedidosController@index",
-"/itenspedidos/{id}" => "ItensPedidosController@viewItemPedidoUnico",
+ "/itenspedidos/{id}" => "ItensPedidosController@viewItemPedidoUnico",
  "/itenspedidos/criar" => "ItensPedidosController@viewCriarItemPedido",
  "/itenspedidos/listar/{pagina}" => "ItensPedidosController@viewListarItemPedido",
  "/itenspedidos/editar/{id}" => "ItensPedidosController@viewEditarItemPedido",
@@ -34,7 +34,7 @@ $rotas = [
  
  //Pedidos
  "/pedido" => "PedidosController@index",
-        "/pedido/{id}" => "PedidosController@viewPedidoUnico",
+ "/pedido/{id}" => "PedidosController@viewPedidoUnico",
  "/pedido/criar" => "PedidosController@viewCriarPedido",
  "/pedido/listar/{pagina}" => "PedidosController@viewListarPedido",
  "/pedido/editar/{id}" => "PedidosController@viewEditarPedido",
@@ -43,7 +43,7 @@ $rotas = [
  
  //Produtos
  "/produto" => "ProdutosController@index",
-  "/produto/{id}" => "ProdutosController@viewProdutoUnico", 
+ "/produto/{id}" => "ProdutosController@viewProdutoUnico", 
  "/produto/criar" => "ProdutosController@viewCriarProduto",
  "/produto/listar/{pagina}" => "ProdutosController@viewlistarProduto",
  "/produto/editar/{id}" => "ProdutosController@viewEditarProduto",
@@ -52,23 +52,23 @@ $rotas = [
  ],
  "POST" => [
   //usuarios
-   "/usuario/salvar" => "UsuarioController@salvarUsuario",
-   "/usuario/atualizar/{id}" => "UsuarioController@atualizarUsuario",
-   "/usuario/deletar/{id}" => "UsuarioController@deletarUsuario",
-    '/register' => 'AuthController@cadastrarUsuario',
-   '/login' => 'AuthController@authenticar',
+  "/usuario/salvar" => "UsuarioController@salvarUsuario",
+  "/usuario/atualizar/{id}" => "UsuarioController@atualizarUsuario",
+  "/usuario/deletar/{id}" => "UsuarioController@deletarUsuario",
+  '/register' => 'AuthController@cadastrarUsuario',
+  '/login' => 'AuthController@authenticar',
  //itens pedidos
-"/itenspedidos/salvar" => "ItensPedidosController@salvarItemPedido",
-"/itenspedidos/atualizar/{id}" => "ItensPedidosController@atualizarItemPedido",
-"/itenspedidos/deletar/{id}" => "ItensPedidosController@deletarItemPedido",
+ "/itenspedidos/salvar" => "ItensPedidosController@salvarItemPedido",
+ "/itenspedidos/atualizar/{id}" => "ItensPedidosController@atualizarItemPedido",
+ "/itenspedidos/deletar/{id}" => "ItensPedidosController@deletarItemPedido",
 //Pedidos
  "/pedido/salvar" => "PedidosController@salvarPedido",
-"/pedido/atualizar/{id}" => "PedidosController@atualizarPedido",
-"/pedido/deletar/{id}" => "PedidosController@deletarPedido",
+ "/pedido/atualizar/{id}" => "PedidosController@atualizarPedido",
+ "/pedido/deletar/{id}" => "PedidosController@deletarPedido",
 //produtos
  "/produto/salvar" => "ProdutosController@salvarProduto",
-"/produto/atualizar/{id}" => "ProdutosController@atualizarProduto",
-"/produto/deletar/{id}" => "ProdutosController@deletarProduto",
+ "/produto/atualizar/{id}" => "ProdutosController@atualizarProduto",
+ "/produto/deletar/{id}" => "ProdutosController@deletarProduto",
 
   ]
  ];

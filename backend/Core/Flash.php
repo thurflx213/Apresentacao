@@ -2,7 +2,7 @@
 namespace App\Koketsu\Core;
 class Flash
  {
-    public static function set($message, $type = 'success') {
+    public static function set($type = 'success', $message) {
         if (!isset($_SESSION)) {
             session_start();
         }
