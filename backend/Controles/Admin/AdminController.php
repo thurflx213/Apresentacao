@@ -7,7 +7,7 @@ abstract class AdminController extends AuthenticatedController{
        parent::__construct();
        if ($this->session->get('usuario_tipo') !== 'admin') {
         Redirect::redirecionarComMensagem(
-            'admin/dashboard',
+            '/admin/dashboard',
             'error',
             'Você não tem permissão para acessar esta área.'
         );

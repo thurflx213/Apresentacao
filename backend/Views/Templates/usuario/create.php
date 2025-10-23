@@ -1,5 +1,6 @@
-<div>Sou o create</div>
-<form action="/usuario/salvar" method="post">
+<div class="w3-container"></div>
+ <h3>Novo usuario</h3>
+<form action="/backend/usuario/salvar" method="post" enctype="multipart/form-data" class="w3-container w3-card-4">
     <label for="nome_usuario">Nome:</label>
     <input type="text" id="nome_usuario" name="nome_usuario" required>
     <br>
@@ -20,9 +21,11 @@
 
     <label for="imagem">Imagem:</label>
    <input type="file" id="imagem" name="imagem" accept="image/*">
-   <button type="submit">Salvar</button>
    </form>
 
-   <button type="submit">Salvar</button>
+   <p>
+        <button class="w3-button w3-blue">Salvar usuario</button>
+    </p>
 
 </form>
+</div>

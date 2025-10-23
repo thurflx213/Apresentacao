@@ -118,7 +118,7 @@ VALUES (:nome, :email, :senha, :nivel, :foto)";
     }
   }
 
-  public function buscarPorID(int $id){
+  public function buscarPorID($id){
         $sql = "SELECT * FROM tbl_usuarios WHERE id_usuarios = :id";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);

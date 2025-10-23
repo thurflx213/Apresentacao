@@ -1,6 +1,7 @@
 <?php
 namespace App\Koketsu\controles;
 
+
 use App\Koketsu\Controles\Admin\AdminController;
 use App\Koketsu\Models\Usuario;
 use App\Koketsu\Database\Database;
@@ -51,7 +52,11 @@ class UsuarioController extends AdminController{
     }
 
     public function viewExcluirUsuarios($id){
-         View::render("usuario/delete",["id_usuario" => $id]);
+         $dados = $this->usuario->buscarUsuariosPorId($id);
+       foreach($dados as $usuario){
+        $dados = $usuario;
+        }
+         View::render("usuario/delete",["usuario" => $dados]);
     }
     public function relatorioUsuario($id, $data1, $data2){
      View::render("usuario/relatorio",
@@ -106,7 +111,7 @@ class UsuarioController extends AdminController{
     public function viewExcluirUsuario(int $id) {
         $usuario = $this->usuario->buscarPorID($id);
         if (!$usuario) {
-            Redirect::redirecionarComMensagem("/usuario/listar", "error", "Serviço não encontrado.");
+            Redirect::redirecionarComMensagem("/usuario/listar", "error", "Usuario não encontrado.");
         }
 
         View::render("/usuario/delete", ["usuario" => $usuario]);
@@ -114,9 +119,10 @@ class UsuarioController extends AdminController{
     public function deletarUsuario(){
         $id = (int)$_POST['id_usuarios'];
         if ($this->usuario->deletarUsuario($id)) {
-            Redirect::redirecionarComMensagem("/usuario/listar", "success", "Serviço inativado com sucesso!");
+            Redirect::redirecionarComMensagem("/usuario/listar", "success", "Usuario inativado com sucesso!");
         } else {
-            Redirect::redirecionarComMensagem("/usuario/listar", "error", "Erro ao inativar serviço.");
+            Redirect::redirecionarComMensagem("/usuario/listar", "error", "Erro ao inativar usuario.");
         }
     }
+    
 }

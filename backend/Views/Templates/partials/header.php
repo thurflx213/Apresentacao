@@ -169,6 +169,18 @@ footer {
 ::-webkit-scrollbar-thumb:hover {
   background-color: #555;
 }
+@media (max-width: 768px) {
+  .w3-sidebar {
+    width: 200px !important;
+  }
+  .w3-main {
+    margin-left: 200px !important;
+  }
+  .w3-sidebar.collapsed {
+    width: 0 !important;
+  }
+}
+
 
 
 
@@ -190,26 +202,25 @@ footer {
 <!-- Sidebar/menu -->
 <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar"><br>
   <div class="w3-container w3-row">
-    <div class="w3-col s4">
-      <img src="https://www.w3schools.com/w3images/avatar2.png" class="w3-circle w3-margin-right" style="width:46px">
-    </div>
-    <div class="w3-col s8 w3-bar">
-      <span>Bem-vindo, <strong>Admin</strong></span><br>
-      <a href="#" class="w3-bar-item w3-button"><i class="fa fa-envelope"></i></a>
-      <a href="#" class="w3-bar-item w3-button"><i class="fa fa-user"></i></a>
-      <a href="#" class="w3-bar-item w3-button"><i class="fa fa-cog"></i></a>
-    </div>
+   <div class="w3-container w3-center w3-padding">
+  <img src="/img/logoperf.jpg" class="w3-circle" style="width:70px; border:2px solid #ffcc00;">
+  <h5 class="w3-margin-top">Bem-vindo, <strong>Admin</strong></h5>
+  <div class="w3-margin-top">
+    <a href="#" title="Mensagens"><i class="fa fa-envelope w3-hover-text-yellow"></i></a>
+    <a href="#" title="Perfil" style="margin: 0 10px;"><i class="fa fa-user w3-hover-text-yellow"></i></a>
+    <a href="#" title="Configurações"><i class="fa fa-cog w3-hover-text-yellow"></i></a>
   </div>
-  <hr>
+</div>
+<hr style="border-color:#222;">
   <div class="w3-container">
     <h5>Painel Koketsu</h5>
   </div>
   <div class="w3-bar-block">
-    <a href="#" class="w3-bar-item w3-button w3-padding w3-theme"><i class="fa fa-home fa-fw"></i>  Início</a>
+    <a href="/backend/admin/dashboard" class="w3-bar-item w3-button w3-padding w3-theme"><i class="fa fa-home fa-fw"></i>  Início</a>
     <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-tags fa-fw"></i>  Produtos</a>
     <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-shopping-cart fa-fw"></i>  Pedidos</a>
-    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i>  Clientes</a>
-    
+    <a href="/backend/usuario/listar" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i>  Clientes</a>
+    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-user-circle fa-fw"></i>  Perfil</a>
     <?php if ($session->get('usuario_tipo') == 'admin'){ ?>
     <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-star fa-fw"></i>  Avaliações</a>
     <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-bar-chart fa-fw"></i>  Relatórios</a>
