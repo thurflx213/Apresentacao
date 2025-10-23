@@ -1,10 +1,8 @@
 <?php
 namespace App\Koketsu;
 require_once __DIR__ . '/../vendor/autoload.php';
-if (!isset($_SESSION)) {
-  session_start();
- }
 use App\Koketsu\Rotas\Rotas;
+<<<<<<< HEAD
 use Bramus\Router\Router;
 
 $router = new Router();
@@ -80,11 +78,27 @@ foreach ($rotas as $metodoHttp => $rota){
  $metodoBramus = strtolower($metodoHttp);
  $router->{$metodoBramus}($uri, $acao);
  }
+=======
+if (!isset($_SESSION)) {
+    session_start();
+>>>>>>> a5b89a898fd8dfa1e2b47cad3611aa66256912b4
 }
 
+use Bramus\Router\Router;     
+$router = new Router();
+
+$rotas = Rotas::get();
+$router->setNamespace('App\Koketsu\Controles');
+
+foreach ($rotas as $metodohttp => $rota) {
+    foreach ($rota as $uri => $acao) {
+        $metodoBramus = strtolower($metodohttp);
+        $router->{$metodoBramus}($uri, $acao);
+    }
+}
 $router->set404(function() {
- header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
- echo '404, Rota não Encontrada!';
+    header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
+    echo '404, rota não encontrada';
 });
 
 $router->run();

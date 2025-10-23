@@ -1,16 +1,20 @@
+<<<<<<< HEAD
 <?php 
+=======
+<?php
+>>>>>>> a5b89a898fd8dfa1e2b47cad3611aa66256912b4
 namespace App\Koketsu\Controles\Admin;
 use App\Koketsu\Core\Redirect;
 
 abstract class AdminController extends AuthenticatedController{
     public function __construct(){
-        parent::__construct();
-            if ($this->session->get('usuario_tipo') !== 'admin'){
-            Redirect::redirecionarComMensagem(
-                'admin/dashboard',
-                'error',
-                'Você não tem permissão para acessar está area.'
-            );
-            }
-        }
+       parent::__construct();
+       if ($this->session->get('usuario_tipo') !== 'admin') {
+        Redirect::redirecionarComMensagem(
+            'admin/dashboard',
+            'error',
+            'Você não tem permissão para acessar esta área.'
+        );
+       }
     }
+}
