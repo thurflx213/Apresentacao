@@ -1,6 +1,7 @@
 <?php
 namespace App\Koketsu\model;
 use PDO;
+
 class Avaliacao {
     private $id_avaliacoes;
     private $id_produto;

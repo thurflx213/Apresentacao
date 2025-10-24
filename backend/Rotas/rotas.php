@@ -10,6 +10,12 @@ class Rotas
             "GET" => [
         // o caminho da URL    o nome do controlle e o metodo do controle 
 
+          '/register' => 'AuthController@register',
+          '/login' => 'AuthController@login',
+          '/logout' => 'AuthController@logout',
+         '/admin/dashboard' => 'Admin\DashboardController@index',
+                '/api/produtos' => 'PublicApiController@getProdutos',
+
         //Avaliação
         "/backend/avaliacao" => "AvaliacaoController@index",
         "/backend/avaliacao/criar" => "AvaliacaoController@viewCriarAvaliacoes",
@@ -40,6 +46,9 @@ class Rotas
 
         ],
     "POST" => [
+
+        '/api/pedidos' => 'PublicApiController@salvarPedido',
+
         //avaliacao
        "/backend/avaliacao/salvar" => "AvaliacaoController@salvarAvaliacao",
        "/backend/avaliacao/atualizar/{id}" => "AvaliacaoController@atualizarAvaliacao",
@@ -56,9 +65,13 @@ class Rotas
        "/backend/EstoqueMovimentacao/deletar/{id}" => "EstoqueController@deletarEstoque_Movimentacao",
 
         //imagens
-         "/backend/Imagem/salvar" => "ImagensController@salvarImagens",
+        "/backend/Imagem/salvar" => "ImagensController@salvarImagens",
        "/backend/Imagem/atualizar/{id}" => "ImagensController@atualizarImagens",
        "/backend/Imagem/deletar/{id}" => "ImagensController@deletarImagens",
+
+       '/register' => 'AuthController@cadastrarUsuario',
+        '/login' => 'AuthController@authenticar',
+
 
             ]
         ];
