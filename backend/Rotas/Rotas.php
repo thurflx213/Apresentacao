@@ -6,13 +6,14 @@ class Rotas
 {
     public static function get()
     {
-        var_dump("teste");
+       
         return [ 
              "GET" => [
         // o caminho da URL    o nome do controlle e o metodo do controle 
         //usuarios
-        "/usuarios" => "UsuarioController@index",
+        "/usuario" => "UsuarioController@index",
         "/usuario/criar" => "UsuarioController@viewCriarUsuarios",
+        "/usuario/listar" => "UsuarioController@viewListarUsuarios",
         "/usuario/listar/{pagina}" => "UsuarioController@viewListarUsuarios",
         "/usuario/editar/{id}" => "UsuarioController@viewEditarUsuarios",
         "/usuario/excluir/{id}" => "UsuarioController@viewExcluirUsuarios",

@@ -52,26 +52,26 @@
   <header class="w3-container" style="padding-top:22px">
     <h5><b><i class="fa fa-dashboard"></i> Painel de Controle - Koketsu</b></h5>
   </header>
-<?php if (isset($usuarios) && count($usuarios) > 0): ?>
-<table id="usuarios" class="w3-table w3-striped w3-border w3-hoverable w3-black">
+<?php if (isset($usuario) && count($usuario) > 0): ?>
+<table id="usuario" class="w3-table w3-striped w3-border w3-hoverable w3-black">
 
 <style>
   main {
     padding-bottom: 70px;
   }
-#usuarios tr:nth-child(even),
-#usuarios tr:nth-child(odd) {
+#usuario tr:nth-child(even),
+#usuario tr:nth-child(odd) {
   background-color: #000 !important;
   color: #f5f5f5 !important;
 }
-#usuarios tr:hover {
+#usuario tr:hover {
   background-color: #222 !important;
 }
 </style>
 <tr style="background-color: <?= empty($usuario['excluido_em']) ? '#000' : '#331111' ?>;">
      <thead>
          <tr>
-            <th>Id-Usuarios</th>
+            <th>Id-usuario</th>
             <th>Nome</th>
             <th>Email</th>
             <th>Senha</th>
@@ -81,12 +81,12 @@
         </tr>
      </thead>
      <tbody>
-         <?php foreach ($usuarios as $usuario): ?>
+         <?php foreach ($usuario as $usuario): ?>
         <tr>
-            <td><?= htmlspecialchars($usuario['id_usuarios']) ?></td>
-            <td><?= htmlspecialchars($usuario['nome_usuarios']) ?></td>
-            <td><?= htmlspecialchars($usuario['email_usuarios']) ?></td>
-            <td><?= htmlspecialchars($usuario['senha_usuarios']) ?></td>
+            <td><?= htmlspecialchars($usuario['id_usuario']) ?></td>
+            <td><?= htmlspecialchars($usuario['nome_usuario']) ?></td>
+            <td><?= htmlspecialchars($usuario['email_usuario']) ?></td>
+            <td><?= htmlspecialchars($usuario['senha_usuario']) ?></td>
             <td><?= htmlspecialchars($usuario['nivel_acesso']) ?></td>
             <td><?php if(!empty($usuario['excluido_em'])) {
                 echo " <b style= 'background-color: red;'>Inativo</b>";
@@ -96,11 +96,11 @@
             ?></td>
             <td>
                 <a class="w3-button w3-round w3-blue w3-hover-red w3-padding-large w3-margin-right"
-                   href="/backend/usuario/editar/<?= htmlspecialchars($usuario['id_usuarios']) ?>">Editar</a>
+                   href="/backend/usuario/editar/<?= htmlspecialchars($usuario['id_usuario']) ?>">Editar</a>
             </td>
             <td>
                 <a class="w3-button w3-round w3-red w3-hover-red w3-padding-large w3-margin-right"
-                   href="/backend/usuario/excluir/<?= htmlspecialchars($usuario['id_usuarios']) ?>">Excluir</a>
+                   href="/backend/usuario/excluir/<?= htmlspecialchars($usuario['id_usuario']) ?>">Excluir</a>
             </td>
         </tr>
         <?php endforeach; ?>
