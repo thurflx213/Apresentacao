@@ -10,7 +10,6 @@ body{
 .navbar{
   background-color: black;
   z-index: 999;
-  
 }
 
 .faq-section {
@@ -21,11 +20,55 @@ body{
   font-family: Arial, sans-serif;
 }
 
-.faq-section h2 {
+/* --- CORREÇÃO UX: Sidebar Fixo (Mobile First) --- */
+.sidebar {
+  display: none; /* Oculta por padrão (Mobile/Tablet) */
+}
+
+@media (min-width: 992px) { /* Exibir a partir de Desktop (lg) */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 200px;
+    height: 100%;
+    background-color: #000;
+    padding-top: 140px;
+    z-index: 500;
+    display: block; /* Mostra no desktop */
+  }
+
+  /* Aplica margem ao conteúdo principal para compensar a barra lateral */
+  .faq-section {
+    margin-left: 200px; 
+  }
+}
+/* --- FIM CORREÇÃO UX --- */
+
+
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar ul li {
+  padding: 15px 20px;
+  border-bottom: 1px solid #222;
+}
+
+.sidebar ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  display: block;
+  transition: background 0.3s ease;
+}
+
+.sidebar ul li a:hover {
+  background-color: #f1cd2f; /* Amarelo da marca */
   color: #000;
-  text-align: center;
-  font-size: 32px;
-  margin-bottom: 40px;
+  border-radius: 4px;
 }
 
 .faq {
@@ -70,39 +113,4 @@ body{
   font-size: 20px;
   margin: 0;
   display: absolute;
-}
-.sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 200px;
-  height: 100%;
-  background-color: #000; /* preto igual ao seu cabeçalho */
-  padding-top: 140px;
-  z-index: 500;
-}
-
-.sidebar ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
-
-.sidebar ul li {
-  padding: 15px 20px;
-  border-bottom: 1px solid #222;
-}
-
-.sidebar ul li a {
-  color: #fff;
-  text-decoration: none;
-  font-weight: bold;
-  display: block;
-  transition: background 0.3s ease;
-}
-
-.sidebar ul li a:hover {
-  background-color: #f1cd2f;
-  color: #000;
-  border-radius: 4px;
 }

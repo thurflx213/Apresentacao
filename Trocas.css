@@ -16,17 +16,33 @@
     background-color: black;
     z-index: 999;
   }
+ 
+  /* --- CORREÇÃO UX: Sidebar Fixo (Mobile First) --- */
   .sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 200px;
-    height: 100%;
-    background-color: #000; /* preto igual ao seu cabeçalho */
-    padding-top: 140px;
-    z-index: 500;
+    display: none; /* Oculta por padrão (Mobile/Tablet) */
   }
-  
+
+  @media (min-width: 992px) { /* Exibir a partir de Desktop (lg) */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 200px;
+      height: 100%;
+      background-color: #000;
+      padding-top: 140px;
+      z-index: 500;
+      display: block; /* Mostra no desktop */
+    }
+
+    /* Aplica margem ao conteúdo principal para compensar a barra lateral */
+    main .container {
+        margin-left: 200px; 
+        max-width: calc(100% - 200px); 
+    }
+  }
+  /* --- FIM CORREÇÃO UX --- */
+
   .sidebar ul {
     list-style-type: none;
     padding: 0;
