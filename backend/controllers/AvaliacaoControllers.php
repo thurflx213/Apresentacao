@@ -18,7 +18,8 @@ class AvaliacaoController {
     }
     // index
     public function index($pagina = 1){
-        $resultado = $this->avaliacao->buscarAvaliacoes($pagina);
+        // CORREÇÃO: O método 'buscarAvaliacoes' no Model parece não aceitar paginação, usar 'paginacao'
+        $resultado = $this->avaliacao->paginacao($pagina);
         return $resultado;
     }
      public function viewListaravaliacao($pagina){
@@ -44,10 +45,12 @@ class AvaliacaoController {
     public function viewEditarAvaliacao(int $id){
        $dados = $this->avaliacao->buscarAvaliacaoPorId($id);
 
-    //    foreach($dados as $categoria){
-    //     $dados = $categoria;
-    //    }
-       var_dump($dados);
+       if (empty($dados)) {
+           Redirect::redirecionarComMensagem("avaliacao/listar", "error", "Avaliação não encontrada ou inativa.");
+           return;
+       }
+
+       // CORREÇÃO: Removido var_dump($dados);
        view::render("avaliacao/edit", ["avaliacao" => $dados]);
     }
 
@@ -85,11 +88,42 @@ class AvaliacaoController {
             Redirect::redirecionarComMensagem("avaliacao/create", "error", "Erro ao criar avaliação. Tente novamente.");
         }
     }
+    
     public function atualizarAvaliacao(){
-        echo "Atualizar avaliação";
+        $id_avaliacoes = $_POST['id_avaliacoes'] ?? null;
+        $nota = $_POST['nota_avaliacoes'] ?? null;
+        $comentario = $_POST['comentario_avaliacoes'] ?? null;
+
+        if (is_null($id_avaliacoes)) {
+            Redirect::redirecionarComMensagem("avaliacao/listar", "error", "ID da avaliação não fornecido para atualização.");
+            return;
+        }
+        
+        if (is_null($nota) || !is_numeric($nota) || $nota < 1 || $nota > 5) {
+             Redirect::redirecionarComMensagem("avaliacao/edit/{$id_avaliacoes}", "error", "Nota inválida. Deve ser entre 1 e 5.");
+             return;
+        }
+
+        if ($this->avaliacao->atualizarAvaliacao((int)$id_avaliacoes, (float)$nota, $comentario)) {
+            Redirect::redirecionarComMensagem("avaliacao/listar", "success", "Avaliação ID {$id_avaliacoes} atualizada com sucesso!");
+        } else {
+            Redirect::redirecionarComMensagem("avaliacao/edit/{$id_avaliacoes}", "error", "Erro ao atualizar avaliação. Ele pode estar inativo.");
+        }
     }
+    
     public function deletarAvaliacao(){
-        echo "Deletar avaliação";
+        $id_avaliacoes = $_POST['id_avaliacoes'] ?? null;
+
+        if (is_null($id_avaliacoes)) {
+            Redirect::redirecionarComMensagem("avaliacao/listar", "error", "ID da avaliação não fornecido para exclusão.");
+            return;
+        }
+
+        if ($this->avaliacao->excluirAvaliacao((int)$id_avaliacoes)) {
+            Redirect::redirecionarComMensagem("avaliacao/listar", "success", "Avaliação ID {$id_avaliacoes} excluída (inativada) com sucesso!");
+        } else {
+            Redirect::redirecionarComMensagem("avaliacao/delete/{$id_avaliacoes}", "error", "Erro ao excluir avaliação.");
+        }
     }
 
 }

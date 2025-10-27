@@ -21,7 +21,7 @@ class Estoque_MovimentacaoControllers {
        $id_produto = $_POST["id_produto"] ?? null;
        $tipo = $_POST["tipo_estoque_movimentacao"] ?? null;
        $quantidade = $_POST["quantidade_estoque_movimentacao"] ?? null;
-       $data = $_POST["data_movimentacao_estoque_movimentacao"] ?? null;
+       $data = $_POST["data_movimentacao_estoque_movimentacao"] ?? null; // Variável não usada no Model
        $descricao = $_POST["descricao_estoque_movimentacao"] ?? null;
 
        if (is_null($id_produto) || is_null($tipo) || is_null($quantidade) || is_null($data)) {
@@ -29,7 +29,9 @@ class Estoque_MovimentacaoControllers {
            return;
        }
 
-       if ($this->estoque_movimentacao->inserirMovimentacao($id_produto, $tipo, $quantidade, $data, $descricao)) {
+       // CORREÇÃO: O Model::inserirMovimentacao espera 4 argumentos, não 5. 
+       // Removemos $data, pois a data de criação é definida como NOW() no Model.
+       if ($this->estoque_movimentacao->inserirMovimentacao($id_produto, $tipo, $quantidade, $descricao)) {
            Redirect::redirecionarComMensagem("estoque_movimentacao/listar", "success", "Movimentação de estoque salva com sucesso!");
        } else {
            Redirect::redirecionarComMensagem("estoque_movimentacao/create", "error", "Erro ao salvar movimentação de estoque.");
