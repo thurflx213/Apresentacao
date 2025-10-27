@@ -21,7 +21,7 @@ class AuthController{
         $this->session = new Session();
     }
     public function login(): void{
-        view::render('auth/login');
+     View::render('auth/login');
     }
     public function register(): void{
         View::render('auth/register');

@@ -7,28 +7,28 @@ use App\Koketsu\Core\View;
 
 
 class UsuarioValidador{
-   public static function validarEntradas($dados){ //
-    $erros = []; //
+   public static function validarEntradas($dados){ 
+    $erros = []; 
 
     // Validação de Nome
-    if(!isset($dados['nome_usuario']) || empty($dados['nome_usuario'])){ // Lógica mais simples
-        $erros[] = "O campo nome é obrigatório."; //
+    if(!isset($dados['nome_usuario']) && empty($dados['nome_usuario'])){ 
+        $erros[] = "O campo nome é obrigatório."; 
     }
 
     // Validação de Email
-    if(!isset($dados['email_usuario']) || empty($dados['email_usuario'])){
-        $erros[] = "O campo email é obrigatório."; //
-    } elseif (!filter_var($dados['email_usuario'], FILTER_VALIDATE_EMAIL)) { // Descomentar e usar a validação de email
+    if(!isset($dados['email_usuario']) && empty($dados['email_usuario'])){
+        $erros[] = "O campo email é obrigatório."; 
+    } elseif (!filter_var($dados['email_usuario'], FILTER_VALIDATE_EMAIL)) { 
         $erros[] = "O campo email deve conter um endereço de email válido.";
     }
 
     // Validação de Senha
-    if(!isset($dados['senha_usuario']) || empty($dados['senha_usuario'])){
-        $erros[] = "O campo senha é obrigatório."; //
-    } elseif(strlen($dados['senha_usuario']) < 6){ // Senha é válida, mas é menor que 6.
-        $erros[] = "O campo senha deve ter pelo menos 6 caracteres."; //
+    if(!isset($dados['senha_usuario']) && empty($dados['senha_usuario'])){
+        $erros[] = "O campo senha é obrigatório."; 
+    } elseif(strlen($dados['senha_usuario']) < 6){ 
+        $erros[] = "O campo senha deve ter pelo menos 6 caracteres."; 
     }
     
-    return $erros; //
+    return $erros; 
 }
 }

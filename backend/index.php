@@ -12,7 +12,6 @@ $router = new Router();
 $router->setNamespace('\App\Koketsu\Controles');
 $router->get('/backend/register', 'AuthController@register');
 $router->post('/backend/register', 'AuthController@cadastrarUsuario');
-$router->get('/admin/usuario', 'UsuarioController@index');
 $rotas = [ 
   "GET" => [
  // o caminho da URL o nome do controlle e o metodo do controle 
@@ -34,6 +33,7 @@ $rotas = [
         "/itenspedidos" => "ItensPedidosController@index",
         "/itenspedidos/criar" => "ItensPedidosController@viewCriarItemPedido",
         "/itenspedidos/listar" => "ItensPedidosController@viewListarItemPedido",
+        "/itenspedidos/listar/{pagina}" => "ItensPedidosController@viewlistaritenspedidos",
         "/itenspedidos/editar/{id}" => "ItensPedidosController@viewEditarItemPedido",
         "/itenspedidos/excluir/{id}" => "ItensPedidosController@viewExcluirItemPedido",
         "/itenspedidos/{id}/relatorio/{data1}/{data2}" => "ItensPedidosController@relatorioitenspedidos",
@@ -46,10 +46,11 @@ $rotas = [
          "/pedido/{id}/relatorio/{data1}/{data2}" => "Pedidos@relatorioPedido",
         //Produtos
         "/produto" => "ProdutosController@index",
-        "/produto/criar" => "ProdutosController@viewCriarProdutos",
-        "/produto/listar" => "ProdutosController@viewListarProdutos",
+        "/produto/criar" => "ProdutosController@viewCriarProduto",
+        "/produto/listar" => "ProdutosController@viewlistarProduto",
+        "/produto/listar/{pagina}" => "ProdutosController@viewlistarProduto",
         "/produto/editar/{id}" => "ProdutosController@viewEditarProduto",
-        "/produto/excluir/{id}" => "ProdutosController@viewExcluirProdutos",
+        "/produto/excluir/{id}" => "ProdutosController@viewExcluirProduto",
         "/produto/{id}/relatorio/{data1}/{data2}" => "ProdutosController@relatorioProduto",
     ],
     "POST" => [

@@ -34,24 +34,19 @@ class ItensPedidosController {
         }
     }
 
-    // Exibe a lista de itens de pedidos com paginação
-    public function viewListarItemPedido($pagina){
-        $pagina = filter_var($pagina, FILTER_VALIDATE_INT) ? (int) $pagina : 1;
-
-        $dados = $this->itenspedidos->paginacao($pagina);
-        $total = $this->itenspedidos->totalDeItensPedidos(); 
-
-        View::render("itenspedidos/index",
-            [
-                "itenspedidos" => $dados['data'],
-                "total_itens_pedidos" => $total, 
-                "total_inativos" => 0,
-                "Total_ativos" => 0, 
-                'paginacao' => $dados
-            ]
-        );
-    }
-
+  
+public function viewListarItemPedido(){
+ $dados = $this->itenspedidos->paginacao();
+ $total = $this->itenspedidos->totaldeitenspedidos();
+ view::render("itenspedidos/index",
+ ["itenspedidos" => $dados['data'],
+ "total_itenspedidos" => $total[0],
+ "total_inativos" => 22,
+ "Total_ativos" => 12,
+ 'paginacao' => $dados
+]
+);
+}
     // Exibe o formulário para criar um novo item de pedido
     public function viewCriarItemPedido() {
         View::render("itenspedidos/create");

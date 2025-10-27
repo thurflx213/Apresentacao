@@ -3,7 +3,7 @@
 
     <!-- Botão para Criar Novo Usuário -->
     <p>
-        <a href="/usuario/criar" class="w3-button w3-blue w3-round-large">
+        <a href="usuario/criar" class="w3-button w3-blue w3-round-large">
             <i class="fa fa-plus"></i> Novo Usuário
         </a>
     </p>
@@ -21,46 +21,40 @@
         </thead>
         <tbody>
             <?php 
-            $usuario = $data['usuario'] ?? []; 
-            if (empty($usuario)): ?>
-                <tr>
-                    <td colspan="6" class="w3-center">Nenhum usuário ativo encontrado.</td>
-                </tr>
+           $usuario = $data['usuario'] ?? []; 
+             if (empty($usuario)): ?>
+            <tr>
+          <table border ="1" cellpadding="5" cellspacing="0" class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white">
+            </tr>
             <?php else: ?>
-                <?php foreach ($usuario as $usuario): ?>
-                    <tr>
-                        <td><?= htmlspecialchars($usuario['id_usuario']) ?></td>
-                        <td><?= htmlspecialchars($usuario['nome_usuario']) ?></td>
-                        <td><?= htmlspecialchars($usuario['email_usuario']) ?></td>
-                        <td><?= htmlspecialchars($usuario['tipo_usuario']) ?></td>
-                        <td><?= htmlspecialchars($usuario['criado_em']) ?></td>
-                        <td>
-                            <!-- Links de Ação -->
-                            <a href="/usuario/editar/<?= $usuario['id_usuario'] ?>" 
-                               class="w3-button w3-tiny w3-yellow w3-margin-right">Editar</a>
-                            <a href="/usuario/excluir/<?= $usuario['id_usuario'] ?>" 
-                               class="w3-button w3-tiny w3-red">Excluir</a>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
+          <?php foreach ($usuario as $u): ?>
+            <tr>
+            <td><?= htmlspecialchars($u['id_usuario']) ?></td>
+            <td><?= htmlspecialchars($u['nome_usuario']) ?></td>
+            <td><?= htmlspecialchars($u['email_usuario']) ?></td>
+            <td><?= htmlspecialchars($u['tipo_usuario']) ?></td>
+            <td><?= htmlspecialchars($u['criado_em']) ?></td>
+            <td>
+        <a href="/usuario/editar<?= $u['id_usuario'] ?>" class="w3-button w3-tiny w3-yellow w3-margin-right">Editar</a>
+        <a href="/usuario/excluir<?= $u['id_usuario'] ?>" class="w3-button w3-tiny w3-red">Excluir</a>
+    </td>
+    </tr>
+    <?php endforeach; ?>
+     </tbody>
+   </table>
+   <div class="cao-controls" style="display:flex; justify-content:space-between; align-items:center; margin-top:20px;">
+    <div class="page-selector" style="display:flex; align-items:center;">
+        <div class="page-nav">
+            <?php if ($cao['pagina_atual'] > 1): ?>
+                <a href="/backend/usuario/listar/<?= $paginacao['pagina_atual'] - 1 ?>">Anterior</a>
             <?php endif; ?>
-        </tbody>
-    </table>
-    
-    <!-- Navegação de Paginação -->
-    <?php 
-    $paginaAtual = $data['paginaAtual'] ?? 1;
-    $totalPaginas = $data['totalPaginas'] ?? 1;
-    
-    if ($totalPaginas > 1): ?>
-        <div class="w3-bar w3-padding w3-center">
-            <?php for ($i = 1; $i <= $totalPaginas; $i++): ?>
-                <a 
-                    href="/usuario/listar/<?= $i ?>" 
-                    class="w3-bar-item w3-button w3-border <?= $i == $paginaAtual ? 'w3-blue' : '' ?>">
-                    <?= $i ?>
-                </a>
-            <?php endfor; ?>
+            <span style="margin:0 10px;">Página <?= $paginacao['pagina_atual'] ?> de <?= $paginacao['ultima_pagina'] ?></span>
+            <?php if ($paginacao['pagina_atual'] < $paginacao['ultima_pagina']): ?>
+                <a href="/backend/usuario/listar/<?= $paginacao['pagina_atual'] + 1 ?>">Próximo</a>
+            <?php endif; ?>
         </div>
-    <?php endif; ?>
+    </div>
 </div>
+  <?php else: ?>
+      <div>Nenhum usuário encontrado.</div>
+  <?php endif; ?>

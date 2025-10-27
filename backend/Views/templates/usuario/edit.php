@@ -13,7 +13,7 @@
    <input type="password" id="senha_usuario" name="senha_usuario" value="" required>
    <br>
    <label for="tipo">Tipo:</label>
-   <select id="nivel_acesso" name="nivel_acesso" value="<?php echo $usuario['nivel_acesso'] ?>" required>
+   <select id="tipo_usuario" name="tipo_usuario" value="<?php echo $usuario['tipo_usuario'] ?>" required>
    <option value="vendedor">Vendedor</option>
    <option value="admin" >Admin</option>
    </select><br>

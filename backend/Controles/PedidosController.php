@@ -54,7 +54,7 @@ public function viewCriarPedidos(){
 }
 public function viewEditarPedido(int $id){
   $dados = $this->pedidos->buscarPedidoPorId($id);
-var_dump($dados);
+
 //  foreach($dados as $pedidos){
 // $dados = $pedidos;
 // }
@@ -68,7 +68,7 @@ public function viewexcluirPedido(){
 public function atualizarPedidos(){
  echo "Atualizar usuario";
 }
-public function deletarUsuario(){
+public function excluirPedido(){
  echo "Deletar usuario";
 } 
 public function relatorioPedido($id, $data1, $data2){
