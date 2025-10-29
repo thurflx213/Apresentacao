@@ -21,40 +21,41 @@
         </thead>
         <tbody>
             <?php 
-           $usuario = $data['usuario'] ?? []; 
-             if (empty($usuario)): ?>
-            <tr>
-          <table border ="1" cellpadding="5" cellspacing="0" class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white">
-            </tr>
+            $usuario = $data['usuario'] ?? []; 
+            if (empty($usuario)): ?>
+                <tr>
+                    <td colspan="6">Nenhum usuário encontrado.</td>
+                </tr>
             <?php else: ?>
-          <?php foreach ($usuario as $u): ?>
-            <tr>
-            <td><?= htmlspecialchars($u['id_usuario']) ?></td>
-            <td><?= htmlspecialchars($u['nome_usuario']) ?></td>
-            <td><?= htmlspecialchars($u['email_usuario']) ?></td>
-            <td><?= htmlspecialchars($u['tipo_usuario']) ?></td>
-            <td><?= htmlspecialchars($u['criado_em']) ?></td>
-            <td>
-        <a href="/usuario/editar<?= $u['id_usuario'] ?>" class="w3-button w3-tiny w3-yellow w3-margin-right">Editar</a>
-        <a href="/usuario/excluir<?= $u['id_usuario'] ?>" class="w3-button w3-tiny w3-red">Excluir</a>
-    </td>
-    </tr>
-    <?php endforeach; ?>
-     </tbody>
-   </table>
-   <div class="cao-controls" style="display:flex; justify-content:space-between; align-items:center; margin-top:20px;">
-    <div class="page-selector" style="display:flex; align-items:center;">
-        <div class="page-nav">
-            <?php if ($cao['pagina_atual'] > 1): ?>
-                <a href="/backend/usuario/listar/<?= $paginacao['pagina_atual'] - 1 ?>">Anterior</a>
+                <?php foreach ($usuario as $u): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($u['id_usuario']) ?></td>
+                        <td><?= htmlspecialchars($u['nome_usuario']) ?></td>
+                        <td><?= htmlspecialchars($u['email_usuario']) ?></td>
+                        <td><?= htmlspecialchars($u['tipo_usuario']) ?></td>
+                        <td><?= htmlspecialchars($u['criado_em']) ?></td>
+                        <td>
+                            <a href="/usuario/editar/<?= $u['id_usuario'] ?>" class="w3-button w3-tiny w3-yellow w3-margin-right">Editar</a>
+                            <a href="/usuario/excluir/<?= $u['id_usuario'] ?>" class="w3-button w3-tiny w3-red">Excluir</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
             <?php endif; ?>
-            <span style="margin:0 10px;">Página <?= $paginacao['pagina_atual'] ?> de <?= $paginacao['ultima_pagina'] ?></span>
-            <?php if ($paginacao['pagina_atual'] < $paginacao['ultima_pagina']): ?>
-                <a href="/backend/usuario/listar/<?= $paginacao['pagina_atual'] + 1 ?>">Próximo</a>
-            <?php endif; ?>
+        </tbody>
+    </table>
+
+    <?php if (!empty($usuario) && !empty($paginacao)): ?>
+    <div class="cao-controls" style="display:flex; justify-content:space-between; align-items:center; margin-top:20px;">
+        <div class="page-selector" style="display:flex; align-items:center;">
+            <div class="page-nav">
+                <?php if ($paginacao['pagina_atual'] > 1): ?>
+                    <a href="/backend/usuario/listar/<?= $paginacao['pagina_atual'] - 1 ?>">Anterior</a>
+                <?php endif; ?>
+                <span style="margin:0 10px;">Página <?= $paginacao['pagina_atual'] ?> de <?= $paginacao['ultima_pagina'] ?></span>
+                <?php if ($paginacao['pagina_atual'] < $paginacao['ultima_pagina']): ?>
+                    <a href="/backend/usuario/listar/<?= $paginacao['pagina_atual'] + 1 ?>">Próximo</a>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
-</div>
-  <?php else: ?>
-      <div>Nenhum usuário encontrado.</div>
-  <?php endif; ?>
+    <?php endif; ?>

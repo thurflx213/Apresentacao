@@ -28,17 +28,25 @@ class Produtos {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
- function buscarProdutoPorId($id) {
-    $sql = "SELECT * FROM tbl_produtos
-            WHERE id_produto = :id_produto AND excluido_em IS NULL"; 
+function buscarProdutoPorId($id) {
+    
+    
+    $sql = "SELECT 
+                id_produto, 
+                nome_produtos AS nome_produto, 
+                preco_produtos AS preco_produto, 
+                descricao_produtos AS descricao_produto, 
+                criado_em 
+            FROM tbl_produtos 
+            WHERE id_produto = :id_produto AND excluido_em IS NULL";
+            
     $stmt = $this->db->prepare($sql);
     $stmt->bindParam(':id_produto', $id, PDO::PARAM_INT);
     $stmt->execute();
-
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-public function paginacao(int $pagina = 1, int $por_pagina = 10): array{
+public function paginacao(int $pagina = 1, int $por_pagina = 50): array{
         $totalQuery = "SELECT COUNT(*) FROM `tbl_produtos`";
         $totalStmt = $this->db->query($totalQuery);
         $total_de_registros = $totalStmt->fetchColumn();

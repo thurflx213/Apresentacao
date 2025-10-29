@@ -45,7 +45,7 @@ class Pedidos {
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
-public function paginacao(int $pagina = 1, int $por_pagina = 10): array{
+public function paginacao(int $pagina = 1, int $por_pagina = 50): array{
         $totalQuery = "SELECT COUNT(*) FROM `tbl_pedidos`";
         $totalStmt = $this->db->query($totalQuery);
         $total_de_registros = $totalStmt->fetchColumn();
@@ -76,41 +76,58 @@ public function paginacao(int $pagina = 1, int $por_pagina = 10): array{
     return $stmt->fetch(PDO::FETCH_COLUMN);
 }
   // Inserir novo pedido
-  function inserirPedido($id_cliente, $data_pedido, $total_pedido, $status_pedido) {
-    $sql = "INSERT INTO tbl_pedidos 
+function inserirPedido($id_cliente, $data_pedido, $total_pedido, $status_pedido) {
+        $sql = "INSERT INTO tbl_pedidos 
             (id_cliente, data_pedido, total_pedido, status_pedido, criado_em) 
-            VALUES (:id_cliente, :data_pedido, :total_pedido, :status_pedido, NOW())";
-    $stmt = $this->db->prepare($sql);
-    $stmt->bindParam(':id_cliente', $id_cliente);
-    $stmt->bindParam(':data_pedido', $data_pedido);
-    $stmt->bindParam(':total_pedido', $total_pedido);
-    $stmt->bindParam(':status_pedido', $status_pedido);
-    if($stmt->execute()) {
-      return $this->db->lastInsertId();
-    } else {
-      return false;
+             VALUES (:id_cliente, :data_pedido, :total_pedido, :status_pedido, NOW())";
+        
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':id_cliente', $id_cliente);
+        $stmt->bindParam(':data_pedido', $data_pedido);
+        $stmt->bindParam(':total_pedido', $total_pedido);
+        $stmt->bindParam(':status_pedido', $status_pedido);
+        
+        if($stmt->execute()) {
+            return $this->db->lastInsertId(); // **CRUCIAL: Retorna o ID do pedido**
+        } else {
+            return false;
+        }
     }
-  }
 
   // Atualizar pedido existente
-  function atualizarPedido($id_pedido, $total_pedido, $status_pedido) {
-    $dataatual = date('Y-m-d H:i:s');
-    $sql = "UPDATE tbl_pedidos SET 
-            total_pedido = :total_pedido,
-            status_pedido = :status_pedido,
-            atualizado_em = :atualizado_em
-            WHERE id_pedido = :id";
-    $stmt = $this->db->prepare($sql);
-    $stmt->bindParam(':total_pedido', $total_pedido);
-    $stmt->bindParam(':status_pedido', $status_pedido);
-    $stmt->bindParam(':atualizado_em', $dataatual);
-    $stmt->bindParam(':id', $id_pedido);
-    if($stmt->execute()) {
-      return true;
-    } else {
-      return false;
+function atualizarPedido($id_pedido, $total_pedido, $data_pedido, $status_pedido, $imagem = null) {
+        $dataatual = date('Y-m-d H:i:s');
+        
+        $sql = "UPDATE tbl_pedidos SET 
+                total_pedido = :total_pedido,
+                data_pedido = :data_pedido, // NOVO: Adicionado
+                status_pedido = :status_pedido,
+                atualizado_em = :atualizado_em";
+        
+        if (!empty($imagem)) {
+            $sql .= ", imagem_pedidos = :imagem"; // NOVO: Adicionado Condicionalmente
+        }
+
+        $sql .= " WHERE id_pedido = :id";
+        
+        $stmt = $this->db->prepare($sql);
+        
+        $stmt->bindParam(':total_pedido', $total_pedido);
+        $stmt->bindParam(':data_pedido', $data_pedido); // NOVO: Bind
+        $stmt->bindParam(':status_pedido', $status_pedido);
+        $stmt->bindParam(':atualizado_em', $dataatual);
+        $stmt->bindParam(':id', $id_pedido);
+        
+        if (!empty($imagem)) {
+            $stmt->bindParam(':imagem', $imagem);
+        }
+        
+        if($stmt->execute()) {
+            return true;
+        } else {
+            return false;
+        }
     }
-  }
 
   // Excluir pedido
   function excluirPedido($id_pedido) {

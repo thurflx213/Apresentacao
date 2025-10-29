@@ -1,24 +1,34 @@
-<div>Sou o edit</div>
-<form action="/backend/pedido/atualizar/<?php echo $pedidos['id_pedido']; ?>" method="post">
-    <label for="id_cliente">Cliente:</label>
-    <input type="number" id="id_cliente" value="<?php echo $pedidos['id_pedido']; ?>" name="id_cliente" required>
-    <br>
+<div class="w3-container w3-margin-top">
+    <h2>Editar pedido</h2>
 
-    <label for="data_pedido">Data do Pedido:</label>
-    <input type="date" id="data_pedido" name="data_pedido"  value="<?php echo $pedidos['data_pedido']; ?>"  required>
-    <br>
+    <?php if (!empty($pedido) && isset($pedido['id_pedido'])): ?>
+        <form action="/backend/pedido/atualizar/<?php echo (int)$pedido['id_pedido']; ?>" method="post" class="w3-container w3-card w3-padding w3-black">
 
-    <label for="total_pedido">Total do Pedido (R$):</label>
-    <input type="number" step="0.01" id="total_pedido" value="<?php echo $pedidos['total_pedido']; ?>" name="total_pedido" required>
-    <br>
+            <label for="data_pedido">Data:</label>
+            <input class="w3-input w3-margin-bottom" type="text" id="data_pedido" name="data_pedido"
+                value="<?php echo htmlspecialchars($pedido['data_pedido'] ?? ''); ?>" required>
 
-    <label for="status_pedido">Status:</label>
-    <select id="status_pedido" value="<?php echo $pedidos['status_pedido']; ?>" name="status_pedido" required>
-        <option value="pendente">Pendente</option>
-        <option value="pago">Pago</option>
-        <option value="cancelado">Cancelado</option>
-    </select>
-    <br>
+            <label for="total_pedido">Total:</label>
+            <textarea class="w3-input w3-margin-bottom" id="total_pedido" name="total_pedido" required><?php echo htmlspecialchars($pedido['total_pedido'] ?? ''); ?></textarea>
 
-    <button type="submit">Salvar Pedido</button>
-</form>
+            <label for="status_pedido">Status:</label>
+            <input class="w3-input w3-margin-bottom" type="text"  id="status_pedido" name="status_pedido"
+                value="<?php echo htmlspecialchars($pedido['status_pedido'] ?? ''); ?>" required>
+
+            <label for="imagem_pedidos">Imagem (URL):</label>
+            <input class="w3-input w3-margin-bottom" type="text" id="imagem_pedidos" name="imagem_pedidos"
+                value="<?php echo htmlspecialchars($pedido['imagem_pedidos'] ?? ''); ?>">
+
+            <label for="id_pedido">Pedido (ID):</label>
+            <input class="w3-input w3-margin-bottom" type="number" id="id_pedido" name="id_pedido"
+                value="<?php echo htmlspecialchars($pedido['id_pedido'] ?? ''); ?>" required>
+
+            <button type="submit" class="w3-button w3-yellow w3-round-large">Salvar</button>
+        </form>
+
+    <?php else: ?>
+        <div class="w3-panel w3-red w3-padding">
+            <p><b>Erro:</b> pedido não encontrado.</p>
+        </div>
+    <?php endif; ?>
+</div>

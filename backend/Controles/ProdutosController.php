@@ -5,115 +5,128 @@ use App\Koketsu\Models\Produtos;
 use App\Koketsu\Database\Database;
 use App\Koketsu\Core\View;
 use App\Koketsu\Core\Redirect;
+use App\Koketsu\Core\FileManager;
+use App\Koketsu\Controles\Admin\AdminController;
 
-
-class ProdutosController {
-public $produtos;
-public $db;
+class ProdutosController extends AdminController {
+    public $produtos;
+    public $db;
+    public $gerenciarImagem;
 
 public function __construct() {
-$this->db = Database::getInstance();
-$this->produtos = new Produtos($this->db);
+    parent::__construct();
+    $this->db = Database::getInstance();
+    $this->produtos = new Produtos($this->db);
+    $this->gerenciarImagem = new FileManager('upload');
 }
 
-// index: Retorna a lista de produtos (geralmente usado por APIs internas)
+  // index
 public function index(){
-$resultado = $this->produtos->buscarProdutos();
-return $resultado;
-} 
-  
+    $this->viewListarProduto();
+}  
 
-// viewProdutoUnico: Exibe os detalhes de um produto específico
-public function viewProdutoUnico(int $id) {
-  $dados = $this->produtos->buscarProdutoPorId($id);
+public function viewProdutoUnico(int $id_produto) {
+        
+        $produto = $this->produtos->buscarProdutoPorId($id_produto);
+        
+        if ($produto) {
+           
+            \App\Koketsu\Core\View::render('produtos/detalhes', [
+                'produto' => $produto
+            ]);
+        } else {
+          
+            \App\Koketsu\Core\Redirect::redirecionarComMensagem("/produto/listar", "error", "Produto não encontrado.");
+        }
+    }
+    public function viewlistarProduto() {
+        $dados = $this->produtos->paginacao();
+        $total = $this->produtos->totaldeProdutos();
 
-  if ($dados) {
-    View::render('produtos/detalhes', ['produto' => $dados]);
-  } else {
-    header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
-    echo 'Produto não encontrado.';
-  }
+        // Garante que $total seja número simples
+        $total_produtos = is_array($total) ? reset($total) : $total;
+
+        View::render("produtos/index", [
+            "produtos" => $dados['data'] ?? [],
+            "total_produtos" => $total_produtos ?? 0,
+            "total_inativos" => 0,
+            "Total_ativos" => 0,
+            'paginacao' => $dados
+        ]);
+    }
+
+    public function viewCriarProduto() {
+        View::render("produtos/create");
+    }
+
+ public function viewEditarProdutos(int $id) {
+        $produtos = $this->produtos->buscarProdutoPorId($id);
+        if (!$produtos) {
+            Redirect::redirecionarComMensagem("/produto/listar", "error", "Produto não encontrado.");
+        }
+        
+        View::render("produtos/edit", ["produtos" => $produtos]);
+    }
+
+
+  public function atualizarProdutos() {
+    $id_produto = (int)($_POST['id_produto'] ?? 0);
+    $nome = $_POST['nome_produtos'] ?? '';
+    $descricao = $_POST['descricao_produtos'] ?? '';
+    $preco = (int)($_POST['preco_produtos'] ?? 0);
+     $estoque = $_POST['estoque_produtos'] ?? '';
+    $imagem = null;
+    if (isset($_FILES['imagem_produtos']) && $_FILES['imagem_produtos']['error'] == 0) {
+        $imagem = $this->gerenciarImagem->salvarArquivo($_FILES['imagem_produtos'], 'produtos');
+    }
+
+    $id_categoria = $_POST['id_categoria'] ?? null;
+
+    if ($this->produtos->atualizarProduto($id_produto, $nome, $descricao, $preco, $estoque, $imagem, $id_categoria)) {
+        Redirect::redirecionarComMensagem("/produto/listar", "success", "Produto atualizado com sucesso!");
+    } else {
+        Redirect::redirecionarComMensagem("produto/editar/" . $id_produto, "error", "Erro ao atualizar produto!");
+    }
 }
 
 
-// viewlistarProduto: Exibe a lista de produtos com paginação para a view
-public function viewlistarProduto(){
-$dados = $this->produtos->paginacao();
-// Assumindo que totaldeProdutos() retorna um array e o total está no índice 0
-$total = $this->produtos->totaldeProdutos(); 
-view::render("produtos/index",
-[
-  "produtos" => $dados['data'],
-  "total_produtos" => $total[0],
-  "total_inativos" => 22, // Dados de exemplo, você pode buscar os reais
-  "Total_ativos" => 12,   // Dados de exemplo, você pode buscar os reais
-  'paginacao' => $dados
-]
-);
-}
+   public function viewExcluirProduto(int $id) {
+     $id = (int)$_POST['id_produto'];
+        if ($this->produtos->excluirProduto($id)) {
+            Redirect::redirecionarComMensagem("/produto/listar", "success", "Produto inativado com sucesso!");
+        } else {
+            Redirect::redirecionarComMensagem("/produto/listar", "error", "Erro ao inativar produto.");
+        }
+    }
 
+     public function salvarProduto() {
+if (empty($_POST["nome_produtos"]) || empty($_FILES['imagem_produtos']['name'])) {
+            Redirect::redirecionarComMensagem("/produto/criar", "error", "Nome e Foto são obrigatórios.");
+        }
 
-public function viewCriarProduto(){
-view::render("produtos/create");
-}
+        $imagem = $this->gerenciarImagem->salvarArquivo($_FILES['imagem_produtos'], 'produtos');
 
-public function viewEditarProduto(int $id){
- $dados = $this->produtos->buscarProdutoPorId($id);
+       
+        $preco = isset($_POST['preco_produtos']) ? (float)$_POST['preco_produtos'] : 0;
+        $estoque = isset($_POST['estoque_produtos']) ? (int)$_POST['estoque_produtos'] : 0;
+        $id_categoria = $_POST['id_categoria'] ?? null;
 
-View::render('produtos/edit', ['produto' => $dados]);
-}
+        if ($this->produtos->inserirProduto(
+            $_POST["nome_produtos"],
+            $_POST["descricao_produtos"],
+            $preco,
+            $estoque,
+            $imagem,
+            $id_categoria
+        )) {
+            Redirect::redirecionarComMensagem("/produto/listar", "success", "Produtos cadastrado com sucesso!");
+        } else {
+            Redirect::redirecionarComMensagem("/produto/criar", "error", "Erro ao cadastrar produtos.");
+        }
+    }
 
-
-public function viewExcluirProduto(){
-view::render("produto/delete");
-}
-
-
-public function atualizarProdutos(){
-
-if ($this->produtos->atualizarProduto(
-  $_POST["id_produto"], 
-  $_POST["nome_produtos"],
-  $_POST["descricao_produtos"],
-  $_POST["preco_produtos"],
-  $_POST["estoque_produtos"],
-  $_POST["status_produtos"], // Ex: 'Ativo' ou 'Inativo'
-  isset($_POST["id_categoria"]) ? $_POST["id_categoria"] : null
-)) {
-  Redirect::redirecionarComMensagem("produto/listar", "success", "Produto atualizado com sucesso.");
-} else {
-  Redirect::redirecionarComMensagem("produto/editar/" . $_POST["id_produto"], "error", "Erro ao atualizar produto.");
-}
-}
-
-
-public function deletarProduto(int $id){
-
-if ($this->produtos->excluirProduto($id)) {
-  Redirect::redirecionarComMensagem("produto/listar", "success", "Produto excluído com sucesso.");
-} else {
-  Redirect::redirecionarComMensagem("produto/listar", "error", "Erro ao excluir produto.");
-}
-} 
-public function relatorioProduto($id, $data1, $data2){
-View::render("produto/relatorio",
-["id"=> $id, "data1"=> $data1, "data2"=> $data2]);
-}
-
-
-public function salvarProduto() {
-
-if ($this->produtos->inserirProduto(
-  $_POST["nome_produtos"],
-  $_POST["descricao_produtos"],
-  $_POST["preco_produtos"],
-  $_POST["estoque_produtos"],
-  "Ativo", 
-  isset($_POST["id_categoria"]) ? $_POST["id_categoria"] : null
-)) {
-  Redirect::redirecionarComMensagem("produto/listar", "success", "Produto criado com sucesso.");
-} else {
-  Redirect::redirecionarComMensagem("produto/criar", "error", "Erro ao criar produto.");
-}
+    public function relatorioProduto($id, $data1, $data2){
+ View::render("produto/relatorio",
+ ["id"=> $id, "data1"=> $data1, "data2"=> $data2]);
 }
 }
