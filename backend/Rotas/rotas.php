@@ -24,25 +24,18 @@ class Rotas
         "/backend/avaliacao/excluir/{id}" => "AvaliacaoController@viewExcluirAvaliacao",
 
        //Carrinho
-          "/backend/carrinho" => "CarrinhoControllers@index",
-        "/backend/carrinho/criar" => "CarrinhoControllers@viewCriarCarrinho",
-        "/backend/carrinho/listar" => "CarrinhoControllers@viewListarCarrinho",
-        "/backend/carrinho/editar/{id}" => "CarrinhoControllers@viewEditarCarrinho",
-        "/backend/carrinho/excluir/{id}" => "CarrinhoControllers@viewExcluirCarrinho",
-
-        //Estoque_Movimentação
-         "/backend/EstoqueMovimentacao" => "Estoque_MovimentacaoControllers@index",
-        "/backend/EstoqueMovimentacao/criar" => "Estoque_MovimentacaoControllers@viewCriarEstoque_Movimentacao",
-        "/backend/EstoqueMovimentacao/listar" => "Estoque_MovimentacaoControllers@viewListarEstoque_Movimentacao",
-        "/backend/EstoqueMovimentacao/editar/{id}" => "Estoque_MovimentacaoControllers@viewEditarEstoque_Movimentacao",
-        "/backend/EstoqueMovimentacao/excluir/{id}" => "Estoque_MovimentacaoControllers@viewExcluirEstoque_Movimentacao",
+          "/backend/carrinho" => "CarrinhoController@index",
+        "/backend/carrinho/criar" => "CarrinhoController@viewCriarCarrinho",
+        "/backend/carrinho/listar" => "CarrinhoController@viewListarCarrinho",
+        "/backend/carrinho/editar/{id}" => "CarrinhoController@viewEditarCarrinho",
+        "/backend/carrinho/excluir/{id}" => "CarrinhoController@viewExcluirCarrinho",
 
          //Imagens
-         "/backend/Imagens" => "ImagemControllers@index",
-        "/backend/Imagens/criar" => "ImagemControllers@viewCriarImagem",
-        "/backend/Imagens/listar" => "ImagemControllers@viewListarImagens",
-        "/backend/Imagens/editar/{id}" => "ImagemControllers@viewEditarImagem",
-        "/backend/Imagens/excluir/{id}" => "ImagemControllers@viewExcluirImagem",
+         "/backend/Imagens" => "ImagemController@index",
+        "/backend/Imagens/criar" => "ImagemController@viewCriarImagem",
+        "/backend/Imagens/listar" => "ImagemController@viewListarImagens",
+        "/backend/Imagens/editar/{id}" => "ImagemController@viewEditarImagem",
+        "/backend/Imagens/excluir/{id}" => "ImagemController@viewExcluirImagem",
 
         ],
     "POST" => [
@@ -55,19 +48,15 @@ class Rotas
        "/backend/avaliacao/deletar/{id}" => "AvaliacaoController@deletarAvaliacao",
         
        //carrinho
-       "/backend/carrinho/salvar" => "CarrinhoControllers@salvarCarrinho",
-       "/backend/carrinho/atualizar/{id}" => "CarrinhoControllers@atualizarCarrinho",
-       "/backend/carrinho/deletar/{id}" => "CarrinhoControllers@deletarCarrinho",
-
-       //EstoqueMovimentacao
-       "/backend/EstoqueMovimentacao/salvar" => "Estoque_MovimentacaoControllers@salvarEstoqueMovimentacao",
-       "/backend/EstoqueMovimentacao/atualizar/{id}" => "Estoque_MovimentacaoControllers@atualizarEstoqueMovimentacao",
-       "/backend/EstoqueMovimentacao/deletar/{id}" => "Estoque_MovimentacaoControllers@deletarEstoqueMovimentacao",
+       "/backend/carrinho/salvar" => "CarrinhoController@salvarCarrinho",
+       "/backend/carrinho/atualizar/{id}" => "CarrinhoController@atualizarCarrinho",
+       "/backend/carrinho/deletar/{id}" => "CarrinhoController@deletarCarrinho",
+       "/backend/carrinho/edit/{id}" => "CarrinhoController@viewEditCarrinho",
 
         //imagens
-        "/backend/Imagem/salvar" => "ImagemControllers@salvarImagem",
-       "/backend/Imagem/atualizar/{id}" => "ImagemControllers@atualizarImagem",
-       "/backend/Imagem/deletar/{id}" => "ImagemControllers@deletarImagem",
+        "/backend/Imagens/salvar" => "ImagemController@salvarImagem",
+       "/backend/Imagens/atualizar/{id}" => "ImagemController@atualizarImagem",
+       "/backend/Imagens/deletar/{id}" => "ImagemController@deletarImagem",
 
          //autenticação
        '/register' => 'AuthController@cadastrarUsuario',

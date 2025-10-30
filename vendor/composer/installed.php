@@ -3,7 +3,7 @@
         'name' => 'app/koketsu',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '5dd7f70efe9775b7483930f775c2b9f1c8acfec1',
+        'reference' => 'e2ddcf6d663f7482712df3b3c3912bd8ea5e2848',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'app/koketsu' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '5dd7f70efe9775b7483930f775c2b9f1c8acfec1',
+            'reference' => 'e2ddcf6d663f7482712df3b3c3912bd8ea5e2848',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

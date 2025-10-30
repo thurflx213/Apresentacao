@@ -44,7 +44,6 @@ class AuthController{
             
             Redirect::redirecionarPara('/admin/dashboard'); 
         } else {
-            // CORREÇÃO: Removido '/backend/' e a barra inicial
             Redirect::redirecionarComMensagem('login', 'error', 'E-mail ou senha incorretos.');
         }
     }
@@ -52,7 +51,7 @@ class AuthController{
     public function cadastrarUsuario(): void {
         $erros = UsuarioValidador::ValidarEntradas($_POST);
         if (!empty($erros)) {
-            // CORREÇÃO: Removido a barra inicial
+            
             Redirect::redirecionarComMensagem('register', 'erros', implode("<br>", $erros));
         }
         $nome = $_POST['nome_usuario'] ?? null;
@@ -60,15 +59,15 @@ class AuthController{
         $senha = $_POST['senha_usuario'] ?? null;
         $senha_confirm = $_POST['senha_confirm'] ?? null;
         if ($senha != $senha_confirm) {
-            // CORREÇÃO: Removido a barra inicial
+    
             Redirect::redirecionarComMensagem('register', 'erros', 'As senhas não conferem.');
         }
         
         if (!empty($this->usuarioModel->buscarUsuariosPorEMail($email))){
-            // CORREÇÃO: Removido a barra inicial
+          
             Redirect::redirecionarComMensagem('register', 'erros', 'Erro ao cadastrar, problema no seu e-mail.');
         }
-        // CORREÇÃO: Alterado 'null' string para o valor null, pois o model espera ?string
+    
         $novoUsuarioId = $this->usuarioModel->inseriUsuario($nome, $email, $senha, 'vendedor', 'Ativo', null);
         if ($novoUsuarioId) {
             Redirect::redirecionarComMensagem('login', 'success', 'Cadastro realizado! Por favor, faça o login.');
