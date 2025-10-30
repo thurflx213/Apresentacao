@@ -61,9 +61,23 @@ class ItensPedidos {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    /**
-     * Inserir item de pedido.
-     */
+    public function buscarTop5ProdutosVendidos()
+    {
+        $sql = "
+            SELECT
+                p.nome_produtos AS nome_produto, 
+                SUM(ip.quantidade) AS total_vendido
+            FROM tbl_itens_pedidos ip
+            JOIN tbl_produtos p ON ip.id_produto = p.id_produto
+            GROUP BY p.nome_produtos
+            ORDER BY total_vendido DESC
+            LIMIT 5
+        ";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+   
     function inserirItemPedido($id_pedido, $id_produto, $quantidade, $preco_unitario) {
         $sql = "INSERT INTO tbl_itens_pedidos 
         (id_pedido, id_produto, quantidade, preco_unitario, criado_em) 

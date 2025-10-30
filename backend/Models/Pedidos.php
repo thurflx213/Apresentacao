@@ -45,6 +45,92 @@ class Pedidos {
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
+ public function buscarVendasMensais()
+    {
+        $sql = "
+            SELECT
+                DATE_FORMAT(data_pedido, '%Y-%m-01') AS mes,
+                SUM(data_pedido) AS total_vendas
+            FROM tbl_pedidos
+            WHERE data_pedido >= DATE_SUB(NOW(), INTERVAL 12 MONTH)
+            AND status_pedido IN ('pago', 'enviado', 'concluido')
+            GROUP BY mes
+            ORDER BY mes ASC
+        ";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Busca a contagem de pedidos para cada status.
+     * @return array
+     */
+    public function contarPedidosPorStatus()
+    {
+        $sql = "
+            SELECT
+                status_pedido,
+                COUNT(id_pedido) AS contagem
+            FROM tbl_pedidos
+            WHERE excluido_em IS NULL
+            GROUP BY status_pedido
+            ORDER BY contagem DESC
+        ";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    /**
+     * Busca o faturamento (receita) mensal por categoria.
+     * @return array
+     */
+    public function buscarVendasMensaisPorCategoria()
+    {
+        $sql = "
+            SELECT
+                DATE_FORMAT(p.data_pedido, '%Y-%m-01') AS mes,
+                c.nome_categorias AS categoria,
+                SUM(ip.quantidade * ip.preco_unitario) AS faturamento
+            FROM tbl_pedidos p
+            
+            JOIN tbl_itens_pedidos ip ON p.id_pedido = ip.id_pedido
+            JOIN tbl_produtos prod ON ip.id_produto = prod.id_produto
+            JOIN tbl_categorias c ON prod.id_categoria = c.id_categorias
+            
+            WHERE p.data_pedido >= DATE_SUB(NOW(), INTERVAL 12 MONTH)
+            AND p.status_pedido IN ('pago', 'enviado', 'concluido')
+            GROUP BY mes, c.nome_categorias
+            ORDER BY mes ASC, faturamento DESC
+        ";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Calcula o Ticket Médio (Total Vendido / Total de Pedidos) mensalmente.
+     * Usa a coluna CORRETA: data_total_pedido
+     * @return array
+     */
+    public function calcularTicketMedioMensal()
+    {
+        $sql = "
+            SELECT
+                DATE_FORMAT(data_pedido, '%Y-%m-01') AS mes,
+                AVG(data_pedido) AS ticket_medio
+            FROM tbl_pedidos
+            WHERE data_pedido >= DATE_SUB(NOW(), INTERVAL 12 MONTH)
+            AND status_pedido IN ('pago', 'enviado', 'concluido')
+            GROUP BY mes
+            ORDER BY mes ASC
+        ";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+  
 public function paginacao(int $pagina = 1, int $por_pagina = 50): array{
         $totalQuery = "SELECT COUNT(*) FROM `tbl_pedidos`";
         $totalStmt = $this->db->query($totalQuery);
@@ -95,40 +181,47 @@ function inserirPedido($id_cliente, $data_pedido, $total_pedido, $status_pedido)
     }
 
   // Atualizar pedido existente
-function atualizarPedido($id_pedido, $total_pedido, $data_pedido, $status_pedido, $imagem = null) {
-        $dataatual = date('Y-m-d H:i:s');
-        
-        $sql = "UPDATE tbl_pedidos SET 
-                total_pedido = :total_pedido,
-                data_pedido = :data_pedido, // NOVO: Adicionado
-                status_pedido = :status_pedido,
-                atualizado_em = :atualizado_em";
-        
-        if (!empty($imagem)) {
-            $sql .= ", imagem_pedidos = :imagem"; // NOVO: Adicionado Condicionalmente
-        }
+public function atualizarPedido($id_pedido, $total_pedido, $data_pedido, $status_pedido, $imagem = null) {
+    $dataatual = date('Y-m-d H:i:s');
+    
+    // 1. Monta a base da query. SEM a vírgula final
+    $sql = "UPDATE tbl_pedidos SET 
+            total_pedido = :total_pedido,
+            data_pedido = :data_pedido,
+            status_pedido = :status_pedido,
+            atualizado_em = :atualizado_em";
 
-        $sql .= " WHERE id_pedido = :id";
-        
-        $stmt = $this->db->prepare($sql);
-        
-        $stmt->bindParam(':total_pedido', $total_pedido);
-        $stmt->bindParam(':data_pedido', $data_pedido); // NOVO: Bind
-        $stmt->bindParam(':status_pedido', $status_pedido);
-        $stmt->bindParam(':atualizado_em', $dataatual);
-        $stmt->bindParam(':id', $id_pedido);
-        
-        if (!empty($imagem)) {
-            $stmt->bindParam(':imagem', $imagem);
-        }
-        
-        if($stmt->execute()) {
-            return true;
-        } else {
-            return false;
-        }
+    // 2. Adiciona o campo 'imagem_pedidos' APENAS SE A IMAGEM EXISTE (NÃO VAZIA)
+    if (!empty($imagem)) { 
+        // Note o ", " no início. Ele é adicionado APENAS se houver uma imagem.
+        $sql .= ", imagem_pedidos = :imagem"; 
     }
 
+    // 3. Adiciona a cláusula WHERE
+    $sql .= " WHERE id_pedido = :id";
+    
+    $stmt = $this->db->prepare($sql);
+    
+    // Bind Params (Todos os campos obrigatórios)
+    $stmt->bindParam(':total_pedido', $total_pedido);
+    $stmt->bindParam(':data_pedido', $data_pedido); 
+    $stmt->bindParam(':status_pedido', $status_pedido);
+    $stmt->bindParam(':atualizado_em', $dataatual);
+    $stmt->bindParam(':id', $id_pedido);
+    
+    // Bind Param (Condicional - Apenas se houver imagem)
+    if (!empty($imagem)) {
+        $stmt->bindParam(':imagem', $imagem);
+    }
+    
+    if ($stmt->execute()) {
+        return true;
+    } else {
+        // Retorna o erro real do PDO, o que pode ajudar a depurar melhor no futuro
+        error_log("Erro no SQL ao atualizar pedido: " . json_encode($stmt->errorInfo()));
+        return false;
+    }
+}
   // Excluir pedido
   function excluirPedido($id_pedido) {
     $dataatual = date('Y-m-d H:i:s');
@@ -139,4 +232,5 @@ function atualizarPedido($id_pedido, $total_pedido, $data_pedido, $status_pedido
     $stmt->bindParam(':id', $id_pedido);
     return $stmt->execute();
   }
+ 
 }

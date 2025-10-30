@@ -10,8 +10,11 @@ use Bramus\Router\Router;
 
 $router = new Router();
 $router->setNamespace('\App\Koketsu\Controles');
+$router->get('/backend/relatorios', 'RelatoriosController@exibirRelatorios');
 $router->get('/backend/register', 'AuthController@register');
 $router->post('/backend/register', 'AuthController@cadastrarUsuario');
+$router->get('/admin/relatorios', 'RelatoriosController@index');
+
 $rotas = [ 
   "GET" => [
  // o caminho da URL o nome do controlle e o metodo do controle 
@@ -46,6 +49,7 @@ $rotas = [
         "/pedido/editar/{id}" => "PedidosController@viewEditarPedido",
         "/pedido/excluir/{id}" => "PedidosController@viewExcluirPedido",
          "/pedido/{id}/relatorio/{data1}/{data2}" => "Pedidos@relatorioPedido",
+          
         //Produtos
         "/produto" => "ProdutosController@index",
         "/produto/criar" => "ProdutosController@viewCriarProduto",
@@ -55,6 +59,8 @@ $rotas = [
         "/produto/editar/{id}" => "ProdutosController@viewEditarProdutos",
         "/produto/excluir/{id}" => "ProdutosController@viewExcluirProduto",
         "/produto/{id}/relatorio/{data1}/{data2}" => "ProdutosController@relatorioProduto",
+        "/relatorios" => "RelatoriosController@exibirRelatorios",
+        
     ],
     "POST" => [
         //usuarios
@@ -75,7 +81,8 @@ $rotas = [
         "/produto/salvar" => "ProdutosController@salvarProduto",
        "/produto/atualizar/{id}" => "ProdutosController@atualizarProdutos",
        "/produto/deletar/{id}" => "ProdutosController@viewExcluirProduto",
-
+    // Post para cadastro
+       "/register" => "AuthController@cadastrarUsuario", 
   ]
  ];
 

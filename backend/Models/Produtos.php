@@ -46,6 +46,24 @@ function buscarProdutoPorId($id) {
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
+  public function contarProdutosPorCategoria()
+    {
+        $sql = "
+            SELECT
+                c.nome_categorias AS nome_categoria,
+                COUNT(p.id_produto) AS contagem
+            FROM tbl_produtos p
+            JOIN tbl_categorias c ON p.id_categoria = c.id_categorias
+            WHERE p.excluido_em IS NULL
+            GROUP BY c.nome_categorias
+            ORDER BY contagem DESC
+        ";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
 public function paginacao(int $pagina = 1, int $por_pagina = 50): array{
         $totalQuery = "SELECT COUNT(*) FROM `tbl_produtos`";
         $totalStmt = $this->db->query($totalQuery);
