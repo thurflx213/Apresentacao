@@ -4,6 +4,8 @@ use App\Koketsu\Core\Flash;
 
 class Redirect {
    public static function redirecionarPara($url) {
+     
+      $url = ltrim($url, '/');
       header("Location: /backend/" .$url);
       exit;
    }

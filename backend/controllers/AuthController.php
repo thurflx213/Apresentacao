@@ -4,7 +4,7 @@ namespace App\Koketsu\Controllers;
 use App\Koketsu\Core\View;
 use App\Koketsu\Core\Flash;
 use App\Koketsu\Core\Redirect;
-use App\Koketsu\Models\Usuario;
+use App\Koketsu\Model\Usuario;
 use App\Koketsu\Database\Database;
 use App\Koketsu\Core\Session;
 use App\Koketsu\Validadores\UsuarioValidador;

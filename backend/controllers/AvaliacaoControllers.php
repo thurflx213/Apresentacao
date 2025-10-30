@@ -1,7 +1,7 @@
 <?php
 namespace App\Koketsu\controllers;
 
-use App\Koketsu\model\Avaliacao; 
+use App\Koketsu\Model\Avaliacao; 
 use App\Koketsu\Database\Database;
 use App\Koketsu\Core\View;
 use App\Koketsu\Core\Redirect;

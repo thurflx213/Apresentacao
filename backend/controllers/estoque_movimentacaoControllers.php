@@ -1,7 +1,7 @@
 <?php
 namespace App\Koketsu\controllers;
 
-use App\Koketsu\model\EstoqueMovimentacao; 
+use App\Koketsu\Model\EstoqueMovimentacao; 
 use App\Koketsu\Database\Database;
 use App\Koketsu\Core\View;
 use App\Koketsu\Core\Redirect;
@@ -21,7 +21,7 @@ class Estoque_MovimentacaoControllers {
        $id_produto = $_POST["id_produto"] ?? null;
        $tipo = $_POST["tipo_estoque_movimentacao"] ?? null;
        $quantidade = $_POST["quantidade_estoque_movimentacao"] ?? null;
-       $data = $_POST["data_movimentacao_estoque_movimentacao"] ?? null; // Variável não usada no Model
+       $data = $_POST["data_movimentacao_estoque_movimentacao"] ?? null; // Variável não usada no\Model
        $descricao = $_POST["descricao_estoque_movimentacao"] ?? null;
 
        if (is_null($id_produto) || is_null($tipo) || is_null($quantidade) || is_null($data)) {
@@ -29,8 +29,8 @@ class Estoque_MovimentacaoControllers {
            return;
        }
 
-       // CORREÇÃO: O Model::inserirMovimentacao espera 4 argumentos, não 5. 
-       // Removemos $data, pois a data de criação é definida como NOW() no Model.
+       // CORREÇÃO: O\Model::inserirMovimentacao espera 4 argumentos, não 5. 
+       // Removemos $data, pois a data de criação é definida como NOW() no\Model.
        if ($this->estoque_movimentacao->inserirMovimentacao($id_produto, $tipo, $quantidade, $descricao)) {
            Redirect::redirecionarComMensagem("estoque_movimentacao/listar", "success", "Movimentação de estoque salva com sucesso!");
        } else {

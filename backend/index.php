@@ -4,15 +4,15 @@ require __DIR__ ."/../vendor/autoload.php";
 use App\Koketsu\Rotas\Rotas;
 
 use Bramus\Router\Router;
-$router = new Router();
+$router = new \Bramus\Router\Router();
 
 $rotas = Rotas::get();
 $router->setNamespace('\App\Koketsu\Controllers');
-                    //metodoHttp =GET POST    rota= URL
+                   
 foreach ($rotas as $metodoHttp => $rota) {
     foreach ($rota as $uri => $acao) {
         $metodoBramus = strtolower($metodoHttp);
-        $router->{$metodoBramus}($uri, $acao); //a mágica acontece aqui
+        $router->{$metodoBramus}($uri, $acao); 
     }
 }
 $router->set404(function () {

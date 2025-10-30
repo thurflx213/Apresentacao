@@ -1,7 +1,7 @@
 <?php
 namespace App\Koketsu\controllers;
 
-use App\Koketsu\model\Carrinho; 
+use App\Koketsu\Model\Carrinho; 
 use App\Koketsu\Database\Database;
 use App\Koketsu\Core\View;
 use App\Koketsu\Core\Redirect;
