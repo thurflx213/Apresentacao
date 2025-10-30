@@ -1,7 +1,7 @@
 <?php
 namespace App\Koketsu\Validadores;
 
-use App\Koketsu\Models\Usuario;
+use App\Koketsu\Model\Usuario;
 use App\Koketsu\Database\Database;
 use App\Koketsu\Core\View;
 
