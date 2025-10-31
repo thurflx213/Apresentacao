@@ -13,7 +13,9 @@ class Rotas
           '/register' => 'AuthController@register',
           '/login' => 'AuthController@login',
           '/logout' => 'AuthController@logout',
-         '/admin/dashboard' => 'Admin\DashboardController@index',
+         
+         '/admin/dashboard' => 'Admin\DashboardController@index', 
+         
                 '/api/produtos' => 'PublicApiController@getProdutos',
 
         //Avaliação
@@ -30,12 +32,12 @@ class Rotas
         "/backend/carrinho/editar/{id}" => "CarrinhoController@viewEditarCarrinho",
         "/backend/carrinho/excluir/{id}" => "CarrinhoController@viewExcluirCarrinho",
 
-         //Imagens
-         "/backend/Imagens" => "ImagemController@index",
-        "/backend/Imagens/criar" => "ImagemController@viewCriarImagem",
-        "/backend/Imagens/listar" => "ImagemController@viewListarImagens",
-        "/backend/Imagens/editar/{id}" => "ImagemController@viewEditarImagem",
-        "/backend/Imagens/excluir/{id}" => "ImagemController@viewExcluirImagem",
+         //Imagens 
+         "/backend/imagens" => "ImagemController@index",
+        "/backend/imagens/criar" => "ImagemController@viewCriarImagem",
+        "/backend/imagens/listar" => "ImagemController@viewListarImagens",
+        "/backend/imagens/editar/{id}" => "ImagemController@viewEditarImagem",
+        "/backend/imagens/excluir/{id}" => "ImagemController@viewExcluirImagem",
 
         ],
     "POST" => [
@@ -51,12 +53,12 @@ class Rotas
        "/backend/carrinho/salvar" => "CarrinhoController@salvarCarrinho",
        "/backend/carrinho/atualizar/{id}" => "CarrinhoController@atualizarCarrinho",
        "/backend/carrinho/deletar/{id}" => "CarrinhoController@deletarCarrinho",
-       "/backend/carrinho/edit/{id}" => "CarrinhoController@viewEditCarrinho",
+       "/backend/carrinho/edit/{id}" => "CarrinhoController@viewEditCarrinho", 
 
-        //imagens
-        "/backend/Imagens/salvar" => "ImagemController@salvarImagem",
-       "/backend/Imagens/atualizar/{id}" => "ImagemController@atualizarImagem",
-       "/backend/Imagens/deletar/{id}" => "ImagemController@deletarImagem",
+        //imagens (Corrigido para minúsculas no URI)
+        "/backend/imagens/salvar" => "ImagemController@salvarImagem",
+       "/backend/imagens/atualizar/{id}" => "ImagemController@atualizarImagem",
+       "/backend/imagens/deletar/{id}" => "ImagemController@deletarImagem",
 
          //autenticação
        '/register' => 'AuthController@cadastrarUsuario',
