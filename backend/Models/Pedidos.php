@@ -26,6 +26,38 @@ class Pedidos {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
 
+  public function criarPedido(array $itensCarrinho){
+        $this->db->beginTransaction();
+        try {
+            $valorTotalCalculado = 0;
+            foreach ($itensCarrinho as $item) {
+                $valorTotalCalculado += $item['preco'] * $item['quantidade'];
+            }
+
+            $sqlPedido = "INSERT INTO tbl_pedidos (total_pedido, data_pedido) VALUES (:total_pedido, NOW())";
+            $stmtPedido = $this->db->prepare($sqlPedido);
+            $stmtPedido->bindParam(':total_pedido', $valorTotalCalculado);
+            $stmtPedido->execute();
+            $idPedido = $this->db->lastInsertId();
+            $sqlItem = "INSERT INTO tbl_itens_pedidos (id_pedido, id_perfil, total_pedido, status_pedido) 
+                        VALUES (:id_pedido, :id_perfil, :total_pedido, :status_pedido)";
+            $stmtItem = $this->db->prepare($sqlItem);
+            foreach ($itensCarrinho as $item) {
+                $stmtItem->bindParam(':id_pedido', $idPedido, PDO::PARAM_INT);
+                $stmtItem->bindParam(':id_perfil', $item['id'], PDO::PARAM_INT);
+                $stmtItem->bindParam(':total_pedido', $item['pedido'], PDO::PARAM_INT);
+                $stmtItem->bindParam(':status_pedido', $item['preco']);
+                $stmtItem->execute();
+            }
+            $this->db->commit();
+
+            return (int)$idPedido;
+        } catch (\Exception $e) {
+            $this->db->rollBack();
+            return false;
+        }
+    }
+
   // Buscar pedido por ID
   function buscarPedidoPorId($id) {
     $sql = "SELECT * FROM tbl_pedidos 

@@ -1,12 +1,15 @@
+<div class="w3-container">
+ <h3 class= "w3-text-yellow">Editando Produto: <?= htmlspecialchars($produtos['nome_produtos']); ?></h3>
+<form action="/backend/produtos/atualizar" method="post"
+enctype="multipart/form-data" class="w3-container w3-card-4">
+ <input type="text" id="id_produto" name="id_produto" value="<?php echo $produtos['id_produto']; ?>" hidden>
 
-<div>Sou o edit de Produtos</div>
-<form action="/backend/produto/atualizar/<?php echo $produto['id_produtos']; ?>" method="post">
-    <label for="nome_produtos">Nome:</label>
+ <label for="nome_produtos">Nome:</label>
     <input type="text" id="nome_produtos" value ="<?php echo $produtos['nome_produtos']; ?>" name="nome_produtos" required>
     <br>
 
     <label for="descricao_produtos">Descrição:</label>
-    <textarea id="descricao_produtos"   name="descricao_produtos" required7> <?php echo $produtos['descricao_produtos']; ?>" </textarea>
+    <textarea id="descricao_produtos"   name="descricao_produtos" required> <?php echo $produtos['descricao_produtos']; ?>" </textarea>
     <br>
 
     <label for="preco_produtos">Preço:</label>
@@ -17,13 +20,19 @@
     <input type="number" id="estoque_produtos" value="<?php echo $produtos['estoque_produtos']; ?>" name="estoque_produtos" required>
     <br>
 
-    <label for="imagem_produtos">Imagem (URL):</label>
-    <input type="text" id="imagem_produtos" name="imagem_produtos" accept="image/º">
+    <p>
+        <label class="w3-text-yellow"><b>Substituir Foto</b></label>
+        <input class="w3-input w3-border" name="imagem_produtos" type="file">
+        <small>Deixe em branco para manter a foto atual.</small>
+        </p>
+
+        <label for="id_categoria">Categoria:</label>
+    <input type="number" id="id_categoria" name="id_categoria" required>
     <br>
 
-    <label for="id_categoria">Categoria:</label>
-    <input type="number" id="id_categoria" value="<?php echo $produtos['id_categoria']; ?>"  name="id_categoria" required>
-    <br>
-
-    <button type="submit">Salvar</button>
+   <p>
+        <button type="submit" class="w3-button w3-yellow">Salvar Alterações</button>
+        <a href="/backend/produtos/listar" class="w3-button w3-grey">Cancelar</a>
+        </p>
 </form>
+</div>

@@ -43,11 +43,11 @@ if (empty($produto)): ?>
         </div>
 
         <div class="w3-section w3-border-top w3-padding-small w3-right-align">
-            <a href="/backend/produto/editar/<?= htmlspecialchars($produto['id_produto']) ?>"
+            <a href="/backend/produtos/editar/<?= htmlspecialchars($produto['id_produto']) ?>"
                class="w3-button w3-round w3-blue w3-hover-dark-grey w3-margin-right">
                 <i class="fa fa-edit"></i> Editar
             </a>
-            <a href="/backend/produto/listar"
+            <a href="/backend/produtos/listar"
                class="w3-button w3-round w3-light-grey w3-hover-dark-grey">
                 <i class="fa fa-arrow-left"></i> Voltar à Lista
             </a>

@@ -13,7 +13,7 @@
                 <input class="w3-input w3-border" name="senha_usuarios" type="password" placeholder="Senha" required>
             </div>
         </div>
-        <button type="submit" class="w3-button w3-blue">Entrar</button>
+        <button type="submit" class="w3-button w3-yellow w3-round-medium">Entrar</button>
     </form>
     <a href="/backend/register">Não tenho conta</a>
 </div>

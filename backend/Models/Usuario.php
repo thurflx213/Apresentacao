@@ -8,7 +8,6 @@ class Usuario {
   private $email_usuarios;
   private $senha_usuarios;
   private $nivel_acesso;
-  private $foto_usuario;
   private $criado_em;
   private $atualizado_em;
   private $excluido_em;
@@ -25,14 +24,30 @@ class Usuario {
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
+
   function totalDeUsuarios() {
     $sql = "SELECT COUNT(*) AS total FROM tbl_usuarios";
     $stmt = $this->db->prepare($sql);
     $stmt->execute();
     return $stmt->fetch(PDO::FETCH_COLUMN);
 }
+
 function buscarUsuariosAtivos() {
     $sql = "SELECT COUNT(*) AS total_ativos FROM tbl_usuarios WHERE excluido_em IS NULL";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_COLUMN);
+}
+
+function buscarUsuariosAdmin() {
+    $sql = "SELECT COUNT(*) AS total_admin FROM tbl_usuarios WHERE nivel_acesso = 'admin' ";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_COLUMN);
+}
+
+ function buscarUsuariosInativos(){
+   $sql = "SELECT COUNT(*) AS total_inativos FROM tbl_usuarios WHERE excluido_em IS NOT NULL";
     $stmt = $this->db->prepare($sql);
     $stmt->execute();
     return $stmt->fetch(PDO::FETCH_COLUMN);
@@ -61,12 +76,7 @@ function buscarUsuariosAtivos() {
         ];
     }
 
-  function buscarUsuariosInativos($email){
-   $sql = "SELECT COUNT(*) AS total_inativos FROM tbl_usuarios WHERE excluido_em IS NOT NULL";
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute();
-    return $stmt->fetch(PDO::FETCH_COLUMN);
-}
+ 
 
   // Buscar usuários por email
   function buscarUsuariosPorEmail($email){
@@ -94,22 +104,17 @@ function buscarUsuariosPorEmailInativos($email){
 }
 
   // Inserir novo usuário
-  function inserirUsuario($nome, 
-  $email, 
-  $senha, 
-  $nivel,
-  $foto,){
+  function inserirUsuario(string $nome, string $email, string $senha, string $nivel){
     $senha = password_hash($senha, PASSWORD_DEFAULT);
     $sql = "INSERT INTO tbl_usuarios 
-(nome_usuarios, email_usuarios, senha_usuarios, nivel_acesso, foto_usuario)
-VALUES (:nome, :email, :senha, :nivel, :foto)";
+(nome_usuarios, email_usuarios, senha_usuarios, nivel_acesso, excluido_em, criado_em)
+VALUES (:nome, :email, :senha, :nivel, 'ativo', NOW())";
 
     $stmt = $this->db->prepare($sql);
     $stmt->bindParam(':nome', $nome);
     $stmt->bindParam(':email', $email);
     $stmt->bindParam(':senha', $senha);
     $stmt->bindParam(':nivel', $nivel);
-    $stmt->bindParam(':foto', $foto);
 
     if($stmt->execute()){
         return $this->db->lastInsertId();
@@ -153,15 +158,27 @@ VALUES (:nome, :email, :senha, :nivel, :foto)";
 
   // Excluir usuário (soft delete)
   function deletarUsuario(int $id){
-        $status = $this->buscarPorID($id);
-        $status = $status['excluido_em'] == 'ativo' ? 'Inativo' : 'ativo';
-
-        $sql = "UPDATE tbl_usuarios SET excluido_em = :status WHERE id_usuarios = :id";
+        $agora = date("Y-m-d h:m:s");
+        $coluna = $this->buscarPorID($id);
+        //ternario
+        $coluna = $coluna['excluido_em'] != NULL ? NULL : $agora;
+       
+        $sql = "UPDATE tbl_usuarios SET excluido_em = :excluido_em WHERE id_usuarios = :id";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-        $stmt->bindParam(':status', $status);
+        $stmt->bindParam(':excluido_em', $coluna);
         return $stmt->execute();
     }
+
+    public function ativarUsuario(int $id) {
+    $coluna = NULL; 
+    $sql = "UPDATE tbl_usuarios SET excluido_em = :excluido_em WHERE id_usuarios = :id";
+    $stmt = $this->db->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->bindParam(':excluido_em', $coluna, PDO::PARAM_NULL); 
+    
+    return $stmt->execute();
+}
 
     public function checarCredenciais(string $email,string $senha) {
     $usuario = $this->buscarUsuariosPorEmail($email);

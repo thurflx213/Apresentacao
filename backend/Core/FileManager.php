@@ -29,12 +29,15 @@ class FileManager{
     }
 
     private function validarArquivo(array $file, array $tiposPermitidos, int $tamanhoMaximo){
+        
+    
         if ($file['error'] !== UPLOAD_ERR_OK) {
             throw new \Exception("Erro no upload do arquivo. Código: " . $file['error']);
         }
         if ($file['size'] > $tamanhoMaximo) {
             throw new \Exception("O arquivo excede o tamanho máximo de " . ($tamanhoMaximo / 1024 / 1024) . "MB.");
         }
+        
         $tipoArquivo = mime_content_type($file['tmp_name']);
         if (!in_array($tipoArquivo, $tiposPermitidos)) {
             throw new \Exception("Tipo de arquivo inválido. Permitidos: " . implode(', ', $tiposPermitidos));

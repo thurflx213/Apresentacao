@@ -21,12 +21,12 @@ class Produtos {
   }
 
   // Buscar todos os produtos ativos
-  function buscarProdutos() {
-    $sql = "SELECT * FROM tbl_produtos WHERE excluido_em IS NULL";
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-  }
+  public function buscarProdutosAtivos(){
+        $sql = "SELECT id_produto, nome_produtos, preco_produtos, imagem_produtos FROM tbl_produtos WHERE excluido_em is null";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
  function buscarProdutoPorId($id) {
     $sql = "SELECT * FROM tbl_produtos
@@ -34,34 +34,39 @@ class Produtos {
     $stmt = $this->db->prepare($sql);
     $stmt->bindParam(':id_produto', $id, PDO::PARAM_INT);
     $stmt->execute();
-
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-public function paginacao(int $pagina = 1, int $por_pagina = 10): array{
-        $totalQuery = "SELECT COUNT(*) FROM `tbl_produtos`";
-        $totalStmt = $this->db->query($totalQuery);
-        $total_de_registros = $totalStmt->fetchColumn();
-        $offset = ($pagina - 1) * $por_pagina;
-        $dataQuery = "SELECT * FROM `tbl_produtos` LIMIT :limit OFFSET :offset";
-        $dataStmt = $this->db->prepare($dataQuery);
-        $dataStmt->bindValue(':limit', $por_pagina, PDO::PARAM_INT);
-        $dataStmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-        $dataStmt->execute();
-        $dados = $dataStmt->fetchAll(PDO::FETCH_ASSOC);
-        $lastPage = ceil($total_de_registros / $por_pagina);
- 
-        return [
-            'data' => $dados,
-            'total' => (int) $total_de_registros,
-            'por_pagina' => (int) $por_pagina,
-            'pagina_atual' => (int) $pagina,
-            'ultima_pagina' => (int) $lastPage,
-            'de' => $offset + 1,
-            'para' => $offset + count($dados)
-        ];
+public function buscarPorID(int $id){
+        $sql = "SELECT * FROM tbl_produtos WHERE id_produto = :id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+public function paginacao(int $pagina = 1, int $porPagina = 50){
+        $offset = ($pagina - 1) * $porPagina;
+        $sql = "SELECT * FROM tbl_produtos
+                LIMIT :offset, :porPagina";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $stmt->bindParam(':porPagina', $porPagina, PDO::PARAM_INT);
+        $stmt->execute();
+        $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $totalStmt = $this->db->query("SELECT COUNT(*) FROM tbl_produtos");
+        $total = $totalStmt->fetchColumn();
+        $totalPaginas = ceil($total / $porPagina);
+
+        return [
+            'data' => $dados,
+            'total' => (int) $total,
+            'por_pagina' => (int) $porPagina,
+            'pagina_atual' => (int) $pagina,
+            'total_paginas' => (int) $totalPaginas
+        ];
+    }
     function totalDeProdutos() {
     $sql = "SELECT COUNT(*) AS total FROM tbl_produtos";
     $stmt = $this->db->prepare($sql);
@@ -69,17 +74,14 @@ public function paginacao(int $pagina = 1, int $por_pagina = 10): array{
     return $stmt->fetch(PDO::FETCH_COLUMN);
 }
   // Inserir novo produto
-  function inserirProduto($nome, $descricao, $preco, $estoque, $imagem, $id_categoria) {
+  function inserirProduto(string $nome, string $descricao, string $imagem) {
     $sql = "INSERT INTO tbl_produtos 
-            (nome_produtos, descricao_produtos, preco_produtos, estoque_produtos, imagem_produtos, id_categoria, criado_em)
-            VALUES (:nome, :descricao, :preco, :estoque, :imagem, :id_categoria, NOW())";
+            (nome_produtos, descricao_produtos,imagem_produtos, excluido_em, criado_em)
+            VALUES (:nome, :descricao, :imagem, 'Ativo', NOW())";
     $stmt = $this->db->prepare($sql);
     $stmt->bindParam(':nome', $nome);
     $stmt->bindParam(':descricao', $descricao);
-    $stmt->bindParam(':preco', $preco);
-    $stmt->bindParam(':estoque', $estoque);
     $stmt->bindParam(':imagem', $imagem);
-    $stmt->bindParam(':id_categoria', $id_categoria);
     if($stmt->execute()) {
       return $this->db->lastInsertId();
     } else {
@@ -88,32 +90,52 @@ public function paginacao(int $pagina = 1, int $por_pagina = 10): array{
   }
 
   // Atualizar produto existente
-  function atualizarProduto($id_produto, $nome, $descricao, $preco, $estoque, $imagem, $id_categoria) {
-    $dataatual = date('Y-m-d H:i:s');
-    $sql = "UPDATE tbl_produtos SET 
-            nome_produtos = :nome,
-            descricao_produtos = :descricao,
-            preco_produtos = :preco,
-            estoque_produtos = :estoque,
-            imagem_produtos = :imagem,
-            id_categoria = :id_categoria,
-            atualizado_em = :atualizado_em
-            WHERE id_produto = :id";
+  // Arquivo: backend/Models/Produtos.php
+
+// Função atualizarProduto
+public function atualizarProduto(string $id_produto, string $nome, string $descricao, string $preco, string $estoque, ?string $imagem, string $id_categoria) {
+    $sql = "UPDATE tbl_produtos
+    SET nome_produtos = :nome,
+    descricao_produtos = :descricao, -- O parâmetro :descricao deve ser definido
+    preco_produtos = :preco,
+    estoque_produtos = :estoque,
+    id_categoria = :categoria,
+    atualizado_em = NOW()";
+
+    if ($imagem) {
+        $sql .= ", imagem_produtos = :imagem";
+    }
+    
+    $sql .= " WHERE id_produto = :id_produto";
+
     $stmt = $this->db->prepare($sql);
+
+    // Adicionado bindParam para a descrição
+    $stmt->bindParam(':descricao', $descricao); // NOVO
+    
+    // Bindings existentes (certifique-se de que correspondem exatamente aos parâmetros no SQL)
     $stmt->bindParam(':nome', $nome);
-    $stmt->bindParam(':descricao', $descricao);
     $stmt->bindParam(':preco', $preco);
     $stmt->bindParam(':estoque', $estoque);
-    $stmt->bindParam(':imagem', $imagem);
-    $stmt->bindParam(':id_categoria', $id_categoria);
-    $stmt->bindParam(':atualizado_em', $dataatual);
-    $stmt->bindParam(':id', $id_produto);
-    if($stmt->execute()) {
-      return true;
-    } else {
-      return false;
+    $stmt->bindParam(':categoria', $id_categoria); // Usando 'categoria' como placeholder para id_categoria
+    $stmt->bindParam(':id_produto', $id_produto, PDO::PARAM_INT);
+    
+    if ($imagem) {
+        $stmt->bindParam(':imagem', $imagem);
     }
-  }
+    
+    return $stmt->execute();
+}
+
+  public function ativarProduto(int $id) {
+    $coluna = NULL; 
+    $sql = "UPDATE tbl_produtos SET excluido_em = :excluido_em WHERE id_produto = :id";
+    $stmt = $this->db->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->bindParam(':excluido_em', $coluna, PDO::PARAM_NULL); 
+    
+    return $stmt->execute();
+}
 
   // Excluir (soft delete) produto
   function excluirProduto($id_produto) {
@@ -125,4 +147,26 @@ public function paginacao(int $pagina = 1, int $por_pagina = 10): array{
     $stmt->bindParam(':id', $id_produto);
     return $stmt->execute();
   }
+
+  public function deletarProdutos(int $id){
+        $agora = date("Y-m-d h:m:s");
+        $status = $this->buscarPorID($id);
+        $status = $status['excluido_em'] != NULL ? NULL : $agora;
+
+        $sql = "UPDATE tbl_produtos SET excluido_em = :excluido_em WHERE id_produto = :id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->bindParam(':excluido_em', $status);
+        return $stmt->execute();
+    }
+
+    
+
+    public function categoriasProdu() {
+    $sql = "SELECT COUNT(*) as total,nome_produtos as produto FROM `tbl_produtos` GROUP BY id_categoria";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
+    }

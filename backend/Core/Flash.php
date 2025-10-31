@@ -7,8 +7,9 @@ class Flash
             session_start();
         }
         $_SESSION['flash'] = [
-            'message' => $message,
-            'type' => $type
+            
+            'type' => $type,
+            'message' => $message
         ];
       
     }
