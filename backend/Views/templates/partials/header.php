@@ -205,9 +205,9 @@ footer {
     <h5>Painel Koketsu</h5>
   </div>
   <div class="w3-bar-block">
-    <a href="#" class="w3-bar-item w3-button w3-padding w3-theme"><i class="fa fa-home fa-fw"></i>  Início</a>
-    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-tags fa-fw"></i>  Produtos</a>
-    <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-shopping-cart fa-fw"></i>  Pedidos</a>
+    <a href="/backend/admin/dashboard" button w3-padding w3-theme"><i class="fa fa-home fa-fw"></i>  Início</a>
+    <a href="/backend/produto/listar" class="w3-bar-item w3-button w3-padding"><i class="fa fa-tags fa-fw"></i>  Produtos</a>
+    <a href="/backend/pedido/listar" class="w3-bar-item w3-button w3-padding"><i class="fa fa-shopping-cart fa-fw"></i>  Pedidos</a>
     <a href="#" class="w3-bar-item w3-button w3-padding"><i class="fa fa-users fa-fw"></i>  Clientes</a>
     
     <?php if ($session->get('usuario_tipo') == 'admin'){ ?>

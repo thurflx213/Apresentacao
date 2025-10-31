@@ -17,9 +17,7 @@
     <input type="number" id="estoque_produtos" name="estoque_produtos" required>
     <br>
 
-    <label for="imagem_produtos">Imagem (URL):</label>
-    <input type="text" id="imagem_produtos" name="imagem_produtos">
-    <br>
+
 
     <label for="id_categoria">Categoria:</label>
     <input type="number" id="id_categoria" name="id_categoria" required>
