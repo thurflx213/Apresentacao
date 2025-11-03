@@ -12,7 +12,7 @@ class Config
   'mysql' => 
   array (
     'host' => 'localhost',
-    'db_name' => 'Koketsu',
+    'db_name' => 'koketsu',
     'username' => 'root',
     'password' => NULL,
     'charset' => 'utf8',

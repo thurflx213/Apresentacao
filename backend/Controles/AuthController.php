@@ -32,15 +32,22 @@ class AuthController{
     Redirect::redirecionarComMensagem('/login', 'success', 'Você saiu com segurança.');
 }
 
-  public function authenticar(): void {
-    $email = $_POST['email_usuarios'] ?? null;
-    $senha = $_POST['senha_usuarios'] ?? null;
+ public function authenticar(): void{
+    $email = $_POST['email_usuarios'] ?? '';
+    $senha = $_POST['senha_usuarios'] ?? '';
+    
+    if (empty($email) || empty($senha)) {
+        Redirect::redirecionarComMensagem('/login', 'error', 'Por favor, preencha E-mail e Senha.');
+        return;
+    }
+    // Chamada segura para a Model
     $usuario = $this->usuarioModel->checarCredenciais($email, $senha);
-    if ($usuario) {
+    if ($usuario){
         session_regenerate_id(true);
-        $this->session->set('usuario_id', $usuario['id_usuarios']);
-        $this->session->set('usuario_nome', $usuario['nome_usuarios']);
-        $this->session->set('usuario_tipo', $usuario['nivel_acesso']);
+        $this->session->set('usuarios_id', $usuario['id_usuarios']);
+        $this->session->set('usuario_nomes', $usuario['nome_usuarios']);
+        $this->session->set('usuario_tipos', $usuario['tipo_usuarios']);
+
         Redirect::redirecionarPara('/admin/dashboard');
     } else {
         Redirect::redirecionarComMensagem('/login', 'error', 'E-mail ou senha incorretos.');

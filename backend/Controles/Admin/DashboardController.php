@@ -17,8 +17,8 @@ class DashboardController extends AuthenticatedController{
     public function index(): void{
         $dados = $this->usuario->buscarUsuarios();
         View::render('admin/dashboard/index', [
-            'nomeUsuario' => $this->session->get('usuario_nome'),
-            'Tipo' => $this->session->get('usuario_tipo'),
+            'nomeUsuario' => $this->session->get('usuarios_nome'),
+            'Tipo' => $this->session->get('usuarios_tipo'),
             'usuarios' => $dados
         ]);
     }
