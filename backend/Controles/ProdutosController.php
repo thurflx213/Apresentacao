@@ -99,31 +99,37 @@ public function viewProdutoUnico(int $id_produto) {
         }
     }
 
-     public function salvarProduto() {
-if (empty($_POST["nome_produtos"]) || empty($_FILES['imagem_produtos']['name'])) {
-            Redirect::redirecionarComMensagem("/produto/criar", "error", "Nome e Foto são obrigatórios.");
-        }
+  public function salvarProduto() {
+    $nome_produto = $_POST["nome_produtos"] ?? '';
 
-        $imagem = $this->gerenciarImagem->salvarArquivo($_FILES['imagem_produtos'], 'produtos');
-
-       
-        $preco = isset($_POST['preco_produtos']) ? (float)$_POST['preco_produtos'] : 0;
-        $estoque = isset($_POST['estoque_produtos']) ? (int)$_POST['estoque_produtos'] : 0;
-        $id_categoria = $_POST['id_categoria'] ?? null;
-
-        if ($this->produtos->inserirProduto(
-            $_POST["nome_produtos"],
-            $_POST["descricao_produtos"],
-            $preco,
-            $estoque,
-            $imagem,
-            $id_categoria
-        )) {
-            Redirect::redirecionarComMensagem("/produto/listar", "success", "Produtos cadastrado com sucesso!");
-        } else {
-            Redirect::redirecionarComMensagem("/produto/criar", "error", "Erro ao cadastrar produtos.");
-        }
+    if (empty($nome_produto)) {
+        Redirect::redirecionarComMensagem("/produto/criar", "error", "Nome do produto é obrigatório.");
+        return; 
     }
+
+    $imagem = NULL;
+    $descricao = $_POST["descricao_produtos"] ?? '';
+    
+    $preco_str = $_POST['preco_produtos'] ?? '0';
+    $preco = (float)str_replace(',', '.', $preco_str);
+    
+    $estoque = isset($_POST['estoque_produtos']) ? (int)$_POST['estoque_produtos'] : 0;
+    
+    $id_categoria = NULL; 
+
+    if ($this->produtos->inserirProduto(
+        $nome_produto,
+        $descricao,
+        $preco,
+        $estoque,
+        $imagem,
+        $id_categoria
+    )) {
+        Redirect::redirecionarComMensagem("/produto/listar", "success", "Produto cadastrado com sucesso!");
+    } else {
+        Redirect::redirecionarComMensagem("/produto/criar", "error", "Erro ao cadastrar produto.");
+    }
+}
 
     public function relatorioProduto($id, $data1, $data2){
  View::render("produto/relatorio",

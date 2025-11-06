@@ -30,27 +30,33 @@ class AuthController{
         $this->session->destroy();
         Redirect::redirecionarComMensagem('/login', 'success', "Você saiu com segurança");
     }
-public function authenticar(): void{
-    $email = $_POST['email_usuario'] ?? '';
-    $senha = $_POST['senha_usuario'] ?? '';
-    
+public function authenticar(): void
+{
+    // O POST está correto: 'email_usuario' e 'senha_usuario'
+    $email = $_POST['email_usuario'] ?? ''; 
+    $senha = $_POST['senha_usuario'] ?? ''; 
+
     if (empty($email) || empty($senha)) {
         Redirect::redirecionarComMensagem('/login', 'error', 'Por favor, preencha E-mail e Senha.');
         return;
     }
-    // Chamada segura para a Model
+
     $usuario = $this->usuarioModel->checarCredenciais($email, $senha);
-    if ($usuario){
+
+    if ($usuario) {
         session_regenerate_id(true);
-        $this->session->set('usuario_id', $usuario['id_usuario']);
-        $this->session->set('usuario_nome', $usuario['nome_usuario']);
-        $this->session->set('usuario_tipo', $usuario['tipo_usuario']);
+        $this->session->set('usuario_id', $usuario['id_usuarios']);
+        $this->session->set('usuario_nome', $usuario['nome_usuarios']);
+        $this->session->set('usuario_tipo', $usuario['nivel_acesso']); // Se for 'nivel_acesso' como na linha 10 do seu Model
 
         Redirect::redirecionarPara('/admin/dashboard');
+
     } else {
         Redirect::redirecionarComMensagem('/login', 'error', 'E-mail ou senha incorretos.');
     }
 }
+
+
 
 public function cadastrarUsuario(): void {
     

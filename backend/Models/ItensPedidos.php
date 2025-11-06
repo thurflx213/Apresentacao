@@ -1,6 +1,7 @@
 <?php
 namespace App\Koketsu\Models;
 use PDO;
+use PDOException;
 
 class ItensPedidos {
     private $id_itens_pedidos;
@@ -53,13 +54,22 @@ class ItensPedidos {
     /**
      * Buscar itens de um pedido específico (com JOIN).
      */
-    function buscarItensPorPedido($id_pedido) {
-        $sql = $this->getBaseSql() . " WHERE i.id_pedido = :id_pedido AND i.excluido_em IS NULL";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':id_pedido', $id_pedido);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+ function buscarItensPorPedido($id_pedido) {
+    // ip = tbl_itens_pedidos, prod = tbl_produtos
+    $sql = "SELECT
+        ip.*,
+        prod.nome_produto, /* Garanta que o nome da coluna do produto é 'nome_produto' */
+        prod.sku_produto /* Garanta que o nome da coluna do sku é 'sku_produto' */
+    FROM tbl_itens_pedidos ip
+    JOIN tbl_produtos prod ON ip.id_produto = prod.id_produto
+    WHERE ip.id_pedido = :id_pedido";
+
+    $stmt = $this->db->prepare($sql);
+    $stmt->bindParam(':id_pedido', $id_pedido, PDO::PARAM_INT);
+    $stmt->execute();
+    
+    return $stmt->fetchAll(PDO::FETCH_ASSOC); // Retorna todos os itens do pedido
+}
 
     public function buscarTop5ProdutosVendidos()
     {
@@ -78,25 +88,30 @@ class ItensPedidos {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
    
-    function inserirItemPedido($id_pedido, $id_produto, $quantidade, $preco_unitario) {
+function inserirItemPedido($id_pedido, $id_produto, $quantidade, $preco_unitario) {
         $sql = "INSERT INTO tbl_itens_pedidos 
-        (id_pedido, id_produto, quantidade, preco_unitario, criado_em) 
-        VALUES (:id_pedido, :id_produto, :quantidade, :preco_unitario, NOW())";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':id_pedido', $id_pedido);
-        $stmt->bindParam(':id_produto', $id_produto);
-        $stmt->bindParam(':quantidade', $quantidade);
-        $stmt->bindParam(':preco_unitario', $preco_unitario);
-        if($stmt->execute()) {
-            return $this->db->lastInsertId();
-        } else {
+                (id_pedido, id_produto, quantidade, preco_unitario, criado_em)
+                VALUES (:id_pedido, :id_produto, :quantidade, :preco_unitario, NOW())";
+                
+        try {
+            $stmt = $this->db->prepare($sql);
+
+            $stmt->bindParam(':id_pedido', $id_pedido);
+            $stmt->bindParam(':id_produto', $id_produto);
+            $stmt->bindParam(':quantidade', $quantidade);
+            $stmt->bindParam(':preco_unitario', $preco_unitario);
+
+            if($stmt->execute()) {
+                return $this->db->lastInsertId();
+            } else {
+                return false;
+            }
+        } catch (\PDOException $e) { 
             return false;
         }
     }
 
-    /**
-     * Atualizar item de pedido.
-     */
+    
     function atualizarItemPedido($id_itens_pedidos, $quantidade, $preco_unitario) {
         $dataatual = date('Y-m-d H:i:s');
         $sql = "UPDATE tbl_itens_pedidos SET 
@@ -115,7 +130,7 @@ class ItensPedidos {
     /**
      * Paginação
      */
-    public function paginacao(int $pagina = 1, int $por_pagina = 10): array{
+    public function paginacao(int $pagina = 1, int $por_pagina = 30): array{
         $totalQuery = "SELECT COUNT(*) FROM `tbl_itens_pedidos` WHERE excluido_em IS NULL";
         $totalStmt = $this->db->query($totalQuery);
         $total_de_registros = $totalStmt->fetchColumn();
@@ -143,6 +158,7 @@ class ItensPedidos {
         ];
     }
 
+   
     /**
      * Contar total de itens de pedidos
      */

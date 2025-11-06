@@ -1,5 +1,5 @@
 <?php
-namespace App\Koketsu\Controles;
+namespace App\Koketsu\controles;
 
 
 use App\Koketsu\Controles\Admin\AdminController;
@@ -25,19 +25,19 @@ class UsuarioController extends AdminController{
 
     public function viewListarUsuarios($pagina = 1){
     $dados = $this->usuario->paginacao($pagina);
+    $total_admin = $this->usuario->buscarUsuariosAdmin();
     $total = $this->usuario->totalDeUsuarios();
     $total_inativos = $this->usuario->buscarUsuariosInativos($pagina);
     $total_ativos = $this->usuario->buscarUsuariosAtivos($pagina);
-    
-    View::render('usuario/index', 
+    view::render('usuario/index', 
     [
         "usuarios" => $dados['data'],
+        "total_admin" => $total_admin,
         "total_usuarios" => $total,
         "total_inativos" => $total_inativos,
         "total_ativos" => $total_ativos,
         'paginacao' => $dados
     ] 
-    
   );
     }
 
@@ -52,62 +52,72 @@ class UsuarioController extends AdminController{
 
     public function viewExcluirUsuarios($id){
          $dados = $this->usuario->buscarPorID($id);
-         View::render("usuario/delete",["usuario" => $dados]);
+         View::render("/usuario/delete",["usuario" => $dados]);
     }
+
+    public function viewAtivarUsuarios($id){
+         $dados = $this->usuario->buscarPorID($id);
+         View::render("/usuario/ativar",["usuario" => $dados]);
+    }
+
     public function relatorioUsuario($id, $data1, $data2){
-     View::render("usuario/relatorio",
+     View::render("/usuario/relatorios",
            ["id" => $id, "data1" => $data1, "data2" => $data2]
       );
     }
     public function salvarUsuario(){
         $erros = UsuarioValidador::ValidarEntradas($_POST);
         if(!empty($erros)){
-            Redirect::redirecionarComMensagem("usuario/criar", "error", implode("<br>", $erros));
+            Redirect::redirecionarComMensagem("/usuario/criar", "error", implode("<br>", $erros));
             
         }
-        $imagem = $this->gerenciarImagem->salvarArquivo($_FILES['imagem'], 'usuario');
        if($this->usuario->inserirUsuario(
-            $_POST["nome_usuario"],
-            $_POST["email_usuario"],
-            $_POST["senha_usuario"],
-            $_POST["tipo_usuario"],
+            $_POST["nome_usuarios"],
+            $_POST["email_usuarios"],
+            $_POST["senha_usuarios"],
+            $_POST["nivel_acesso"],
             "Ativo",
-            $imagem
         )){
-            Redirect::redirecionarComMensagem("usuario/listar", "success", "Usuário criado com sucesso!");
+            Redirect::redirecionarComMensagem("/usuario/listar", "success", "Usuário criado com sucesso!");
         }else{
-            Redirect::redirecionarComMensagem("usuario/create", "error", "Erro ao criar usuário. Tente novamente.");
+            Redirect::redirecionarComMensagem("/usuario/create", "error", "Erro ao criar usuário. Tente novamente.");
         }
     }
     public function viewEditarUsuario(int $id) {
         $usuario = $this->usuario->buscarPorID($id);
         if (!$usuario) {
-            Redirect::redirecionarComMensagem("usuario/listar", "error", "Serviço não encontrado.");
+            Redirect::redirecionarComMensagem("/usuario/listar", "error", "Usuario não encontrado.");
         }
         
-        View::render("usuario/edit", ["usuario" => $usuario]);
+        View::render("/usuario/edit", ["usuario" => $usuario]);
     }
 
        public function atualizarUsuario(){
-        $id = (int)$_POST['id_usuario'];
-        $nome = $_POST['nome_usuario'];
-        $email = $_POST['email_usuario'];
-        $senha = $_POST['senha_usuario'];
-        $tipo = $_POST['tipo_usuario'];
+        $id = (int)$_POST['id_usuarios'];
+        $nome = $_POST['nome_usuarios'];
+        $email = $_POST['email_usuarios'];
+        $senha = $_POST['senha_usuarios'];
+        $tipo = $_POST['nivel_acesso'];
         $imagem = null;
 
-        if (isset($_FILES['foto_usuario']) && $_FILES['foto_usuario']['error'] == 0 && !empty($_FILES['foto_usuario']['name'])) {
-            $imagem = $this->gerenciarImagem->salvarArquivo($_FILES['foto_usuario'], 'usuarios');
-        }
-        if ($this->usuario->atualizarUsuario($id, $nome, $email, $senha, $tipo, $imagem)) {
+       
+        if ($this->usuario->atualizarUsuario($id, $nome, $email, $senha, $tipo)) {
             Redirect::redirecionarComMensagem("/usuario/listar", "success", "Usuário atualizado com sucesso!");
         } else {
             Redirect::redirecionarComMensagem("/usuario/editar" . $id, "error", "Erro ao atualizar usuário.");
         }
     }
+    public function ativarUsuario(){
+        $id = (int)$_POST['id_usuarios'];
+        if ($this->usuario->ativarUsuario($id)) {
+            Redirect::redirecionarComMensagem("/usuario/listar", "success", "Usuario ativado com sucesso!");
+        } else {
+            Redirect::redirecionarComMensagem("/usuario/listar", "error", "Erro ao ativar usuario.");
+        }
+    }
     
     public function deletarUsuario(){
-        $id = (int)$_POST['id_usuario'];
+        $id = (int)$_POST['id_usuarios'];
         if ($this->usuario->deletarUsuario($id)) {
             Redirect::redirecionarComMensagem("/usuario/listar", "success", "Usuario inativado com sucesso!");
         } else {

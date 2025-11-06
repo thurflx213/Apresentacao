@@ -1,48 +1,44 @@
 <header class="w3-container" style="padding-top:22px">
-    <h5><b><i class="fa fa-dashboard"></i> Painel de Controle - Koketsu</b></h5>
+    <h5><b><i class="fa fa-dashboard"></i> Painel de Controle - Koketsu</b></h5>
 </header>
 
 <div class="w3-row-padding w3-margin-bottom">
-    <div class="w3-quarter">
-      <div class="w3-container w3-theme w3-padding-16">
-        <div class="w3-left"><i class="fa fa-tags w3-xxxlarge"></i></div>
-        <div class="w3-right">
-          <h3>120</h3>
-        </div>
-        <div class="w3-clear"></div>
-        <h4>Produtos</h4>
-      </div>
-    </div>
-    <div class="w3-quarter">
-      <div class="w3-container w3-black w3-padding-16">
-        <div class="w3-left"><i class="fa fa-shopping-cart w3-xxxlarge"></i></div>
-        <div class="w3-right">
-          <h3>87</h3>
-        </div>
-        <div class="w3-clear"></div>
-        <h4>Pedidos</h4>
-      </div>
-    </div>
-    <div class="w3-quarter">
-      <div class="w3-container w3-yellow w3-text-black w3-padding-16">
-        <div class="w3-left"><i class="fa fa-users w3-xxxlarge"></i></div>
-        <div class="w3-right">
-          <h3>56</h3>
-        </div>
-        <div class="w3-clear"></div>
-        <h4>Clientes</h4>
-      </div>
-    </div>
-    <div class="w3-quarter">
-      <div class="w3-container w3-dark-grey w3-padding-16">
-        <div class="w3-left"><i class="fa fa-star w3-xxxlarge"></i></div>
-        <div class="w3-right">
-          <h3>4.8★</h3>
-        </div>
-        <div class="w3-clear"></div>
-        <h4>Avaliações</h4>
-      </div>
-    </div>
+    <div class="w3-quarter">
+      <div class="w3-container w3-theme w3-padding-16">
+        <div class="w3-left"><i class="fa fa-tags w3-xxxlarge"></i></div>
+        <div class="w3-right">
+          <h3>120</h3> </div>
+        <div class="w3-clear"></div>
+        <h4>Produtos</h4>
+      </div>
+    </div>
+    <div class="w3-quarter">
+      <div class="w3-container w3-black w3-padding-16">
+        <div class="w3-left"><i class="fa fa-shopping-cart w3-xxxlarge"></i></div>
+        <div class="w3-right">
+          <h3><?= htmlspecialchars($total_pedidos ?? 0) ?></h3> </div>
+        <div class="w3-clear"></div>
+        <h4>Pedidos</h4>
+      </div>
+    </div>
+    <div class="w3-quarter">
+      <div class="w3-container w3-yellow w3-text-black w3-padding-16">
+        <div class="w3-left"><i class="fa fa-users w3-xxxlarge"></i></div>
+        <div class="w3-right">
+          <h3>56</h3> </div>
+        <div class="w3-clear"></div>
+        <h4>Clientes</h4>
+      </div>
+    </div>
+    <div class="w3-quarter">
+      <div class="w3-container w3-dark-grey w3-padding-16">
+        <div class="w3-left"><i class="fa fa-star w3-xxxlarge"></i></div>
+        <div class="w3-right">
+          <h3>4.8★</h3> </div>
+        <div class="w3-clear"></div>
+        <h4>Avaliações</h4>
+      </div>
+    </div>
 </div>
 
 <div class="w3-container">
@@ -58,9 +54,9 @@
             <thead>
                 <tr class="w3-black">
                     <th>ID</th>
-                    <th>Data</th>
+                    <th>Cliente/Perfil</th> <th>Data</th>
                     <th>Total</th>
-                    <th>Status</th>
+                    <th>Itens</th> <th>Status</th>
                     <th>Ações</th>
                 </tr>
             </thead>
@@ -71,7 +67,7 @@
                     $status_classe = 'w3-dark-grey';
                     if ($status === 'pago' || $status === 'enviado' || $status === 'concluido') {
                         $status_classe = 'w3-green';
-                    } elseif ($status === 'pendente') {
+                    } elseif ($status === 'pendente' || $status === 'em processamento') {
                         $status_classe = 'w3-yellow w3-text-black';
                     } elseif ($status === 'cancelado') {
                         $status_classe = 'w3-red';
@@ -79,8 +75,14 @@
                 ?>
                 <tr>
                     <td><?= htmlspecialchars($pedido['id_pedido']) ?></td>
-                    <td><?= htmlspecialchars($pedido['data_pedido']) ?></td>
+                    <td><?= htmlspecialchars($pedido['nome_perfil'] ?? 'N/A') ?></td> 
+                    
+                    <td><?= date('d/m/Y H:i', strtotime($pedido['data_pedido'])) ?></td> 
+                    
                     <td>R$ <?= number_format($pedido['total_pedido'], 2, ',', '.') ?></td>
+                    
+                    <td><?= htmlspecialchars($pedido['total_itens'] ?? 0) ?></td> 
+                    
                     <td>
                         <span class="w3-tag w3-round <?= $status_classe ?>">
                             <?= ucfirst(htmlspecialchars($pedido['status_pedido'])) ?>
@@ -88,7 +90,7 @@
                     </td>
                     <td class="w3-center">
                         <a class="w3-button w3-round w3-small w3-teal w3-hover-dark-grey w3-margin-right"
-                           href="/backend/pedido/listar/<?= htmlspecialchars($pedido['id_pedido']) ?>" 
+                           href="/backend/pedido/detalhes/<?= htmlspecialchars($pedido['id_pedido']) ?>" 
                            title="Ver Detalhes do Pedido">
                            <i class="fa fa-info-circle"></i> Detalhes
                         </a>
@@ -113,15 +115,18 @@
         <div class="paginacao-controls" style="display:flex; justify-content:space-between; align-items:center;">
             <div class="page-selector" style="display:flex; align-items:center;">
                 <div class="page-nav">
-                    <?php if ($paginacao['pagina_atual'] > 1): ?>
-                        <a href="/backend/pedido/listar/<?= $paginacao['pagina_atual'] - 1 ?>">Anterior</a>
+                    <?php if (($paginacao['pagina_atual'] ?? 1) > 1): ?>
+                        <a class="w3-button w3-round w3-light-grey w3-hover-dark-grey" href="/backend/pedido/listar/<?= $paginacao['pagina_atual'] - 1 ?>">« Anterior</a>
                     <?php endif; ?>
-                    <span style="margin:0 10px;">Página <?= $paginacao['pagina_atual'] ?> de <?= $paginacao['ultima_pagina'] ?></span>
-                    <?php if ($paginacao['pagina_atual'] < $paginacao['ultima_pagina']): ?>
-                        <a href="/backend/pedido/listar/<?= $paginacao['pagina_atual'] + 1 ?>">Próximo</a>
+                    <span style="margin:0 10px;">Página <?= $paginacao['pagina_atual'] ?? 1 ?> de <?= $paginacao['ultima_pagina'] ?? 1 ?></span>
+                    <?php if (($paginacao['pagina_atual'] ?? 1) < ($paginacao['ultima_pagina'] ?? 1)): ?>
+                        <a class="w3-button w3-round w3-light-grey w3-hover-dark-grey" href="/backend/pedido/listar/<?= $paginacao['pagina_atual'] + 1 ?>">Próximo »</a>
                     <?php endif; ?>
                 </div>
             </div>
+            <small class="w3-text-grey">
+                Exibindo <?= $paginacao['de'] ?? 0 ?> a <?= $paginacao['para'] ?? 0 ?> de <?= $paginacao['total'] ?? 0 ?> pedidos.
+            </small>
         </div>
     </div>
     

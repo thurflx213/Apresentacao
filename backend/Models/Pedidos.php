@@ -5,7 +5,7 @@ use PDO;
 
 class Pedidos {
   private $id_pedido;
-  private $id_cliente;
+  private $id_perfil;
   private $data_pedido;
   private $total_pedido;
   private $status_pedido;
@@ -27,21 +27,28 @@ class Pedidos {
   }
 
   // Buscar pedido por ID
-  function buscarPedidoPorId($id) {
-    $sql = "SELECT * FROM tbl_pedidos 
-            WHERE id_pedido = :id_pedido AND excluido_em IS NULL";
+public function buscarPedidoPorId(int $id) {
+    // Busca o pedido (p) e junta com o nome do perfil (u)
+    $sql = "SELECT p.*, u.nome_perfil 
+            FROM tbl_pedidos p
+            
+            LEFT JOIN perfil u ON p.id_perfil = u.id_perfil /* 🎯 CORRIGIDO: Usa 'perfil' */
+            
+            WHERE p.id_pedido = :id_pedido AND p.excluido_em IS NULL";
+
     $stmt = $this->db->prepare($sql);
     $stmt->bindParam(':id_pedido', $id, PDO::PARAM_INT);
     $stmt->execute();
-    return $stmt->fetch(PDO::FETCH_ASSOC);
-  }
+    
+    return $stmt->fetch(PDO::FETCH_ASSOC); // Retorna um único pedido ou false
+}
 
-  // Buscar pedidos de um cliente específico
-  function buscarPedidosPorCliente($id_cliente) {
+  // Buscar pedidos de um perfil específico
+  function buscarPedidosPorCliente($id_perfil) {
     $sql = "SELECT * FROM tbl_pedidos 
-            WHERE id_cliente = :id_cliente AND excluido_em IS NULL";
+            WHERE id_perfil = :id_perfil AND excluido_em IS NULL";
     $stmt = $this->db->prepare($sql);
-    $stmt->bindParam(':id_cliente', $id_cliente);
+    $stmt->bindParam(':id_perfil', $id_perfil);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
   }
@@ -131,69 +138,99 @@ class Pedidos {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
   
+// Pedidos.php
+
+// Pedidos.php (função paginacao)
+
 public function paginacao(int $pagina = 1, int $por_pagina = 50): array{
-        $totalQuery = "SELECT COUNT(*) FROM `tbl_pedidos`";
-        $totalStmt = $this->db->query($totalQuery);
-        $total_de_registros = $totalStmt->fetchColumn();
-        $offset = ($pagina - 1) * $por_pagina;
-        $dataQuery = "SELECT * FROM `tbl_pedidos` LIMIT :limit OFFSET :offset";
-        $dataStmt = $this->db->prepare($dataQuery);
-        $dataStmt->bindValue(':limit', $por_pagina, PDO::PARAM_INT);
-        $dataStmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-        $dataStmt->execute();
-        $dados = $dataStmt->fetchAll(PDO::FETCH_ASSOC);
-        $lastPage = ceil($total_de_registros / $por_pagina);
- 
-        return [
-            'data' => $dados,
-            'total' => (int) $total_de_registros,
-            'por_pagina' => (int) $por_pagina,
-            'pagina_atual' => (int) $pagina,
-            'ultima_pagina' => (int) $lastPage,
-            'de' => $offset + 1,
-            'para' => $offset + count($dados)
-        ];
-    }
+    // 1. Contagem total de registros (não muda)
+    $totalQuery = "SELECT COUNT(*) FROM `tbl_pedidos`";
+    $totalStmt = $this->db->query($totalQuery);
+    $total_de_registros = $totalStmt->fetchColumn();
+    $offset = ($pagina - 1) * $por_pagina;
 
-    function totalDePedidos() {
-    $sql = "SELECT COUNT(*) AS total FROM tbl_pedidos";
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute();
-    return $stmt->fetch(PDO::FETCH_COLUMN);
+    // 2. Query principal: JOIN com a tabela 'perfil' e COUNT de itens
+    $dataQuery = "SELECT 
+                    p.*, 
+                    u.nome_perfil, 
+                    COUNT(ip.id_itens_pedidos) AS total_itens
+                  FROM `tbl_pedidos` p
+                  
+                  LEFT JOIN `perfil` u       /* CORRIGIDO para 'perfil' */
+                    ON p.id_perfil = u.id_perfil
+                    
+                  LEFT JOIN `tbl_itens_pedidos` ip 
+                    ON p.id_pedido = ip.id_pedido
+                  
+                  GROUP BY p.id_pedido, u.nome_perfil
+                  LIMIT :limit OFFSET :offset";
+                  
+    $dataStmt = $this->db->prepare($dataQuery);
+    $dataStmt->bindValue(':limit', $por_pagina, PDO::PARAM_INT);
+    $dataStmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+    $dataStmt->execute();
+    
+    $dados = $dataStmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // CÁLCULO DA ÚLTIMA PÁGINA (Correção da variável $lastPage)
+    $lastPage = ceil($total_de_registros / $por_pagina); 
+    
+    return [
+        'data' => $dados,
+        'total' => (int) $total_de_registros,
+        'por_pagina' => (int) $por_pagina,
+        'pagina_atual' => (int) $pagina,
+        'ultima_pagina' => (int) $lastPage,
+        'de' => $offset + 1,
+        'para' => $offset + count($dados)
+    ];
 }
-  // Inserir novo pedido
-function inserirPedido($id_cliente, $data_pedido, $total_pedido, $status_pedido) {
-        $sql = "INSERT INTO tbl_pedidos 
-            (id_cliente, data_pedido, total_pedido, status_pedido, criado_em) 
-             VALUES (:id_cliente, :data_pedido, :total_pedido, :status_pedido, NOW())";
-        
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':id_cliente', $id_cliente);
-        $stmt->bindParam(':data_pedido', $data_pedido);
-        $stmt->bindParam(':total_pedido', $total_pedido);
-        $stmt->bindParam(':status_pedido', $status_pedido);
-        
-        if($stmt->execute()) {
-            return $this->db->lastInsertId(); // **CRUCIAL: Retorna o ID do pedido**
-        } else {
-            return false;
-        }
-    }
 
-  // Atualizar pedido existente
+function inserirPedido($id_perfil, $data_pedido, $total_pedido, $status_pedido) { 
+    
+    // Mude a coluna e o placeholder de id_cliente para id_perfil
+    $sql = "INSERT INTO tbl_pedidos
+    (id_perfil, data_pedido, total_pedido, status_pedido, criado_em) 
+    VALUES (:id_perfil, :data_pedido, :total_pedido, :status_pedido, NOW())"; 
+
+    $stmt = $this->db->prepare($sql);
+    
+    // Mude o bindParam de :id_cliente para :id_perfil
+    $stmt->bindParam(':id_perfil', $id_perfil); 
+    $stmt->bindParam(':data_pedido', $data_pedido);
+    $stmt->bindParam(':total_pedido', $total_pedido);
+    $stmt->bindParam(':status_pedido', $status_pedido);
+    
+    if ($stmt->execute()) {
+        return $this->db->lastInsertId();
+    } else {
+        return false;
+    }
+}
+
+function totalDePedidos() {
+    // ⚠️ Importante: Mantenha a mesma lógica de contagem da função paginacao
+    // Se você usa uma coluna 'excluido_em' para soft delete, inclua-a no WHERE
+    $sql = "SELECT COUNT(*) FROM `tbl_pedidos` WHERE excluido_em IS NULL";
+    
+    $stmt = $this->db->query($sql);
+    
+    // Retorna a primeira coluna da primeira linha (a contagem)
+    return $stmt->fetchColumn(); 
+}
+
 public function atualizarPedido($id_pedido, $total_pedido, $data_pedido, $status_pedido, $imagem = null) {
     $dataatual = date('Y-m-d H:i:s');
     
-    // 1. Monta a base da query. SEM a vírgula final
+   
     $sql = "UPDATE tbl_pedidos SET 
             total_pedido = :total_pedido,
             data_pedido = :data_pedido,
             status_pedido = :status_pedido,
             atualizado_em = :atualizado_em";
 
-    // 2. Adiciona o campo 'imagem_pedidos' APENAS SE A IMAGEM EXISTE (NÃO VAZIA)
     if (!empty($imagem)) { 
-        // Note o ", " no início. Ele é adicionado APENAS se houver uma imagem.
+       
         $sql .= ", imagem_pedidos = :imagem"; 
     }
 

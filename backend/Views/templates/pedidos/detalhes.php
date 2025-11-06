@@ -1,119 +1,101 @@
-<?php 
-// Arquivo: views/templates/pedidos/detalhes.php
-// Esta View recebe $pedido e $itens (lista de itens/produtos).
-
-if (empty($pedido)): ?>
-    <div class="w3-panel w3-red w3-round-large w3-margin-top w3-margin-bottom" style="margin: 20px;">
-        <h3><i class="fa fa-times-circle"></i> Erro!</h3>
-        <p>Pedido não encontrado ou ID inválido. Verifique a URL.</p>
-    </div>
-<?php else: 
-
-    // Lógica para cor do status
-    $status = strtolower($pedido['status_pedido'] ?? 'desconhecido');
-    $status_classe = 'w3-dark-grey';
-    if ($status === 'pago' || $status === 'concluido') {
-        $status_classe = 'w3-green';
-    } elseif ($status === 'enviado') {
-        $status_classe = 'w3-blue';
-    } elseif ($status === 'pendente') {
-        $status_classe = 'w3-yellow w3-text-black';
-    } elseif ($status === 'cancelado') {
-        $status_classe = 'w3-red';
-    }
-?>
-
 <header class="w3-container" style="padding-top:22px">
-  <h5><b><i class="fa fa-info-circle"></i> Detalhes do Pedido</b></h5>
+    <h5><b><i class="fa fa-info-circle"></i> Detalhes do Pedido #<?= htmlspecialchars($pedido['id_pedido']) ?></b></h5>
 </header>
 
-<div class="w3-container w3-margin-bottom" style="max-width: 900px; margin: auto;">
-    <h2 class="w3-border-bottom w3-padding-16 w3-text-white" style="font-weight: 500;">
-        Pedido #<?= htmlspecialchars($pedido['id_pedido']) ?>
-        <span class="w3-tag w3-round w3-large <?= $status_classe ?>" style="float:right; padding: 8px 15px;">
-            <i class="fa fa-check-circle"></i> <?= ucfirst(htmlspecialchars($pedido['status_pedido'])) ?>
-        </span>
-    </h2>
+<div class="w3-container w3-margin-top">
+    <a href="/backend/pedido/listar" class="w3-button w3-round w3-light-grey w3-margin-bottom">
+        <i class="fa fa-arrow-left"></i> Voltar à Lista
+    </a>
+</div>
 
-    <div class="w3-card-4 w3-black w3-padding-large w3-margin-bottom w3-text-white" style="border-radius: 8px;">
-        
-        <h3 class="w3-border-bottom w3-padding-small w3-text-yellow" style="font-weight: 400;"><i class="fa fa-file-text-o"></i> Resumo</h3>
-        
-        <div class="w3-row-padding">
-            <div class="w3-half">
-                <p><strong>ID do Cliente:</strong> <span class="w3-text-light-grey"><?= htmlspecialchars($pedido['id_cliente'] ?? 'N/A') ?></span></p>
-                <p><strong>Data do Pedido:</strong> <span class="w3-text-light-grey"><?= htmlspecialchars($pedido['data_pedido']) ?></span></p>
-            </div>
+<?php 
+// Lógica para cor do status
+$status = strtolower($pedido['status_pedido'] ?? 'desconhecido');
+$status_classe = 'w3-dark-grey';
+if ($status === 'pago' || $status === 'concluido') {
+    $status_classe = 'w3-green';
+} elseif ($status === 'pendente' || $status === 'em andamento') {
+    $status_classe = 'w3-yellow w3-text-black';
+} elseif ($status === 'cancelado') {
+    $status_classe = 'w3-red';
+}
+?>
 
-            <div class="w3-half w3-right-align">
-                <p class="w3-xxlarge w3-text-yellow" style="font-weight: 600; margin-bottom: 5px;">
-                    R$ <?= number_format($pedido['total_pedido'], 2, ',', '.') ?>
-                </p>
-                <p class="w3-text-grey">Total Pago/Devido</p>
-            </div>
-        </div>
-        
-        <div class="w3-row-padding w3-border-top w3-padding-top w3-small w3-text-grey w3-right-align">
-             Criado em: <?= htmlspecialchars($pedido['criado_em']) ?> | Última atualização: <?= htmlspecialchars($pedido['atualizado_em'] ?? 'Nunca') ?>
+<div class="w3-row-padding w3-margin-bottom">
+
+    <div class="w3-col l6 m6 w3-margin-bottom">
+        <div class="w3-container w3-white w3-card-4 w3-padding">
+            <h4><i class="fa fa-file-text-o"></i> Informações do Pedido</h4>
+            <hr>
+            <p><strong>ID do Pedido:</strong> #<?= htmlspecialchars($pedido['id_pedido'] ?? 'N/A') ?></p>
+            <p><strong>Data:</strong> <?= date('d/m/Y H:i', strtotime($pedido['data_pedido'] ?? '')) ?></p>
+            <p><strong>Criado em:</strong> <?= date('d/m/Y H:i', strtotime($pedido['criado_em'] ?? '')) ?></p>
+            <p><strong>Status:</strong> 
+                <span class="w3-tag w3-round w3-large <?= $status_classe ?>">
+                    <?= ucfirst(htmlspecialchars($pedido['status_pedido'] ?? 'Desconhecido')) ?>
+                </span>
+            </p>
+            <p><strong>Total Pago:</strong> <span class="w3-text-green w3-large w3-bold">R$ <?= number_format($pedido['total_pedido'] ?? 0, 2, ',', '.') ?></span></p>
         </div>
     </div>
-    
-    <h3 class="w3-border-bottom w3-padding-8 w3-text-white" style="font-weight: 400;">
-        <i class="fa fa-shopping-basket"></i> Produtos do Pedido
-    </h3>
-    
-    <?php if (empty($itens)): ?>
-        <div class="w3-panel w3-dark-grey w3-padding w3-round w3-text-white">
-            <p>Nenhum produto encontrado para este pedido.</p>
+
+    <div class="w3-col l6 m6 w3-margin-bottom">
+        <div class="w3-container w3-white w3-card-4 w3-padding">
+            <h4><i class="fa fa-user"></i> Informações do Cliente/Perfil</h4>
+            <hr>
+            <p><strong>ID Perfil:</strong> <?= htmlspecialchars($pedido['id_perfil'] ?? 'N/A') ?></p>
+            <p><strong>Nome:</strong> <?= htmlspecialchars($pedido['nome_perfil'] ?? 'Perfil Não Encontrado') ?></p>
+            <p><strong>Ações:</strong> 
+                <a href="/backend/perfil/editar/<?= htmlspecialchars($pedido['id_perfil']) ?>" class="w3-button w3-small w3-theme w3-round">
+                    <i class="fa fa-edit"></i> Ver Perfil
+                </a>
+            </p>
         </div>
-    <?php else: ?>
-        
-        <div class="w3-responsive">
-        <table class="w3-table w3-bordered w3-hoverable w3-black w3-text-white" style="border-radius: 4px; overflow: hidden;">
-            <thead>
-                <tr class="w3-dark-grey w3-border-bottom w3-border-yellow">
-                    <th>ID Item</th>
-                    <th>ID Produto</th>
-                    <th>Quantidade</th>
-                    <th>Preço Unitário</th>
-                    <th style="text-align: right;">Subtotal</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($itens as $item): 
-                    $subtotal = $item['quantidade'] * $item['preco_unitario'];
-                ?>
-                <tr>
-                    <td><?= htmlspecialchars($item['id_itens_pedidos']) ?></td>
-                    <td>
-                        <a href="/backend/produto/listar/<?= htmlspecialchars($item['id_produto']) ?>" class="w3-text-teal w3-hover-text-yellow">
-                            <?= htmlspecialchars($item['id_produto']) ?>
-                        </a>
-                    </td>
-                    <td><?= htmlspecialchars($item['quantidade']) ?></td>
-                    <td>R$ <?= number_format($item['preco_unitario'], 2, ',', '.') ?></td>
-                    <td style="text-align: right;">R$ <strong class="w3-text-yellow"><?= number_format($subtotal, 2, ',', '.') ?></strong></td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-        </div>
-        
-    <?php endif; ?>
-    
-    <div class="w3-section w3-padding-small w3-right-align w3-border-top w3-padding-top">
-        <a href="/backend/pedido/editar/<?= htmlspecialchars($pedido['id_pedido']) ?>"
-           class="w3-button w3-round w3-blue w3-hover-dark-grey w3-margin-right">
-            <i class="fa fa-edit"></i> Editar Status/Pedido
-        </a>
-        <a href="/backend/pedido/listar"
-           class="w3-button w3-round w3-light-grey w3-hover-dark-grey">
-            <i class="fa fa-arrow-left"></i> Voltar à Lista
-        </a>
     </div>
 
 </div>
 
-<div style="height: 50px;"></div>
+<div class="w3-container w3-margin-bottom">
+    <div class="w3-container w3-white w3-card-4 w3-padding">
+        <h4><i class="fa fa-shopping-basket"></i> Itens Comprados (<?= count($itens ?? []) ?>)</h4>
+        <hr>
+        
+        <?php if (!empty($itens)): ?>
+            <table class="w3-table w3-striped w3-bordered w3-hoverable">
+                <thead>
+                    <tr class="w3-light-grey">
+                        <th>Produto</th>
+                        <th>SKU</th>
+                        <th class="w3-right-align">Preço Unitário</th>
+                        <th class="w3-center">Quantidade</th>
+                        <th class="w3-right-align">Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php 
+                    $subtotal_geral = 0;
+                    foreach ($itens as $item): 
+                        $subtotal = $item['quantidade'] * $item['preco_unitario'];
+                        $subtotal_geral += $subtotal;
+                    ?>
+                    <tr>
+                        <td><?= htmlspecialchars($item['nome_produto'] ?? 'Produto Desconhecido') ?></td>
+                        <td><?= htmlspecialchars($item['sku_produto'] ?? 'N/A') ?></td>
+                        <td class="w3-right-align">R$ <?= number_format($item['preco_unitario'] ?? 0, 2, ',', '.') ?></td>
+                        <td class="w3-center"><?= htmlspecialchars($item['quantidade'] ?? 0) ?></td>
+                        <td class="w3-right-align w3-bold">R$ <?= number_format($subtotal, 2, ',', '.') ?></td>
+                    </tr>
+                    <?php endforeach; ?>
+                    <tr class="w3-light-grey w3-text-bold">
+                        <td colspan="4" class="w3-right-align">Total Calculado:</td>
+                        <td class="w3-right-align">R$ <?= number_format($subtotal_geral, 2, ',', '.') ?></td>
+                    </tr>
+                </tbody>
+            </table>
+        <?php else: ?>
+            <p class="w3-text-red"><i class="fa fa-exclamation-triangle"></i> Nenhum item encontrado para este pedido.</p>
+        <?php endif; ?>
+    </div>
+</div>
 
-<?php endif; ?>
+<div style="height: 100px;"></div>

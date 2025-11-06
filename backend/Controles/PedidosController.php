@@ -9,6 +9,7 @@ use App\Koketsu\Models\ItensPedidos;
 use App\Koketsu\Core\FileManager;
 use App\Koketsu\Controles\Admin\AdminController;
 
+
 class PedidosController extends AdminController {
     public $pedidos;
     public $itenspedidos; 
@@ -47,20 +48,38 @@ public function __construct() {
         }
     }
    
-    public function viewListarPedido() {
-        $dados = $this->pedidos->paginacao();
-        $total = $this->pedidos->totalDePedidos();
+  public function viewListarPedido() {
+    $dados = $this->pedidos->paginacao();
+    $total = $this->pedidos->totalDePedidos(); // ⭐️ CHAMA A NOVA FUNÇÃO
 
-        $total_pedidos = is_array($total) ? reset($total) : $total;
 
-        View::render("pedidos/index", [
-            "pedidos" => $dados['data'] ?? [],
-            "total_pedidos" => $total_pedidos ?? 0,
-            "total_inativos" => 0,
-            "total_ativos" => 0,
-            "paginacao" => $dados
-        ]);
+    $total_pedidos = (int) $total;
+
+    View::render("pedidos/index", [
+        "pedidos" => $dados['data'] ?? [],
+        "total_pedidos" => $total_pedidos ?? 0,
+        "total_inativos" => 0, // Se quiser calcular inativos, precisa de uma nova função
+        "total_ativos" => $total_pedidos ?? 0, // Se 'total' já é total de ativos
+        "paginacao" => $dados
+    ]);
+}
+public function viewDetalhesPedido(int $id) {
+   
+    $itensPedidosModel = new \App\Koketsu\Models\ItensPedidos($this->db); 
+    $pedido = $this->pedidos->buscarPedidoPorId($id); 
+
+    if (!$pedido) {
+   
+        Redirect::redirecionarComMensagem("/pedido/listar", "error", "Pedido não encontrado.");
+        return;
     }
+
+    $itens = $itensPedidosModel->buscarItensPorPedido($id); 
+    View::render('pedidos/detalhes', [
+        'pedido' => $pedido,
+        'itens' => $itens
+    ]);
+}
 
   
     public function viewCriarPedidos() {
@@ -98,65 +117,77 @@ public function __construct() {
 }
 
 public function salvarPedido() {
-        // Coleta de dados do Pedido Principal
-        $id_cliente = $_POST['id_cliente'] ?? null;
-        $data_pedido = $_POST['data_pedido'] ?? null;
-        $total_pedido = isset($_POST['total_pedido']) ? (float)$_POST['total_pedido'] : 0.00;
-        $status_pedido = $_POST['status_pedido'] ?? 'pendente'; 
-        
-        // Coleta de dados do Item (ASSUMINDO que o form tem id_produto e quantidade)
-        $id_produto = $_POST['id_produto'] ?? null;
-        $quantidade = isset($_POST['quantidade']) ? (int)$_POST['quantidade'] : 1;
-        
-        // 1. Validação básica
-        if (empty($id_cliente) || empty($data_pedido) || empty($total_pedido) || empty($id_produto)) {
-            Redirect::redirecionarComMensagem("/pedido/criar", "error", "Preencha todos os campos obrigatórios (Cliente, Data, Total e Produto).");
-            return; 
-        }
+    
+    // 1. Receber e Tratar os Dados
+    $id_perfil = $_POST['id_perfil'] ?? NULL; 
+    
+    $data_pedido = $_POST['data_pedido'] ?? null;
+    $total_pedido_str = $_POST['total_pedido'] ?? '0.00';
+    $total_pedido = (float)str_replace(',', '.', $total_pedido_str);
+    $status_pedido = $_POST['status_pedido'] ?? 'pendente';
+    
+    $itens_pedido = $_POST['itens'] ?? []; 
 
-        // 2. Salvar o pedido principal e obter o ID
-        $novo_id_pedido = $this->pedidos->inserirPedido(
-            $id_cliente,
-            $data_pedido,
-            $total_pedido,
-            $status_pedido
-        );
+
+    // 2. Validação
+    if (empty($id_perfil) || empty($data_pedido) || $total_pedido <= 0 || empty($itens_pedido)) {
+        Redirect::redirecionarComMensagem("/pedido/criar", "error", "Preencha o Perfil, a Data, o Total e adicione pelo menos um Item.");
+        return;
+    }
+
+
+    // 3. Salvar o pedido principal
+    $novo_id_pedido = $this->pedidos->inserirPedido(
+        $id_perfil, 
+        $data_pedido, 
+        $total_pedido, 
+        $status_pedido
+    );
+
+
+    if ($novo_id_pedido) {
         
-        if ($novo_id_pedido) {
+        // 4. Salvar os itens do pedido
+        $todos_itens_salvos = true;
+        
+        foreach ($itens_pedido as $item) {
             
-            // 3. Salvar o Item do Pedido usando o ID recém-criado
-            $preco_unitario = $total_pedido / $quantidade; 
-            
-            // CORRIGIDO: Chamada para o método da sua Model ItensPedidos
-            $item_salvo = $this->itenspedidos->inserirItemPedido( 
-                $novo_id_pedido, 
-                $id_produto, 
-                $quantidade, 
-                $preco_unitario 
-            );
-            
-            if ($item_salvo) {
-                Redirect::redirecionarComMensagem("/pedido/listar", "success", "Pedido e Item cadastrados com sucesso!");
+            $id_produto       = $item['id_produto'] ?? NULL;
+            $quantidade       = $item['quantidade'] ?? 0;
+            $preco_unitario   = (float)str_replace(',', '.', ($item['preco_unitario'] ?? '0.00')); 
+
+            if ($id_produto && $quantidade > 0 && $preco_unitario > 0) {
+                // Assumindo que $this->itensPedidos está instanciado no Controller
+                $id_item_salvo = $this->itenspedidos->inserirItemPedido(
+                    $novo_id_pedido, 
+                    $id_produto, 
+                    $quantidade, 
+                    $preco_unitario
+                );
+                
+                if (!$id_item_salvo) {
+                    $todos_itens_salvos = false;
+                    break; 
+                }
             } else {
-                // Se o item falhar, idealmente você deve desfazer o pedido principal.
-                Redirect::redirecionarComMensagem("/pedido/listar", "error", "Pedido criado, mas falha ao adicionar item! Verifique o log.");
+                $todos_itens_salvos = false;
+                break;
             }
-
-        } else {
-            // Falha ao criar o pedido principal
-            Redirect::redirecionarComMensagem("/pedido/criar", "error", "Erro ao cadastrar pedido principal.");
         }
-    }
-
-  
-    public function viewExcluirPedido(int $id) {
-     $id = (int)$_POST['id_pedido'];
-        if ($this->pedidos->excluirPedido($id)) {
-            Redirect::redirecionarComMensagem("/pedido/listar", "success", "Pedido inativado com sucesso!");
+        
+        // 5. Finalização
+        if ($todos_itens_salvos) {
+            Redirect::redirecionarComMensagem("/pedido/listar", "success", "Pedido e Itens cadastrados com sucesso! ID: " . $novo_id_pedido);
         } else {
-            Redirect::redirecionarComMensagem("/pedido/listar", "error", "Erro ao inativar pedido.");
+            // Reverter ou deletar o pedido principal aqui seria o ideal
+            Redirect::redirecionarComMensagem("/pedido/criar", "error", "Pedido principal salvo, mas erro ao cadastrar os Itens.");
         }
+
+    } else {
+        // Falha no Model ao salvar o Pedido Principal
+        Redirect::redirecionarComMensagem("/pedido/criar", "error", "Erro ao cadastrar pedido principal. Verifique se o ID do Perfil existe no banco.");
     }
+}
 
    
     public function relatorioPedido($id, $data1, $data2) {
