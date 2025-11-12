@@ -2,6 +2,7 @@
 
 namespace App\Koketsu\Models;
 use PDO;
+use PDOException;
 
 class Pedidos {
   private $id_pedido;
@@ -142,49 +143,51 @@ public function buscarPedidoPorId(int $id) {
 
 // Pedidos.php (função paginacao)
 
-public function paginacao(int $pagina = 1, int $por_pagina = 50): array{
-    // 1. Contagem total de registros (não muda)
-    $totalQuery = "SELECT COUNT(*) FROM `tbl_pedidos`";
-    $totalStmt = $this->db->query($totalQuery);
-    $total_de_registros = $totalStmt->fetchColumn();
-    $offset = ($pagina - 1) * $por_pagina;
+public function paginacao(int $pagina = 1, int $por_pagina = 100): array{
 
-    // 2. Query principal: JOIN com a tabela 'perfil' e COUNT de itens
-    $dataQuery = "SELECT 
-                    p.*, 
-                    u.nome_perfil, 
-                    COUNT(ip.id_itens_pedidos) AS total_itens
-                  FROM `tbl_pedidos` p
-                  
-                  LEFT JOIN `perfil` u       /* CORRIGIDO para 'perfil' */
-                    ON p.id_perfil = u.id_perfil
-                    
-                  LEFT JOIN `tbl_itens_pedidos` ip 
-                    ON p.id_pedido = ip.id_pedido
-                  
-                  GROUP BY p.id_pedido, u.nome_perfil
-                  LIMIT :limit OFFSET :offset";
-                  
-    $dataStmt = $this->db->prepare($dataQuery);
-    $dataStmt->bindValue(':limit', $por_pagina, PDO::PARAM_INT);
-    $dataStmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-    $dataStmt->execute();
-    
-    $dados = $dataStmt->fetchAll(PDO::FETCH_ASSOC);
+        $totalQuery = "SELECT COUNT(*) FROM `tbl_pedidos`";
 
-    // CÁLCULO DA ÚLTIMA PÁGINA (Correção da variável $lastPage)
-    $lastPage = ceil($total_de_registros / $por_pagina); 
-    
-    return [
-        'data' => $dados,
-        'total' => (int) $total_de_registros,
-        'por_pagina' => (int) $por_pagina,
-        'pagina_atual' => (int) $pagina,
-        'ultima_pagina' => (int) $lastPage,
-        'de' => $offset + 1,
-        'para' => $offset + count($dados)
-    ];
-}
+        $totalStmt = $this->db->query($totalQuery);
+
+        $total_de_registros = $totalStmt->fetchColumn();
+
+        $offset = ($pagina - 1) * $por_pagina;
+
+        $dataQuery = "SELECT * FROM `tbl_pedidos` LIMIT :limit OFFSET :offset";
+
+        $dataStmt = $this->db->prepare($dataQuery);
+
+        $dataStmt->bindValue(':limit', $por_pagina, PDO::PARAM_INT);
+
+        $dataStmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+
+        $dataStmt->execute();
+
+        $dados = $dataStmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $lastPage = ceil($total_de_registros / $por_pagina);
+
+ 
+
+        return [
+
+            'data' => $dados,
+
+            'total' => (int) $total_de_registros,
+
+            'por_pagina' => (int) $por_pagina,
+
+            'pagina_atual' => (int) $pagina,
+
+            'ultima_pagina' => (int) $lastPage,
+
+            'de' => $offset + 1,
+
+            'para' => $offset + count($dados)
+
+        ];
+
+    }
 
 function inserirPedido($id_perfil, $data_pedido, $total_pedido, $status_pedido) { 
     
@@ -196,10 +199,10 @@ function inserirPedido($id_perfil, $data_pedido, $total_pedido, $status_pedido) 
     $stmt = $this->db->prepare($sql);
     
     // Mude o bindParam de :id_cliente para :id_perfil
-    $stmt->bindParam(':id_perfil', $id_perfil); 
-    $stmt->bindParam(':data_pedido', $data_pedido);
-    $stmt->bindParam(':total_pedido', $total_pedido);
-    $stmt->bindParam(':status_pedido', $status_pedido);
+    // $stmt->bindParam(':id_perfil', $id_perfil); 
+    // $stmt->bindParam(':data_pedido', $data_pedido);
+    // $stmt->bindParam(':total_pedido', $total_pedido);
+    // $stmt->bindParam(':status_pedido', $status_pedido);
     
     if ($stmt->execute()) {
         return $this->db->lastInsertId();
@@ -240,11 +243,11 @@ public function atualizarPedido($id_pedido, $total_pedido, $data_pedido, $status
     $stmt = $this->db->prepare($sql);
     
     // Bind Params (Todos os campos obrigatórios)
-    $stmt->bindParam(':total_pedido', $total_pedido);
-    $stmt->bindParam(':data_pedido', $data_pedido); 
-    $stmt->bindParam(':status_pedido', $status_pedido);
-    $stmt->bindParam(':atualizado_em', $dataatual);
-    $stmt->bindParam(':id', $id_pedido);
+    // $stmt->bindParam(':total_pedido', $total_pedido);
+    // $stmt->bindParam(':data_pedido', $data_pedido); 
+    // $stmt->bindParam(':status_pedido', $status_pedido);
+    // $stmt->bindParam(':atualizado_em', $dataatual);
+    // $stmt->bindParam(':id', $id_pedido);
     
     // Bind Param (Condicional - Apenas se houver imagem)
     if (!empty($imagem)) {
@@ -266,7 +269,7 @@ public function atualizarPedido($id_pedido, $total_pedido, $data_pedido, $status
             WHERE id_pedido = :id";
     $stmt = $this->db->prepare($sql);
     $stmt->bindParam(':excluido_em', $dataatual);
-    $stmt->bindParam(':id', $id_pedido);
+    // $stmt->bindParam(':id', $id_pedido);
     return $stmt->execute();
   }
  
