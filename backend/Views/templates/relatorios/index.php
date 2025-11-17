@@ -47,8 +47,21 @@
             <div class="card">
                 <h2>Vendas no Último Mês</h2>
                 <?php 
-                    $ultimo_mes = end($vendas_mensais);
-                    $total_mes = $ultimo_mes['total_vendas'] ?? 0;
+                    // Garantir que $vendas_mensais é um array não vazio antes de usar end()
+                    if (is_array($vendas_mensais) && !empty($vendas_mensais)) {
+                        $ultimo_mes = end($vendas_mensais);
+                    } else {
+                        $ultimo_mes = null;
+                    }
+
+                    // Ler total_vendas de forma segura tanto para arrays quanto para objetos
+                    if (is_array($ultimo_mes)) {
+                        $total_mes = isset($ultimo_mes['total_vendas']) ? $ultimo_mes['total_vendas'] : 0;
+                    } elseif (is_object($ultimo_mes)) {
+                        $total_mes = isset($ultimo_mes->total_vendas) ? $ultimo_mes->total_vendas : 0;
+                    } else {
+                        $total_mes = 0;
+                    }
                 ?>
                 <p style="font-size: 2em; color: #28a745;">R$ <?= number_format($total_mes, 2, ',', '.') ?></p>
             </div>
@@ -56,8 +69,25 @@
             <div class="card">
                 <h2>Ticket Médio (Último)</h2>
                 <?php 
-                    $ultimo_ticket = end($ticket_medio_mensal);
-                    $ticket_medio = $ultimo_ticket['ticket_medio'] ?? 0;
+                    // Garantir que $ticket_medio_mensal é um array não vazio antes de usar end()
+                    if (is_array($ticket_medio_mensal) && !empty($ticket_medio_mensal)) {
+                        $ultimo_ticket = end($ticket_medio_mensal);
+                    } elseif (is_object($ticket_medio_mensal) && !empty((array)$ticket_medio_mensal)) {
+                        // Se for um objeto, converter para array para pegar o último elemento
+                        $arr_ticket = (array)$ticket_medio_mensal;
+                        $ultimo_ticket = end($arr_ticket);
+                    } else {
+                        $ultimo_ticket = null;
+                    }
+
+                    // Ler ticket_medio de forma segura tanto para arrays quanto para objetos
+                    if (is_array($ultimo_ticket)) {
+                        $ticket_medio = isset($ultimo_ticket['ticket_medio']) ? $ultimo_ticket['ticket_medio'] : 0;
+                    } elseif (is_object($ultimo_ticket)) {
+                        $ticket_medio = isset($ultimo_ticket->ticket_medio) ? $ultimo_ticket->ticket_medio : 0;
+                    } else {
+                        $ticket_medio = 0;
+                    }
                 ?>
                 <p style="font-size: 2em; color: #ffc107;">R$ <?= number_format($ticket_medio, 2, ',', '.') ?></p>
             </div>

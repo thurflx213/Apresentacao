@@ -67,9 +67,9 @@ public function cadastrarUsuario(): void {
         return;
     }
         
-    $nome = $_POST['nome_usuario'] ?? '';
-    $email = $_POST['email_usuario'] ?? '';
-    $senha = $_POST['senha_usuario'] ?? '';
+    $nome = $_POST['nome_usuarios'] ?? '';
+    $email = $_POST['email_usuarios'] ?? '';
+    $senha = $_POST['senha_usuarios'] ?? '';
     $senha_confirm = $_POST['senha_confirm'] ?? '';
         
     if ($senha != $senha_confirm){

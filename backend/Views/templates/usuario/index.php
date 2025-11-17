@@ -29,10 +29,10 @@
             <?php else: ?>
                 <?php foreach ($usuario as $u): ?>
                     <tr>
-                        <td><?= htmlspecialchars($u['id_usuario']) ?></td>
-                        <td><?= htmlspecialchars($u['nome_usuario']) ?></td>
-                        <td><?= htmlspecialchars($u['email_usuario']) ?></td>
-                        <td><?= htmlspecialchars($u['tipo_usuario']) ?></td>
+                        <td><?= htmlspecialchars($u['id_usuarios']) ?></td>
+                        <td><?= htmlspecialchars($u['nome_usuarios']) ?></td>
+                        <td><?= htmlspecialchars($u['email_usuarios']) ?></td>
+                        <td><?= htmlspecialchars($u['nivel_acesso']) ?></td>
                         <td><?= htmlspecialchars($u['criado_em']) ?></td>
                         <td>
                             <a href="/usuario/editar/<?= $u['id_usuario'] ?>" class="w3-button w3-tiny w3-yellow w3-margin-right">Editar</a>

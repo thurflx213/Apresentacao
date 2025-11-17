@@ -76,11 +76,11 @@
       <tbody>
         <?php foreach ($usuario as $usuarios): ?>
           <tr style="background-color: <?= empty($usuarios['excluido_em']) ? '#000' : '#331111' ?>;">
-            <td><?= htmlspecialchars($usuarios['id_usuario']) ?></td>
-            <td><?= htmlspecialchars($usuarios['nome_usuario']) ?></td>
-            <td><?= htmlspecialchars($usuarios['email_usuario']) ?></td>
-            <td><?= htmlspecialchars($usuarios['senha_usuario']) ?></td>
-            <td><?= htmlspecialchars($usuarios['tipo_usuario']) ?></td>
+            <td><?= htmlspecialchars($usuarios['id_usuarios']) ?></td>
+            <td><?= htmlspecialchars($usuarios['nome_usuarios']) ?></td>
+            <td><?= htmlspecialchars($usuarios['email_usuarios']) ?></td>
+            <td><?= htmlspecialchars($usuarios['senha_usuarios']) ?></td>
+            <td><?= htmlspecialchars($usuarios['nivel_acesso']) ?></td>
             <td>
               <?php if (!empty($usuarios['excluido_em'])): ?>
                 <b style="background-color: red;">Inativo</b>
@@ -90,11 +90,11 @@
             </td>
             <td>
               <a class="w3-button w3-round w3-blue w3-hover-red w3-padding-large w3-margin-right"
-                 href="/backend/usuario/editar/<?= htmlspecialchars($usuarios['id_usuario']) ?>">Editar</a>
+                 href="/backend/usuario/editar/<?= htmlspecialchars($usuarios['id_usuarios']) ?>">Editar</a>
             </td>
             <td>
               <a class="w3-button w3-round w3-red w3-hover-red w3-padding-large w3-margin-right"
-                 href="/backend/usuario/excluir/<?= htmlspecialchars($usuarios['id_usuario']) ?>">Excluir</a>
+                 href="/backend/usuario/excluir/<?= htmlspecialchars($usuarios['id_usuarios']) ?>">Excluir</a>
             </td>
           </tr>
         <?php endforeach; ?>

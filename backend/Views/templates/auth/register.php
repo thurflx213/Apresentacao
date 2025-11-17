@@ -4,19 +4,19 @@
         <div class="w3-row w3-section">
             <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-user"></i></div>
             <div class="w3-rest">
-                <input class="w3-input w3-border" name="nome_usuario" type="text" placeholder="Nome Completo" required>
+                <input class="w3-input w3-border" name="nome_usuarios" type="text" placeholder="Nome Completo" required>
             </div>
         </div>
         <div class="w3-row w3-section">
             <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-envelope-o"></i></div>
             <div class="w3-rest">
-                <input class="w3-input w3-border" name="email_usuario" type="email" placeholder="Email" required>
+                <input class="w3-input w3-border" name="email_usuarios" type="email" placeholder="Email" required>
             </div>
         </div>
         <div class="w3-row w3-section">
             <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-lock"></i></div>
             <div class="w3-rest">
-                <input class="w3-input w3-border" name="senha_usuario" type="password" placeholder="Senha" required>
+                <input class="w3-input w3-border" name="senha_usuarios" type="password" placeholder="Senha" required>
             </div>
         </div>
         <div class="w3-row w3-section">
