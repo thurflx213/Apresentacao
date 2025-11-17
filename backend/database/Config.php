@@ -11,12 +11,12 @@ class Config
   'driver' => 'mysql',
   'mysql' => 
   array (
-    'host' => 'localhost',
-    'db_name' => 'Koketsu',
-    'username' => 'root',
-    'password' => NULL,
+    'host' => '216.172.172.207',
+    'db_name' => 'faust537_time6_ti29',
+    'username' => 'faust537_time6_ti29',
+    'password' => 'zSXibN6l$.R}',
     'charset' => 'utf8',
-    'port' => NULL,
+    'port' => '3306',
   ),
 )
         ];

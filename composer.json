@@ -1,0 +1,14 @@
+{
+    "name": "koketsu/website",
+    "description": "Projeto de site da Koketsu Grife.",
+    "type": "project",
+    "require": {
+        "php": ">=8.0",
+        "bramus/router": "^1.2" 
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\Koketsu\\": "backend/"
+        }
+    }
+}

@@ -8,8 +8,7 @@ class Rotas
     {
         return [ 
             "GET" => [
-        // o caminho da URL o nome do controlle e o metodo do controle 
-
+      
           '/register' => 'AuthController@register',
           '/login' => 'AuthController@login',
           '/logout' => 'AuthController@logout',
@@ -55,7 +54,7 @@ class Rotas
        "/backend/carrinho/deletar/{id}" => "CarrinhoController@deletarCarrinho",
        "/backend/carrinho/edit/{id}" => "CarrinhoController@viewEditCarrinho", 
 
-        //imagens (Corrigido para minúsculas no URI)
+        //imagens 
         "/backend/imagens/salvar" => "ImagemController@salvarImagem",
        "/backend/imagens/atualizar/{id}" => "ImagemController@atualizarImagem",
        "/backend/imagens/deletar/{id}" => "ImagemController@deletarImagem",
