@@ -1,0 +1,15 @@
+import { contextBridge, ipcRenderer } from 'electron/renderer';
+
+contextBridge.exposeInMainWorld (
+ 
+'api',{
+  listar: () => ipcRenderer.invoke('usuarios:listar'),
+  cadastrar: (usuario) => ipcRenderer.invoke('usuarios:cadastrar', usuario)
+}
+)
+contextBridge.exposeInMainWorld (
+    'darkMode', {
+  toggle: () => ipcRenderer.invoke('dark-mode:toggle')
+},
+
+)
