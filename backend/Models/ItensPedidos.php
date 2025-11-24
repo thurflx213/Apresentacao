@@ -54,23 +54,23 @@ class ItensPedidos {
     /**
      * Buscar itens de um pedido específico (com JOIN).
      */
- function buscarItensPorPedido($id_pedido) {
-    // ip = tbl_itens_pedidos, prod = tbl_produtos
+function buscarItensPorPedido($id_pedido)
+{
+    // Tentativa de correção final: Apenas o nome do produto (assumindo que o campo real é 'nome')
     $sql = "SELECT
-        ip.*,
-        prod.nome_produto, /* Garanta que o nome da coluna do produto é 'nome_produto' */
-        prod.sku_produto /* Garanta que o nome da coluna do sku é 'sku_produto' */
-    FROM tbl_itens_pedidos ip
-    JOIN tbl_produtos prod ON ip.id_produto = prod.id_produto
-    WHERE ip.id_pedido = :id_pedido";
-
+        tbl_itens_pedidos.*,
+        tbl_produtos.nome_produtos                 /* <--- Usando apenas 'nome' (Tente corrigir este campo no BD) */
+    FROM tbl_itens_pedidos
+    JOIN tbl_produtos ON tbl_itens_pedidos.id_produto = tbl_produtos.id_produto
+    WHERE tbl_itens_pedidos.id_pedido = :id_pedido";
+    
+    // O restante do código de execução (PDO)
     $stmt = $this->db->prepare($sql);
     $stmt->bindParam(':id_pedido', $id_pedido, PDO::PARAM_INT);
     $stmt->execute();
     
-    return $stmt->fetchAll(PDO::FETCH_ASSOC); // Retorna todos os itens do pedido
+    return $stmt->fetchAll(PDO::FETCH_ASSOC); 
 }
-
     public function buscarTop5ProdutosVendidos()
     {
         $sql = "

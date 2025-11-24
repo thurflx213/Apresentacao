@@ -12,8 +12,9 @@ $router = new Router();
 $router->setNamespace('\App\Koketsu\Controles');
 $router->get('/backend/relatorios', 'RelatoriosController@exibirRelatorios');
 $router->get('/backend/register', 'AuthController@register');
-$router->post('/backend/register', 'AuthController@cadastrarUsuario');
 $router->get('/admin/relatorios', 'RelatoriosController@index');
+$router->post('/backend/pedido/listar', 'PedidosController@pesquisarPedido'); // Rota POST para Busca
+$router->get('/backend/pedido/listar', 'PedidosController@viewListarPedido'); 
 
 $rotas = [ 
   "GET" => [
@@ -77,6 +78,7 @@ $rotas = [
          "/pedido/salvar" => "PedidosController@salvarPedido",
        "/pedido/atualizar/{id}" => "PedidosController@atualizarPedidos",
        "/pedido/deletar/{id}" => "PedidosController@viewExcluirPedido",
+        "/backend/pedido/listar" => "PedidosController@pesquisarPedido",
        //produtos
         "/produto/salvar" => "ProdutosController@salvarProduto",
        "/produto/atualizar/{id}" => "ProdutosController@atualizarProdutos",
