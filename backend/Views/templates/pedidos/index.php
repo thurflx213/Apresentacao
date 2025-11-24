@@ -75,7 +75,7 @@
         ?>
         <tr>
           <td><?= htmlspecialchars($pedido['id_pedido']) ?></td>
-          <td><?= htmlspecialchars($pedido['nome_usuarios'] ?? 'N/A') ?></td> 
+          <td><?= htmlspecialchars($pedido['nome_cliente'] ?? 'N/A') ?></td>  
           
           <td><?= date('d/m/Y H:i', strtotime($pedido['data_pedido'])) ?></td> 
           

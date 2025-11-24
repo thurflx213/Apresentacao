@@ -142,61 +142,63 @@ class Pedidos {
 
     // Pedidos.php (função paginacao)
 
-    public function paginacao(int $pagina = 1, int $por_pagina = 100): array{
+public function paginacao(int $pagina = 1, int $por_pagina = 100): array{
 
-        $totalQuery = "SELECT COUNT(*) FROM `tbl_pedidos`";
-        $totalStmt = $this->db->query($totalQuery);
-        $total_de_registros = $totalStmt->fetchColumn();
+    $totalQuery = "SELECT COUNT(*) FROM `tbl_pedidos` WHERE excluido_em IS NULL";
+    $totalStmt = $this->db->query($totalQuery);
+    $total_de_registros = $totalStmt->fetchColumn();
 
-        $offset = ($pagina - 1) * $por_pagina;
-        
-    $dataQuery = "SELECT tbl_pedidos.*, tbl_perfil.endereco_perfil, tbl_usuarios.nome_usuarios AS nome_usuarios
-
-        FROM tbl_pedidos LEFT JOIN tbl_perfil ON tbl_pedidos.id_perfil = tbl_perfil.id_perfil 
+    $offset = ($pagina - 1) * $por_pagina;
+    $dataQuery = "SELECT 
+        tbl_pedidos.*, 
+        tbl_perfil.endereco_perfil, 
+        tbl_usuarios.nome_usuarios AS nome_cliente 
+    FROM tbl_pedidos 
+    LEFT JOIN tbl_perfil ON tbl_pedidos.id_perfil = tbl_perfil.id_perfil
     LEFT JOIN tbl_usuarios ON tbl_perfil.id_usuarios = tbl_usuarios.id_usuarios
+    WHERE tbl_pedidos.excluido_em IS NULL 
+    LIMIT :limit OFFSET :offset";
 
-    WHERE tbl_pedidos.excluido_em IS NULL LIMIT :limit OFFSET :offset";
+    $dataStmt = $this->db->prepare($dataQuery);
+    $dataStmt->bindValue(':limit', $por_pagina, PDO::PARAM_INT);
+    $dataStmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+    $dataStmt->execute();
 
-        $dataStmt = $this->db->prepare($dataQuery);
-        $dataStmt->bindValue(':limit', $por_pagina, PDO::PARAM_INT);
-        $dataStmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-        $dataStmt->execute();
+    $dados = $dataStmt->fetchAll(PDO::FETCH_ASSOC);
 
-        $dados = $dataStmt->fetchAll(PDO::FETCH_ASSOC);
+    $lastPage = ceil($total_de_registros / $por_pagina);
 
-        $lastPage = ceil($total_de_registros / $por_pagina);
+    return [
+        'data' => $dados,
+        'total' => (int) $total_de_registros,
+        'por_pagina' => (int) $por_pagina,
+        'pagina_atual' => (int) $pagina,
+        'ultima_pagina' => (int) $lastPage,
+        'de' => $offset + 1,
+        'para' => $offset + count($dados)
+    ];
+}
+  function inserirPedido($id_perfil, $data_pedido, $total_pedido, $status_pedido) { 
+    
+    $sql = "INSERT INTO tbl_pedidos
+    (id_perfil, data_pedido, total_pedido, status_pedido, criado_em) 
+    VALUES (:id_perfil, :data_pedido, :total_pedido, :status_pedido, NOW())"; 
 
-        return [
-            'data' => $dados,
-            'total' => (int) $total_de_registros,
-            'por_pagina' => (int) $por_pagina,
-            'pagina_atual' => (int) $pagina,
-            'ultima_pagina' => (int) $lastPage,
-            'de' => $offset + 1,
-            'para' => $offset + count($dados)
-        ];
+    $stmt = $this->db->prepare($sql);
+    
+    // DESCOMENTAR e garantir que os parâmetros sejam passados
+    $stmt->bindParam(':id_perfil', $id_perfil, PDO::PARAM_INT); // Adicionado INT
+    $stmt->bindParam(':data_pedido', $data_pedido);
+    $stmt->bindParam(':total_pedido', $total_pedido);
+    $stmt->bindParam(':status_pedido', $status_pedido);
+    
+    if ($stmt->execute()) {
+        return $this->db->lastInsertId();
+    } else {
+        // Seria bom adicionar um log aqui para debug
+        return false;
     }
-    function inserirPedido($id_perfil, $data_pedido, $total_pedido, $status_pedido) { 
-        
-        // Mude a coluna e o placeholder de id_cliente para id_perfil
-        $sql = "INSERT INTO tbl_pedidos
-        (id_perfil, data_pedido, total_pedido, status_pedido, criado_em) 
-        VALUES (:id_perfil, :data_pedido, :total_pedido, :status_pedido, NOW())"; 
-
-        $stmt = $this->db->prepare($sql);
-        
-        // Mude o bindParam de :id_cliente para :id_perfil
-        // $stmt->bindParam(':id_perfil', $id_perfil); 
-        // $stmt->bindParam(':data_pedido', $data_pedido);
-        // $stmt->bindParam(':total_pedido', $total_pedido);
-        // $stmt->bindParam(':status_pedido', $status_pedido);
-        
-        if ($stmt->execute()) {
-            return $this->db->lastInsertId();
-        } else {
-            return false;
-        }
-    }
+}
 
     function totalDePedidos() {
         // ⚠️ Importante: Mantenha a mesma lógica de contagem da função paginacao

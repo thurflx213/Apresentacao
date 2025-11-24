@@ -44,7 +44,7 @@ if ($status === 'pago' || $status === 'concluido') {
             <h4><i class="fa fa-user"></i> Informações do Cliente/Perfil</h4>
             <hr>
             <p><strong>ID Perfil:</strong> <?= htmlspecialchars($pedido['id_perfil'] ?? 'N/A') ?></p>
-            <p><strong>Nome:</strong> <?= htmlspecialchars($pedido['nome_usuarios'] ?? 'Perfil Não Encontrado') ?></p>
+            <p><strong>Nome:</strong> <?= htmlspecialchars($pedido['nome_cliente'] ?? 'Perfil Não Encontrado') ?></p>
             <p><strong>Ações:</strong> 
                 <a href="/backend/perfil/editar/<?= htmlspecialchars($pedido['id_perfil']) ?>" class="w3-button w3-small w3-theme w3-round">
                     <i class="fa fa-edit"></i> Ver Perfil
