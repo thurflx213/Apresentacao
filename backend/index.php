@@ -1,16 +1,16 @@
 <?php
-namespace App\Koketsu;
-
+// Front controller do backend
+// Carrega o autoloader gerado pelo Composer
 require __DIR__ . '/../vendor/autoload.php';
 
-use Bramus\Router\Router;
 use App\Koketsu\Rotas\Rotas;
-$router = new Router();
+
+$router = new \Bramus\Router\Router();
 
 $rotas = Rotas::get();
-$router->setNamespace('App\Koketsu\Controllers');
+$router->setNamespace('App\\Koketsu\\Controles');
 
-// 🔍 Rota de teste simples
+// Rota de teste simples
 $router->get('/teste', function() {
     echo "✅ Rota de teste funcionando!";
 });

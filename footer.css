@@ -29,7 +29,9 @@ footer .container{
     flex-direction: column;
     color: rgb(255, 255, 255);
     gap: 10px;
-    flex: 5;
+    /* CORRIGIDO: Melhor responsividade para telas menores */
+    flex: 1 1 250px; 
+    min-width: 200px; /* Garante que não fique muito estreito */
 }
 .coluna-footer p{
     margin: 4px 0;
@@ -45,7 +47,9 @@ footer .container{
 .form-email {
     display: flex;
     flex-direction: column;
-    width: 300px;
+    /* Ajuste para ser mais responsivo, usando max-width */
+    max-width: 300px; 
+    width: 100%;
     gap: 10px;
     font-family: Arial, sans-serif;
   }
@@ -54,6 +58,9 @@ footer .container{
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    /* Garante que o input seja escuro, seguindo a paleta */
+    background-color: #222; 
+    color: #fff;
   }
 
   .form-email button {
@@ -72,12 +79,20 @@ footer .container{
     font-size: 14px;
     color: #999;
     padding-top: 30px;
+    /* Ajuste para centralizar o texto de copyright */
+    width: 100%;
+    text-align: center; 
   }
   a {
     color: white;
     text-decoration: none;
     transition: color 0.3s ease;
   }
+/* CORRIGIDO: O seletor de hover estava incorreto. Deve ser aplicado diretamente ao link. */
+.hover-destaque:hover,
+.coluna-footer a:hover {
+  color: rgb(158, 148, 58) !important;
+}
 
 .btn3{
     color: rgb(0, 0, 0);
@@ -93,10 +108,6 @@ footer .container{
     background-size: 19px;
     text-align: left;
 }
-.hover-destaque:hover p {
-  color: rgb(158, 148, 58);
-}
-
 .btn3:hover{
     background-color: rgb(72, 129, 54);
     color: rgb(255, 255, 255);
@@ -107,3 +118,8 @@ footer .container{
   a:hover {
     color: rgb(223, 217, 169); 
   }
+
+/* Garantir que o hover nos links do footer aplique o destaque */
+.coluna-footer a:hover p {
+    color: rgb(158, 148, 58);
+}

@@ -3,7 +3,7 @@
         'name' => 'koketsu/website',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'd8e9f708a35ce6e4791db420a5723a1155893ee5',
+        'reference' => 'c9dae958c24428d603a7299ea53631994dc4904a',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -22,7 +22,7 @@
         'koketsu/website' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'd8e9f708a35ce6e4791db420a5723a1155893ee5',
+            'reference' => 'c9dae958c24428d603a7299ea53631994dc4904a',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
