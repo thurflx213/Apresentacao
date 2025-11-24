@@ -4,6 +4,9 @@ class Rotas{
         this.rotas={
             "/usuario_form": ()=> {
                 return new UsuarioForm().renderizarFormulario();
+            },
+            "/usuario_listar":async () =>{
+                return new UsuarioListar().renderizarLista();
             }
         }        
     }
