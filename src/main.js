@@ -3,6 +3,7 @@ import path from 'node:path';
 import started from 'electron-squirrel-startup';
 import UsuarioController from './Main_back/Controllers/UsuarioController.js';
 import ServicoController from './Main_back/Controllers/ServicoController.js';
+import { initDatabase } from './Main_back/Database/db.js';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
@@ -36,7 +37,7 @@ const createWindow = () => {
   }
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 };
 
 // This method will be called when Electron has finished
@@ -44,9 +45,7 @@ const createWindow = () => {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   createWindow();
-
-  // On OS X it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
+    initDatabase();
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow();
@@ -61,12 +60,26 @@ ipcMain.handle('dark-mode:toggle', () => {
   return nativeTheme.shouldUseDarkColors
 })
 
+ipcMain.handle("usuarios:buscarPorId", async (event, uuid) => {
+  return await controlerUsuario.buscarUsuarioPorId(uuid);
+})
+
+ipcMain.handle("usuarios:removerusuario", async (event, uuid) => {
+  return await controlerUsuario.removerUsuario(uuid);
+})
+
 ipcMain.handle("usuarios:listar", async () => {
   return await controlerUsuario.listar();
 })
+
 ipcMain.handle("usuarios:cadastrar", async (event, usuario) => {
-  const resultado = await controlerUsuario.cadastrar(usuario);
-  return resultado;
+   const resultado = await controlerUsuario.cadastrar(usuario);
+   return resultado;
+})
+
+ipcMain.handle("usuarios:editar", async (event, usuario) => {
+   const resultado = await controlerUsuario.atualizarUsuario(usuario);
+   return resultado;
 })
 
 
