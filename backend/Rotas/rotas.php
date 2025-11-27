@@ -7,11 +7,12 @@ class Rotas
 	{
 		return [ 
 			"GET" => [
-      
-		  '/register' => 'AuthController@register',
-		  '/login' => 'AuthController@login',
-		  '/logout' => 'AuthController@logout',
-         
+				'/meu-carrinho' => 'CarrinhoController@verCarrinho',
+				'/carrinho/remover/{id}' => 'CarrinhoController@removerDoCarrinho',
+				'/register' => 'AuthController@register',
+				'/login' => 'AuthController@login',
+				'/logout' => 'AuthController@logout',
+
 		 '/admin/dashboard' => 'Admin\\DashboardController@index', 
          
 				'/api/produtos' => 'PublicApiController@getProdutos',
@@ -41,6 +42,7 @@ class Rotas
 	"POST" => [
 
 		'/api/pedidos' => 'PublicApiController@salvarPedido',
+		'/carrinho/adicionar' => 'CarrinhoController@adicionarAoCarrinho',
 
 		//avaliacao
 	   "/backend/avaliacao/salvar" => "AvaliacaoController@salvarAvaliacao",

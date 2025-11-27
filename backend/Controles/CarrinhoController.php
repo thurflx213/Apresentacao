@@ -5,42 +5,108 @@ use App\Koketsu\Models\Carrinho;
 use App\Koketsu\Database\Database;
 use App\Koketsu\Core\View;
 use App\Koketsu\Core\Redirect;
-use App\Koketsu\Core\FileManager;
 
 class CarrinhoController {
     public $carrinho;
     public $db;
-    public $gerenciarImagem;
 
     public function __construct() {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
         $this->db = Database::getInstance();
-    
-        $this->carrinho = new \App\Koketsu\Models\Carrinho($this->db);
-        $this->gerenciarImagem = new FileManager('upload');
+        $this->carrinho = new Carrinho($this->db);
     }
 
- 
+    // --- LÓGICA DO FRONTEND (LOJA) ---
+
+    /**
+     * Recebe o POST do formulário de produto e adiciona ao carrinho
+     */
+    public function adicionarAoCarrinho() {
+        $id_produto = filter_input(INPUT_POST, 'id_produto', FILTER_SANITIZE_NUMBER_INT);
+        $quantidade = filter_input(INPUT_POST, 'quantidade', FILTER_SANITIZE_NUMBER_INT) ?? 1;
+        
+        // Em produção, pegue o ID do cliente logado: $_SESSION['usuario']['id']
+        // Aqui estou fixando '1' para testes, caso não haja login feito.
+        $id_cliente = $_SESSION['id_cliente'] ?? 1; 
+
+        if (!$id_produto) {
+            Redirect::redirecionarComMensagem("/", "error", "Produto inválido!");
+            return;
+        }
+
+        // 1. Verifica/Cria a sessão do carrinho
+        if (!isset($_SESSION['carrinho_id'])) {
+            // Cria um novo carrinho "Aberto" no banco
+            $novoId = $this->carrinho->inserirCarrinho($id_cliente, 0.00, 'Aberto');
+            
+            if ($novoId) {
+                $_SESSION['carrinho_id'] = $novoId;
+            } else {
+                Redirect::redirecionarComMensagem("/", "error", "Erro ao iniciar carrinho.");
+                return;
+            }
+        }
+
+        // 2. Adiciona o item ao carrinho existente
+        $id_carrinho = $_SESSION['carrinho_id'];
+        
+        if ($this->carrinho->adicionarItem($id_carrinho, $id_produto, $quantidade)) {
+            Redirect::redirecionarComMensagem("meu-carrinho", "success", "Produto adicionado com sucesso!");
+        } else {
+            Redirect::redirecionarComMensagem("meu-carrinho", "error", "Erro ao adicionar item.");
+        }
+    }
+
+    /**
+     * Exibe a página do carrinho do cliente
+     */
+    public function verCarrinho() {
+        $itens = [];
+        $total = 0.00;
+        $id_carrinho = $_SESSION['carrinho_id'] ?? null;
+
+        if ($id_carrinho) {
+            $itens = $this->carrinho->buscarItensCarrinho($id_carrinho);
+            $dadosCarrinho = $this->carrinho->buscarCarrinhoPorId($id_carrinho);
+            $total = $dadosCarrinho['total_carrinho'] ?? 0.00;
+        }
+
+        // Renderiza a view da pasta 'loja'
+        View::render("loja/carrinho", [
+            "itens" => $itens,
+            "total" => $total
+        ]);
+    }
+
+    /**
+     * Remove item do carrinho
+     */
+    public function removerDoCarrinho($id_item) {
+        $id_carrinho = $_SESSION['carrinho_id'] ?? null;
+
+        if ($id_carrinho && $this->carrinho->removerItem($id_item, $id_carrinho)) {
+            Redirect::redirecionarComMensagem("meu-carrinho", "success", "Item removido.");
+        } else {
+            Redirect::redirecionarComMensagem("meu-carrinho", "error", "Erro ao remover item.");
+        }
+    }
+
+    // --- LÓGICA DO BACKEND (ADMIN) ---
+    // Mantive seus métodos de administração abaixo
+
     public function index(){
-        $resultado = $this->carrinho->buscarCarrinhos();
-        return $resultado;
+        return $this->carrinho->buscarCarrinhos();
     }
     
-    // View para listar e exibir dados de paginação
     public function viewListarCarrinho($pagina){
         $dados = $this->carrinho->paginacao($pagina);
-        $total = $this->carrinho->totalDeCarrinhos(); // Total de ativos
-        $total_inativos = $this->carrinho->buscarCarrinhosInativos(); // Contagem de inativos
-        $total_ativos = $this->carrinho->buscarCarrinhosAtivos(); // Contagem de ativos
-        
-        View::render('carrinho/index', 
-            [
-                "carrinhos" => $dados['data'],
-                "total_carrinhos" => $total,
-                "total_inativos" => $total_inativos,
-                "total_ativos" => $total_ativos,
-                'paginacao' => $dados
-            ] 
-        );
+        View::render('carrinho/index', [
+            "carrinhos" => $dados['data'],
+            "total_carrinhos" => $this->carrinho->totalDeCarrinhos(),
+            "paginacao" => $dados
+        ]);
     }
 
     public function viewCriarCarrinho(){
@@ -49,89 +115,47 @@ class CarrinhoController {
 
     public function viewEditarCarrinho(int $id){
        $dados = $this->carrinho->buscarCarrinhoPorId($id);
-
        if (!$dados) {
-           Redirect::redirecionarComMensagem("carrinho/listar", "error", "Carrinho não encontrado ou inativo!");
-           return; // Interrompe a execução
+           Redirect::redirecionarComMensagem("carrinho/listar", "error", "Carrinho não encontrado!");
+           return;
        }
-       
-       // var_dump($dados); // Removido para evitar quebrar o View::render
        View::render("carrinho/edit", ["carrinho" => $dados]);
     }
-
 
     public function viewExcluirCarrinho($id){
           View::render("carrinho/delete", ["id_carrinho" => $id]);
     }
 
-    public function relatorioCarrinho($id, $data1, $data2){
-       View::render("carrinho/relatorio",
-            ["id" => $id, "data1" => $data1, "data2" => $data2]
-        );
-    }
-
-    // --- Métodos de CRUD (Lógica de Persistência) ---
-
-    // Lógica para salvar novo carrinho (usando os campos de carrinho/pedido)
     public function salvarCarrinho(){
-        // Note: Assumindo que você está passando os dados de ID do cliente, total e status via POST
-        // Você deve ajustar estes parâmetros conforme seu formulário de criação.
-
         $id_cliente = $_POST["id_cliente"] ?? null; 
-        $total_carrinho = $_POST["total_carrinho"] ?? 0.0;
-        $status_carrinho = $_POST["status_carrinho"] ?? "Aberto";
+        $total = $_POST["total_carrinho"] ?? 0;
+        $status = $_POST["status_carrinho"] ?? "Aberto";
 
-        // Verifica se os dados mínimos estão presentes
-        if (is_null($id_cliente)) {
-             Redirect::redirecionarComMensagem("carrinho/create", "error", "ID do cliente é obrigatório.");
-             return;
-        }
-
-        $novoId = $this->carrinho->inserirCarrinho(
-             $id_cliente,
-             $total_carrinho,
-             $status_carrinho
-         );
-
-        if($novoId !== false){
-            Redirect::redirecionarComMensagem("carrinho/listar", "success", "Carrinho ID {$novoId} criado com sucesso!");
-        }else{
-            Redirect::redirecionarComMensagem("carrinho/create", "error", "Erro ao criar carrinho. Tente novamente.");
+        if ($this->carrinho->inserirCarrinho($id_cliente, $total, $status)) {
+            Redirect::redirecionarComMensagem("carrinho/listar", "success", "Carrinho criado!");
+        } else {
+            Redirect::redirecionarComMensagem("carrinho/create", "error", "Erro ao criar.");
         }
     }
     
-    // Lógica para atualizar carrinho
     public function atualizarCarrinho(){
-        $id_carrinho = $_POST['id_carrinho'] ?? null;
-        $total_carrinho = $_POST['total_carrinho'] ?? null;
-        $status_carrinho = $_POST['status_carrinho'] ?? null;
+        $id = $_POST['id_carrinho'] ?? null;
+        $total = $_POST['total_carrinho'] ?? null;
+        $status = $_POST['status_carrinho'] ?? null;
 
-        if (is_null($id_carrinho)) {
-            Redirect::redirecionarComMensagem("carrinho/listar", "error", "ID do carrinho não fornecido.");
-            return;
-        }
-
-        if ($this->carrinho->atualizarCarrinho($id_carrinho, $total_carrinho, $status_carrinho)) {
-            Redirect::redirecionarComMensagem("carrinho/listar", "success", "Carrinho ID {$id_carrinho} atualizado com sucesso!");
+        if ($this->carrinho->atualizarCarrinho($id, $total, $status)) {
+            Redirect::redirecionarComMensagem("carrinho/listar", "success", "Atualizado com sucesso!");
         } else {
-            Redirect::redirecionarComMensagem("carrinho/edit/{$id_carrinho}", "error", "Erro ao atualizar carrinho. Ele pode estar inativo.");
+            Redirect::redirecionarComMensagem("carrinho/listar", "error", "Erro ao atualizar.");
         }
     }
     
-    // Lógica para exclusão lógica
     public function deletarCarrinho(){
-        $id_carrinho = $_POST['id_carrinho'] ?? null;
-
-        if (is_null($id_carrinho)) {
-            Redirect::redirecionarComMensagem("carrinho/listar", "error", "ID do carrinho não fornecido para exclusão.");
-            return;
-        }
-
-        if ($this->carrinho->deletarCarrinho($id_carrinho)) {
-            Redirect::redirecionarComMensagem("carrinho/listar", "success", "Carrinho ID {$id_carrinho} excluído (inativado) com sucesso!");
+        $id = $_POST['id_carrinho'] ?? null;
+        if ($this->carrinho->deletarCarrinho($id)) {
+            Redirect::redirecionarComMensagem("carrinho/listar", "success", "Excluído com sucesso!");
         } else {
-            // Isso geralmente acontece se o ID não existir
-            Redirect::redirecionarComMensagem("carrinho/listar", "error", "Erro ao excluir carrinho ou ID não encontrado.");
+            Redirect::redirecionarComMensagem("carrinho/listar", "error", "Erro ao excluir.");
         }
     }
 }

@@ -241,4 +241,23 @@ body {
 .btn-voltar-topo i {
   font-size: 18px;
 }
+/* Estilo do card de produto */
+.produto-card {
+    border-radius: 15px;
+    background: #ffffff;
+    box-shadow: 0px 4px 15px rgba(0,0,0,0.1);
+}
+
+/* Botão dentro da página */
+#btnVoltarHome {
+    padding: 12px;
+    font-size: 18px;
+    border-radius: 12px;
+    transition: 0.3s;
+}
+
+#btnVoltarHome:hover {
+    transform: scale(1.03);
+}
+
 
