@@ -21,6 +21,8 @@ class Rotas
         '/login' => 'AuthController@login',
         '/logout' => 'AuthController@logout',
         '/admin/dashboard' => 'Admin\DashboardController@index',
+        '/api/usuarios' => 'APIUsuarioController@getUsuarios',
+        '/api/usuarios/{pagina}' => 'APIUsuarioController@getUsuarios',
 
         //Itens pedidos
         "/itenspedidos" => "ItensPedidosController@index",

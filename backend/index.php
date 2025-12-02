@@ -32,6 +32,8 @@ $rotas = [
         '/login' => 'AuthController@login',
         '/logout' => 'AuthController@logout',
         '/admin/dashboard' => 'Admin\DashboardController@index',
+        '/api/usuarios' => 'APIUsuarioController@getUsuarios',
+        '/api/usuarios/{pagina}' => 'APIUsuarioController@getUsuarios',
 
         //Itens pedidos
         "/itenspedidos" => "ItensPedidosController@index",
@@ -61,6 +63,7 @@ $rotas = [
         "/produto/excluir/{id}" => "ProdutosController@viewExcluirProduto",
         "/produto/{id}/relatorio/{data1}/{data2}" => "ProdutosController@relatorioProduto",
         "/relatorios" => "RelatoriosController@exibirRelatorios",
+        '/api/produtos' => 'PublicApiController@getProdutos',
         
     ],
     "POST" => [
