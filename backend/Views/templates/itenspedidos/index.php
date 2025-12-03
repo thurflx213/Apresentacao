@@ -1,40 +1,40 @@
 <header class="w3-container" style="padding-top:22px">
-  <h5><b><i class="fa fa-shopping-basket"></i> Itens de Pedidos</b></h5>
+     <h5><b><i class="fa fa-shopping-basket"></i> Itens de Pedidos</b></h5>
 </header>
 
 <div class="w3-row-padding w3-margin-bottom">
-    <div class="w3-quarter">
-   <div class="w3-container w3-theme w3-padding-16">
-    <div class="w3-left"><i class="fa fa-tags w3-xxxlarge"></i></div>
-    <div class="w3-right"><h3>120</h3></div>
-    <div class="w3-clear"></div>
-    <h4>Produtos</h4>
-   </div>
-  </div>
-  <div class="w3-quarter">
-   <div class="w3-container w3-black w3-padding-16">
-    <div class="w3-left"><i class="fa fa-shopping-cart w3-xxxlarge"></i></div>
-    <div class="w3-right"><h3><?= $total_itenspedidos ?? 'N/A' ?></h3></div>
-    <div class="w3-clear"></div>
-    <h4>Total de Itens</h4>
-   </div>
-  </div>
-  <div class="w3-quarter">
-   <div class="w3-container w3-yellow w3-text-black w3-padding-16">
-    <div class="w3-left"><i class="fa fa-users w3-xxxlarge"></i></div>
-    <div class="w3-right"><h3>56</h3></div>
-    <div class="w3-clear"></div>
-    <h4>Clientes</h4>
-   </div>
-  </div>
-  <div class="w3-quarter">
-   <div class="w3-container w3-dark-grey w3-padding-16">
-    <div class="w3-left"><i class="fa fa-star w3-xxxlarge"></i></div>
-    <div class="w3-right"><h3>4.8★</h3></div>
-    <div class="w3-clear"></div>
-    <h4>Avaliações</h4>
-   </div>
-  </div>
+         <div class="w3-quarter">
+        <div class="w3-container w3-theme w3-padding-16">
+         <div class="w3-left"><i class="fa fa-tags w3-xxxlarge"></i></div>
+         <div class="w3-right"><h3>120</h3></div>
+         <div class="w3-clear"></div>
+         <h4>Produtos</h4>
+        </div>
+     </div>
+     <div class="w3-quarter">
+        <div class="w3-container w3-black w3-padding-16">
+         <div class="w3-left"><i class="fa fa-shopping-cart w3-xxxlarge"></i></div>
+         <div class="w3-right"><h3><?= $total_itenspedidos ?? 'N/A' ?></h3></div>
+         <div class="w3-clear"></div>
+         <h4>Total de Itens</h4>
+        </div>
+     </div>
+     <div class="w3-quarter">
+        <div class="w3-container w3-yellow w3-text-black w3-padding-16">
+         <div class="w3-left"><i class="fa fa-users w3-xxxlarge"></i></div>
+         <div class="w3-right"><h3>56</h3></div>
+         <div class="w3-clear"></div>
+         <h4>Clientes</h4>
+        </div>
+     </div>
+     <div class="w3-quarter">
+        <div class="w3-container w3-dark-grey w3-padding-16">
+         <div class="w3-left"><i class="fa fa-star w3-xxxlarge"></i></div>
+         <div class="w3-right"><h3>4.8★</h3></div>
+         <div class="w3-clear"></div>
+         <h4>Avaliações</h4>
+        </div>
+     </div>
 </div>
 
 <div class="w3-container w3-margin-bottom">
@@ -45,7 +45,7 @@
 </div>
 
 <div class="w3-container w3-responsive">
-    <?php if (isset($itenspedidos) && count($itenspedidos) > 0): ?>
+    <?php if (isset($itenspedidos) && count($itempedido) > 0): ?>
     
     <table class="w3-table w3-bordered w3-border w3-hoverable w3-black w3-text-white">
         <thead>

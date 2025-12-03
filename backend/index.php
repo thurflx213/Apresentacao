@@ -22,12 +22,12 @@ $rotas = [
    //usuarios
    // o caminho da URL    o nome do controlle e o metodo do controle 
         //usuarios
-        "/usuario/criar" => "UsuarioController@viewCriarUsuarios",
-        "/usuario/listar" => "UsuarioController@viewListarUsuarios",
-        "/usuario/listar/{pagina}" => "UsuarioController@viewListarUsuarios",
-        "/usuario/editar/{id}" => "UsuarioController@viewEditarUsuarios",
-        "/usuario/excluir/{id}" => "UsuarioController@viewExcluirUsuarios",
-        "/usuario/{id}/relatorio/{data1}/{data2}" => "UsuarioController@relatorioUsuario",
+        "/usuarios/criar" => "UsuarioController@viewCriarUsuarios",
+        "/usuarios/listar" => "UsuarioController@viewListarUsuarios",
+        "/usuarios/listar/{pagina}" => "UsuarioController@viewListarUsuarios",
+        "/usuarios/editar/{id}" => "UsuarioController@viewEditarUsuarios",
+        "/usuarios/excluir/{id}" => "UsuarioController@viewExcluirUsuarios",
+        "/usuarios/{id}/relatorio/{data1}/{data2}" => "UsuarioController@relatorioUsuario",
         '/register' => 'AuthController@register',
         '/login' => 'AuthController@login',
         '/logout' => 'AuthController@logout',
@@ -44,6 +44,8 @@ $rotas = [
         "/itenspedidos/editar/{id}" => "ItensPedidosController@viewEditarItemPedido",
         "/itenspedidos/excluir/{id}" => "ItensPedidosController@viewExcluirItemPedido",
         "/itenspedidos/{id}/relatorio/{data1}/{data2}" => "ItensPedidosController@relatorioitenspedidos",
+        '/api/itenspedidos' => 'PublicApiController@getItenspedidos',
+        '/api/itenspedidos/{pagina}' => 'PublicApiController@getItenspedidos',
         //Pedidos
         "/pedido" => "PedidosController@index",
         "/pedido/criar" => "PedidosController@viewCriarPedidos",
@@ -51,7 +53,9 @@ $rotas = [
         "/pedido/listar/{id}" => "PedidosController@viewPedidoUnico",
         "/pedido/editar/{id}" => "PedidosController@viewEditarPedido",
         "/pedido/excluir/{id}" => "PedidosController@viewExcluirPedido",
-         "/pedido/{id}/relatorio/{data1}/{data2}" => "Pedidos@relatorioPedido",
+        "/pedido/{id}/relatorio/{data1}/{data2}" => "Pedidos@relatorioPedido",
+        '/api/pedidos' => 'PublicApiController@getPedidos',
+        '/api/pedidos/{pagina}' => 'PublicApiController@getPedidos',
           
         //Produtos
         "/produto" => "ProdutosController@index",
@@ -64,13 +68,16 @@ $rotas = [
         "/produto/{id}/relatorio/{data1}/{data2}" => "ProdutosController@relatorioProduto",
         "/relatorios" => "RelatoriosController@exibirRelatorios",
         '/api/produtos' => 'PublicApiController@getProdutos',
+        '/api/produtos/{pagina}' => 'PublicApiController@getProdutos',
+        
+        
         
     ],
     "POST" => [
         //usuarios
-        "/usuario/salvar" => "UsuarioController@salvarUsuario",
-       "/usuario/atualizar/{id}" => "UsuarioController@atualizarUsuario",
-       "/usuario/deletar/{id}" => "UsuarioController@deletarUsuario",
+        "/usuarios/salvar" => "UsuarioController@salvarUsuario",
+       "/usuarios/atualizar/{id}" => "UsuarioController@atualizarUsuario",
+       "/usuarios/deletar/{id}" => "UsuarioController@deletarUsuario",
         '/register' => 'AuthController@cadastrarUsuario',
        '/login' => 'AuthController@authenticar',
         '/api/usuarios' => 'APIUsuarioController@getUsuarios',

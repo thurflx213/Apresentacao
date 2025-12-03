@@ -17,8 +17,6 @@
    <option value="vendedor">Vendedor</option>
    <option value="admin" >Admin</option>
    </select><br>
-   <label for="imagem">Imagem:</label>
-   <input type="file" id="imagem" name="imagem" accept="image/*">
     <p>
         <button type="submit" class="w3-button w3-blue">Salvar Alterações</button>
         <a href="/backend/usuario/listar" class="w3-button w3-grey">Cancelar</a>

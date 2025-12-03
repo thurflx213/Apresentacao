@@ -11,12 +11,12 @@ class Rotas
              "GET" => [
         // o caminho da URL    o nome do controlle e o metodo do controle 
          //usuarios
-        "/usuario/criar" => "UsuarioController@viewCriarUsuarios",
-        "/usuario/listar" => "UsuarioController@viewListarUsuarios",
-        "/usuario/listar/{pagina}" => "UsuarioController@viewListarUsuarios",
-        "/usuario/editar/{id}" => "UsuarioController@viewEditarUsuarios",
-        "/usuario/excluir/{id}" => "UsuarioController@viewExcluirUsuarios",
-        "/usuario/{id}/relatorio/{data1}/{data2}" => "UsuarioController@relatorioUsuario",
+        "/usuarios/criar" => "UsuarioController@viewCriarUsuarios",
+        "/usuarios/listar" => "UsuarioController@viewListarUsuarios",
+        "/usuarios/listar/{pagina}" => "UsuarioController@viewListarUsuarios",
+        "/usuarios/editar/{id}" => "UsuarioController@viewEditarUsuarios",
+        "/usuarios/excluir/{id}" => "UsuarioController@viewExcluirUsuarios",
+        "/usuarios/{id}/relatorio/{data1}/{data2}" => "UsuarioController@relatorioUsuario",
         '/register' => 'AuthController@register',
         '/login' => 'AuthController@login',
         '/logout' => 'AuthController@logout',
@@ -48,9 +48,9 @@ class Rotas
     ],
     "POST" => [
         //usuarios
-        "/usuario/salvar" => "UsuarioController@salvarUsuario",
-       "/usuario/atualizar/{id}" => "UsuarioController@atualizarUsuario",
-       "/usuario/deletar/{id}" => "UsuarioController@deletarUsuario",
+        "/usuarios/salvar" => "UsuarioController@salvarUsuario",
+       "/usuarios/atualizar/{id}" => "UsuarioController@atualizarUsuario",
+       "/usuarios/deletar/{id}" => "UsuarioController@deletarUsuario",
         '/register' => 'AuthController@cadastrarUsuario',
        '/login' => 'AuthController@authenticar',
         //itens pedidos

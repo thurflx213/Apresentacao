@@ -1,48 +1,48 @@
 <header class="w3-container" style="padding-top:22px">
-    <h5><b><i class="fa fa-dashboard"></i> Painel de Controle - Koketsu</b></h5>
+    <h5><b><i class="fa fa-dashboard"></i> Painel de Controle - Koketsu</b></h5>
 </header>
 
 <div class="w3-row-padding w3-margin-bottom">
-    <div class="w3-quarter">
-      <div class="w3-container w3-theme w3-padding-16">
-        <div class="w3-left"><i class="fa fa-tags w3-xxxlarge"></i></div>
-        <div class="w3-right">
-          <h3>120</h3>
-        </div>
-        <div class="w3-clear"></div>
-        <h4>Produtos</h4>
-      </div>
-    </div>
-    <div class="w3-quarter">
-      <div class="w3-container w3-black w3-padding-16">
-        <div class="w3-left"><i class="fa fa-shopping-cart w3-xxxlarge"></i></div>
-        <div class="w3-right">
-          <h3>87</h3>
-        </div>
-        <div class="w3-clear"></div>
-        <h4>Pedidos</h4>
-      </div>
-    </div>
-    <div class="w3-quarter">
-      <div class="w3-container w3-yellow w3-text-black w3-padding-16">
-        <div class="w3-left"><i class="fa fa-users w3-xxxlarge"></i></div>
-        <div class="w3-right">
-          <h3>56</h3>
-        </div>
-        <div class="w3-clear"></div>
-        <h4>Clientes</h4>
-      </div>
-    </div>
-    <div class="w3-quarter">
-      <div class="w3-container w3-dark-grey w3-padding-16">
-        <div class="w3-left"><i class="fa fa-star w3-xxxlarge"></i></div>
-        <div class="w3-right">
-          <h3>4.8★</h3>
-        </div>
-        <div class="w3-clear"></div>
-        <h4>Avaliações</h4>
-      </div>
-    </div>
+    <div class="w3-quarter">
+    <div class="w3-container w3-theme w3-padding-16">
+    <div class="w3-left"><i class="fa fa-tags w3-xxxlarge"></i></div>
+    <div class="w3-right">
+    <h3>120</h3>
+    </div>
+    <div class="w3-clear"></div>
+    <h4>Produtos</h4>
+    </div>
+    </div>
+    <div class="w3-quarter">
+    <div class="w3-container w3-black w3-padding-16">
+    <div class="w3-left"><i class="fa fa-shopping-cart w3-xxxlarge"></i></div>
+    <div class="w3-right">
+    <h3>87</h3>
+    </div>
+    <div class="w3-clear"></div>
+    <h4>Pedidos</h4>
+    </div>
+    </div>
+    <div class="w3-quarter">
+    <div class="w3-container w3-yellow w3-text-black w3-padding-16">
+    <div class="w3-left"><i class="fa fa-users w3-xxxlarge"></i></div>
+    <div class="w3-right">
+    <h3>56</h3>
+    </div>
+    <div class="w3-clear"></div>
+    <h4>Clientes</h4>
+    </div>
+    </div>
+    <div class="w3-quarter">
+    <div class="w3-container w3-dark-grey w3-padding-16">
+    <div class="w3-left"><i class="fa fa-star w3-xxxlarge"></i></div>
+    <div class="w3-right">
+    <h3>4.8★</h3>
+    </div>
+    <div class="w3-clear"></div>
+    <h4>Avaliações</h4>
+    </div>
+    </div>
 </div>
 
 <div class="w3-container">
@@ -52,7 +52,7 @@
     </a>
 </div>
 
-<?php if (isset($produtos) && count($produtos) > 0): ?>
+<?php if (isset($produtos) && count($produto) > 0): ?>
     <div class="w3-container w3-responsive">
         <table border ="1" cellpadding="5" cellspacing="0" 
                class="w3-table w3-bordered w3-border w3-hoverable w3-dark-grey w3-text-white">

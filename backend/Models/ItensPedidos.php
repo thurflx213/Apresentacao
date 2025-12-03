@@ -51,15 +51,19 @@ class ItensPedidos {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     
-    /**
-     * Buscar itens de um pedido específico (com JOIN).
-     */
+   public function buscarItensPedidosAtivos() {
+    $sql = "SELECT * FROM tbl_itens_pedidos WHERE excluido_em IS NULL";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 function buscarItensPorPedido($id_pedido)
 {
-    // Tentativa de correção final: Apenas o nome do produto (assumindo que o campo real é 'nome')
+    
     $sql = "SELECT
         tbl_itens_pedidos.*,
-        tbl_produtos.nome_produtos                 /* <--- Usando apenas 'nome' (Tente corrigir este campo no BD) */
+        tbl_produtos.nome_produtos                
     FROM tbl_itens_pedidos
     JOIN tbl_produtos ON tbl_itens_pedidos.id_produto = tbl_produtos.id_produto
     WHERE tbl_itens_pedidos.id_pedido = :id_pedido";
@@ -155,6 +159,24 @@ function inserirItemPedido($id_pedido, $id_produto, $quantidade, $preco_unitario
             'ultima_pagina' => (int) $lastPage,
             'de' => $offset + 1,
             'para' => $offset + count($dados)
+        ];
+    }
+     public function paginacaoAPI(int $pagina = 1, int $por_pagina = 50): array{
+        $totalQuery = "SELECT COUNT(*) FROM `tbl_itens_pedidos`";
+        $totalStmt = $this->db->query($totalQuery);
+        $total_de_registros = $totalStmt->fetchColumn();
+        $offset = ($pagina - 1) * $por_pagina;
+        $dataQuery = "SELECT * FROM `tbl_itens_pedidos` LIMIT :limit OFFSET :offset";
+        $dataStmt = $this->db->prepare($dataQuery);
+        $dataStmt->bindValue(':limit', $por_pagina, PDO::PARAM_INT);
+        $dataStmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $dataStmt->execute();
+        $dados = $dataStmt->fetchAll(PDO::FETCH_ASSOC);
+        $lastPage = ceil($total_de_registros / $por_pagina);
+ 
+        return [
+            'data' => $dados,
+        
         ];
     }
 

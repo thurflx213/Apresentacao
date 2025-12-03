@@ -81,11 +81,11 @@
             ?></td>
             <td>
                 <a class="w3-button w3-round w3-blue w3-hover-red w3-padding-large w3-margin-right"
-                   href="/backend/usuario/editar/<?= htmlspecialchars($usuario['id_usuarios']) ?>">Editar</a>
+                   href="/backend/usuarios/editar/<?= htmlspecialchars($usuario['id_usuarios']) ?>">Editar</a>
             </td>
             <td>
                 <a class="w3-button w3-round w3-red w3-hover-red w3-padding-large w3-margin-right"
-                   href="/backend/usuario/excluir/<?= htmlspecialchars($usuario['id_usuarios']) ?>">Excluir</a>
+                   href="/backend/usuarios/excluir/<?= htmlspecialchars($usuario['id_usuarios']) ?>">Excluir</a>
             </td>
         </tr>
         <?php endforeach; ?>
@@ -95,11 +95,11 @@
     <div class="page-selector" style="display:flex; align-items:center;">
         <div class="page-nav">
             <?php if ($paginacao['pagina_atual'] > 1): ?>
-                <a href="/backend/usuario/listar/<?= $paginacao['pagina_atual'] - 1 ?>">Anterior</a>
+                <a href="/backend/usuarios/listar/<?= $paginacao['pagina_atual'] - 1 ?>">Anterior</a>
             <?php endif; ?>
             <span style="margin:0 10px;">Página <?= $paginacao['pagina_atual'] ?> de <?= $paginacao['ultima_pagina'] ?></span>
             <?php if ($paginacao['pagina_atual'] < $paginacao['ultima_pagina']): ?>
-                <a href="/backend/usuario/listar/<?= $paginacao['pagina_atual'] + 1 ?>">Próximo</a>
+                <a href="/backend/usuarios/listar/<?= $paginacao['pagina_atual'] + 1 ?>">Próximo</a>
             <?php endif; ?>
         </div>
     </div>
