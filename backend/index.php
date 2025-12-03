@@ -73,6 +73,8 @@ $rotas = [
        "/usuario/deletar/{id}" => "UsuarioController@deletarUsuario",
         '/register' => 'AuthController@cadastrarUsuario',
        '/login' => 'AuthController@authenticar',
+        '/api/usuarios' => 'APIUsuarioController@getUsuarios',
+        '/api/usuarios/{pagina}' => 'APIUsuarioController@getUsuarios',
         //itens pedidos
        "/itenspedidos/salvar" => "ItensPedidosController@salvarItemPedido",
        "/itenspedidos/atualizar/{id}" => "ItensPedidosController@atualizarItemPedido",
@@ -86,6 +88,7 @@ $rotas = [
         "/produto/salvar" => "ProdutosController@salvarProduto",
        "/produto/atualizar/{id}" => "ProdutosController@atualizarProdutos",
        "/produto/deletar/{id}" => "ProdutosController@viewExcluirProduto",
+        '/api/produtos' => 'PublicApiController@getProdutos',
     // Post para cadastro
        "/register" => "AuthController@cadastrarUsuario", 
   ]

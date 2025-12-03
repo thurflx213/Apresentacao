@@ -46,6 +46,25 @@ function buscarProdutoPorId($id) {
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
+function buscarProdutosAtivos() {
+    $sql = "SELECT 
+                id_produto,
+                nome_produtos,
+                descricao_produtos,
+                preco_produtos,
+                estoque_produtos,
+                imagem_produtos,
+                id_categoria,
+                criado_em,
+                atualizado_em
+            FROM tbl_produtos
+            WHERE excluido_em IS NULL";
+
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
   public function contarProdutosPorCategoria()
     {
         $sql = "
@@ -85,6 +104,25 @@ public function paginacao(int $pagina = 1, int $por_pagina = 50): array{
             'ultima_pagina' => (int) $lastPage,
             'de' => $offset + 1,
             'para' => $offset + count($dados)
+        ];
+    }
+
+    public function paginacaoAPI(int $pagina = 1, int $por_pagina = 50): array{
+        $totalQuery = "SELECT COUNT(*) FROM `tbl_produtos`";
+        $totalStmt = $this->db->query($totalQuery);
+        $total_de_registros = $totalStmt->fetchColumn();
+        $offset = ($pagina - 1) * $por_pagina;
+        $dataQuery = "SELECT * FROM `tbl_produtos` LIMIT :limit OFFSET :offset";
+        $dataStmt = $this->db->prepare($dataQuery);
+        $dataStmt->bindValue(':limit', $por_pagina, PDO::PARAM_INT);
+        $dataStmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $dataStmt->execute();
+        $dados = $dataStmt->fetchAll(PDO::FETCH_ASSOC);
+        $lastPage = ceil($total_de_registros / $por_pagina);
+ 
+        return [
+            'data' => $dados,
+        
         ];
     }
 
