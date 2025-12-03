@@ -47,11 +47,6 @@ class Rotas
                  '/login' => 'AuthController@login',
                  '/logout' => 'AuthController@logout',
                  '/admin/dashboard' => 'Admin\DashboardController@index',
-                 
-               // APIs 
-                  '/api/produtos' => 'PublicApiController@getProdutos',
-                 '/api/usuarios' => 'APIUsuarioController@getUsuarios',
-                 '/api/usuarios/{pagina}' => 'APIUsuarioController@getUsuarios',
           ],
 
         "POST" => [
