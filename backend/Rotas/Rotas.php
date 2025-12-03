@@ -28,23 +28,32 @@ class Rotas
         "/itenspedidos" => "ItensPedidosController@index",
         "/itenspedidos/criar" => "ItensPedidosController@viewCriarItemPedido",
         "/itenspedidos/listar" => "ItensPedidosController@viewListarItemPedido",
+        "/itenspedidos/listar/{id}" => "ItensPedidosController@viewItemPedidoUnico",
+        "/itenspedidos/listar/{pagina}" => "ItensPedidosController@viewlistaritenspedidos",
         "/itenspedidos/editar/{id}" => "ItensPedidosController@viewEditarItemPedido",
         "/itenspedidos/excluir/{id}" => "ItensPedidosController@viewExcluirItemPedido",
         "/itenspedidos/{id}/relatorio/{data1}/{data2}" => "ItensPedidosController@relatorioitenspedidos",
         //Pedidos
         "/pedido" => "PedidosController@index",
-        "/pedido/criar" => "PedidosController@viewCriarPedido",
+        "/pedido/criar" => "PedidosController@viewCriarPedidos",
         "/pedido/listar" => "PedidosController@viewListarPedido",
+        "/pedido/listar/{id}" => "PedidosController@viewPedidoUnico",
         "/pedido/editar/{id}" => "PedidosController@viewEditarPedido",
         "/pedido/excluir/{id}" => "PedidosController@viewExcluirPedido",
          "/pedido/{id}/relatorio/{data1}/{data2}" => "Pedidos@relatorioPedido",
+          
         //Produtos
         "/produto" => "ProdutosController@index",
-        "/produto/criar" => "ProdutosController@viewCriarProdutos",
-        "/produto/listar" => "ProdutosController@viewListarProdutos",
-        "/produto/editar/{id}" => "ProdutosController@viewEditarProduto",
-        "/produto/excluir/{id}" => "ProdutosController@viewExcluirProdutos",
+        "/produto/criar" => "ProdutosController@viewCriarProduto",
+        "/produto/listar" => "ProdutosController@viewlistarProduto",
+        "/produto/listar/{id}" => "ProdutosController@viewProdutoUnico",
+        "/produto/listar/{pagina}" => "ProdutosController@viewlistarProduto",
+        "/produto/editar/{id}" => "ProdutosController@viewEditarProdutos",
+        "/produto/excluir/{id}" => "ProdutosController@viewExcluirProduto",
         "/produto/{id}/relatorio/{data1}/{data2}" => "ProdutosController@relatorioProduto",
+        "/relatorios" => "RelatoriosController@exibirRelatorios",
+        '/api/produtos' => 'PublicApiController@getProdutos',
+        
     ],
     "POST" => [
         //usuarios
@@ -53,20 +62,25 @@ class Rotas
        "/usuario/deletar/{id}" => "UsuarioController@deletarUsuario",
         '/register' => 'AuthController@cadastrarUsuario',
        '/login' => 'AuthController@authenticar',
+        '/api/usuarios' => 'APIUsuarioController@getUsuarios',
+        '/api/usuarios/{pagina}' => 'APIUsuarioController@getUsuarios',
         //itens pedidos
        "/itenspedidos/salvar" => "ItensPedidosController@salvarItemPedido",
        "/itenspedidos/atualizar/{id}" => "ItensPedidosController@atualizarItemPedido",
        "/itenspedidos/deletar/{id}" => "ItensPedidosController@deletarItemPedido",
        //Pedidos
          "/pedido/salvar" => "PedidosController@salvarPedido",
-       "/pedido/atualizar/{id}" => "PedidosController@atualizarPedido",
-       "/pedido/deletar/{id}" => "PedidosController@deletarPedido",
+       "/pedido/atualizar/{id}" => "PedidosController@atualizarPedidos",
+       "/pedido/deletar/{id}" => "PedidosController@viewExcluirPedido",
+        "/backend/pedido/listar" => "PedidosController@pesquisarPedido",
        //produtos
         "/produto/salvar" => "ProdutosController@salvarProduto",
-       "/produto/atualizar/{id}" => "ProdutosController@atualizarProduto",
-       "/produto/deletar/{id}" => "ProdutosController@deletarProduto",
-
-            ]
-        ];
+       "/produto/atualizar/{id}" => "ProdutosController@atualizarProdutos",
+       "/produto/deletar/{id}" => "ProdutosController@viewExcluirProduto",
+        '/api/produtos' => 'PublicApiController@getProdutos',
+    // Post para cadastro
+       "/register" => "AuthController@cadastrarUsuario", 
+  ]
+ ];
     }
 }
