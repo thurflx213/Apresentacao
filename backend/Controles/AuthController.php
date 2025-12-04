@@ -9,16 +9,17 @@ use App\Koketsu\Core\Redirect;
 use App\Koketsu\Validadores\UsuarioValidador;
 use App\Koketsu\Core\FileManager;
 use App\Koketsu\Core\Session;
-
+use App\Koketsu\Core\NotificacaoEmail;
 
 class AuthController{
     private Usuario $usuarioModel;
     private session $session;
-
+      private $notificacaoEmail;
     public function __construct(){
         $db = database::getInstance();
         $this->usuarioModel = new Usuario($db);
         $this->session = new Session();
+          $this->notificacaoEmail = new NotificacaoEmail;
     }
     public function login(): void{
      View::render('auth/login');
@@ -83,8 +84,9 @@ public function cadastrarUsuario(): void {
     }
     
     $novoUsuarioId = $this->usuarioModel->inserirUsuario($nome, $email, $senha, 'cliente', null);
-    
+      
     if ($novoUsuarioId){
+        $this->notificacaoEmail->boasVindas($email, $nome);
         Redirect::redirecionarComMensagem('/login', 'success', 'Cadastro realizado! Por favor, faça o login');
     }else {
         Redirect::redirecionarComMensagem('/register', 'error', 'Erro no servidor. Tente novamente');

@@ -11,21 +11,21 @@ class UsuarioValidador{
     $erros = []; 
 
     // Validação de Nome
-    if(!isset($dados['nome_usuario']) && empty($dados['nome_usuario'])){ 
+    if(!isset($dados['nome_usuarios']) && empty($dados['nome_usuarios'])){ 
         $erros[] = "O campo nome é obrigatório."; 
     }
 
     // Validação de Email
-    if(!isset($dados['email_usuario']) && empty($dados['email_usuario'])){
+    if(!isset($dados['email_usuarios']) && empty($dados['email_usuarios'])){
         $erros[] = "O campo email é obrigatório."; 
-    } elseif (!filter_var($dados['email_usuario'], FILTER_VALIDATE_EMAIL)) { 
+    } elseif (!filter_var($dados['email_usuarios'], FILTER_VALIDATE_EMAIL)) { 
         $erros[] = "O campo email deve conter um endereço de email válido.";
     }
 
     // Validação de Senha
-    if(!isset($dados['senha_usuario']) && empty($dados['senha_usuario'])){
-        $erros[] = "O campo senha é obrigatório."; 
-    } elseif(strlen($dados['senha_usuario']) < 6){ 
+    if(!isset($dados['senha_usuarios']) && empty($dados['senha_usuarios'])){
+        $erros[] = ""; 
+    } elseif(strlen($dados['senha_usuarios']) < 6){ 
         $erros[] = "O campo senha deve ter pelo menos 6 caracteres."; 
     }
     

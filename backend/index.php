@@ -70,6 +70,7 @@ $rotas = [
         '/api/produtos' => 'PublicApiController@getProdutos',
         '/api/produtos/{pagina}' => 'PublicApiController@getProdutos',
         
+  '/contato/salvar' => 'ContatoController@salvarNovoContato',
         
         
     ],
@@ -90,7 +91,7 @@ $rotas = [
          "/pedido/salvar" => "PedidosController@salvarPedido",
        "/pedido/atualizar/{id}" => "PedidosController@atualizarPedidos",
        "/pedido/deletar/{id}" => "PedidosController@viewExcluirPedido",
-        "/backend/pedido/listar" => "PedidosController@pesquisarPedido",
+        "/pedido/listar" => "PedidosController@pesquisarPedido",
        //produtos
         "/produto/salvar" => "ProdutosController@salvarProduto",
        "/produto/atualizar/{id}" => "ProdutosController@atualizarProdutos",
@@ -98,6 +99,8 @@ $rotas = [
         '/api/produtos' => 'PublicApiController@getProdutos',
     // Post para cadastro
        "/register" => "AuthController@cadastrarUsuario", 
+      //Contato
+      '/contato/salvar' => 'ContatoController@salvarNovoContato',
   ]
  ];
 
