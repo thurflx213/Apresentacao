@@ -16,6 +16,7 @@ $router->get('/admin/relatorios', 'RelatoriosController@index');
 $router->post('/backend/pedido/listar', 'PedidosController@pesquisarPedido'); // Rota POST para Busca
 $router->get('/backend/pedido/listar', 'PedidosController@viewListarPedido'); 
 
+
 $rotas = [ 
   "GET" => [
  // o caminho da URL o nome do controlle e o metodo do controle 
@@ -70,7 +71,7 @@ $rotas = [
         '/api/produtos' => 'PublicApiController@getProdutos',
         '/api/produtos/{pagina}' => 'PublicApiController@getProdutos',
         
-  '/contato/salvar' => 'ContatoController@salvarNovoContato',
+
         
         
     ],
@@ -98,7 +99,7 @@ $rotas = [
        "/produto/deletar/{id}" => "ProdutosController@viewExcluirProduto",
         '/api/produtos' => 'PublicApiController@getProdutos',
     // Post para cadastro
-       "/register" => "AuthController@cadastrarUsuario", 
+       "/register" => "AuthControll er@cadastrarUsuario", 
       //Contato
       '/contato/salvar' => 'ContatoController@salvarNovoContato',
   ]

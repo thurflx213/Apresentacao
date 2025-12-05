@@ -65,7 +65,7 @@ class Rotas
         "/produto/salvar" => "ProdutosController@salvarProduto",
        "/produto/atualizar/{id}" => "ProdutosController@atualizarProduto",
        "/produto/deletar/{id}" => "ProdutosController@deletarProduto",
-
+'/contato/salvar' => 'ContatoController@salvarNovoContato',
             ]
         ];
     }

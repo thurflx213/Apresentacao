@@ -18,32 +18,43 @@ class Contato
     }
 
     public function buscarContatoPorEmail(string $email)
-    { 
+{ 
+    try {
         $sql = "SELECT * FROM tbl_contato WHERE email_contato = :email AND excluido_em IS NULL";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':email', $email);
         $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $resultado ?: false;
+
+    } catch (PDOException $e) {
+       
+        return false; 
     }
+}
 
     
     public function inserirNovoContato(string $email)
-    {
-        try {
-            $sql = "INSERT INTO tbl_contato (email_contato) VALUES (:email)";
-            $stmt = $this->db->prepare($sql);
-            $stmt->bindParam(':email', $email);
+{
+    try {
+        $sql = "INSERT INTO tbl_contato (email_contato) VALUES (:email)";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':email', $email);
 
-            if($stmt->execute()){
-                return $this->db->lastInsertId();
-            } else {
-                return false;
-            }
-        } catch (PDOException $e) {
-            return false; 
+        if($stmt->execute()){
+            return $this->db->lastInsertId();
+        } else {
+            
+            return false;
         }
+    } catch (PDOException $e) {
+       
+        echo "ERRO FATAL NA INSERÇÃO: " . $e->getMessage();
+        die(); 
     }
     
+}
     public function desativarContato(int $id): bool
     {
         $agora = date("Y-m-d H:i:s");
