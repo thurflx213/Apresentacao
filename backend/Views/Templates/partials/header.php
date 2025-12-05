@@ -177,8 +177,8 @@ html, body {
 
 /* ======= CARDS / CONTAINERS ======= */
 .w3-card, .w3-white, .w3-light-grey {
-  background-color: #1a1a1a !important;
-  color: #f5f5f5 !important;
+  background-color: #000000ff !important;
+  color: #000000ff !important;
   border: 1px solid #222 !important;
 }
 
@@ -212,7 +212,7 @@ input, select, textarea {
 
 </style>
 </head>
-<body class="w3-light-grey">
+<body class="">
 
   <?php
     $session = new Session();
