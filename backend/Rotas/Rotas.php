@@ -45,6 +45,7 @@ class Rotas
         "/produto/editar/{id}" => "ProdutosController@viewEditarProduto",
         "/produto/excluir/{id}" => "ProdutosController@viewExcluirProdutos",
         "/produto/{id}/relatorio/{data1}/{data2}" => "ProdutosController@relatorioProduto",
+
     ],
     "POST" => [
         //usuarios

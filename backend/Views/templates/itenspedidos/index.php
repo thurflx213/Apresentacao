@@ -45,7 +45,7 @@
 </div>
 
 <div class="w3-container w3-responsive">
-    <?php if (isset($itenspedidos) && count($itempedido) > 0): ?>
+    <?php if (isset($itenspedidos) && count($itenspedidos) > 0): ?>
     
     <table class="w3-table w3-bordered w3-border w3-hoverable w3-black w3-text-white">
         <thead>

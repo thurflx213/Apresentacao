@@ -52,12 +52,14 @@
     </a>
 </div>
 
-<?php if (isset($produtos) && count($produto) > 0): ?>
+<?php if (isset($produtos) && count($produto) > 0): // Correção: use $produtos ao invés de $produto ?>
     <div class="w3-container w3-responsive">
         <table border ="1" cellpadding="5" cellspacing="0" 
-               class="w3-table w3-bordered w3-border w3-hoverable w3-dark-grey w3-text-white">
+            class="w3-table w3-bordered w3-border w3-hoverable w3-dark-grey w3-text-white">
             <thead>
-                <tr class="w3-black"> <th>ID</th>
+                <tr class="w3-black"> 
+                    <th>ID</th>
+                    <th style="width: 80px;">Imagem</th> 
                     <th>Nome</th>
                     <th>Preço</th>
                     <th>Estoque</th>
@@ -65,9 +67,24 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($produtos as $produto): ?>
+                <?php foreach ($produtos as $produto): 
+                    // --- LÓGICA DE LIMPEZA PARA EXIBIÇÃO DA IMAGEM ---
+                    $imagem_bd = trim($produto['imagem_produtos'] ?? 'default.jpg');
+                    $caminho_limpo = str_replace('\\', '/', $imagem_bd); 
+                    // Remove prefixos indesejados (como 'produtos/' ou 'img/')
+                    $nome_arquivo_puro = preg_replace('/^(img\/|produtos\/)/i', '', $caminho_limpo);
+                    $imagem_url = "/backend/upload/" . $nome_arquivo_puro;
+                    // -------------------------------------------------
+                ?>
                 <tr>
                     <td><?= htmlspecialchars($produto['id_produto']) ?></td>
+                    
+                    <td>
+                        <img src="<?= $imagem_url ?>" 
+                             alt="<?= htmlspecialchars($produto['nome_produtos']) ?>" 
+                             style="width: 100%; max-width: 60px; height: auto;">
+                    </td>
+                    
                     <td><?= htmlspecialchars($produto['nome_produtos']) ?></td>
                     <td>R$ <?= number_format($produto['preco_produtos'], 2, ',', '.') ?></td>
                     <td>
@@ -99,6 +116,7 @@
             </tbody>
         </table>
     </div>
+
 
     <div class="w3-container w3-padding-16">
         <div class="paginacao-controls" style="display:flex; justify-content:space-between; align-items:center;">

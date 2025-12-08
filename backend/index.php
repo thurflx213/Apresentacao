@@ -70,6 +70,7 @@ $rotas = [
         "/relatorios" => "RelatoriosController@exibirRelatorios",
         '/api/produtos' => 'PublicApiController@getProdutos',
         '/api/produtos/{pagina}' => 'PublicApiController@getProdutos',
+        '/api/vitrine'=> 'PublicApiController@getProdutosParaVitrineFormatados'
         
 
         

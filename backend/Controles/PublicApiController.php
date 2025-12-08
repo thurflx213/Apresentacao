@@ -100,13 +100,12 @@ class PublicApiController {
         exit;
     }
 
-    // Extrai os campos esperados do payload (ajuste os nomes conforme seu cliente envia)
     $nome = isset($carrinho['nome']) ? $carrinho['nome'] : null;
     $email = isset($carrinho['email']) ? $carrinho['email'] : null;
     $telefone = isset($carrinho['telefone']) ? $carrinho['telefone'] : null;
     $itens = isset($carrinho['itens']) ? $carrinho['itens'] : (isset($carrinho['items']) ? $carrinho['items'] : null);
 
-    // Validação básica dos campos obrigatórios
+ 
     if (!$nome || !$email || !$telefone || empty($itens) || !is_array($itens)) {
         http_response_code(400);
         echo json_encode([
@@ -116,7 +115,6 @@ class PublicApiController {
         exit;
     }
 
-    // Chama o método com 4 argumentos conforme esperado pela assinatura
     $novoPedidoId = $this->pedidosModel->inserirPedido($nome, $email, $telefone, $itens);
 
     if ($novoPedidoId) {
@@ -134,5 +132,77 @@ class PublicApiController {
         ]);
     }
     exit;
+}
+public function getProdutosParaVitrineFormatados() {
+    header('Content-Type: application/json; charset=utf-8');
+    header('Access-Control-Allow-Origin: *'); 
+
+    try {
+        // CORREÇÃO DA CONEXÃO: Se o $this->db falhar, use o método estático para obter a conexão
+        $db = $this->db ?? \App\Koketsu\Database\Database::getInstance();
+        $produtosModel = new \App\Koketsu\Models\Produtos($db);
+        
+        $produtos_db = $produtosModel->buscarProdutosAtivosComCategoria();
+        
+        $categorias_organizadas = $this->formatarProdutosParaCarrossel($produtos_db);
+
+        echo json_encode(array_values($categorias_organizadas), JSON_UNESCAPED_UNICODE);
+
+    } catch (\Exception $e) {
+        http_response_code(500);
+        echo json_encode(["error" => "Erro de Banco de Dados: " . $e->getMessage()]);
+    }
+}
+
+
+private function formatarProdutosParaCarrossel(array $produtos_db): array {
+    $categorias_organizadas = [];
+    $imagem_padrao = "img/default.png"; 
+
+    foreach ($produtos_db as $produto) {
+        $nome_categoria = $produto['nome_categoria'] ?? 'OUTROS';
+        $tag_categoria = ''; // Vazio ou defina aqui se precisar de tags específicas
+
+        if (!isset($categorias_organizadas[$nome_categoria])) {
+            $categorias_organizadas[$nome_categoria] = [
+                'categoria' => $nome_categoria,
+                'tag' => $tag_categoria, 
+                'itens' => []
+            ];
+        }
+
+       
+        $nome_imagem_bd = trim($produto['imagem_produtos'] ?? '');
+        $caminho_imagem = $imagem_padrao; 
+        
+        if (!empty($nome_imagem_bd) && $nome_imagem_bd !== 'NULL') {
+            
+            $caminho_limpo = str_replace('\\', '/', $nome_imagem_bd);
+            
+         
+            $caminho_limpo = preg_replace('/^(img\/|produtos\/)/i', '', $caminho_limpo);
+            
+          
+            if (!empty($caminho_limpo)) {
+                $caminho_imagem = "img/" . $caminho_limpo;
+            }
+        } 
+      
+
+        $preco = (float)str_replace(',', '.', $produto['preco_produtos']); 
+        $parcelas = $preco / 6;
+
+        $categorias_organizadas[$nome_categoria]['itens'][] = [
+            'id' => $produto['id_produto'],
+            'nome' => $produto['nome_produtos'], 
+            'preco' => $preco,
+            'img' => $caminho_imagem, 
+            'alt' => $produto['descricao_produtos'],
+            'parcelas' => $parcelas,
+        
+        ];
+    }
+
+    return $categorias_organizadas;
 }
 }

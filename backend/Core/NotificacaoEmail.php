@@ -4,8 +4,8 @@ use App\Koketsu\Core\EmailService;
 
 class NotificacaoEmail{
     private EmailService $emailService;
-    public function __construct(EmailService $emailService){
-        $this->emailService = $emailService;
+    public function __construct(){
+        $this->emailService =  new EmailService();
     }
  public function esqueciASenha(string $email, string $token): void {
     $assunto = "Redefinação de Senha";

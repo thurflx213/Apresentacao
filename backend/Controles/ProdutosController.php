@@ -98,6 +98,7 @@ public function viewProdutoUnico(int $id_produto) {
             Redirect::redirecionarComMensagem("/produto/listar", "error", "Erro ao inativar produto.");
         }
     }
+  
 
   public function salvarProduto() {
     $nome_produto = $_POST["nome_produtos"] ?? '';

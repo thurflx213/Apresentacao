@@ -11,9 +11,7 @@
 </head>
 <body>
   <header>
-    <!-- Navbar personalizada -->
     <nav id="navbar" class="navbar d-flex align-items-center px-4 sticky-top">
-      <!-- Esquerda: Menu e Pesquisa -->
       <div class="navbar-section d-flex align-items-center">
         <button class="btn btn-link text-white d-flex align-items-center p-0 me-3" data-bs-toggle="offcanvas" data-bs-target="#menuOffcanvas">
           <i class="bi bi-list fs-5"></i> <span class="ms-1">Menu</span>
@@ -21,66 +19,59 @@
   
       </div>
   
-      <!-- Centro: Logo -->
-        <a href="index.html">
+      <div class="navbar-center"> <a href="index.html">
             <img src="img/icons/logo.png" alt="Logo COMP" class="logo" />
-            </a>
-          
+        </a>
       </div>
   
-      <!-- Direita: Login e Carrinho -->
       <div class="navbar-end d-flex justify-content-end align-items-center">
         <a href="login.html" class="icon-link"><i class="bi bi-person"></i> Login</a>
         <a href="https://instagram.com" class="icon-button"><i class="bi bi-bag"></i> Carrinho</a>
       </div>
     </nav>
 
-     <!-- Menu lateral interativo -->
-<div class="offcanvas offcanvas-start botao-fechar" tabindex="-1" id="menuOffcanvas">
-<div class="offcanvas-header justify-content-end">
-    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Fechar"></button>
-</div>
-<div class="offcanvas-body">
-  <ul class="list-unstyled">
-    <li><a class="text-white text-decoration-none d-block py-2" href="index.html">Início</a></li>
-        <li><a class="text-white text-decoration-none d-block py-2" href="produto.html">Produtos</a></li>
-        <li><a class="text-white text-decoration-none d-block py-2" href="sobre.html">Sobre</a></li>
-        <li><a class="text-white text-decoration-none d-block py-2" href="#">Contato</a></li>
-  </ul>
-</div>
-    </header>
-
-  <!-- Menu lateral interativo -->
- 
-  <div >
-    <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-          <div class="carousel-item active" data-bs-interval="500">
-            <img src="img/COMP1.png" class="d-block w-100" alt="...">
-          </div>
-          <div class="carousel-item" data-bs-interval="500">
-            <img src="img/COMP2.png" class="d-block w-100" alt="...">
-          </div>
-          <div class="carousel-item" data-bs0interval="500">
-            <img src="img/COMP3.png" class="d-block w-100" alt="...">
-          </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Next</span>
-        </button>   
+    <div class="offcanvas offcanvas-start botao-fechar" tabindex="-1" id="menuOffcanvas">
+      <div class="offcanvas-header justify-content-end">
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Fechar"></button>
       </div>
-  </div>
-  <main class="container py-5">
-    <!-- CAMISETAS -->
-    <div id="vitrine"></div>
-    </section>
+      <div class="offcanvas-body">
+        <ul class="list-unstyled">
+          <li><a class="text-white text-decoration-none d-block py-2" href="index.html">Início</a></li>
+          <li><a class="text-white text-decoration-none d-block py-2" href="produto.html">Produtos</a></li>
+          <li><a class="text-white text-decoration-none d-block py-2" href="sobre.html">Sobre</a></li>
+          <li><a class="text-white text-decoration-none d-block py-2" href="#">Contato</a></li>
+        </ul>
+      </div>
+    </div> </header>
 
-  </main>
+  <div>
+    <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        <div class="carousel-item active" data-bs-interval="5000">
+          <img src="img/COMP1.png" class="d-block w-100" alt="...">
+        </div>
+        <div class="carousel-item" data-bs-interval="5000">
+          <img src="img/COMP2.png" class="d-block w-100" alt="...">
+        </div>
+        <div class="carousel-item" data-bs-interval="5000">
+          <img src="img/COMP3.png" class="d-block w-100" alt="...">
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>   
+    </div>
+  </div>
+  
+  <main class="container py-5">
+    <div id="vitrine"></div>
+    </main>
+  
   <div class="top-bar">
     <div class="info-box">
       <i class="bi bi-clock"></i>
@@ -114,6 +105,7 @@
       </div>
     </div>
   </div>
+  
   <footer>
     <div class="container">
         <div class="coluna-footer">

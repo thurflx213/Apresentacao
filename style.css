@@ -2,20 +2,18 @@ body {
     background-color: #000000;
     color: rgb(238, 238, 238);
     padding-top: 70px;
-  }
+}
 
-  .navbar {
+.navbar {
     background-color: transparent;
     position: fixed;
     top: 0;
     width: 100%;
     z-index: 1050;
     transition: background-color 0.3s ease;
-    
+}
 
-  }
-
-  .icon-button {
+.icon-button {
     background-color: black;
     border-radius: 30px;
     color: white;
@@ -26,9 +24,9 @@ body {
     gap: 5px;
     font-size: 0.9rem;
     text-decoration: none;
-  }
+}
 
-  .icon-link {
+.icon-link {
     color: white;
     text-decoration: none;
     margin-right: 15px;
@@ -36,38 +34,41 @@ body {
     align-items: center;
     gap: 5px;
     font-size: 0.9rem;
-  }
+}
 
-  .logo {
+.logo {
     max-height: 98px;
-  }
+}
 
-  .offcanvas {
+.offcanvas {
     background-color: #000000;
     color: white;
-  }
+}
 
-  .navbar-section {
+.navbar-section {
     flex: 1;
-  }
+}
 
-  .navbar-center {
+.navbar-center {
     flex: 1;
     text-align: center;
-  }
+}
 
-  .navbar-end {
+.navbar-end {
     flex: 1;
     text-align: right;
-  }
-  .navbar.scrolled {
-    background-color: #0e0d0d /* cor quando rola para baixo */
-  }
-  *{
+}
+
+.navbar.scrolled {
+    background-color: #0e0d0d; /* cor quando rola para baixo */
+}
+
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
+
 .top-bar {
     display: flex;
     justify-content: space-around;
@@ -77,9 +78,9 @@ body {
     gap: 20px;
     flex-wrap: wrap;
     color: black;
-  }
-  
-  .info-box {
+}
+
+.info-box {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -88,70 +89,243 @@ body {
     min-width: 250px;
     gap: 40px;
     box-shadow: 20px;
-  }
-  
-  .info-box i {
-     white-space: nowrap;
+}
+
+.info-box i {
+    white-space: nowrap;
     font-size: 32px;
     margin-bottom: 10px;
-    color: #000; /* ou o tom que desejar */
+    color: #000;
     font-size: 50px;
-  }
-  
-  .info-box h4 {
+}
+
+.info-box h4 {
     font-size: 20px;
     font-weight: bold;
     margin: 0;
     text-transform: uppercase;
-  }
-  
-  .info-box p {
+}
+
+.info-box p {
     margin-top: 5px;
     font-size: 18px;
     line-height: 1.4;
-    font-family:Verdana, Geneva, Tahoma, sans-serif;
-  }
-  .card {
-    width: 300px;
-    height: 400px;
-    background-color: #000;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.card {
+    background-color: transparent;
     border: none;
-    text-align: center;
+    box-shadow: none;
+    transform: none;
+    cursor: default;
+    height: auto !important;
+}
+
+/* Novo estilo do Card Principal */
+.product-card {
+    background-color: #0c0c0c;
     color: #dfdcdc;
-    box-shadow:  0 0 10px rgba(240, 225, 74, 0.6);
-    transition: transform 0.3s ease;
-    cursor: pointer;
-  
-  }
-  .card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 20px rgba(240, 225, 74, 1);
-  }
-  .card img {
-    width: 100%;
+    border: 1px solid #222;
+    overflow: hidden;
+    position: relative;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     height: 100%;
-    border-radius: rem;
-    background-color: #ffffff;
-  
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(240, 225, 74, 0.3);
+}
+
+.card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    flex-grow: 1;
+}
+
+/* Container da Imagem com efeito hover */
+.card-img-container {
+    position: relative;
+    overflow: hidden;
+    background-color: #fff;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* --- AUMENTO DE TAMANHO DO CARD DE PRODUTO APLICADO AQUI --- */
+    min-height: 450px; /* Altura mínima aumentada */
+}
+
+.card-img-container img {
+    /* --- AJUSTE DA IMAGEM PARA PREENCHER O NOVO TAMANHO --- */
+    width: 95%; 
+    height: 95%;
+    object-fit: contain; /* Garante que a imagem se ajuste sem ser cortada */
     
-  }
-  
-  .card-title {
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.product-card:hover .card-main-img {
+    transform: scale(1.05);
+}
+
+/* Corpo do Card */
+.card-body {
+    padding: 1rem;
+    flex-shrink: 0;
+    text-align: left;
+}
+
+.card-title {
     font-size: 1rem;
-    font-weight: 600;
-    margin-top: 0.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
     text-transform: uppercase;
-  }
-  
-  .card-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #fff;
+}
+
+/* Informações de Preço */
+.price-info {
+    margin-top: 0.5rem;
+}
+
+.main-price {
     color: #f0e14a;
     font-weight: bold;
-    font-size: 1rem;
-    margin-top: 0.5rem
-  }
-  
-  /* Botão destaque */
-  .btn-highlight {
+    font-size: 1.25rem;
+    margin-bottom: 0;
+}
+
+.card-installments {
+    color: #aaa;
+    font-size: 0.8rem;
+    margin-bottom: 0;
+}
+
+
+/* Indicadores de Oferta/Desconto */
+.card-badges {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 10;
+    display: flex;
+    gap: 5px;
+}
+
+.badge {
+    padding: 5px 8px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    border-radius: 3px;
+    text-transform: uppercase;
+}
+
+.sale-badge {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.sale-badge-alt {
+    background-color: #f0e14a;
+    color: #000;
+}
+
+/* Ações/Botão de Compra */
+.card-actions {
+    padding: 0 1rem 1rem 1rem;
+    flex-shrink: 0;
+}
+
+.btn-quick-buy {
+    background-color: #f0e14a;
+    color: #000;
+    font-weight: bold;
+    border: none;
+    padding: 10px 15px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    width: 100%;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+.btn-quick-buy:hover {
+    background-color: #fff200;
+    color: #000;
+    transform: scale(1.02);
+}
+
+/* --- ESTILO CORRIGIDO E ESTILIZADO PARA O TÍTULO DE CATEGORIA (.h2-titulo) --- */
+.h2-titulo {
+    font-family: 'Arial Black', sans-serif;
+    font-size: 3rem;
+    color: #F8D346;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    margin-bottom: 0.5rem !important;
+    text-align: center;
+    display: block;
+}
+
+/* --- ESTILOS DO CARROSSEL DE PRODUTOS --- */
+
+.carousel {
+    padding: 0 50px;
+    position: relative;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    width: 50px;
+    opacity: 1;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: rgba(240, 225, 74, 0.9);
+    border-radius: 50%;
+    padding: 15px;
+    height: 30px;
+    width: 30px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    transition: background-color 0.3s;
+}
+
+.carousel-control-prev-icon:hover,
+.carousel-control-next-icon:hover {
+    background-color: #fff200;
+}
+
+/* Media Query: Garantir que as setas fiquem visíveis no celular, mas não atrapalhem */
+@media (max-width: 768px) {
+    .carousel {
+        padding: 0 15px;
+    }
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 30px;
+    }
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        padding: 10px;
+        height: 20px;
+        width: 20px;
+    }
+}
+
+/* Botão destaque */
+.btn-highlight {
     background-color: #f0e14a;
     color: #000;
     font-weight: bold;
@@ -160,29 +334,94 @@ body {
     font-size: 1rem;
     text-transform: uppercase;
     transition: 0.3s ease-in-out;
-  }
-  
-  .btn-highlight:hover {
+}
+
+.btn-highlight:hover {
     background-color: #fff200;
     transform: scale(1.05);
-  }
-  h5{
+}
+
+h5 {
     font-size: smaller;
-  }
-.h2-titulo{
-  font-family: cursive;
-  align-items: center;
-  justify-content: center;
-  display: flex;
-  text-shadow: 0px 3px 0px #f0e24a7e;
-  
 }
-.botao-fechar{
-  z-index: 2000;
+
+.botao-fechar {
+    z-index: 2000;
 }
-.manutencao{
-  display: block;
-  margin: 40px auto; /* Espaço acima e abaixo */
-  max-width: 90%;    /* Responsivo */
-  height: 600px;
+
+.manutencao {
+    display: block;
+    margin: 40px auto;
+    max-width: 90%;
+    height: 600px;
+}
+
+/* --- NOVO ESTILO PARA O SUBTÍTULO/TAG --- */
+.category-tag {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.1rem;
+    color: #A9A9A9;
+    letter-spacing: 2px;
+    margin-top: 0;
+    margin-bottom: 3rem !important;
+    text-align: center;
+}
+
+/* --- ESTILOS PARA OS CARDS DE CATEGORIA (BANNERS) --- */
+.category-card-link {
+    text-decoration: none;
+    display: block;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.category-card {
+    position: relative;
+    height: 450px; /* Altura fixa para todos os cards */
+    overflow: hidden;
+}
+
+.category-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+/* Efeito de zoom ao passar o mouse */
+.category-card:hover .category-card-img {
+    transform: scale(1.05);
+}
+
+.category-card-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0)); 
+    color: #ffffff;
+    pointer-events: none;
+}
+
+.overlay-title {
+    font-size: 2.2rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+
+.overlay-cta {
+    font-size: 1rem;
+    color: #F8D346;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+/* Estilo específico para cards com texto em cor alternativa (como o de Acessórios) */
+.red-text-overlay .overlay-title {
+    color: #FF6347;
+}
+.red-text-overlay .overlay-cta {
+    color: #FF6347;
 }
