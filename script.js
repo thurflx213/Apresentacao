@@ -35,27 +35,27 @@ const produtos = [
     categoria: "BLUSAS",
     itens: [
       { id: "blusa1", nome: "ZIP UP - FREEDOMA", preco: "180,00", img: "img/moletom.png", alt: "Blusa preta" },
-      { id: "blusa1", nome: "MOLETOM GOLA CARECA - FACE", preco: "180,00", img: "img/moletom 2.png", alt: "Blusa preta" },
-      { id: "blusa1", nome: "MOLETOM GOLA CARECA - LOGO", preco: "180,00", img: "img/moletom 3.png", alt: "Blusa preta" },
-      { id: "blusa1", nome: "CASACO MOLETOM OVERSIZED - LOGO", preco: "180,00", img: "img/moletom 4.png", alt: "Blusa preta" },
+      { id: "blusa2", nome: "MOLETOM GOLA CARECA - FACE", preco: "180,00", img: "img/moletom 2.png", alt: "Blusa preta" },
+      { id: "blusa3", nome: "MOLETOM GOLA CARECA - LOGO", preco: "180,00", img: "img/moletom 3.png", alt: "Blusa preta" },
+      { id: "blusa4", nome: "CASACO MOLETOM OVERSIZED - LOGO", preco: "180,00", img: "img/moletom 4.png", alt: "Blusa preta" },
     ]
   },
   {
     categoria: "SAPATOS",
     itens: [
       { id: "sapato1", nome: "Tênis Nike Air Max Dn Feminino", preco: "250,00", img: "img/dn.png", alt: "Sapato casual" },
-      { id: "sapato1", nome: "Air Max DN", preco: "250,00", img: "img/dn vermelho.png", alt: "Sapato casual" },
-      { id: "sapato1", nome: "Tênis Nike Air Max Dn Masculino", preco: "250,00", img: "img/dn branco 3232.png", alt: "Sapato casual" },
-      { id: "sapato1", nome: "Tênis Nike Air Max Plus Drift Feminino", preco: "250,00", img: "img/TN.png", alt: "Sapato casual" },
+      { id: "sapato2", nome: "Air Max DN", preco: "250,00", img: "img/dn vermelho.png", alt: "Sapato casual" },
+      { id: "sapato3", nome: "Tênis Nike Air Max Dn Masculino", preco: "250,00", img: "img/dn branco 3232.png", alt: "Sapato casual" },
+      { id: "sapato4", nome: "Tênis Nike Air Max Plus Drift Feminino", preco: "250,00", img: "img/TN.png", alt: "Sapato casual" },
     ]
   },
   {
     categoria: "CAMISAS - POLO",
     itens: [
-      { id: "bone1", nome: "Camisa Polo Nike Court Dri-FIT Masculina", preco: "80,00", img: "img/polo .png", alt: "Boné preto" },
-      { id: "bone1", nome: "Camisa Polo Nike Court Dri-FIT Masculina", preco: "80,00", img: "img/polo 2.png", alt: "Boné preto" },
-      { id: "bone1", nome: "Camisa Polo Nike Court Dri-FIT Masculina", preco: "80,00", img: "img/polo 3.png", alt: "Boné preto" },
-      { id: "bone1", nome: "Camisa Polo Nike Court Dri-FIT Masculina", preco: "80,00", img: "img/polo .png", alt: "Boné preto" },
+      { id: "polo1", nome: "Camisa Polo Nike Court Dri-FIT Masculina", preco: "80,00", img: "img/polo .png", alt: "Camisa Polo" },
+      { id: "polo2", nome: "Camisa Polo Nike Court Dri-FIT Masculina", preco: "80,00", img: "img/polo 2.png", alt: "Camisa Polo" },
+      { id: "polo3", nome: "Camisa Polo Nike Court Dri-FIT Masculina", preco: "80,00", img: "img/polo 3.png", alt: "Camisa Polo" },
+      { id: "polo4", nome: "Camisa Polo Nike Court Dri-FIT Masculina", preco: "80,00", img: "img/polo .png", alt: "Camisa Polo" },
     ]
   }
 ];

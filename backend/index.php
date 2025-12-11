@@ -11,6 +11,11 @@ $router = new Router();
 
 $rotas = Rotas::get();
 $router->setNamespace('App\Koketsu\Controles');
+$router->get('/backend/relatorios', 'RelatoriosController@exibirRelatorios');
+$router->get('/backend/register', 'AuthController@register');
+$router->get('/admin/relatorios', 'RelatoriosController@index');
+$router->post('/backend/pedido/listar', 'PedidosController@pesquisarPedido');
+$router->get('/backend/pedido/listar', 'PedidosController@viewListarPedido'); 
 
 foreach ($rotas as $metodohttp => $rota) {
     foreach ($rota as $uri => $acao) {

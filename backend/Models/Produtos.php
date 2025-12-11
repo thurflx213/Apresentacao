@@ -71,7 +71,7 @@ public function paginacao(int $pagina = 1, int $porPagina = 50){
     $sql = "SELECT COUNT(*) AS total FROM tbl_produtos";
     $stmt = $this->db->prepare($sql);
     $stmt->execute();
-    return $stmt->fetch(PDO::FETCH_COLUMN);
+    return $stmt->fetchColumn();
 }
   // Inserir novo produto
   function inserirProduto(string $nome, string $descricao, string $imagem) {

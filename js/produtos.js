@@ -12,7 +12,7 @@ function renderizarProdutos(produtos) {
         const precoFormatado = parseFloat(produto.preco_produtos).toFixed(2);
         const cardHtml = `
             <div class="produto-card">
-                <img src="${produto.carrinho_imagem || produto.caminho_imagem}" alt="${produto.nome_produto}"> 
+                <img src="${produto.imagem_produtos || 'img/produto-default.png'}" alt="${produto.nome_produtos}"> 
                 <h3 class="card-title text-uppercase">${produto.nome_produtos}</h3>
                 <p class="card-text">R$ ${precoFormatado}</p>
                 <button class="btn-add-cart" 

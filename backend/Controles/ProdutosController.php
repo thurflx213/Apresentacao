@@ -25,7 +25,7 @@ public function index(){
     $this->viewListarProduto();
 }  
 
- public function viewlistarProduto($pagina = 1) {
+ public function viewListarProduto($pagina = 1) {
     $produto = $this->produtos->categoriasProdu();
     $total = $this->produtos->categoriasProdu();
         if (empty($pagina) || $pagina <= 0) $pagina = 1;
