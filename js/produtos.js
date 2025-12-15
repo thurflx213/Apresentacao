@@ -30,38 +30,48 @@ function renderizarProdutos(produtos) {
 function inicializar() {
     carregarCarrinhoLocalStorage();
     renderizarCarrinho();
-    fetch('/backend/api/produtos')
-        .then(response => 
-            response.ok ? response.json() : Promise.reject('Erro ao carregar produtos')
-    )
-        .then(json => {
-            if (json.status === 'success' && json.data) {
-                renderizarProdutos(json.data);
-            } else {
-                throw new Error(json.message || 'Erro ao buscar produtos da API.');
-            }
-        })
-        .catch(err => {
-            console.error("Erro ao carregar produtos:", err);
-            produtosContainer.innerHTML = `<p style="color: red;">${err.message || 'Não foi possível carregar os produtos.'}</p>`;
-        });
-
     
-    produtosContainer.addEventListener('click', function(e) {
-        if (e.target.classList.contains('btn-add-cart')) {
-            const { id, nome, preco } = e.target.dataset;
-            adicionarAoCarrinho(id, nome, preco);
-        }
-    });
+    // Verificar se os elementos existem antes de adicionar event listeners
+    if (produtosContainer) {
+        // Comentado temporariamente - API não disponível
+        /*
+        fetch('/backend/api/produtos')
+            .then(response => 
+                response.ok ? response.json() : Promise.reject('Erro ao carregar produtos')
+        )
+            .then(json => {
+                if (json.status === 'success' && json.data) {
+                    renderizarProdutos(json.data);
+                } else {
+                    throw new Error(json.message || 'Erro ao buscar produtos da API.');
+                }
+            })
+            .catch(err => {
+                console.error("Erro ao carregar produtos:", err);
+                produtosContainer.innerHTML = `<p style="color: red;">${err.message || 'Não foi possível carregar os produtos.'}</p>`;
+            });
+        */
+        
+        produtosContainer.addEventListener('click', function(e) {
+            if (e.target.classList.contains('btn-add-cart')) {
+                const { id, nome, preco } = e.target.dataset;
+                adicionarAoCarrinho(id, nome, preco);
+            }
+        });
+    }
 
-    cartItemsEl.addEventListener('click', function(e) {
-        if (e.target.classList.contains('btn-remove-cart')) {
-            const id = e.target.dataset.id;
-            removerDoCarrinho(id);
-        }
-    });
+    if (cartItemsEl) {
+        cartItemsEl.addEventListener('click', function(e) {
+            if (e.target.classList.contains('btn-remove-cart')) {
+                const id = e.target.dataset.id;
+                removerDoCarrinho(id);
+            }
+        });
+    }
 
-    btnFinalizar.addEventListener('click', finalizarPedido);
+    if (btnFinalizar) {
+        btnFinalizar.addEventListener('click', finalizarPedido);
+    }
 }
 function salvarCarrinhoLocalStorage() {
     localStorage.setItem(localStorageKey, JSON.stringify(carrinho));

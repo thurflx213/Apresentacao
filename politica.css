@@ -91,7 +91,20 @@ a:hover {
     box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.25);
 }
 
-/* Responsivo */
+/* ============================================ */
+/* RESPONSIVIDADE - POLÍTICA */
+/* ============================================ */
+
+@media (max-width: 1024px) {
+    .conteudo {
+        padding: 0 30px;
+    }
+    
+    .conteudo h1 {
+        font-size: 2.1rem;
+    }
+}
+
 @media (max-width: 768px) {
     .conteudo {
         margin: 30px auto;
@@ -100,6 +113,7 @@ a:hover {
 
     section {
         padding: 20px;
+        margin-bottom: 20px;
     }
 
     .conteudo h1 {
@@ -108,5 +122,37 @@ a:hover {
 
     section h2 {
         font-size: 1.25rem;
+    }
+    
+    section p,
+    section li {
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .conteudo {
+        margin: 20px auto;
+    }
+    
+    .conteudo h1 {
+        font-size: 1.6rem;
+    }
+    
+    section {
+        padding: 15px 20px;
+        margin-bottom: 15px;
+    }
+    
+    section h2 {
+        font-size: 1.1rem;
+        padding-left: 8px;
+        border-left-width: 4px;
+    }
+    
+    section p,
+    section li {
+        font-size: 0.875rem;
+        margin-bottom: 10px;
     }
 }

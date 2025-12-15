@@ -1,6 +1,6 @@
 <?php
 
-namespace App\koketsu\Rotas;
+namespace App\Koketsu\Rotas;
 
 class Rotas
 {
@@ -45,7 +45,7 @@ class Rotas
                  "/tamanho/listar"  => "TamanhoController@viewListarTamanhos",
                  "/tamanho/editar/{id}"  => "TamanhoController@viewEditarTamanho",
                  "/tamanho/excluir/{id}" => "TamanhoController@viewExcluirTamanho",
-              // Itens Pedidos   
+         
                  //Itens pedidos
                   "/itenspedidos" => "ItensPedidosController@index",
                   "/itenspedidos/criar" => "ItensPedidosController@viewCriarItemPedido",
@@ -165,7 +165,7 @@ class Rotas
                 "/produto/atualizar/{id}" => "ProdutosController@atualizarProduto",
                 "/produtos/deletar" => "ProdutosController@deletarProdutos",
                 "/produto/deletar/{id}" => "ProdutosController@deletarProduto",
-                "/produtos/ativar" => "produtosController@ativarProduto",
+                "/produtos/ativar" => "ProdutosController@ativarProduto",
                 "/produtos/listar" => "ProdutosController@pesquisarProdutos",
                 //avaliacao
                 "/backend/avaliacao/salvar" => "AvaliacaoController@salvarAvaliacao",

@@ -1,8 +1,8 @@
 <?php
-namespace App\backend\controllers;
+namespace App\Koketsu\Controles;
 
-use App\backend\model\EstoqueMovimentacao;
-use App\backend\database\Database;
+use App\Koketsu\Models\EstoqueMovimentacao;
+use App\Koketsu\Database\Database;
 
 class EstoqueMovimentacaoController {
     public $Estoque_Movimentacao;

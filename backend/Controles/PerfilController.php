@@ -1,5 +1,5 @@
 <?php
-namespace App\Koketsu\controles;
+namespace App\Koketsu\Controles;
 
 use App\Koketsu\Models\Perfil;
 use App\Koketsu\Database\Database;
@@ -23,7 +23,7 @@ class PerfilController {
     $total = $this->perfil->totalDePerfis($pagina);
     $total_inativos = $this->perfil->buscarPerfisInativos($pagina);
     $total_ativos = $this->perfil->buscarPerfisAtivos($pagina);
-    view::render('perfil/index', 
+    View::render('perfil/index', 
     [
         "perfil" => $dados['data'],
         "total_perfil" => $total,
@@ -35,22 +35,17 @@ class PerfilController {
 }
 
     public function viewCriarPerfil(){
-        view::render("perfil/create");
+        View::render("perfil/create");
     }
 
     public function viewEditarPerfil(int $id){
          $dados = $this->perfil->buscarPerfisPorId($id);
-       
-    //    foreach($dados as $perfil){
-    //     $dados = $perfil;
-    //    }
-       var_dump($dados);
-       view::render("perfil/edit", ["perfil" => $dados]);
+         View::render("perfil/edit", ["perfil" => $dados]);
     }
 
-    public function viewExcluirPerfil(){
-         view::render("perfil/delete");
-    }
+        public function viewExcluirPerfil(){
+            View::render("perfil/delete");
+        }
     public function salvarPerfil(){
        if($this->perfil->inserirPerfil(
             $_POST["telefone_perfil"],

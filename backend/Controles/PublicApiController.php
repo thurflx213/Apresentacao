@@ -2,7 +2,7 @@
 namespace App\Koketsu\Controles;
 
 use App\Koketsu\Models\Produtos;
-use App\Koketsu\Database\database;
+use App\Koketsu\Database\Database;
 use App\Koketsu\Models\Pedidos;
 
 class PublicApiController {
@@ -10,7 +10,7 @@ class PublicApiController {
     private $pedidosModel;
     public function __construct() {
         $db = Database::getInstance();
-        $this->produtosModel = new produtos($db);
+        $this->produtosModel = new Produtos($db);
         $this->pedidosModel = new Pedidos($db);
     }
     

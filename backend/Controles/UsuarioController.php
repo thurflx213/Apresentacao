@@ -1,5 +1,5 @@
 <?php
-namespace App\Koketsu\controles;
+namespace App\Koketsu\Controles;
 
 
 use App\Koketsu\Controles\Admin\AdminController;
@@ -24,21 +24,21 @@ class UsuarioController extends AdminController{
     // index
 
     public function viewListarUsuarios($pagina = 1){
-    $dados = $this->usuario->paginacao($pagina);
-    $total_admin = $this->usuario->buscarUsuariosAdmin();
-    $total = $this->usuario->totalDeUsuarios();
-    $total_inativos = $this->usuario->buscarUsuariosInativos($pagina);
-    $total_ativos = $this->usuario->buscarUsuariosAtivos($pagina);
-    view::render('usuario/index', 
-    [
-        "usuarios" => $dados['data'],
-        "total_admin" => $total_admin,
-        "total_usuarios" => $total,
-        "total_inativos" => $total_inativos,
-        "total_ativos" => $total_ativos,
-        'paginacao' => $dados
-    ] 
-  );
+        $dados = $this->usuario->paginacao($pagina);
+        $total_admin = $this->usuario->buscarUsuariosAdmin();
+        $total = $this->usuario->totalDeUsuarios();
+        $total_inativos = $this->usuario->buscarUsuariosInativos();
+        $total_ativos = $this->usuario->buscarUsuariosAtivos();
+        View::render('usuario/index', 
+            [
+                "usuarios" => $dados['data'],
+                "total_admin" => $total_admin,
+                "total_usuarios" => $total,
+                "total_inativos" => $total_inativos,
+                "total_ativos" => $total_ativos,
+                'paginacao' => $dados
+            ] 
+        );
     }
 
     public function viewCriarUsuarios(){
@@ -71,12 +71,11 @@ class UsuarioController extends AdminController{
             Redirect::redirecionarComMensagem("/usuario/criar", "error", implode("<br>", $erros));
             
         }
-       if($this->usuario->inserirUsuario(
+        if($this->usuario->inserirUsuario(
             $_POST["nome_usuarios"],
             $_POST["email_usuarios"],
             $_POST["senha_usuarios"],
-            $_POST["nivel_acesso"],
-            "Ativo",
+            $_POST["nivel_acesso"]
         )){
             Redirect::redirecionarComMensagem("/usuario/listar", "success", "Usuário criado com sucesso!");
         }else{

@@ -1,3 +1,11 @@
 vendor
 backend/Database/Config.php
 backend/Database/config.php
+
+# Dependências Node.js
+node_modules/
+package-lock.json
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db

@@ -1,5 +1,5 @@
 <?php
-namespace App\backend\models;
+namespace App\Koketsu\Models;
 use PDO;
 class Carrinho {
     private $id_carrinho;

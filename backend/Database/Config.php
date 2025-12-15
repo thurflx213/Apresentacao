@@ -9,9 +9,9 @@ class Config
         return [
             'database' => array (
   'driver' => 'mysql',
-  'mysql' =>
+    'mysql' =>
   array (
-    'host' => 'localhost',
+    'host' => '127.0.0.1',
     'db_name' => 'koketsu',
     'username' => 'root',
     'password' => '',

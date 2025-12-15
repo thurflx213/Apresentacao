@@ -4,7 +4,14 @@ use App\Koketsu\Core\Flash;
 
 class Redirect{
     public static function redirecionarPara($url){
-        header("Location: /backend".$url);
+        // Use URL as provided when absolute or already rooted; otherwise ensure it starts with '/'
+        if (preg_match('#^https?://#i', $url)) {
+            header("Location: " . $url);
+        } elseif (substr($url, 0, 1) === '/') {
+            header("Location: " . $url);
+        } else {
+            header("Location: /" . $url);
+        }
         exit;
     }
 

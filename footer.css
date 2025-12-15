@@ -18,22 +18,22 @@ footer .container{
     align-items: flex-start;
     justify-content: space-between;
     flex-wrap: wrap;
-    padding: 50px;
-    gap: 37px;
+    padding: 40px 30px;
+    gap: 30px;
 }
 
 .coluna-footer{
     display: flex;
     position: relative;
-    padding-bottom: 40px;
+    padding-bottom: 30px;
     flex-direction: column;
     color: rgb(255, 255, 255);
-    gap: 10px;
+    gap: 12px;
     flex: 5;
 }
 .coluna-footer p{
-    margin: 4px 0;
-    line-height: 1;
+    margin: 6px 0;
+    line-height: 1.5;
 }
 
 .redes-sociais{
@@ -42,11 +42,55 @@ footer .container{
     color: #00ffff;
 }
 
+/* WhatsApp Flutuante */
+.whatsapp-float {
+    position: fixed;
+    width: 60px;
+    height: 60px;
+    bottom: 30px;
+    right: 30px;
+    background-color: #25d366;
+    color: #FFF;
+    border-radius: 50px;
+    text-align: center;
+    font-size: 32px;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.4);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.whatsapp-float:hover {
+    background-color: #128C7E;
+    transform: scale(1.1);
+    color: #FFF;
+}
+
+/* Formas de Pagamento */
+.payment-methods {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 2rem;
+    color: #f1cd2f;
+}
+
+.payment-methods i {
+    transition: transform 0.3s ease;
+}
+
+.payment-methods i:hover {
+    transform: scale(1.2);
+}
+
 .form-email {
     display: flex;
     flex-direction: column;
-    width: 300px;
-    gap: 10px;
+    width: 100%;
+    max-width: 320px;
+    gap: 12px;
     font-family: Arial, sans-serif;
   }
 
@@ -107,4 +151,88 @@ footer .container{
   a:hover {
     color: rgb(223, 217, 169); 
   }
- 
+
+/* ============================================ */
+/* RESPONSIVIDADE - FOOTER */
+/* ============================================ */
+
+@media (max-width: 1024px) {
+  footer .container {
+    gap: 25px;
+    padding: 40px 30px;
+  }
+  
+  .coluna-footer {
+    flex: 1 1 45%;
+  }
+  
+  .form-email {
+    width: 100%;
+    max-width: 280px;
+  }
+}
+
+@media (max-width: 768px) {
+  footer .container {
+    flex-direction: column;
+    padding: 30px 20px;
+    gap: 20px;
+  }
+  
+  .coluna-footer {
+    flex: 1 1 100%;
+    text-align: center;
+    padding-bottom: 20px;
+  }
+  
+  .form-email {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  
+  .redes-sociais {
+    width: 60px;
+    padding: 8px;
+  }
+  
+  .fale-conosco {
+    margin-top: 30px;
+  }
+  
+  .btn3 {
+    width: 100%;
+    max-width: 250px;
+    padding: 12px;
+  }
+  
+  .copyright {
+    text-align: center;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  footer .container {
+    padding: 20px 15px;
+  }
+  
+  .coluna-footer h3 {
+    font-size: 1rem;
+  }
+  
+  .coluna-footer p {
+    font-size: 0.875rem;
+  }
+  
+  .form-email input[type="email"],
+  .form-email button {
+    padding: 8px;
+    font-size: 0.875rem;
+  }
+  
+  .btn3 {
+    padding: 10px;
+    font-size: 0.875rem;
+  }
+}

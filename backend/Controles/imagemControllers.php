@@ -1,8 +1,8 @@
 <?php
-namespace App\backend\controllers;
+namespace App\Koketsu\Controles;
 
-use App\backend\model\Imagem;
-use App\backend\database\Database;
+use App\Koketsu\Models\Imagem;
+use App\Koketsu\Database\Database;
 
 class ImagemController {
     public $imagem;

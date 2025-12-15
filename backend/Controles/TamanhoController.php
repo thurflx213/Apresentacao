@@ -1,12 +1,12 @@
 <?php
-namespace App\Koketsu\controles;
+namespace App\Koketsu\Controles;
 
 use App\Koketsu\Controles\Admin\AdminController;
 use App\Koketsu\Models\Tamanho;
 use App\Koketsu\Database\Database;
 use App\Koketsu\Core\View;
 use App\Koketsu\Core\Redirect;
-use App\koketsu\Validadores\UsuarioValidador;
+use App\Koketsu\Validadores\UsuarioValidador;
 use App\Koketsu\Controles\Admin\AuthenticatedController;
 
 class TamanhoController extends AdminController {
@@ -19,23 +19,23 @@ class TamanhoController extends AdminController {
     }
     // index
      public function viewListarTamanhos($pagina = 1){
-    $dados = $this->tamanho->paginacao($pagina);
-    $total = $this->tamanho->totalDeUsuarios();
-    $total_inativos = $this->tamanho->buscarTamanhosInativos($pagina);
-    $total_ativos = $this->tamanho->buscartamanhosAtivos($pagina);
-    view::render('tamanho/index', 
-    [
-        "tamanhos" => $dados['data'],
-        "total_tamanhos" => $total,
-        "total_inativos" => $total_inativos,
-        "total_ativos" => $total_ativos,
-        'paginacao' => $dados
-    ] 
-  );
+        $dados = $this->tamanho->paginacao($pagina);
+        $total = $this->tamanho->totalDeUsuarios();
+        $total_inativos = $this->tamanho->buscarTamanhosInativos();
+        $total_ativos = $this->tamanho->buscarTamanhosAtivos();
+        View::render('tamanho/index', 
+            [
+                "tamanhos" => $dados['data'],
+                "total_tamanhos" => $total,
+                "total_inativos" => $total_inativos,
+                "total_ativos" => $total_ativos,
+                'paginacao' => $dados
+            ] 
+        );
     }
 
     public function viewCriarTamanho(){
-        view::render("/tamanho/create");
+        View::render("tamanho/create");
     }
 
     public function viewEditarTamanho(int $id){
@@ -51,8 +51,7 @@ class TamanhoController extends AdminController {
        if($this->tamanho->inserirTamanho(
             $_POST["id_produto"],
             $_POST["tamanho_tamanhos"],
-            $_POST["quantidade_tamanho"],
-            "Ativo"
+            $_POST["quantidade_tamanhos"]
         )){
             Redirect::redirecionarComMensagem("/tamanho/listar", "success", "Tamanho criado com sucesso!");
         }else{
@@ -62,7 +61,7 @@ class TamanhoController extends AdminController {
     public function atualizarTamanho(){
         $id = (int)$_POST['id_tamanhos'];
         $id_produtos = $_POST['id_produto'];
-        $tamanho = $_POST['tamanhos_tamanhos'];
+        $tamanho = $_POST['tamanho_tamanhos'];
         $quantidade = $_POST['quantidade_tamanhos'];
         if ($this->tamanho->atualizarTamanho($id, $id_produtos, $tamanho, $quantidade)) {
             Redirect::redirecionarComMensagem("/tamanho/listar", "success", "Tamanho atualizado com sucesso!");

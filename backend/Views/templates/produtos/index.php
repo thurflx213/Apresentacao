@@ -10,7 +10,6 @@
 <hr class="w3-border-dark-grey">
 <script>
     const dados_php = <?php echo json_encode($produto); ?>; 
-    console.log(dados_php)
     const labels = dados_php.map(item => item.produto);
     const dataValues = dados_php.map(item => item.total);
 

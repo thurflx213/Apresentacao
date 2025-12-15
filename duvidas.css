@@ -72,14 +72,7 @@ body{
   display: absolute;
 }
 .sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 200px;
-  height: 100%;
-  background-color: #000; /* preto igual ao seu cabeçalho */
-  padding-top: 140px;
-  z-index: 500;
+  display: none !important;
 }
 
 .sidebar ul {
@@ -105,4 +98,87 @@ body{
   background-color: #f1cd2f;
   color: #000;
   border-radius: 4px;
+}
+
+/* ============================================ */
+/* RESPONSIVIDADE - DÚVIDAS */
+/* ============================================ */
+
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 180px;
+  }
+  
+  .faq-section {
+    padding: 40px 15px;
+  }
+  
+  .faq-section h2 {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    padding-top: 60px;
+  }
+  
+  .sidebar {
+    position: static;
+    width: 100%;
+    padding-top: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .sidebar ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .sidebar ul li {
+    padding: 10px 15px;
+    border: 1px solid #222;
+    border-radius: 4px;
+  }
+  
+  .faq-section {
+    padding: 30px 15px;
+  }
+  
+  .faq-section h2 {
+    font-size: 24px;
+    margin-bottom: 30px;
+  }
+  
+  .faq-question {
+    font-size: 16px;
+    padding: 12px 0;
+  }
+  
+  .faq.open .faq-answer {
+    max-height: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar ul li {
+    padding: 8px 12px;
+    font-size: 0.875rem;
+  }
+  
+  .faq-section h2 {
+    font-size: 20px;
+  }
+  
+  .faq-question {
+    font-size: 14px;
+    padding: 10px 0;
+  }
+  
+  .faq-answer p {
+    font-size: 0.875rem;
+    padding: 0 0 12px;
+  }
 }

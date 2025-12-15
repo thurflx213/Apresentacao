@@ -1,5 +1,5 @@
 <?php
-namespace App\Koketsu\controles;
+namespace App\Koketsu\Controles;
 
 use App\Koketsu\Models\Cor;
 use App\Koketsu\Database\Database;
@@ -26,7 +26,7 @@ class CoresController {
         $total = $this->cores->totalDeCores($pagina);
         $total_inativos = $this->cores->buscarCoresInativos($pagina);
         $total_ativos = $this->cores->buscarCoresAtivos($pagina);
-         view::render('cores/index', 
+         View::render('cores/index', 
     [
         "cores" => $dados['data'],
         "total_cores" => $total,
@@ -38,27 +38,26 @@ class CoresController {
 }
 
     public function viewCriarCor(){
-        view::render("cores/create");
+        View::render("cores/create");
     }
 
     public function viewEditarCor(int $id){
         $dados = $this->cores->buscarCoresPorIdProduto($id);
-       var_dump($dados);
        foreach($dados as $cores){
         $dados = $cores;
        }
-       view::render("cores/edit", ["cor" => $dados]);
+    View::render("cores/edit", ["cor" => $dados]);
     }
 
-    public function viewExcluirCor(int $id){
-         view::render("cores/delete", ["id_cores" => $id]);
-    }
+        public function viewExcluirCor(int $id){
+            View::render("cores/delete", ["id_cores" => $id]);
+        }
 
-    public function relatorioCores($id, $data1, $data2){
-     view::render("cores/relatorio",
-           ["id" => $id, "data1" => $data1, "data2" => $data2]
-      );
-    }
+        public function relatorioCores($id, $data1, $data2){
+         View::render("cores/relatorio",
+                     ["id" => $id, "data1" => $data1, "data2" => $data2]
+            );
+        }
 
     public function salvarCor(){
        if($this->cores->inserirCor(
@@ -72,10 +71,25 @@ class CoresController {
             Redirect::redirecionarComMensagem("cor/create", "error", "Erro ao criar cor. Tente novamente.");
         }
     }
-    public function atualizarCor(){
-        echo "Atualizar cor";
+    public function atualizarCor($id){
+        if($this->cores->atualizarCor(
+            $id,
+            $_POST["id_produto"],
+            $_POST["cor_cores"],
+            $_POST["quantidade_cores"],
+            $_POST["status_cores"] ?? "Ativo"
+        )){
+            Redirect::redirecionarComMensagem("/cor/listar/1", "success", "Cor atualizada com sucesso!");
+        }else{
+            Redirect::redirecionarComMensagem("/cor/editar/" . $id, "error", "Erro ao atualizar cor.");
+        }
     }
-    public function deletarCor(){
-        echo "Deletar cor";
+    
+    public function deletarCor($id){
+        if($this->cores->deletarCor($id)){
+            Redirect::redirecionarComMensagem("/cor/listar/1", "success", "Cor excluída com sucesso!");
+        }else{
+            Redirect::redirecionarComMensagem("/cor/listar/1", "error", "Erro ao excluir cor.");
+        }
     }  
 }

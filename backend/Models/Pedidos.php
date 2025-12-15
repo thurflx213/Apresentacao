@@ -2,6 +2,8 @@
 namespace App\Koketsu\Models;
 use PDO;
 use PDOException;
+use App\Koketsu\Models\ItensPedidos;
+use App\Koketsu\Models\Produtos;
 
 class Pedidos {
       private $id_pedido;
@@ -230,6 +232,63 @@ class Pedidos {
             return $this->db->lastInsertId();
         } else {
             error_log("Erro ao inserir pedido: " . json_encode($stmt->errorInfo()));
+            return false;
+        }
+    }
+
+    /**
+     * Cria um pedido a partir do array do carrinho.
+     * Espera um array de itens com chaves: id_produto, quantidade, preco (opcional).
+     */
+    public function criarPedido(array $carrinho)
+    {
+        try {
+            $this->db->beginTransaction();
+
+            $total = 0.0;
+            $itensModel = new ItensPedidos($this->db);
+            $prodModel = new Produtos($this->db);
+
+            foreach ($carrinho as $item) {
+                $id_produto = $item['id_produto'] ?? ($item['id'] ?? null);
+                $quantidade = (int) ($item['quantidade'] ?? ($item['qty'] ?? 1));
+                $preco = $item['preco'] ?? $item['preco_unitario'] ?? $item['price'] ?? null;
+
+                if (!$preco) {
+                    $produto = $prodModel->buscarPorID((int) $id_produto);
+                    $preco = $produto['preco_produtos'] ?? 0;
+                }
+
+                $total += ((float) $preco) * $quantidade;
+            }
+
+            $data_pedido = date('Y-m-d H:i:s');
+            $id_perfil = null;
+            $status_pedido = 'pendente';
+
+            $novoPedidoId = $this->inserirPedido($id_perfil, $data_pedido, $total, $status_pedido);
+            if (!$novoPedidoId) {
+                $this->db->rollBack();
+                return false;
+            }
+
+            foreach ($carrinho as $item) {
+                $id_produto = $item['id_produto'] ?? ($item['id'] ?? null);
+                $quantidade = (int) ($item['quantidade'] ?? ($item['qty'] ?? 1));
+                $preco = $item['preco'] ?? $item['preco_unitario'] ?? $item['price'] ?? null;
+                if (!$preco) {
+                    $produto = $prodModel->buscarPorID((int) $id_produto);
+                    $preco = $produto['preco_produtos'] ?? 0;
+                }
+                $itensModel->inserirItemPedido($novoPedidoId, $id_produto, $quantidade, $preco);
+            }
+
+            $this->db->commit();
+            return $novoPedidoId;
+        } catch (\Exception $e) {
+            if ($this->db->inTransaction()) {
+                $this->db->rollBack();
+            }
             return false;
         }
     }

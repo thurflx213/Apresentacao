@@ -1,5 +1,5 @@
 <?php
-namespace App\backend\models;
+namespace App\Koketsu\Models;
 use PDO;
  class EstoqueMovimentacao {
     private $id_estoque_movimentacao;

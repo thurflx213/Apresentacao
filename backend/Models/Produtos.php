@@ -169,4 +169,9 @@ public function atualizarProduto(string $id_produto, string $nome, string $descr
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+    // Compatibilidade com RelatoriosController
+    public function contarProdutosPorCategoria() {
+      return $this->categoriasProdu();
+    }
+
     }

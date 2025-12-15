@@ -40,8 +40,8 @@ public function index(){
         ]);
 }
 
-public function viewCriarProduto(){
- view::render("produtos/create");
+ public function viewCriarProduto(){
+ View::render("produtos/create");
 }
 
 

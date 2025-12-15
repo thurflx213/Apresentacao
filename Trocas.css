@@ -17,14 +17,7 @@
     z-index: 999;
   }
   .sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 200px;
-    height: 100%;
-    background-color: #000; /* preto igual ao seu cabeçalho */
-    padding-top: 140px;
-    z-index: 500;
+    display: none !important;
   }
   
   .sidebar ul {
@@ -150,4 +143,118 @@
 .card-conteudo strong {
   color: #222;
   font-weight: 600;
+}
+
+/* ============================================ */
+/* RESPONSIVIDADE - TROCAS */
+/* ============================================ */
+
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 180px;
+  }
+  
+  .conteudo-principal {
+    margin: 40px auto;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    padding-top: 60px;
+  }
+  
+  main {
+    padding-top: 40px;
+  }
+  
+  .sidebar {
+    position: static;
+    width: 100%;
+    padding-top: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .sidebar ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .sidebar ul li {
+    padding: 10px 15px;
+    border: 1px solid #222;
+    border-radius: 4px;
+  }
+  
+  .conteudo-principal {
+    margin: 30px auto;
+    padding: 0 15px;
+  }
+  
+  .card-conteudo {
+    padding: 30px 25px;
+  }
+  
+  .card-conteudo h1 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+  }
+  
+  .card-conteudo h2 {
+    font-size: 1.3rem;
+    margin-top: 25px;
+  }
+  
+  footer {
+    padding: 30px 15px;
+    gap: 25px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar ul li {
+    padding: 8px 12px;
+    font-size: 0.875rem;
+  }
+  
+  .conteudo-principal {
+    margin: 20px auto;
+  }
+  
+  .card-conteudo {
+    padding: 20px 15px;
+  }
+  
+  .card-conteudo h1 {
+    font-size: 1.5rem;
+    gap: 8px;
+  }
+  
+  .card-conteudo h2 {
+    font-size: 1.1rem;
+    margin-top: 20px;
+    padding-left: 8px;
+    border-left-width: 3px;
+  }
+  
+  .card-conteudo p {
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+  }
+  
+  .card-conteudo ul {
+    margin-left: 15px;
+    padding-left: 15px;
+  }
+  
+  .card-conteudo ul li {
+    font-size: 0.9rem;
+  }
+  
+  footer {
+    padding: 20px 10px;
+    gap: 20px;
+  }
 }

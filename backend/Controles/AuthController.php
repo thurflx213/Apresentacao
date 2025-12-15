@@ -9,7 +9,7 @@ use App\Koketsu\Validadores\UsuarioValidador;
 use App\Koketsu\Core\FileManager;
 use App\Koketsu\Core\Flash;
 use App\Koketsu\Core\Session;
-use App\Koketsu\core\NotificacaoEmail;
+use App\Koketsu\Core\NotificacaoEmail;
 
 class AuthController{
     private Usuario $usuarioModel;

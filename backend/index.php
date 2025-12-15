@@ -23,6 +23,11 @@ foreach ($rotas as $metodohttp => $rota) {
         $router->{$metodoBramus}($uri, $acao);
     }
 }
+// Rota raiz: redireciona para a listagem de produtos pública
+$router->get('/', function() {
+    header('Location: /produtos/listar');
+    exit;
+});
 $router->set404(function() {
     header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
     echo '404, rota não encontrada';

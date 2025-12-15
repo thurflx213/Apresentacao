@@ -75,4 +75,9 @@ class Contato
         
         return $stmt->execute();
     }
+    public function notificarRecebimentoContato(string $email, string $mensagem = null): bool
+    {
+        // Este método pode ser implementado para enviar uma notificação de recebimento
+        return true;
+    }
 }
