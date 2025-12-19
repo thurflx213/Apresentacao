@@ -11,8 +11,8 @@ abstract class AuthenticatedController{
         if (!$this->session->has('usuario_id')){
             Redirect::redirecionarComMensagem(
                 'login',
-                'Por favor, faça login para acessar esta área.',
-                'error'
+                'error',
+                'Por favor, faça login para acessar esta área.'
             );
         }
     }

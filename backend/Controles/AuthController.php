@@ -72,7 +72,7 @@ class AuthController{
 
     Redirect::redirecionarComMensagem('/register', 'erros', 'Erro ao cadastrar, problema no seu e-mail.');
   }
-  $novoUsuarioId = $this->usuarioModel->inserirUsuario($nome, $email, $senha, 'usuario', 'Ativo', 'null');
+  $novoUsuarioId = $this->usuarioModel->inserirUsuario($nome, $email, $senha, 'usuario');
 
   if ($novoUsuarioId) {
     $this->notificacaoEmail->boasVindas($email, $nome);

@@ -21,21 +21,21 @@ class CoresController {
         $resultado = $this->cores->buscarCores();
         return $resultado;
     }
-     public function viewListarCores($pagina){
-        $dados = $this->cores->paginacao($pagina);
-        $total = $this->cores->totalDeCores($pagina);
-        $total_inativos = $this->cores->buscarCoresInativos($pagina);
-        $total_ativos = $this->cores->buscarCoresAtivos($pagina);
-         View::render('cores/index', 
-    [
-        "cores" => $dados['data'],
-        "total_cores" => $total,
-        "total_inativos" => $total_inativos,
-        "total_ativos" => $total_ativos,
-        'paginacao' => $dados
-    ] 
-  );
-}
+     public function viewListarCores($pagina = 1){
+        $dados = $this->cores->paginacao((int)$pagina);
+        $cores = $dados['data'] ?? [];
+        $total = $dados['total'] ?? 0;
+        $total_inativos = $this->cores->buscarCoresInativos();
+        $total_ativos = $this->cores->buscarCoresAtivos();
+
+        View::render('cores/index', [
+            "cores" => $cores,
+            "total_cores" => (int)$total,
+            "total_inativos" => (int)$total_inativos,
+            "total_ativos" => (int)$total_ativos,
+            'paginacao' => $dados
+        ]);
+    }
 
     public function viewCriarCor(){
         View::render("cores/create");
@@ -43,10 +43,11 @@ class CoresController {
 
     public function viewEditarCor(int $id){
         $dados = $this->cores->buscarCoresPorIdProduto($id);
-       foreach($dados as $cores){
-        $dados = $cores;
-       }
-    View::render("cores/edit", ["cor" => $dados]);
+        $cor = [];
+        if (is_array($dados) && count($dados) > 0) {
+            $cor = $dados[0];
+        }
+        View::render("cores/edit", ["cor" => $cor]);
     }
 
         public function viewExcluirCor(int $id){
@@ -60,35 +61,50 @@ class CoresController {
         }
 
     public function salvarCor(){
-       if($this->cores->inserirCor(
-            $_POST["id_produto"],
-            $_POST["cor_cores"],
-            $_POST["quantidade_cores"],
-            "Ativo"
-        )){
-            Redirect::redirecionarComMensagem("cor/listar", "success", "Cor criada com sucesso!");
-        }else{
-            Redirect::redirecionarComMensagem("cor/create", "error", "Erro ao criar cor. Tente novamente.");
+        $id_produto = isset($_POST['id_produto']) ? (int)$_POST['id_produto'] : 0;
+        $cor_nome = trim($_POST['cor_cores'] ?? '');
+        $quantidade = isset($_POST['quantidade_cores']) ? (int)$_POST['quantidade_cores'] : 0;
+
+        if ($id_produto <= 0 || $cor_nome === '' || $quantidade < 0) {
+            Redirect::redirecionarComMensagem("/cor/criar", "error", "Preencha corretamente os campos obrigatórios.");
+            return;
+        }
+
+        if ($this->cores->inserirCor($id_produto, $cor_nome, $quantidade, "Ativo")){
+            Redirect::redirecionarComMensagem("/cor/listar", "success", "Cor criada com sucesso!");
+        } else {
+            Redirect::redirecionarComMensagem("/cor/criar", "error", "Erro ao criar cor. Tente novamente.");
         }
     }
     public function atualizarCor($id){
-        if($this->cores->atualizarCor(
-            $id,
-            $_POST["id_produto"],
-            $_POST["cor_cores"],
-            $_POST["quantidade_cores"],
-            $_POST["status_cores"] ?? "Ativo"
-        )){
+        $id = (int)$id;
+        $id_produto = isset($_POST['id_produto']) ? (int)$_POST['id_produto'] : 0;
+        $cor_nome = trim($_POST['cor_cores'] ?? '');
+        $quantidade = isset($_POST['quantidade_cores']) ? (int)$_POST['quantidade_cores'] : 0;
+        $status = $_POST['status_cores'] ?? "Ativo";
+
+        if ($id <= 0 || $id_produto <= 0 || $cor_nome === '' || $quantidade < 0) {
+            Redirect::redirecionarComMensagem("/cor/editar/" . $id, "error", "Dados inválidos.");
+            return;
+        }
+
+        if($this->cores->atualizarCor($id, $id_produto, $cor_nome, $quantidade, $status)){
             Redirect::redirecionarComMensagem("/cor/listar/1", "success", "Cor atualizada com sucesso!");
-        }else{
+        } else {
             Redirect::redirecionarComMensagem("/cor/editar/" . $id, "error", "Erro ao atualizar cor.");
         }
     }
     
     public function deletarCor($id){
+        $id = (int)$id;
+        if ($id <= 0) {
+            Redirect::redirecionarComMensagem("/cor/listar/1", "error", "ID inválido.");
+            return;
+        }
+
         if($this->cores->deletarCor($id)){
             Redirect::redirecionarComMensagem("/cor/listar/1", "success", "Cor excluída com sucesso!");
-        }else{
+        } else {
             Redirect::redirecionarComMensagem("/cor/listar/1", "error", "Erro ao excluir cor.");
         }
     }  

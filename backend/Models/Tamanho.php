@@ -46,11 +46,11 @@ function buscarTamanhosAtivos() {
     return $stmt->fetch(PDO::FETCH_COLUMN);
 }
 
-function buscarTamanhosInativos($email){
+function buscarTamanhosInativos(){
    $sql = "SELECT COUNT(*) AS total_inativos FROM tbl_tamanhos WHERE excluido_em IS NOT NULL";
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute();
-    return $stmt->fetch(PDO::FETCH_COLUMN);
+  $stmt = $this->db->prepare($sql);
+  $stmt->execute();
+  return $stmt->fetch(PDO::FETCH_COLUMN);
 }
 
 public function paginacao(int $pagina = 1, int $porPagina = 50){
@@ -147,7 +147,7 @@ public function paginacao(int $pagina = 1, int $porPagina = 50){
   
   // Método para deletar (soft delete) um tamanho
   function deletarTamanho(int $id_tamanhos) {
-    $dataAtual = date("Y-m-d h:m:s");
+    $dataAtual = date("Y-m-d H:i:s");
     $status = $this->buscarPorID($id_tamanhos);
     $status = $status['excluido_em'] != NULL ? NULL : $dataAtual;
 
@@ -156,7 +156,7 @@ public function paginacao(int $pagina = 1, int $porPagina = 50){
             WHERE id_tamanhos = :id_tamanhos";
     $stmt = $this->db->prepare($sql);
     $stmt->bindParam(':id_tamanhos', $id_tamanhos);
-    $stmt->bindParam(':excluido', $dataAtual);
+    $stmt->bindParam(':excluido', $status);
     return $stmt->execute();
   }
 }

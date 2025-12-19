@@ -52,7 +52,7 @@ public function viewExcluirProduto(int $id) {
 
     public function viewAtivarProdutos($id){
          $dados = $this->produtos->buscarPorID($id);
-         View::render("/produtos/ativar",["produtos" => $dados]);
+         View::render("produtos/ativar",["produtos" => $dados]);
     }
 
     public function ativarProduto(){
@@ -66,18 +66,29 @@ public function viewExcluirProduto(int $id) {
 
 public function atualizarProdutos() {
     $id_produto = (int)$_POST['id_produto'];
-    $nome = $_POST['nome_produtos'];
-    $descricao = $_POST['descricao_produtos'];
-    $preco = $_POST['preco_produtos'];
-    $estoque = $_POST['estoque_produtos'];
-    $id_categoria = $_POST['id_categoria'];
+    $nome = trim($_POST['nome_produtos'] ?? '');
+    $descricao = trim($_POST['descricao_produtos'] ?? '');
+    $preco = $_POST['preco_produtos'] ?? null;
+    $estoque = $_POST['estoque_produtos'] ?? null;
+    $id_categoria = $_POST['id_categoria'] ?? null;
     $imagem = null;
-    if (isset($_FILES['imagem_produtos']) && $_FILES['imagem_produtos']['error'] == 0) {
-        $imagem = $this->gerenciarImagem->salvarArquivo($_FILES['imagem_produtos'], 'produtos');
-        
+
+    if ($nome === '') {
+        Redirect::redirecionarComMensagem("/produtos/editar/" . $id_produto, "error", "Nome é obrigatório.");
+        return;
     }
 
-    if ($this->produtos->atualizarProduto($id_produto, $nome, $descricao, $preco, $estoque, $imagem, $id_categoria)) {
+    if (isset($_FILES['imagem_produtos']) && $_FILES['imagem_produtos']['error'] == 0) {
+        try {
+            $imagem = $this->gerenciarImagem->salvarArquivo($_FILES['imagem_produtos'], 'produtos');
+        } catch (\Exception $e) {
+            Redirect::redirecionarComMensagem("/produtos/editar/" . $id_produto, "error", "Erro ao salvar imagem: " . $e->getMessage());
+            return;
+        }
+    }
+
+    $updated = $this->produtos->atualizarProduto($id_produto, $nome, $descricao, $preco, $estoque, $imagem, $id_categoria);
+    if ($updated) {
         Redirect::redirecionarComMensagem("/produtos/listar/", "success", "Produto atualizado com sucesso!");
     } else {
         Redirect::redirecionarComMensagem("/produtos/editar/" . $id_produto, "error", "Erro ao atualizar produto!");
@@ -98,21 +109,32 @@ public function relatorioProduto($id, $data1, $data2){
 }
 
  public function salvarProduto() {
-if (empty($_POST["nome_produtos"]) || empty($_FILES['imagem_produtos']['name'])) {
-            Redirect::redirecionarComMensagem("/produtos/criar", "error", "Nome e Foto são obrigatórios.");
-        }
+    $nome = trim($_POST['nome_produtos'] ?? '');
+    $descricao = trim($_POST['descricao_produtos'] ?? '');
 
+    if ($nome === '') {
+        Redirect::redirecionarComMensagem("/produtos/criar", "error", "Nome é obrigatório.");
+        return;
+    }
+
+    if (!isset($_FILES['imagem_produtos']) || empty($_FILES['imagem_produtos']['name'])) {
+        Redirect::redirecionarComMensagem("/produtos/criar", "error", "A imagem do produto é obrigatória.");
+        return;
+    }
+
+    try {
         $imagem = $this->gerenciarImagem->salvarArquivo($_FILES['imagem_produtos'], 'produtos');
+    } catch (\Exception $e) {
+        Redirect::redirecionarComMensagem("/produtos/criar", "error", "Erro ao salvar imagem: " . $e->getMessage());
+        return;
+    }
 
-        if ($this->produtos->inserirProduto(
-            $_POST["nome_produtos"],
-            $_POST["descricao_produtos"],
-            $imagem
-        )) {
-            Redirect::redirecionarComMensagem("/produtos/listar", "success", "Produtos cadastrado com sucesso!");
-        } else {
-            Redirect::redirecionarComMensagem("/produtos/criar", "error", "Erro ao cadastrar produtos.");
-        }
+    $inserido = $this->produtos->inserirProduto($nome, $descricao, $imagem);
+    if ($inserido) {
+        Redirect::redirecionarComMensagem("/produtos/listar", "success", "Produtos cadastrado com sucesso!");
+    } else {
+        Redirect::redirecionarComMensagem("/produtos/criar", "error", "Erro ao cadastrar produtos.");
+    }
     }
 
     public function viewEditarProdutos(int $id) {

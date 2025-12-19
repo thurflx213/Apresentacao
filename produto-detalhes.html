@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalhes do Produto - Koketsu</title>
-    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="node_modules/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="footer.css">
+    <link href="/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/node_modules/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/footer.css">
     <style>
         body {
             background-color: #000;
@@ -258,7 +258,7 @@
                 </button>
             </div>
             <a href="index.html">
-                <img src="img/icons/logo.png" alt="Logo Koketsu" class="logo" />
+                <img src="/img/icons/logo.png" alt="Logo Koketsu" class="logo" />
             </a>
             <div class="navbar-end d-flex justify-content-end align-items-center">
                 <a href="/backend/login" class="icon-link"><i class="bi bi-person"></i> <span class="d-none d-sm-inline">Login</span></a>
@@ -294,7 +294,7 @@
 
             <div class="row">
                 <div class="col-lg-6 mb-4">
-                    <img id="produto-imagem" src="img/CAMISETA MARROM.png" alt="Produto" class="produto-imagem-principal">
+                    <img id="produto-imagem" src="/img/camiseta-marrom.png" alt="Produto" class="produto-imagem-principal">
                 </div>
 
                 <div class="col-lg-6">
@@ -381,7 +381,7 @@
                 <p>Atendimento:</p>
                 <p>Segunda a Sábado (exceto feriados) das 09h às 19h</p>
                 <p>E-mail: sac@Koketsu.com.br</p>
-                <a href="https://api.whatsapp.com/send?phone=5547933856337" target="_blank"><button type="button" class="btn3">WhatsApp <img src="img/icons/whatsapp.svg" alt=""></button></a>
+                <a href="https://api.whatsapp.com/send?phone=5547933856337" target="_blank"><button type="button" class="btn3">WhatsApp <img src="/img/icons/whatsapp.svg" alt=""></button></a>
             </div>
 
             <div class="coluna-footer">
@@ -407,9 +407,9 @@
         <i class="bi bi-whatsapp"></i>
     </a>
 
-    <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="script.js"></script>
-    <script src="js/carrinho.js"></script>
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/script.js"></script>
+    <script src="/js/carrinho.js"></script>
     <script>
         // Dados dos produtos
         const produtos = {
@@ -418,7 +418,7 @@
                 categoria: "Camisetas",
                 preco: 120.00,
                 precoAntigo: 169.90,
-                imagem: "img/CAMISETA MARROM.png",
+                imagem: "img/camiseta-marrom.png",
                 descricao: "Camiseta oversized premium com design exclusivo. Confeccionada em 100% algodão de alta qualidade, proporcionando máximo conforto e durabilidade. Perfeita para looks casuais modernos.",
                 desconto: 29
             },
@@ -427,7 +427,7 @@
                 categoria: "Camisetas",
                 preco: 125.00,
                 precoAntigo: 169.90,
-                imagem: "img/camiseta off white.png",
+                imagem: "img/camiseta-off-white.png",
                 descricao: "Camiseta off white com modelagem oversized. Tecido premium que não desbota e mantém a forma mesmo após várias lavagens. Estilo urbano e contemporâneo.",
                 desconto: 26
             },
@@ -445,7 +445,7 @@
                 categoria: "Camisetas",
                 preco: 110.00,
                 precoAntigo: 149.90,
-                imagem: "img/camiseta.png",
+                imagem: "/img/camiseta-branca.png",
                 descricao: "Camiseta clássica da Koketsu com logo bordado. Peça essencial para o guarda-roupa urbano. Qualidade superior e durabilidade garantida.",
                 desconto: 27
             },
@@ -463,7 +463,7 @@
                 categoria: "Moletom",
                 preco: 260.00,
                 precoAntigo: 329.90,
-                imagem: "img/moletom 2.png",
+                imagem: "img/moletom-2.png",
                 descricao: "Moletom clássico com capuz e bolso canguru. Tecido de alta gramatura que proporciona aquecimento sem pesar. Ideal para looks casuais.",
                 desconto: 21
             },
@@ -472,7 +472,7 @@
                 categoria: "Moletom",
                 preco: 270.00,
                 precoAntigo: 339.90,
-                imagem: "img/moletom 3.png",
+                imagem: "img/moletom-3.png",
                 descricao: "Moletom urban style com detalhes exclusivos. Modelagem moderna e confortável. Perfeito para compor looks streetwear.",
                 desconto: 21
             },
@@ -481,7 +481,7 @@
                 categoria: "Moletom",
                 preco: 290.00,
                 precoAntigo: 359.90,
-                imagem: "img/moletom 4.png",
+                imagem: "img/moletom-4.png",
                 descricao: "Moletom premium com acabamento diferenciado. Confeccionado com tecidos de primeira linha. Design sofisticado e urbano.",
                 desconto: 19
             },
@@ -490,7 +490,7 @@
                 categoria: "Calças",
                 preco: 250.00,
                 precoAntigo: 319.90,
-                imagem: "img/calça 2.png",
+                imagem: "img/calca-2.png",
                 descricao: "Calça cargo preta com múltiplos bolsos. Design funcional e estiloso. Tecido resistente e confortável para o dia a dia.",
                 desconto: 22
             },
@@ -499,7 +499,7 @@
                 categoria: "Calças",
                 preco: 230.00,
                 precoAntigo: 299.90,
-                imagem: "img/calça 3.png",
+                imagem: "img/calca-3.png",
                 descricao: "Calça skinny com modelagem ajustada. Tecido com elastano para maior conforto e mobilidade. Estilo moderno e versátil.",
                 desconto: 23
             },
@@ -508,7 +508,7 @@
                 categoria: "Calças",
                 preco: 260.00,
                 precoAntigo: 329.90,
-                imagem: "img/calça 4.png",
+                imagem: "img/calca-4.png",
                 descricao: "Calça wide leg com modelagem ampla e confortável. Tendência fashion que não sai de moda. Tecido premium de alta qualidade.",
                 desconto: 21
             },
@@ -535,7 +535,7 @@
                 categoria: "Tênis",
                 preco: 480.00,
                 precoAntigo: 629.90,
-                imagem: "img/dn vermelho.png",
+                imagem: "img/dn-vermelho.png",
                 descricao: "Tênis DN na cor vermelha vibrante. Destaque garantido em qualquer look. Tecnologia de amortecimento avançada.",
                 desconto: 24
             },
@@ -544,7 +544,7 @@
                 categoria: "Tênis",
                 preco: 470.00,
                 precoAntigo: 619.90,
-                imagem: "img/dn branco.png",
+                imagem: "img/dn-branco.png",
                 descricao: "Tênis DN branco clean e versátil. Combina com qualquer outfit. Qualidade e durabilidade excepcionais.",
                 desconto: 24
             },
@@ -562,7 +562,7 @@
                 categoria: "Polo",
                 preco: 150.00,
                 precoAntigo: 199.90,
-                imagem: "img/polo.png",
+                imagem: "/img/polo-.png",
                 descricao: "Polo clássica branca com gola e botões. Elegância casual para diversas ocasiões. Tecido respirável e confortável.",
                 desconto: 25
             },
@@ -571,7 +571,7 @@
                 categoria: "Polo",
                 preco: 160.00,
                 precoAntigo: 209.90,
-                imagem: "img/polo 2.png",
+                imagem: "img/polo-2.png",
                 descricao: "Polo premium em preto com acabamento refinado. Sofisticação e conforto em uma única peça. Ideal para looks elegantes.",
                 desconto: 24
             },
@@ -580,7 +580,7 @@
                 categoria: "Polo",
                 preco: 155.00,
                 precoAntigo: 204.90,
-                imagem: "img/polo 3.png",
+                imagem: "img/polo-3.png",
                 descricao: "Polo slim fit com modelagem ajustada. Design moderno e elegante. Tecido de alta qualidade que não amassa.",
                 desconto: 24
             },
@@ -676,3 +676,14 @@
     </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+

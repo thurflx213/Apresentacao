@@ -149,7 +149,7 @@ public function atualizarProduto(string $id_produto, string $nome, string $descr
   }
 
   public function deletarProdutos(int $id){
-        $agora = date("Y-m-d h:m:s");
+    $agora = date("Y-m-d H:i:s");
         $status = $this->buscarPorID($id);
         $status = $status['excluido_em'] != NULL ? NULL : $agora;
 

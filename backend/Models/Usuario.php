@@ -174,9 +174,28 @@ VALUES (:nome, :email, :senha, :nivel, 'ativo', NOW())";
     }
   }
 
+  // Atualiza usuário sem alterar a senha (útil quando o usuário não fornece nova senha)
+  public function atualizarUsuarioSemSenha($id, $nome, $email, $nivel) {
+    $dataatual = date('Y-m-d H:i:s');
+    $sql = "UPDATE tbl_usuarios SET 
+              nome_usuarios = :nome,
+              email_usuarios = :email,
+              nivel_acesso = :nivel,
+              atualizado_em = :atual
+            WHERE id_usuarios = :id";
+    $stmt = $this->db->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->bindParam(':nome', $nome);
+    $stmt->bindParam(':email', $email);
+    $stmt->bindParam(':nivel', $nivel);
+    $stmt->bindParam(':atual', $dataatual);
+
+    return $stmt->execute();
+  }
+
   // Excluir usuário (soft delete)
-  function deletarUsuario(int $id){
-        $agora = date("Y-m-d h:m:s");
+    function deletarUsuario(int $id){
+      $agora = date("Y-m-d H:i:s");
         $coluna = $this->buscarPorID($id);
         //ternario
         $coluna = $coluna['excluido_em'] != NULL ? NULL : $agora;

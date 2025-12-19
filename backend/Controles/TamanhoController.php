@@ -6,8 +6,7 @@ use App\Koketsu\Models\Tamanho;
 use App\Koketsu\Database\Database;
 use App\Koketsu\Core\View;
 use App\Koketsu\Core\Redirect;
-use App\Koketsu\Validadores\UsuarioValidador;
-use App\Koketsu\Controles\Admin\AuthenticatedController;
+
 
 class TamanhoController extends AdminController {
     public $tamanho;
@@ -19,19 +18,19 @@ class TamanhoController extends AdminController {
     }
     // index
      public function viewListarTamanhos($pagina = 1){
-        $dados = $this->tamanho->paginacao($pagina);
-        $total = $this->tamanho->totalDeUsuarios();
+        $dados = $this->tamanho->paginacao((int)$pagina);
+        $tamanhos = $dados['data'] ?? [];
+        $total = $dados['total'] ?? 0;
         $total_inativos = $this->tamanho->buscarTamanhosInativos();
         $total_ativos = $this->tamanho->buscarTamanhosAtivos();
-        View::render('tamanho/index', 
-            [
-                "tamanhos" => $dados['data'],
-                "total_tamanhos" => $total,
-                "total_inativos" => $total_inativos,
-                "total_ativos" => $total_ativos,
-                'paginacao' => $dados
-            ] 
-        );
+
+        View::render('tamanho/index', [
+            "tamanhos" => $tamanhos,
+            "total_tamanhos" => (int)$total,
+            "total_inativos" => (int)$total_inativos,
+            "total_ativos" => (int)$total_ativos,
+            'paginacao' => $dados
+        ]);
     }
 
     public function viewCriarTamanho(){
@@ -48,29 +47,46 @@ class TamanhoController extends AdminController {
          View::render("tamanho/delete",["tamanho" => $dados]);
     }
     public function salvarTamanho(){
-       if($this->tamanho->inserirTamanho(
-            $_POST["id_produto"],
-            $_POST["tamanho_tamanhos"],
-            $_POST["quantidade_tamanhos"]
-        )){
+        $id_produto = isset($_POST['id_produto']) ? (int)$_POST['id_produto'] : 0;
+        $tamanho = trim($_POST['tamanho_tamanhos'] ?? '');
+        $quantidade = isset($_POST['quantidade_tamanhos']) ? (int)$_POST['quantidade_tamanhos'] : 0;
+
+        if ($id_produto <= 0 || $tamanho === '' || $quantidade < 0) {
+            Redirect::redirecionarComMensagem("/tamanho/criar", "error", "Preencha corretamente os campos obrigatórios.");
+            return;
+        }
+
+        if ($this->tamanho->inserirTamanho($id_produto, $tamanho, $quantidade)) {
             Redirect::redirecionarComMensagem("/tamanho/listar", "success", "Tamanho criado com sucesso!");
-        }else{
-            Redirect::redirecionarComMensagem("/tamanho/create", "error", "Erro ao criar tamanho. Tente novamente.");
+        } else {
+            Redirect::redirecionarComMensagem("/tamanho/criar", "error", "Erro ao criar tamanho. Tente novamente.");
         }
     }
     public function atualizarTamanho(){
-        $id = (int)$_POST['id_tamanhos'];
-        $id_produtos = $_POST['id_produto'];
-        $tamanho = $_POST['tamanho_tamanhos'];
-        $quantidade = $_POST['quantidade_tamanhos'];
+        $id = isset($_POST['id_tamanhos']) ? (int)$_POST['id_tamanhos'] : 0;
+        $id_produtos = isset($_POST['id_produto']) ? (int)$_POST['id_produto'] : 0;
+        $tamanho = trim($_POST['tamanho_tamanhos'] ?? '');
+        $quantidade = isset($_POST['quantidade_tamanhos']) ? (int)$_POST['quantidade_tamanhos'] : 0;
+
+        if ($id <= 0 || $id_produtos <= 0 || $tamanho === '' || $quantidade < 0) {
+            Redirect::redirecionarComMensagem("/tamanho/editar/" . $id, "error", "Preencha corretamente os campos obrigatórios.");
+            return;
+        }
+
         if ($this->tamanho->atualizarTamanho($id, $id_produtos, $tamanho, $quantidade)) {
             Redirect::redirecionarComMensagem("/tamanho/listar", "success", "Tamanho atualizado com sucesso!");
         } else {
-            Redirect::redirecionarComMensagem("/tamanho/editar" . $id, "error", "Erro ao atualizar tamanho.");
+            Redirect::redirecionarComMensagem("/tamanho/editar/" . $id, "error", "Erro ao atualizar tamanho.");
         }
     }
     public function deletarTamanho(){
-        $id = (int)$_POST['id_tamanhos'];
+        $id = isset($_POST['id_tamanhos']) ? (int)$_POST['id_tamanhos'] : 0;
+
+        if ($id <= 0) {
+            Redirect::redirecionarComMensagem("/tamanho/listar", "error", "ID inválido.");
+            return;
+        }
+
         if ($this->tamanho->deletarTamanho($id)) {
             Redirect::redirecionarComMensagem("/tamanho/listar", "success", "Tamanho inativado com sucesso!");
         } else {

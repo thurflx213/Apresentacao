@@ -18,21 +18,21 @@ class CategoriasController {
         $resultado = $this->categoria->buscarCategorias();
         return $resultado;
     }
-     public function viewListarCategoria($pagina){
-    $dados = $this->categoria->paginacao($pagina);
-    $total = $this->categoria->totalDeCategorias($pagina);
-    $total_inativos = $this->categoria->buscarCategoriasInativos($pagina);
-    $total_ativos = $this->categoria->buscarCategoriasAtivos($pagina);
-    View::render('categoria/index', 
-    [
-        "categorias" => $dados['data'],
-        "total_categorias" => $total,
-        "total_inativos" => $total_inativos,
-        "total_ativos" => $total_ativos,
-        'paginacao' => $dados
-    ] 
-  );
-}
+     public function viewListarCategoria($pagina = 1){
+        $dados = $this->categoria->paginacao((int)$pagina);
+        $categorias = $dados['data'] ?? [];
+        $total = $dados['total'] ?? 0;
+        $total_inativos = $this->categoria->buscarCategoriasInativos();
+        $total_ativos = $this->categoria->buscarCategoriasAtivos();
+
+        View::render('categoria/index', [
+            "categorias" => $categorias,
+            "total_categorias" => (int)$total,
+            "total_inativos" => (int)$total_inativos,
+            "total_ativos" => (int)$total_ativos,
+            'paginacao' => $dados
+        ]);
+    }
 
     public function viewCriarCategoria(){
         View::render("categoria/create");
@@ -44,8 +44,9 @@ class CategoriasController {
     }
 
 
-        public function viewExcluirCategoria($id){
-            View::render("categoria/delete", ["id_categorias" => $id]);
+        public function viewExcluirCategoria(int $id){
+            $dados = $this->categoria->buscarCategoriaPorId($id);
+            View::render("categoria/delete", ["categoria" => $dados]);
         }
 
         public function relatorioCategoria($id, $data1, $data2){
@@ -55,34 +56,49 @@ class CategoriasController {
         }
 
     public function salvarCategoria(){
-       if($this->categoria->inserirCategoria(
-            $_POST["nome_categorias"],
-            $_POST["descricao_categorias"],
-            "Ativo"
-        )){
-            Redirect::redirecionarComMensagem("categoria/listar", "success", "Categoria criada com sucesso!");
-        }else{
-            Redirect::redirecionarComMensagem("categoria/create", "error", "Erro ao criar categoria. Tente novamente.");
+        $nome = trim($_POST['nome_categorias'] ?? '');
+        $descricao = trim($_POST['descricao_categorias'] ?? '');
+
+        if ($nome === '') {
+            Redirect::redirecionarComMensagem('/categoria/criar', 'error', 'O nome da categoria é obrigatório.');
+            return;
+        }
+
+        if ($this->categoria->inserirCategoria($nome, $descricao, 'Ativo')){
+            Redirect::redirecionarComMensagem('/categoria/listar', 'success', 'Categoria criada com sucesso!');
+        } else {
+            Redirect::redirecionarComMensagem('/categoria/criar', 'error', 'Erro ao criar categoria. Tente novamente.');
         }
     }
     public function atualizarCategoria($id){
-        if($this->categoria->atualizarCategoria(
-            $id,
-            $_POST["nome_categorias"],
-            $_POST["descricao_categorias"],
-            $_POST["status_categorias"] ?? "Ativo"
-        )){
-            Redirect::redirecionarComMensagem("/categoria/listar/1", "success", "Categoria atualizada com sucesso!");
-        }else{
-            Redirect::redirecionarComMensagem("/categoria/editar/" . $id, "error", "Erro ao atualizar categoria.");
+        $id = (int)$id;
+        $nome = trim($_POST['nome_categorias'] ?? '');
+        $descricao = trim($_POST['descricao_categorias'] ?? '');
+        $status = $_POST['status_categorias'] ?? 'Ativo';
+
+        if ($id <= 0 || $nome === '') {
+            Redirect::redirecionarComMensagem('/categoria/editar/' . $id, 'error', 'Dados inválidos.');
+            return;
+        }
+
+        if ($this->categoria->atualizarCategoria($id, $nome, $descricao, $status)) {
+            Redirect::redirecionarComMensagem('/categoria/listar/1', 'success', 'Categoria atualizada com sucesso!');
+        } else {
+            Redirect::redirecionarComMensagem('/categoria/editar/' . $id, 'error', 'Erro ao atualizar categoria.');
         }
     }
     
     public function deletarCategoria($id){
-        if($this->categoria->deletarCategoria($id)){
-            Redirect::redirecionarComMensagem("/categoria/listar/1", "success", "Categoria excluída com sucesso!");
-        }else{
-            Redirect::redirecionarComMensagem("/categoria/listar/1", "error", "Erro ao excluir categoria.");
+        $id = (int)$id;
+        if ($id <= 0) {
+            Redirect::redirecionarComMensagem('/categoria/listar/1', 'error', 'ID inválido.');
+            return;
+        }
+
+        if ($this->categoria->deletarCategoria($id)) {
+            Redirect::redirecionarComMensagem('/categoria/listar/1', 'success', 'Categoria excluída com sucesso!');
+        } else {
+            Redirect::redirecionarComMensagem('/categoria/listar/1', 'error', 'Erro ao excluir categoria.');
         }
     }   
 

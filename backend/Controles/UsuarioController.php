@@ -52,34 +52,48 @@ class UsuarioController extends AdminController{
 
     public function viewExcluirUsuarios($id){
          $dados = $this->usuario->buscarPorID($id);
-         View::render("/usuario/delete",["usuario" => $dados]);
+         View::render("usuario/delete",["usuario" => $dados]);
     }
 
     public function viewAtivarUsuarios($id){
          $dados = $this->usuario->buscarPorID($id);
-         View::render("/usuario/ativar",["usuario" => $dados]);
+         View::render("usuario/ativar",["usuario" => $dados]);
     }
 
     public function relatorioUsuario($id, $data1, $data2){
-     View::render("/usuario/relatorios",
-           ["id" => $id, "data1" => $data1, "data2" => $data2]
-      );
+    View::render("usuario/relatorios",
+         ["id" => $id, "data1" => $data1, "data2" => $data2]
+     );
     }
     public function salvarUsuario(){
         $erros = UsuarioValidador::ValidarEntradas($_POST);
         if(!empty($erros)){
             Redirect::redirecionarComMensagem("/usuario/criar", "error", implode("<br>", $erros));
-            
+            return;
         }
-        if($this->usuario->inserirUsuario(
-            $_POST["nome_usuarios"],
-            $_POST["email_usuarios"],
-            $_POST["senha_usuarios"],
-            $_POST["nivel_acesso"]
-        )){
+
+        $nome = trim($_POST['nome_usuarios'] ?? '');
+        $email = trim($_POST['email_usuarios'] ?? '');
+        $senha = $_POST['senha_usuarios'] ?? '';
+        $senha_confirm = $_POST['senha_confirm'] ?? null;
+        $nivel = $_POST['nivel_acesso'] ?? 'usuario';
+
+        if ($senha !== $senha_confirm) {
+            Redirect::redirecionarComMensagem('/usuario/criar', 'error', 'As senhas não conferem.');
+            return;
+        }
+
+        // Verifica se e-mail já está em uso
+        $existentes = $this->usuario->buscarUsuariosPorEmail($email);
+        if (is_array($existentes) && count($existentes) > 0) {
+            Redirect::redirecionarComMensagem('/usuario/criar', 'error', 'Este e-mail já está cadastrado.');
+            return;
+        }
+
+        if($this->usuario->inserirUsuario($nome, $email, $senha, $nivel)){
             Redirect::redirecionarComMensagem("/usuario/listar", "success", "Usuário criado com sucesso!");
         }else{
-            Redirect::redirecionarComMensagem("/usuario/create", "error", "Erro ao criar usuário. Tente novamente.");
+            Redirect::redirecionarComMensagem("/usuario/criar", "error", "Erro ao criar usuário. Tente novamente.");
         }
     }
     public function viewEditarUsuario(int $id) {
@@ -88,23 +102,43 @@ class UsuarioController extends AdminController{
             Redirect::redirecionarComMensagem("/usuario/listar", "error", "Usuario não encontrado.");
         }
         
-        View::render("/usuario/edit", ["usuario" => $usuario]);
+        View::render("usuario/edit", ["usuario" => $usuario]);
     }
 
        public function atualizarUsuario(){
-        $id = (int)$_POST['id_usuarios'];
-        $nome = $_POST['nome_usuarios'];
-        $email = $_POST['email_usuarios'];
-        $senha = $_POST['senha_usuarios'];
-        $tipo = $_POST['nivel_acesso'];
-        $imagem = null;
+            $id = (int)($_POST['id_usuarios'] ?? 0);
+            $nome = trim($_POST['nome_usuarios'] ?? '');
+            $email = trim($_POST['email_usuarios'] ?? '');
+            $senha = $_POST['senha_usuarios'] ?? null;
+            $tipo = $_POST['nivel_acesso'] ?? 'usuario';
 
-       
-        if ($this->usuario->atualizarUsuario($id, $nome, $email, $senha, $tipo)) {
-            Redirect::redirecionarComMensagem("/usuario/listar", "success", "Usuário atualizado com sucesso!");
-        } else {
-            Redirect::redirecionarComMensagem("/usuario/editar" . $id, "error", "Erro ao atualizar usuário.");
-        }
+            if ($nome === '' || $email === '') {
+                Redirect::redirecionarComMensagem("/usuario/editar/" . $id, "error", "Nome e e-mail são obrigatórios.");
+                return;
+            }
+
+            // Verifica se o e-mail pertence a outro usuário
+            $existentes = $this->usuario->buscarUsuariosPorEmail($email);
+            if (is_array($existentes) && count($existentes) > 0) {
+                $primeiro = $existentes[0];
+                if ((int)$primeiro['id_usuarios'] !== $id) {
+                    Redirect::redirecionarComMensagem("/usuario/editar/" . $id, "error", "Este e-mail já pertence a outro usuário.");
+                    return;
+                }
+            }
+
+            if (empty($senha)) {
+                // Atualiza sem alterar a senha
+                $ok = $this->usuario->atualizarUsuarioSemSenha($id, $nome, $email, $tipo);
+            } else {
+                $ok = $this->usuario->atualizarUsuario($id, $nome, $email, $senha, $tipo);
+            }
+
+            if ($ok) {
+                Redirect::redirecionarComMensagem("/usuario/listar", "success", "Usuário atualizado com sucesso!");
+            } else {
+                Redirect::redirecionarComMensagem("/usuario/editar/" . $id, "error", "Erro ao atualizar usuário.");
+            }
     }
     public function ativarUsuario(){
         $id = (int)$_POST['id_usuarios'];

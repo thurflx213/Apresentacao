@@ -139,56 +139,64 @@ public function __construct() {
         }
 
 
-        // 3. Salvar o pedido principal
-        $novo_id_pedido = $this->pedidos->inserirPedido(
-            $id_perfil, 
-            $data_pedido, 
-            $total_pedido, 
-            $status_pedido
-        );
+        // 3. Salvar o pedido principal dentro de uma transação
+        try {
+            $this->db->beginTransaction();
 
+            $novo_id_pedido = $this->pedidos->inserirPedido(
+                $id_perfil,
+                $data_pedido,
+                $total_pedido,
+                $status_pedido
+            );
 
-        if ($novo_id_pedido) {
-            
+            if (!$novo_id_pedido) {
+                // Falha ao inserir pedido principal
+                $this->db->rollBack();
+                Redirect::redirecionarComMensagem("/pedido/criar", "error", "Erro ao cadastrar pedido principal. Verifique se o ID do Perfil existe no banco.");
+                return;
+            }
+
             // 4. Salvar os itens do pedido
-            $todos_itens_salvos = true;
-            
             foreach ($itens_pedido as $item) {
-                
-                $id_produto       = $item['id_produto'] ?? NULL;
-                $quantidade       = $item['quantidade'] ?? 0;
-                $preco_unitario   = (float)str_replace(',', '.', ($item['preco_unitario'] ?? '0.00')); 
+                $id_produto = $item['id_produto'] ?? NULL;
+                $quantidade = $item['quantidade'] ?? 0;
+                $preco_unitario = (float)str_replace(',', '.', ($item['preco_unitario'] ?? '0.00'));
 
-                if ($id_produto && $quantidade > 0 && $preco_unitario > 0) {
-                    // Assumindo que $this->itensPedidos está instanciado no Controller
-                    $id_item_salvo = $this->itenspedidos->inserirItemPedido(
-                        $novo_id_pedido, 
-                        $id_produto, 
-                        $quantidade, 
-                        $preco_unitario
-                    );
-                    
-                    if (!$id_item_salvo) {
-                        $todos_itens_salvos = false;
-                        break; 
-                    }
-                } else {
-                    $todos_itens_salvos = false;
-                    break;
+                if (!($id_produto && $quantidade > 0 && $preco_unitario > 0)) {
+                    throw new \Exception('Dados inválidos em um dos itens.');
+                }
+
+                $id_item_salvo = $this->itenspedidos->inserirItemPedido(
+                    $novo_id_pedido,
+                    $id_produto,
+                    $quantidade,
+                    $preco_unitario
+                );
+
+                if (!$id_item_salvo) {
+                    throw new \Exception('Falha ao salvar item de pedido.');
                 }
             }
-            
-            // 5. Finalização
-            if ($todos_itens_salvos) {
-                Redirect::redirecionarComMensagem("/pedido/listar", "success", "Pedido e Itens cadastrados com sucesso! ID: " . $novo_id_pedido);
-            } else {
-                // Reverter ou deletar o pedido principal aqui seria o ideal
-                Redirect::redirecionarComMensagem("/pedido/criar", "error", "Pedido principal salvo, mas erro ao cadastrar os Itens.");
+
+            // Se chegou até aqui, tudo OK
+            $this->db->commit();
+            Redirect::redirecionarComMensagem("/pedido/listar", "success", "Pedido e Itens cadastrados com sucesso! ID: " . $novo_id_pedido);
+            return;
+
+        } catch (\Exception $e) {
+            // Em caso de erro, reverte transação e notifica
+            try {
+                if ($this->db && $this->db->inTransaction()) {
+                    $this->db->rollBack();
+                }
+            } catch (\Exception $rb) {
+                error_log('Erro ao efetuar rollback: ' . $rb->getMessage());
             }
 
-        } else {
-            // Falha no Model ao salvar o Pedido Principal
-            Redirect::redirecionarComMensagem("/pedido/criar", "error", "Erro ao cadastrar pedido principal. Verifique se o ID do Perfil existe no banco.");
+            error_log('Erro ao salvar pedido: ' . $e->getMessage());
+            Redirect::redirecionarComMensagem("/pedido/criar", "error", "Erro ao cadastrar pedido e/ou itens. Operação revertida.");
+            return;
         }
     }
 

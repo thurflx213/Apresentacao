@@ -41,7 +41,7 @@ class ContatoController {
         $idNovoContato = $this->contatoModel->inserirNovoContato($email);
 
         if ($idNovoContato) {
-            $this->notificacaoEmail->enviarNotificacao($email, "Obrigado por entrar em contato!"); 
+            $this->notificacaoEmail->notificarRecebimento($email, "Obrigado por entrar em contato!");
 
             Redirect::redirecionarComMensagem("/", "success", "Sua inscrição foi confirmada com sucesso!");
         } else {
