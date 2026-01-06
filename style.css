@@ -1,16 +1,48 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
     background-color: #000000;
     color: rgb(238, 238, 238);
-    padding-top: 70px;
+    
+}
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 80px; /* ajuste fino aqui */
+  display: flex;
+  align-items: center;
+  z-index: 1000;
+  transition: background-color 0.3s ease;
+}
+
+.header .logo img {
+  max-height: 48px;
+  width: auto;
+  display: block;
+}
+#carouselExampleInterval {
+  margin-top: 96px;
 }
 
 .navbar {
-    background-color: transparent;
+    height: 96px;
+    padding-top: 0;
+     padding-bottom: 0;
     position: fixed;
     top: 0;
     width: 100%;
     z-index: 1050;
-    transition: background-color 0.3s ease;
+    background-color: transparent;
+  transition: background-color 0.3s ease;
+}
+#navbar.scrolled {
+  background-color: #000;
 }
 
 .icon-button {
@@ -26,6 +58,7 @@ body {
     text-decoration: none;
 }
 
+
 .icon-link {
     color: white;
     text-decoration: none;
@@ -37,12 +70,99 @@ body {
 }
 
 .logo {
-    max-height: 98px;
+  max-height: 90px; /* AQUI está o segredo */
+  width: auto;
+  object-fit: contain;
 }
 
 .offcanvas {
-    background-color: #000000;
-    color: white;
+    width: 400px !important; 
+    background-color: #000 !important;
+    z-index: 2000 !important; /* Maior que a navbar (1050) */
+    top: 0 !important;
+    height: 100vh !important;
+    visibility: visible;
+}
+
+/* Garante que o fundo escuro (backdrop) cubra a navbar também */
+.offcanvas-backdrop {
+    z-index: 1900 !important;
+}
+
+/* Estilização do Accordion */
+.accordion-button {
+    background-color: transparent !important;
+    color: #fff !important;
+    font-weight: 800;
+    font-size: 1.1rem;
+    padding: 20px 25px;
+    border: none !important;
+    box-shadow: none !important;
+    text-transform: uppercase;
+}
+
+.accordion-button::after {
+    filter: invert(1); /* Seta branca */
+}
+
+.accordion-button:not(.collapsed) {
+    color: #F8D346 !important;
+}
+
+.accordion-item {
+    border-bottom: 1px solid #1a1a1a !important;
+    background-color: transparent !important;
+}
+
+.accordion-body {
+    padding: 10px 0 20px 40px;
+    background-color: #080808;
+}
+
+.accordion-body a {
+    display: block;
+    color: #888 !important;
+    text-decoration: none;
+    padding: 8px 0;
+    font-size: 1rem;
+    transition: 0.3s;
+}
+
+.accordion-body a:hover {
+    color: #F8D346 !important;
+    padding-left: 10px;
+}
+
+/* Destaque Promos */
+.promo-btn {
+    color: #F8D346 !important;
+}
+
+.offcanvas-header {
+    height: 70px; /* Alinha com a altura da sua navbar se necessário */
+}
+/* Estilo para links sem sub-menu */
+.direct-link {
+    display: block;
+    padding: 20px 25px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 1.2rem;
+    transition: 0.3s;
+}
+
+.direct-link:hover {
+    color: #F8D346;
+}
+
+/* Estilo Especial para PROMOS */
+.promo-btn {
+    color: #F8D346 !important; /* Amarelo da marca */
+}
+
+.promo-btn::after {
+    filter: sepia(100%) saturate(500%) hue-rotate(10deg); /* Seta amarela */
 }
 
 .navbar-section {
@@ -50,8 +170,12 @@ body {
 }
 
 .navbar-center {
-    flex: 1;
-    text-align: center;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  align-items: center;
+  height: 100%;
+  padding-top: 4px;
 }
 
 .navbar-end {
@@ -63,11 +187,6 @@ body {
     background-color: #0e0d0d; /* cor quando rola para baixo */
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
 
 .top-bar {
     display: flex;
@@ -284,6 +403,7 @@ body {
     padding: 0 50px;
     position: relative;
 }
+
 
 .carousel-control-prev,
 .carousel-control-next {
