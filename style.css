@@ -272,25 +272,25 @@ body {
 .card-img-container {
     position: relative;
     overflow: hidden;
-    background-color: #fff;
-    padding: 10px;
+    /* Altere de #fff para o cinza da foto */
+    background-color: #f3f3f3; 
+    padding: 0; /* Removi o padding para a imagem respirar no espaço total */
     display: flex;
     align-items: center;
     justify-content: center;
-    /* --- AUMENTO DE TAMANHO DO CARD DE PRODUTO APLICADO AQUI --- */
-    min-height: 450px; /* Altura mínima aumentada */
+    min-height: 450px; 
 }
 
 .card-img-container img {
-    /* --- AJUSTE DA IMAGEM PARA PREENCHER O NOVO TAMANHO --- */
-    width: 95%; 
-    height: 95%;
-    object-fit: contain; /* Garante que a imagem se ajuste sem ser cortada */
-    
+    /* Ajuste para ocupar 100% da largura do container */
+    width: 100%; 
+    height: 100%;
+    /* object-fit: cover; -> Se quiser que preencha TUDO mesmo (pode cortar bordas) */
+    /* object-fit: contain; -> Mantém a peça inteira aparecendo (melhor para roupas) */
+    object-fit: contain; 
     display: block;
     transition: transform 0.3s ease;
 }
-
 .product-card:hover .card-main-img {
     transform: scale(1.05);
 }
