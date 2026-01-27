@@ -51,9 +51,9 @@
 
 </style>
   <footer class="rodape">
-    <h4 style="color:white">Koketsu Store</h4>
-    <p>© 2025 Koketsu. Desenvolvido com <a href="https://www.w3schools.com/w3css/" target="_blank">HTML & CSS</a></p>
-  </footer>
+ <h4 style="color:white">Koketsu Store</h4>
+ <p>© 2025 Koketsu. Desenvolvido com <a href="https://www.w3schools.com/w3css/" target="_blank">HTML & CSS</a></p>
+ </footer>
 
 </div>
 

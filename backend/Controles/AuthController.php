@@ -45,6 +45,7 @@ class AuthController{
         $this->session->set('usuario_id', $usuario['id_usuarios']);
         $this->session->set('usuario_nome', $usuario['nome_usuarios']);
         $this->session->set('usuario_tipo', $usuario['nivel_acesso']);
+        $this->session->set('foto_usuarios', $usuario['foto_usuarios'] ?? '/img/logoperf.jpg');
         Redirect::redirecionarPara('/admin/dashboard');
     } else {
         Redirect::redirecionarComMensagem('/login', 'error', 'E-mail ou senha incorretos.');
@@ -72,7 +73,7 @@ class AuthController{
 
     Redirect::redirecionarComMensagem('/register', 'erros', 'Erro ao cadastrar, problema no seu e-mail.');
   }
-  $novoUsuarioId = $this->usuarioModel->inserirUsuario($nome, $email, $senha, 'usuario', 'Ativo', 'null');
+  $novoUsuarioId = $this->usuarioModel->inserirUsuario($nome, $email, $senha, 'usuario', null);
 
   if ($novoUsuarioId) {
     $this->notificacaoEmail->boasVindas($email, $nome);

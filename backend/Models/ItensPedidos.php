@@ -1,7 +1,7 @@
 <?php
-
 namespace App\Koketsu\Models;
 use PDO;
+use PDOException;
 
 class ItensPedidos {
     private $id_itens_pedidos;
@@ -14,58 +14,108 @@ class ItensPedidos {
     private $excluido_em;
     private $db;
 
+    // Constante para mapear o nome da coluna do banco para o nome da variável na View
+    const NOME_PRODUTO_COL = 'nome_produtos'; 
+
     public function __construct($db) {
         $this->db = $db;
     }
     
-    // Buscar item de pedido por ID (chave primária corrigida)
+    // SQL base com JOIN para reutilização (puxa o nome do produto)
+    private function getBaseSql() {
+        return "SELECT 
+                    i.*, 
+                    p." . self::NOME_PRODUTO_COL . " AS nome_produto 
+                FROM tbl_itens_pedidos i
+                LEFT JOIN tbl_produtos p ON i.id_produto = p.id_produto";
+    }
+
+    /**
+     * Busca um item de pedido por ID com o nome do produto.
+     */
     function buscarItemPedidoPorId($id) {
-        $sql = "SELECT * FROM tbl_itens_pedidos
-        WHERE id_itens_pedidos = :id_itens_pedidos AND excluido_em IS NULL"; 
+        $sql = $this->getBaseSql() . " WHERE i.id_itens_pedidos = :id_itens_pedidos AND i.excluido_em IS NULL"; 
         $stmt = $this->db->prepare($sql);
-        // Ajuste no bindParam: removido o PDO::PARAM_INT para maior compatibilidade com IDs vindos da URL
         $stmt->bindParam(':id_itens_pedidos', $id); 
         $stmt->execute();
-
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // Buscar todos os itens de pedidos
+    /**
+     * Busca todos os itens de pedidos (com JOIN para listagem).
+     */
     function buscarItensPedidos() {
-        $sql = "SELECT * FROM tbl_itens_pedidos WHERE excluido_em IS NULL";
+        $sql = $this->getBaseSql() . " WHERE i.excluido_em IS NULL ORDER BY i.id_itens_pedidos DESC";
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     
-    // Buscar itens de um pedido específico
-    function buscarItensPorPedido($id_pedido) {
-        $sql = "SELECT * FROM tbl_itens_pedidos 
-        WHERE id_pedido = :id_pedido AND excluido_em IS NULL";
+   public function buscarItensPedidosAtivos() {
+    $sql = "SELECT * FROM tbl_itens_pedidos WHERE excluido_em IS NULL";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function buscarItensPorPedido($id_pedido)
+{
+    
+    $sql = "SELECT
+        tbl_itens_pedidos.*,
+        tbl_produtos.nome_produtos                
+    FROM tbl_itens_pedidos
+    JOIN tbl_produtos ON tbl_itens_pedidos.id_produto = tbl_produtos.id_produto
+    WHERE tbl_itens_pedidos.id_pedido = :id_pedido";
+    
+    // O restante do código de execução (PDO)
+    $stmt = $this->db->prepare($sql);
+    $stmt->bindParam(':id_pedido', $id_pedido, PDO::PARAM_INT);
+    $stmt->execute();
+    
+    return $stmt->fetchAll(PDO::FETCH_ASSOC); 
+}
+    public function buscarTop5ProdutosVendidos()
+    {
+        $sql = "
+            SELECT
+                p.nome_produtos AS nome_produto, 
+                SUM(ip.quantidade) AS total_vendido
+            FROM tbl_itens_pedidos ip
+            JOIN tbl_produtos p ON ip.id_produto = p.id_produto
+            GROUP BY p.nome_produtos
+            ORDER BY total_vendido DESC
+            LIMIT 5
+        ";
         $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':id_pedido', $id_pedido);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
-
-    // Inserir item de pedido
-    function inserirItemPedido($id_pedido, $id_produto, $quantidade, $preco_unitario) {
+   
+function inserirItemPedido($id_pedido, $id_produto, $quantidade, $preco_unitario) {
         $sql = "INSERT INTO tbl_itens_pedidos 
-        (id_pedido, id_produto, quantidade, preco_unitario, criado_em) 
-        VALUES (:id_pedido, :id_produto, :quantidade, :preco_unitario, NOW())";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':id_pedido', $id_pedido);
-        $stmt->bindParam(':id_produto', $id_produto);
-        $stmt->bindParam(':quantidade', $quantidade);
-        $stmt->bindParam(':preco_unitario', $preco_unitario);
-        if($stmt->execute()) {
-            return $this->db->lastInsertId();
-        } else {
+                (id_pedido, id_produto, quantidade, preco_unitario, criado_em)
+                VALUES (:id_pedido, :id_produto, :quantidade, :preco_unitario, NOW())";
+                
+        try {
+            $stmt = $this->db->prepare($sql);
+
+            $stmt->bindParam(':id_pedido', $id_pedido);
+            $stmt->bindParam(':id_produto', $id_produto);
+            $stmt->bindParam(':quantidade', $quantidade);
+            $stmt->bindParam(':preco_unitario', $preco_unitario);
+
+            if($stmt->execute()) {
+                return $this->db->lastInsertId();
+            } else {
+                return false;
+            }
+        } catch (\PDOException $e) { 
             return false;
         }
     }
 
-    // Atualizar item de pedido
+    
     function atualizarItemPedido($id_itens_pedidos, $quantidade, $preco_unitario) {
         $dataatual = date('Y-m-d H:i:s');
         $sql = "UPDATE tbl_itens_pedidos SET 
@@ -78,20 +128,22 @@ class ItensPedidos {
         $stmt->bindParam(':preco_unitario', $preco_unitario);
         $stmt->bindParam(':atualizado_em', $dataatual);
         $stmt->bindParam(':id', $id_itens_pedidos);
-        if($stmt->execute()) {
-            return true;
-        } else {
-            return false;
-        }
+        return $stmt->execute();
     }
     
-    // Paginação
-    public function paginacao(int $pagina = 1, int $por_pagina = 10): array{
+    /**
+     * Paginação
+     */
+    public function paginacao(int $pagina = 1, int $por_pagina = 30): array{
         $totalQuery = "SELECT COUNT(*) FROM `tbl_itens_pedidos` WHERE excluido_em IS NULL";
         $totalStmt = $this->db->query($totalQuery);
         $total_de_registros = $totalStmt->fetchColumn();
         $offset = ($pagina - 1) * $por_pagina;
-        $dataQuery = "SELECT * FROM `tbl_itens_pedidos` WHERE excluido_em IS NULL LIMIT :limit OFFSET :offset";
+        
+        // Paginacao com o JOIN
+        $dataQuery = $this->getBaseSql() . " WHERE i.excluido_em IS NULL 
+                      ORDER BY i.id_itens_pedidos DESC LIMIT :limit OFFSET :offset";
+        
         $dataStmt = $this->db->prepare($dataQuery);
         $dataStmt->bindValue(':limit', $por_pagina, PDO::PARAM_INT);
         $dataStmt->bindValue(':offset', $offset, PDO::PARAM_INT);
@@ -109,8 +161,29 @@ class ItensPedidos {
             'para' => $offset + count($dados)
         ];
     }
+     public function paginacaoAPI(int $pagina = 1, int $por_pagina = 50): array{
+        $totalQuery = "SELECT COUNT(*) FROM `tbl_itens_pedidos`";
+        $totalStmt = $this->db->query($totalQuery);
+        $total_de_registros = $totalStmt->fetchColumn();
+        $offset = ($pagina - 1) * $por_pagina;
+        $dataQuery = "SELECT * FROM `tbl_itens_pedidos` LIMIT :limit OFFSET :offset";
+        $dataStmt = $this->db->prepare($dataQuery);
+        $dataStmt->bindValue(':limit', $por_pagina, PDO::PARAM_INT);
+        $dataStmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+        $dataStmt->execute();
+        $dados = $dataStmt->fetchAll(PDO::FETCH_ASSOC);
+        $lastPage = ceil($total_de_registros / $por_pagina);
+ 
+        return [
+            'data' => $dados,
+        
+        ];
+    }
 
-    // Contar total de itens de pedidos (ativa ou inativa)
+   
+    /**
+     * Contar total de itens de pedidos
+     */
     function totalDeItensPedidos() {
         $sql = "SELECT COUNT(*) AS total FROM tbl_itens_pedidos WHERE excluido_em IS NULL";
         $stmt = $this->db->prepare($sql);
@@ -118,7 +191,9 @@ class ItensPedidos {
         return $stmt->fetch(PDO::FETCH_COLUMN);
     }
 
-    // Excluir (soft delete) item de pedido
+    /**
+     * Excluir (soft delete) item de pedido
+     */
     function excluirItemPedido($id_itens_pedidos) {
         $dataatual = date('Y-m-d H:i:s');
         $sql = "UPDATE tbl_itens_pedidos SET excluido_em = :excluido_em 
@@ -128,5 +203,4 @@ class ItensPedidos {
         $stmt->bindParam(':id', $id_itens_pedidos);
         return $stmt->execute();
     }
-    }
-
+}

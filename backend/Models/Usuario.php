@@ -8,6 +8,7 @@ class Usuario {
   private $email_usuarios;
   private $senha_usuarios;
   private $nivel_acesso;
+  private $foto_usuarios;
   private $criado_em;
   private $atualizado_em;
   private $excluido_em;
@@ -122,17 +123,21 @@ function buscarUsuariosPorEmailInativos($email){
 }
 
   // Inserir novo usuário
-  function inserirUsuario(string $nome, string $email, string $senha, string $nivel){
+  function inserirUsuario(string $nome, string $email, string $senha, string $nivel, $imagem = null){
     $senha = password_hash($senha, PASSWORD_DEFAULT);
     $sql = "INSERT INTO tbl_usuarios 
-(nome_usuarios, email_usuarios, senha_usuarios, nivel_acesso, excluido_em, criado_em)
-VALUES (:nome, :email, :senha, :nivel, 'ativo', NOW())";
+(nome_usuarios, email_usuarios, senha_usuarios, nivel_acesso, foto_usuarios, criado_em)
+VALUES (:nome, :email, :senha, :nivel, :imagem, NOW())";
 
     $stmt = $this->db->prepare($sql);
     $stmt->bindParam(':nome', $nome);
     $stmt->bindParam(':email', $email);
     $stmt->bindParam(':senha', $senha);
     $stmt->bindParam(':nivel', $nivel);
+    
+    // Se houver imagem, usar; senão usar padrão
+    $fotoPath = $imagem ?? '/img/logoperf.jpg';
+    $stmt->bindParam(':imagem', $fotoPath);
 
     if($stmt->execute()){
         return $this->db->lastInsertId();
@@ -149,7 +154,7 @@ VALUES (:nome, :email, :senha, :nivel, 'ativo', NOW())";
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-  function atualizarUsuario($id, $nome, $email, $senha, $nivel){
+  function atualizarUsuario($id, $nome, $email, $senha, $nivel, $imagem = null){
     $senha = password_hash($senha, PASSWORD_DEFAULT);
     $dataatual = date('Y-m-d H:i:s');
     $sql = "UPDATE tbl_usuarios SET 
@@ -157,8 +162,14 @@ VALUES (:nome, :email, :senha, :nivel, 'ativo', NOW())";
               email_usuarios = :email,
               senha_usuarios = :senha,
               nivel_acesso = :nivel,
-              atualizado_em = :atual
-            WHERE id_usuarios = :id";
+              atualizado_em = :atual";
+    
+    if ($imagem) {
+        $sql .= ", foto_usuarios = :imagem";
+    }
+    
+    $sql .= " WHERE id_usuarios = :id";
+           
     $stmt = $this->db->prepare($sql);
     $stmt->bindParam(':id', $id);
     $stmt->bindParam(':nome', $nome);
@@ -167,12 +178,12 @@ VALUES (:nome, :email, :senha, :nivel, 'ativo', NOW())";
     $stmt->bindParam(':nivel', $nivel);
     $stmt->bindParam(':atual', $dataatual);
 
-    if($stmt->execute()) {
-      return true;
-    } else {
-      return false;
+    if ($imagem) {
+        $stmt->bindParam(':imagem', $imagem);
     }
-  }
+    
+    return $stmt->execute();
+}
 
   // Excluir usuário (soft delete)
   function deletarUsuario(int $id){

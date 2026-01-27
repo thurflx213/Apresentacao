@@ -20,7 +20,7 @@
       </div>
     </div>
     <div class="w3-quarter">
-      <div class="w3-container w3-blue w3-padding-16">
+      <div class="w3-container w3-pale-yellow w3-text-black w3-padding-16">
         <div class="w3-left"><i class="fa fa-exclamation-triangle w3-xxxlarge"></i></div>
         <div class="w3-right">
           <h3><?php echo $total_inativos; ?></h3>
@@ -30,7 +30,7 @@
       </div>
     </div>
     <div class="w3-quarter">
-      <div class="w3-container w3-teal w3-text-white w3-padding-16">
+      <div class="w3-container w3-sand w3-text-black w3-padding-16">
         <div class="w3-left"><i class="fa fa-users w3-xxxlarge"></i></div>
         <div class="w3-right">
           <h3><?php echo $total_usuarios; ?></h3>
@@ -42,6 +42,72 @@
   </div>
 
 <style>
+  /* -------------------------------------- */
+/* AJUSTES GERAIS DE LAYOUT (Reutilizado das páginas anteriores) */
+/* -------------------------------------- */
+.page-wrapper {
+    padding-left: 10px; 
+    padding-right: 20px;
+    padding-top: 20px;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex; 
+    flex-direction: column;
+}
+
+.page-title {
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #ffffff;
+    /* Remover a largura fixa (width: 420px;) e as margens automáticas para o título em páginas de lista */
+    width: auto; 
+    margin-left: 0;
+    margin-right: 0;
+    text-align: left;
+}
+
+/* -------------------------------------- */
+/* ESTILOS ESPECÍFICOS PARA A PÁGINA DE LISTAGEM */
+/* -------------------------------------- */
+
+.header-breadcrumb {
+    /* Estilo para a linha "Painel de Controle - Koketsu" */
+    color: #bbb; /* Cor de texto mais clara */
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #333; /* Linha sutil para separar */
+}
+
+.header-breadcrumb h5 {
+    font-size: 14px;
+    font-weight: 400;
+    margin: 0;
+}
+
+.btn-main-action {
+    display: inline-flex;
+    align-self: flex-start;
+    background: #dfd155ff; 
+    padding: 10px 15px;
+    color: #000000ff;
+    border: none;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+    text-decoration: none; 
+    margin-bottom: 20px; 
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-main-action:hover {
+    background: #e49e1cff; /* Cor de hover */
+    box-shadow: 0 0 8px rgba(241, 220, 25, 0.5);
+}
+
   #usuarios tbody td {
     min-height: 150px; 
     padding: 20px 10px !important; 
@@ -72,7 +138,7 @@
     .w3-striped > tbody > tr.w3-pale-red:nth-child(even),
     .w3-striped > tbody > tr.w3-pale-red:nth-child(odd) 
     {
-        background-color: #ffdddd !important; 
+        background-color: #f0a3a3ff !important; 
         color: #000 !important;
     }
     .w3-striped > tbody > tr.w3-pale-red {
@@ -80,17 +146,22 @@
         color: white !important;
     }
 </style>
-<div class="w3-container">
-    <h3>Gerenciar Usuários</h3>
+<div class="page-wrapper list-page">
 
-    <header class="w3-container" style="padding-top:10px">
+    <h3 class="page-title"><i class="fa fa-users"></i> Gerenciar Usuários</h3>
+
+    <header class="header-breadcrumb">
         <h5><b><i class="fa fa-dashboard"></i> Painel de Controle - Koketsu</b></h5>
     </header>
 
-    <a href="/backend/usuario/criar" class="w3-button w3-yellow w3-margin-bottom w3-round-medium">Adicionar Novo Usuário</a>
+    <a href="/backend/usuario/criar" class="btn-main-action">
+        <i class="fa fa-user-plus"></i> Adicionar Novo Usuário
+    </a>
+    
+    </div>
 
     <main>
-        <table id="usuarios" class="w3-table w3-striped  ">
+        <table id="usuarios" class="w3-table w3-striped">
             <thead>
                 <tr class="w3-light-grey"> 
                     <th>Id</th>
@@ -134,6 +205,7 @@
                         <?php endif; ?>
                     </td>
                 </tr>
+                 
                 <?php endforeach; ?>
             </tbody>
         </table>

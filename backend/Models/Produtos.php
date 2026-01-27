@@ -45,17 +45,36 @@ public function buscarPorID(int $id){
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-public function paginacao(int $pagina = 1, int $porPagina = 50){
+public function paginacao(int $pagina = 1, int $porPagina = 50, ?string $nomeBusca = null){
         $offset = ($pagina - 1) * $porPagina;
-        $sql = "SELECT * FROM tbl_produtos
-                LIMIT :offset, :porPagina";
-        $stmt = $this->db->prepare($sql);
-        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
-        $stmt->bindParam(':porPagina', $porPagina, PDO::PARAM_INT);
+        
+        if ($nomeBusca) {
+            $sql = "SELECT * FROM tbl_produtos
+                    WHERE nome_produtos LIKE :nome
+                    LIMIT :offset, :porPagina";
+            $stmt = $this->db->prepare($sql);
+            $nomeBuscaFormatado = '%' . $nomeBusca . '%';
+            $stmt->bindParam(':nome', $nomeBuscaFormatado);
+            $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+            $stmt->bindParam(':porPagina', $porPagina, PDO::PARAM_INT);
+            
+            $totalSql = "SELECT COUNT(*) FROM tbl_produtos WHERE nome_produtos LIKE :nome";
+            $totalStmt = $this->db->prepare($totalSql);
+            $totalStmt->bindParam(':nome', $nomeBuscaFormatado);
+            $totalStmt->execute();
+        } else {
+            $sql = "SELECT * FROM tbl_produtos
+                    LIMIT :offset, :porPagina";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+            $stmt->bindParam(':porPagina', $porPagina, PDO::PARAM_INT);
+            
+            $totalStmt = $this->db->query("SELECT COUNT(*) FROM tbl_produtos");
+        }
+        
         $stmt->execute();
         $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        $totalStmt = $this->db->query("SELECT COUNT(*) FROM tbl_produtos");
         $total = $totalStmt->fetchColumn();
         $totalPaginas = ceil($total / $porPagina);
 
@@ -71,7 +90,7 @@ public function paginacao(int $pagina = 1, int $porPagina = 50){
     $sql = "SELECT COUNT(*) AS total FROM tbl_produtos";
     $stmt = $this->db->prepare($sql);
     $stmt->execute();
-    return $stmt->fetch(PDO::FETCH_COLUMN);
+    return $stmt->fetchColumn();
 }
   // Inserir novo produto
   function inserirProduto(string $nome, string $descricao, string $imagem) {

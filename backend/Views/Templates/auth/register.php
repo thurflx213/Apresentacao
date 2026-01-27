@@ -1,67 +1,152 @@
-<div class="w3-container w3-padding-32 w3-center" style="background-color: black; color: white;">
-    <h2 style="color: var(--gold-base);">Criar Nova Conta</h2> 
-    
-    <form action="/backend/register" method="POST" class="w3-container w3-card-4 w3-margin" style="background-color: #1a1a1a; color: white;">
-    
-    
-        
-        <div class="w3-row w3-section">
-            <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-user" style="color: var(--gold-base);"></i></div> 
-            <div class="w3-rest">
-                <input class="w3-input w3-border" style="background-color: #333; color: white; border-color: #555;" name="nome_usuarios" type="text" placeholder="Nome Completo" required>
-            </div>
-        </div>
-        
-        <div class="w3-row w3-section">
-            <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-envelope-o" style="color: var(--gold-base);"></i></div> 
-            <div class="w3-rest">
-                <input class="w3-input w3-border" style="background-color: #333; color: white; border-color: #555;" name="email_usuarios" type="email" placeholder="Email" required>
-            </div>
-        </div>
-        
-        <div class="w3-row w3-section">
-            <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-lock" style="color: var(--gold-base);"></i></div> 
-            <div class="w3-rest">
-                <input class="w3-input w3-border" style="background-color: #333; color: white; border-color: #555;" name="senha_usuarios" type="password" placeholder="Senha" required>
-            </div>
-        </div>
-        
-        <div class="w3-row w3-section">
-            <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-lock" style="color: var(--gold-base);"></i></div> 
-            <div class="w3-rest">
-                <input class="w3-input w3-border" style="background-color: #333; color: white; border-color: #555;" name="senha_confirm" type="password" placeholder="Confirmar Senha" required>
-            </div>
-        </div>
-        
-        <button class="w3-button w3-block w3-section w3-ripple w3-padding w3-text-dark-gold" style="background-color: var(--gold-light);">Registrar</button>
-    </form>
-    
-    <div class="w3-container w3-center w3-text-white">
-        <p>Já tem uma conta? <a href="/backend/login" style="color: var(--gold-base);">Faça o login aqui</a>.</p>
-    </div>
+<style>
+    body {
+        background: #000;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    .navbar-fixa {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        background-color: #000;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        border-bottom: 1px solid #1a1a1a;
+    }
+
+    .registro-card {
+        max-width: 700px;
+        margin: 130px auto;
+        padding: 170px;
+        background: #101010;
+        border-radius: 12px;
+        box-shadow: 0 0 25px rgba(255, 255, 0, 0.15);
+        text-align: center;
+    }
+
+    .registro-card h2 {
+        color: #C8AA62;
+        margin-bottom: 35px;
+        font-weight: bold;
+        font-size: 26px;
+        letter-spacing: 1px;
+    }
+
+    .input-group {
+        position: relative;
+        margin-bottom: 15px; /* Espaço entre os campos */
+    }
+
+    /* Estilo dos ícones dentro do input */
+    .input-group i {
+        position: absolute;
+        left: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #C8AA62;
+        font-size: 18px;
+        z-index: 2;
+    }
+
+    .registro-card input {
+        width: 100%;
+        height: 60px !important;
+        font-size: 16px !important;
+        padding: 0 20px 0 55px !important; /* Padding esquerdo abre espaço para o ícone */
+        background-color: #1a1a1a !important;
+        border: 1px solid #333 !important;
+        color: #fff !important;
+        border-radius: 8px !important;
+        box-sizing: border-box;
+        transition: 0.3s;
+    }
+
+    /* Efeito de foco igual ao login */
+    .registro-card input:focus {
+        border-color: #C8AA62 !important;
+        outline: none;
+        box-shadow: 0 0 8px rgba(200, 170, 98, 0.2);
+    }
+
+    .btn-registrar-koketsu {
+        width: 100%;
+        height: 60px;
+        font-size: 18px;
+        font-weight: bold;
+        background-color: #FFD700 !important;
+        color: #000 !important;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.3s;
+        margin-top: 20px;
+        text-transform: uppercase;
+    }
+
+    .btn-registrar-koketsu:hover {
+        background-color: #e6c200 !important;
+        transform: translateY(-2px);
+    }
+
+    .registro-card p {
+        color: #888;
+        font-size: 14px;
+        margin-top: 25px;
+    }
+
+    .registro-card a {
+        color: #C8AA62;
+        text-decoration: none;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    .registro-card a:hover {
+        color: #FFD700;
+    }
+</style>
+
+<div class="navbar-fixa">
+    <a href="../../index.html">
+        <img src="/img/logo.png" alt="Koketsu Logo" height="50px">
+    </a>
 </div>
 
-<style>
-/* 1. Cor Dourada Principal para texto, ícones e bordas (Um tom mais quente) */
-:root {
-    --gold-base: #C8AA62;
-    --gold-light: #FFD700;
-}
+<div class="registro-card">
+    <h2>Criar Nova Conta</h2>
 
-/* 2. Aplica o dourado ao focar (Focus State) */
-.w3-input:focus {
-    border-color: var(--gold-light) !important; /* Dourado mais claro para o foco */
-    box-shadow: 0 0 5px var(--gold-light);
-}
+    <form action="/backend/register" method="POST">
+        <div class="input-group">
+            <i class="fa fa-user"></i>
+            <input type="text" name="nome_usuarios" placeholder="Nome Completo" required>
+        </div>
 
-/* 3. Placeholder em dourado claro para visibilidade */
-input::placeholder {
-  color: #E6C98F; /* Dourado claro */
-}
+        <div class="input-group">
+            <i class="fa fa-envelope"></i>
+            <input type="email" name="email_usuarios" placeholder="Email" required>
+        </div>
 
-/* 4. Dourado escuro para o texto no botão amarelo/dourado */
-.w3-text-dark-gold {
-    color: #4B3728; /* Marrom escuro/preto para contraste máximo */
-}
+        <div class="input-group">
+            <i class="fa fa-lock"></i>
+            <input type="password" name="senha_usuarios" placeholder="Senha" required>
+        </div>
 
-</style>
+        <div class="input-group">
+            <i class="fa fa-lock"></i>
+            <input type="password" name="senha_confirm" placeholder="Confirmar Senha" required>
+        </div>
+
+        <button type="submit" class="btn-registrar-koketsu">
+            Registrar
+        </button>
+    </form>
+
+    <p>Já tem uma conta? <a href="/backend/login">Faça o login aqui</a></p>
+</div>

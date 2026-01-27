@@ -28,11 +28,9 @@ class APIUsuarioController{
         ]);
         exit;
         }
-        // condicao ternaria é igual if else
         $registros_por_pagina = $pagina===0 ? 200 : 5;
         $pagina = $pagina===0 ? 1 : (int)$pagina;
        $dados = $this->usuarioModel->paginacaoAPI($pagina,$registros_por_pagina);
-       // & NO FOREAch anexa a mudança nos dados reais do array
        foreach ($dados['data'] as $usuario){
         unset($usuario['senha_usuarios']);
        }

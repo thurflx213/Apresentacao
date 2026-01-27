@@ -25,21 +25,44 @@ public function index(){
     $this->viewListarProduto();
 }  
 
- public function viewlistarProduto($pagina = 1) {
+ public function viewListarProduto($pagina = 1) {
     $produto = $this->produtos->categoriasProdu();
     $total = $this->produtos->categoriasProdu();
-        if (empty($pagina) || $pagina <= 0) $pagina = 1;
-        
-        $dados = $this->produtos->paginacao($pagina, 50);
-        
-        View::render("produtos/index", [
-            "produtos" => $dados['data'],
-            "produto" => $produto,
-            "total" => $total,
-            'paginacao' => $dados
-        ]);
+    
+    if (empty($pagina) || $pagina <= 0) $pagina = 1;
+    
+    // Buscar por nome se foi feita uma pesquisa
+    $nomeBusca = null;
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['nome_produtos'])) {
+        $nomeBusca = trim($_POST['nome_produtos']);
+    }
+    
+    $dados = $this->produtos->paginacao($pagina, 50, $nomeBusca);
+    
+    View::render("produtos/index", [
+        "produtos" => $dados['data'],
+        "produto" => $produto,
+        "total" => $total,
+        'paginacao' => $dados,
+        'busca' => $nomeBusca
+    ]);
 }
 
+public function viewProdutoUnico(int $id_produto) {
+        
+        $produto = $this->produtos->buscarProdutoPorId($id_produto);
+        
+        if ($produto) {
+           
+            \App\Koketsu\Core\View::render('produtos/detalhes', [
+                'produto' => $produto
+            ]);
+        } else {
+          
+            \App\Koketsu\Core\Redirect::redirecionarComMensagem("/produto/listar", "error", "Produto não encontrado.");
+        }
+    }
+    
 public function viewCriarProduto(){
  view::render("produtos/create");
 }

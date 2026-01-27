@@ -67,16 +67,22 @@ class UsuarioController extends AdminController{
     }
     public function salvarUsuario(){
         $erros = UsuarioValidador::ValidarEntradas($_POST);
-        if(!empty($erros)){
+        if (!empty($erros)) {
             Redirect::redirecionarComMensagem("/usuario/criar", "error", implode("<br>", $erros));
-            
+            return;
         }
-       if($this->usuario->inserirUsuario(
+        
+        $imagem = null;
+        if (isset($_FILES['foto_usuarios']) && $_FILES['foto_usuarios']['error'] == 0) {
+            $imagem = $this->gerenciarImagem->salvarArquivo($_FILES['foto_usuarios'], 'usuarios');
+        }
+        
+        if($this->usuario->inserirUsuario(
             $_POST["nome_usuarios"],
             $_POST["email_usuarios"],
             $_POST["senha_usuarios"],
             $_POST["nivel_acesso"],
-            "Ativo",
+            $imagem
         )){
             Redirect::redirecionarComMensagem("/usuario/listar", "success", "Usuário criado com sucesso!");
         }else{
@@ -99,9 +105,21 @@ class UsuarioController extends AdminController{
         $senha = $_POST['senha_usuarios'];
         $tipo = $_POST['nivel_acesso'];
         $imagem = null;
+        
+    if (isset($_FILES['foto_usuarios']) && $_FILES['foto_usuarios']['error'] == 0) {
+        $imagem = $this->gerenciarImagem->salvarArquivo($_FILES['foto_usuarios'], 'usuarios');
+    }
 
        
-        if ($this->usuario->atualizarUsuario($id, $nome, $email, $senha, $tipo)) {
+        if ($this->usuario->atualizarUsuario($id, $nome, $email, $senha, $tipo, $imagem)) {
+            // Se for o usuário logado, atualizar sessão
+            if ($id == $_SESSION['usuario_id']) {
+                $_SESSION['usuario_nome'] = $nome;
+                $_SESSION['usuario_tipo'] = $tipo;
+                if ($imagem) {
+                    $_SESSION['foto_usuarios'] = $imagem;
+                }
+            }
             Redirect::redirecionarComMensagem("/usuario/listar", "success", "Usuário atualizado com sucesso!");
         } else {
             Redirect::redirecionarComMensagem("/usuario/editar" . $id, "error", "Erro ao atualizar usuário.");
