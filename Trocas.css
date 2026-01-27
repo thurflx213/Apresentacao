@@ -16,52 +16,7 @@
     background-color: black;
     z-index: 999;
   }
-  .sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 200px;
-    height: 100%;
-    background-color: #000; /* preto igual ao seu cabeçalho */
-    padding-top: 140px;
-    z-index: 500;
-  }
-  
-  .sidebar ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .sidebar ul li {
-    padding: 15px 20px;
-    border-bottom: 1px solid #222;
-  }
-  
-  .sidebar ul li a {
-    color: #fff;
-    text-decoration: none;
-    font-weight: bold;
-    display: block;
-    transition: background 0.3s ease;
-  }
-  
-  .sidebar ul li a:hover {
-    background-color: #f1cd2f;
-    color: #000;
-    border-radius: 4px;
-  }
-    
-  footer {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 40px;
-    padding: 40px 20px;
-    background-color: #000;
-    color: #fff;
-  }
-  /* Container principal */
+
 .conteudo-principal {
   max-width: 850px;
   margin: 60px auto;
@@ -70,7 +25,7 @@
   background-color: #f7f8fa;
 }
 
-/* Card de conteúdo */
+
 .card-conteudo {
   background: #ffffff;
   padding: 50px 40px;
