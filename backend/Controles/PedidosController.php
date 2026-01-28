@@ -50,7 +50,13 @@ public function __construct() {
     
     // Método para listar todos os pedidos com paginação
     public function viewListarPedido() {
-        $dados = $this->pedidos->paginacao();
+        // Capturar busca se houver
+        $busca = null;
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['id_pedido'])) {
+            $busca = trim($_POST['id_pedido']);
+        }
+        
+        $dados = $this->pedidos->paginacao(1, 100, $busca);
         $total = $this->pedidos->totalDePedidos(); 
 
         $total_pedidos = (int) $total;
@@ -58,9 +64,10 @@ public function __construct() {
         View::render("pedidos/index", [
             "pedidos" => $dados['data'] ?? [],
             "total_pedidos" => $total_pedidos ?? 0,
-            "total_inativos" => 0, // Se quiser calcular inativos, precisa de uma nova função
-            "total_ativos" => $total_pedidos ?? 0, // Se 'total' já é total de ativos
-            "paginacao" => $dados
+            "total_inativos" => 0,
+            "total_ativos" => $total_pedidos ?? 0,
+            "paginacao" => $dados,
+            "busca" => $busca
         ]);
     }
 

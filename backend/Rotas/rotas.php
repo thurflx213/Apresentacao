@@ -9,6 +9,7 @@ class Rotas
         return [ 
             "GET" => [
               // Usuarios
+                 "cliente/dashboard" => "Cliente\DashboardController@index",
                  "/usuarios" => "UsuarioController@index",
                  "/usuario/criar" => "UsuarioController@viewCriarUsuarios",
                  "/usuario/listar" => "UsuarioController@viewListarUsuarios",
@@ -103,6 +104,7 @@ class Rotas
 
               // Login
                  '/register' => 'AuthController@register',
+                 '/admin' => 'AuthController@loginadmin',
                  '/login' => 'AuthController@login',
                  '/logout' => 'AuthController@logout',
                  '/admin/dashboard' => 'Admin\DashboardController@index',
@@ -142,7 +144,7 @@ class Rotas
                 "/pedido/salvar" => "PedidosController@salvarPedido",
                 "/pedido/atualizar/{id}" => "PedidosController@atualizarPedidos",
                 "/pedido/deletar/{id}" => "PedidosController@viewExcluirPedido",
-                "/pedido/listar" => "PedidosController@pesquisarPedido",
+                "/pedido/listar" => "PedidosController@viewListarPedido",
                 //produtos
                 "/produtos/salvar" => "ProdutosController@salvarProduto",
                 "/produtos/atualizar" => "ProdutosController@atualizarProdutos",

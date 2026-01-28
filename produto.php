@@ -1,3 +1,14 @@
+<?php
+// Carrega produtos do banco de dados
+require_once __DIR__ . '/vendor/autoload.php';
+
+use App\Koketsu\Database\Database;
+use App\Koketsu\Models\Produtos;
+
+$db = Database::getInstance();
+$produtosModel = new Produtos($db);
+$produtos = $produtosModel->buscarProdutosAtivos(); // Busca todos os produtos ativos
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -239,7 +250,7 @@
         /* 4. Resumo do Carrinho (Otimizado) */
         /* =================================================================== */
         .carrinho-resumo {
-            max-width: 400px;
+            max-width: 650px;
             width: 90%; 
             margin: 0 auto;
             left: 50%; 
@@ -417,7 +428,7 @@
                             <?php if ($produto['is_novo'] ?? false): ?>
                                 <span class="produto-card__tag">Novo</span>
                             <?php endif; ?>
-                            <img src="/backend/upload/<?= $imagem; ?>" alt="<?= $nome; ?>" class="produto-card__img">
+                            <img src="/backend/upload/<?= $imagem; ?>" alt="<?= $nome; ?>" class="produto-card__img" onerror="this.src='/img/placeholder.jpg'">
                         </div>
                         <div class="produto-card__content">
                             <div>

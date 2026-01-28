@@ -156,28 +156,69 @@ class Pedidos {
         }
     
     // Função de paginação
-    public function paginacao(int $pagina = 1, int $por_pagina = 100): array{
-
-    $totalQuery = "SELECT COUNT(*) FROM `tbl_pedidos` WHERE excluido_em IS NULL";
-    $totalStmt = $this->db->query($totalQuery);
-    $total_de_registros = $totalStmt->fetchColumn();
+    public function paginacao(int $pagina = 1, int $por_pagina = 100, ?string $busca = null): array{
 
     $offset = ($pagina - 1) * $por_pagina;
-    $dataQuery = "SELECT 
-        tbl_pedidos.*, 
-        tbl_perfil.endereco_perfil, 
-        tbl_usuarios.nome_usuarios AS nome_cliente 
-    FROM tbl_pedidos 
-    LEFT JOIN tbl_perfil ON tbl_pedidos.id_perfil = tbl_perfil.id_perfil
-    LEFT JOIN tbl_usuarios ON tbl_perfil.id_usuarios = tbl_usuarios.id_usuarios
-    WHERE tbl_pedidos.excluido_em IS NULL 
-    LIMIT :limit OFFSET :offset";
+    
+    if ($busca) {
+        $busca_formatada = '%' . $busca . '%';
+        $totalQuery = "SELECT COUNT(*) FROM `tbl_pedidos` 
+            LEFT JOIN tbl_perfil ON tbl_pedidos.id_perfil = tbl_perfil.id_perfil
+            LEFT JOIN tbl_usuarios ON tbl_perfil.id_usuarios = tbl_usuarios.id_usuarios
+            WHERE tbl_pedidos.excluido_em IS NULL 
+            AND (
+                CAST(tbl_pedidos.id_pedido AS CHAR) LIKE :busca
+                OR LOWER(tbl_usuarios.nome_usuarios) LIKE LOWER(:busca)
+                OR LOWER(tbl_perfil.endereco_perfil) LIKE LOWER(:busca)
+            )";
+        $totalStmt = $this->db->prepare($totalQuery);
+        $totalStmt->bindParam(':busca', $busca_formatada);
+        $totalStmt->execute();
+    } else {
+        $totalQuery = "SELECT COUNT(*) FROM `tbl_pedidos` WHERE excluido_em IS NULL";
+        $totalStmt = $this->db->query($totalQuery);
+    }
+    
+    $total_de_registros = $totalStmt->fetchColumn();
 
-    $dataStmt = $this->db->prepare($dataQuery);
-    $dataStmt->bindValue(':limit', $por_pagina, PDO::PARAM_INT);
-    $dataStmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+    if ($busca) {
+        $busca_formatada = '%' . $busca . '%';
+        $dataQuery = "SELECT 
+            tbl_pedidos.*, 
+            tbl_perfil.endereco_perfil, 
+            tbl_usuarios.nome_usuarios AS nome_cliente 
+        FROM tbl_pedidos 
+        LEFT JOIN tbl_perfil ON tbl_pedidos.id_perfil = tbl_perfil.id_perfil
+        LEFT JOIN tbl_usuarios ON tbl_perfil.id_usuarios = tbl_usuarios.id_usuarios
+        WHERE tbl_pedidos.excluido_em IS NULL 
+        AND (
+            CAST(tbl_pedidos.id_pedido AS CHAR) LIKE :busca
+            OR LOWER(tbl_usuarios.nome_usuarios) LIKE LOWER(:busca)
+            OR LOWER(tbl_perfil.endereco_perfil) LIKE LOWER(:busca)
+        )
+        LIMIT :limit OFFSET :offset";
+        
+        $dataStmt = $this->db->prepare($dataQuery);
+        $dataStmt->bindParam(':busca', $busca_formatada);
+        $dataStmt->bindValue(':limit', $por_pagina, PDO::PARAM_INT);
+        $dataStmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+    } else {
+        $dataQuery = "SELECT 
+            tbl_pedidos.*, 
+            tbl_perfil.endereco_perfil, 
+            tbl_usuarios.nome_usuarios AS nome_cliente 
+        FROM tbl_pedidos 
+        LEFT JOIN tbl_perfil ON tbl_pedidos.id_perfil = tbl_perfil.id_perfil
+        LEFT JOIN tbl_usuarios ON tbl_perfil.id_usuarios = tbl_usuarios.id_usuarios
+        WHERE tbl_pedidos.excluido_em IS NULL 
+        LIMIT :limit OFFSET :offset";
+        
+        $dataStmt = $this->db->prepare($dataQuery);
+        $dataStmt->bindValue(':limit', $por_pagina, PDO::PARAM_INT);
+        $dataStmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+    }
+    
     $dataStmt->execute();
-
     $dados = $dataStmt->fetchAll(PDO::FETCH_ASSOC);
 
     $lastPage = ceil($total_de_registros / $por_pagina);

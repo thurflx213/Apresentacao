@@ -226,6 +226,7 @@ input, select, textarea {
   <?php
     $session = new Session();
     if($session->has('usuario_id')):
+     
   ?>
 
 <div class="w3-bar w3-top w3-theme w3-large" style="z-index:4">
@@ -258,7 +259,7 @@ input, select, textarea {
          alt="Foto de perfil"
          onerror="this.src='/img/logoperf.jpg';">
 </div>
-  <h5 class="w3-margin-top">Bem-vindo, <strong>admin</strong></h5>
+  <h5 class="w3-margin-top">Bem-vindo, <strong><?= htmlspecialchars($Tipo); ?></strong></h5>
   <div class="w3-margin-top">
     <a href="#" title="Mensagens"><i class="fa fa-envelope w3-hover-text-yellow"></i></a>
     <a href="#" title="Perfil" style="margin: 0 10px;"><i class="fa fa-user w3-hover-text-yellow"></i></a>
@@ -270,9 +271,15 @@ input, select, textarea {
     <h5>Painel Koketsu</h5>
   </div>
   <div class="w3-bar-block">
+    <?php
+
+    ?>
     <a href="/backend/admin/dashboard" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/admin/dashboard', $current_uri); ?>">
         <i class="fa fa-home fa-fw"></i> Início
     </a>
+    <?php
+      if ($session->get('usuario_tipo') == 'admin'){
+    ?>
     <a href="/backend/usuario/listar" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/usuario/listar', $current_uri); ?>">
         <i class="fa fa-users fa-fw"></i> Listar
     </a>
@@ -288,6 +295,9 @@ input, select, textarea {
     <a href="/backend/usuario/listar" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/perfil/listar', $current_uri); ?>">
         <i class="fa fa-users fa-fw"></i> Clientes
     </a>
+    <?php
+      }
+    ?>
     <a href="#" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/perfil', $current_uri); ?>">
         <i class="fa fa-user-circle fa-fw"></i> Perfil
     </a>

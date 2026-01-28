@@ -26,7 +26,9 @@ class AuthController{
     public function login(): void{
         View::render('auth/login');
     }
-
+    public function loginadmin(): void{
+        View::render('admin/login');
+    }
    public function register(): void {
     View::render('auth/register');
 }
@@ -37,6 +39,21 @@ class AuthController{
 }
 
   public function authenticar(): void {
+    $email = $_POST['email_usuarios'] ?? null;
+    $senha = $_POST['senha_usuarios'] ?? null;
+    $usuario = $this->usuarioModel->checarCredenciais($email, $senha);
+    if ($usuario) {
+        session_regenerate_id(true);
+        $this->session->set('usuario_id', $usuario['id_usuarios']);
+        $this->session->set('usuario_nome', $usuario['nome_usuarios']);
+        $this->session->set('usuario_tipo', $usuario['nivel_acesso']);
+        $this->session->set('foto_usuarios', $usuario['foto_usuarios'] ?? '/img/logoperf.jpg');
+        Redirect::redirecionarPara('/cliente/dashboard');
+    } else {
+        Redirect::redirecionarComMensagem('/login', 'error', 'E-mail ou senha incorretos.');
+    }
+}
+public function authenticaradmin(): void {
     $email = $_POST['email_usuarios'] ?? null;
     $senha = $_POST['senha_usuarios'] ?? null;
     $usuario = $this->usuarioModel->checarCredenciais($email, $senha);
@@ -73,7 +90,7 @@ class AuthController{
 
     Redirect::redirecionarComMensagem('/register', 'erros', 'Erro ao cadastrar, problema no seu e-mail.');
   }
-  $novoUsuarioId = $this->usuarioModel->inserirUsuario($nome, $email, $senha, 'usuario', null);
+  $novoUsuarioId = $this->usuarioModel->inserirUsuario($nome, $email, $senha, 'cliente', null);
 
   if ($novoUsuarioId) {
     $this->notificacaoEmail->boasVindas($email, $nome);

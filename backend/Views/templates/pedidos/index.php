@@ -16,7 +16,7 @@
                         type="text" 
                         name="id_pedido" 
                         class="w3-input w3-border w3-round-large" 
-                        placeholder="Buscar por ID, Cliente ou Endereço..."
+                        placeholder="Buscar por ID, Nome do Cliente ou Endereço..."
                         value="<?= htmlspecialchars($_POST['id_pedido'] ?? '') ?>"
                         style="background-color: #222; color: #fff; border-color: #555;">
                 </div>
@@ -26,7 +26,7 @@
                     </button>
                 </div>
                 
-                <?php if (isset($_POST['id_pedido'])): ?>
+                <?php if (isset($_POST['id_pedido']) && !empty($_POST['id_pedido'])): ?>
                     <div class="w3-col l2 m3 s12 w3-padding-small">
                         <a href="/backend/pedido/listar/" class="w3-button w3-round-large w3-red w3-hover-pink w3-block">
                             <i class="fa fa-times-circle"></i> Limpar
