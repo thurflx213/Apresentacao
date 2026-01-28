@@ -1,14 +1,4 @@
-<?php
-// Carrega produtos do banco de dados
-require_once __DIR__ . '/vendor/autoload.php';
 
-use App\Koketsu\Database\Database;
-use App\Koketsu\Models\Produtos;
-
-$db = Database::getInstance();
-$produtosModel = new Produtos($db);
-$produtos = $produtosModel->buscarProdutosAtivos(); // Busca todos os produtos ativos
-?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -414,13 +404,17 @@ $produtos = $produtosModel->buscarProdutosAtivos(); // Busca todos os produtos a
                 </div>
                 <div id="produtos-lista" class="produtos-grid">
                     <?php
-                    if (isset($produtos) && is_array($produtos)):
+                    // Debug temporário
+                    error_log("DEBUG: \$produtos = " . json_encode($produtos));
+                    error_log("DEBUG: count(\$produtos) = " . count($produtos));
+                    
+                    if (isset($produtos) && is_array($produtos) && count($produtos) > 0):
                         foreach ($produtos as $produto): 
                             // Simulação de campos que você precisa ter no seu array $produtos
                             $id = htmlspecialchars($produto['id_produto'] ?? '0');
                             $nome = htmlspecialchars($produto['nome_produtos'] ?? 'Nome Indisponível');
                             $preco = htmlspecialchars($produto['preco_produtos'] ?? '0.00');
-                            $imagem = htmlspecialchars($produto['imagem_produtos'] ?? 'default.jpg');
+                            $imagem = htmlspecialchars($produto['imagem_produtos'] ?? 'default.png');
                             $categoria = htmlspecialchars($produto['id_categoria'] ?? 'Sem Categoria');
                     ?>
                     <div class="produto-card" data-category="<?= $categoria ?>">
@@ -428,7 +422,10 @@ $produtos = $produtosModel->buscarProdutosAtivos(); // Busca todos os produtos a
                             <?php if ($produto['is_novo'] ?? false): ?>
                                 <span class="produto-card__tag">Novo</span>
                             <?php endif; ?>
-                            <img src="/backend/upload/<?= $imagem; ?>" alt="<?= $nome; ?>" class="produto-card__img" onerror="this.src='/img/placeholder.jpg'">
+                            <img src="/backend/upload/produtos/<?= htmlspecialchars($imagem); ?>" 
+                                 alt="<?= $nome; ?>" 
+                                 class="produto-card__img"
+                                 onerror="this.src='/img/logoperf.jpg';">
                         </div>
                         <div class="produto-card__content">
                             <div>

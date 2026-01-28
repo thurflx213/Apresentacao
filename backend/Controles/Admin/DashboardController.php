@@ -4,7 +4,7 @@ namespace App\Koketsu\Controles\Admin;
 use App\Koketsu\Core\View;
 use App\Koketsu\Database\Database;
 use App\Koketsu\Models\Usuario;
-
+use App\Koketsu\Controles\Admin\AuthenticatedController;
 
 class DashboardController extends AuthenticatedController{
     public $usuario;

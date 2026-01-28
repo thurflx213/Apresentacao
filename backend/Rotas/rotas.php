@@ -9,7 +9,6 @@ class Rotas
         return [ 
             "GET" => [
               // Usuarios
-                 "cliente/dashboard" => "Cliente\DashboardController@index",
                  "/usuarios" => "UsuarioController@index",
                  "/usuario/criar" => "UsuarioController@viewCriarUsuarios",
                  "/usuario/listar" => "UsuarioController@viewListarUsuarios",
@@ -31,6 +30,9 @@ class Rotas
                  "/cor/editar/{id}"   => "CoresController@viewEditarCor",
                  "/cor/excluir/{id}"  => "CoresController@viewExcluirCor",
                  "/cor/{id}/relatorio/{data1}/{data2}" => "CoresController@relatorioCores",
+              // Clientes
+                 "cliente/dashboard" => "Cliente\DashboardController@index",
+                 "/backend/cliente/editar/{id}" => "Cliente\DashboardController@viewEditarCliente",
               // Perfil
                  "/perfis"        => "PerfilController@index",
                  "/perfil/criar"  => "PerfilController@viewCriarPerfil",
@@ -45,7 +47,6 @@ class Rotas
                  "/tamanho/editar/{id}"  => "TamanhoController@viewEditarTamanho",
                  "/tamanho/excluir/{id}" => "TamanhoController@viewExcluirTamanho",
               // Itens Pedidos   
-                 //Itens pedidos
                   "/itenspedidos" => "ItensPedidosController@index",
                   "/itenspedidos/criar" => "ItensPedidosController@viewCriarItemPedido",
                   "/itenspedidos/listar" => "ItensPedidosController@viewListarItemPedido",
@@ -112,6 +113,8 @@ class Rotas
 
         "POST" => [
                  "/api/pedidos" => 'PublicApiController@salvarPedido',
+                // Clientes
+                "/backend/cliente/atualizar/{id}" => "Cliente\DashboardController@atualizarCliente",
                 // Usuarios 
                 "/usuario/salvar" => "UsuarioController@salvarUsuario",
                 "/usuario/atualizar" => "UsuarioController@atualizarUsuario",
@@ -171,7 +174,7 @@ class Rotas
                 // Login
                 '/register' => 'AuthController@cadastrarUsuario',
                 '/login' => 'AuthController@authenticar',
-                
+                '/adminlogin' => 'AuthController@authenticaradmin',
             ]
         ];
     }

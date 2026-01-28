@@ -74,7 +74,7 @@
 <div class="login-card">
     <h1>Login-Admin</h1>
 
-    <form action="/backend/login" method="POST">
+    <form action="/backend/adminlogin" method="POST">
 
         <div class="w3-section">
             <input class="w3-input w3-border w3-round-large" 
