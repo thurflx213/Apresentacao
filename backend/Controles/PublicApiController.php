@@ -147,10 +147,35 @@ public function getProdutosParaVitrineFormatados() {
         $categorias_organizadas = $this->formatarProdutosParaCarrossel($produtos_db);
 
         echo json_encode(array_values($categorias_organizadas), JSON_UNESCAPED_UNICODE);
+        exit;
 
     } catch (\Exception $e) {
         http_response_code(500);
         echo json_encode(["error" => "Erro de Banco de Dados: " . $e->getMessage()]);
+        exit;
+    }
+}
+
+public function getProdutosVitrine($pagina = 0) {
+    header('Content-Type: application/json; charset=utf-8');
+    header('Access-Control-Allow-Origin: *');
+
+    try {
+        $db = $this->db ?? \App\Koketsu\Database\Database::getInstance();
+        $produtosModel = new \App\Koketsu\Models\Produtos($db);
+        
+        $produtos_db = $produtosModel->buscarProdutosAtivosComCategoria();
+        
+        $categorias_organizadas = $this->formatarProdutosParaCarrossel($produtos_db);
+
+        http_response_code(200);
+        echo json_encode(array_values($categorias_organizadas), JSON_UNESCAPED_UNICODE);
+        exit;
+
+    } catch (\Exception $e) {
+        http_response_code(500);
+        echo json_encode(["error" => "Erro de Banco de Dados: " . $e->getMessage()]);
+        exit;
     }
 }
 

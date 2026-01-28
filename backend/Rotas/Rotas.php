@@ -23,6 +23,7 @@ class Rotas
         '/admin/dashboard' => 'Admin\DashboardController@index',
         '/api/usuarios' => 'APIUsuarioController@getUsuarios',
         '/api/usuarios/{pagina}' => 'APIUsuarioController@getUsuarios',
+        '/api/vitrine' => 'PublicApiController@getProdutosParaVitrineFormatados',
 
         //Itens pedidos
         "/itenspedidos" => "ItensPedidosController@index",

@@ -5,7 +5,7 @@
 
 const ProductManager = (() => {
   const PRODUCTS_PER_SLIDE = 4;
-  const API_ENDPOINT = '/api/vitrine';
+  const API_ENDPOINT = 'api-vitrine.php';
 
   /**
    * Cria o HTML de um card de produto
@@ -15,6 +15,10 @@ const ProductManager = (() => {
     const parcelasFormatadas = ProductsData.formatPrice(
       product.parcelas || product.preco / 6
     );
+    
+    // Preço original (20% a mais para simular desconto)
+    const precoOriginal = (product.preco * 1.2).toFixed(2);
+    const precoOriginalFormatado = ProductsData.formatPrice(precoOriginal);
 
     let badges = '';
     if (product.desconto) {
@@ -39,8 +43,9 @@ const ProductManager = (() => {
           <div class="card-body">
             <h5 class="card-title">${product.nome}</h5>
             <div class="price-info">
+              <p class="original-price">R$ ${precoOriginalFormatado}</p>
               <p class="main-price">R$ ${precoFormatado}</p>
-              <p class="card-installments">ou 6x de R$ ${parcelasFormatadas}</p>
+              <p class="card-installments">ou <span class="installments-value">6x de R$ ${parcelasFormatadas}</span> sem juros</p>
             </div>
           </div>
         </a>
@@ -147,7 +152,7 @@ const ProductManager = (() => {
    */
   const fetchProducts = async () => {
     try {
-      const response = await fetch(API_ENDPOINT);
+      const response = await fetch(API_ENDPOINT + '?t=' + Date.now());
 
       if (!response.ok) {
         throw new Error(`Erro HTTP: ${response.status}`);

@@ -70,7 +70,7 @@ $rotas = [
         "/relatorios" => "RelatoriosController@exibirRelatorios",
         '/api/produtos' => 'PublicApiController@getProdutos',
         '/api/produtos/{pagina}' => 'PublicApiController@getProdutos',
-        '/api/vitrine'=> 'PublicApiController@getProdutosParaVitrineFormatados'
+        '/api/vitrine'=> 'PublicApiController@getProdutosVitrine'
         
 
         
@@ -100,7 +100,8 @@ $rotas = [
        "/produto/deletar/{id}" => "ProdutosController@viewExcluirProduto",
         '/api/produtos' => 'PublicApiController@getProdutos',
     // Post para cadastro
-       "/register" => "AuthControll er@cadastrarUsuario", 
+       "/register" => "AuthController@cadastrarUsuario",
+       "/login" => "AuthController@authenticar",
       //Contato
       '/contato/salvar' => 'ContatoController@salvarNovoContato',
   ]

@@ -22,7 +22,7 @@
   
       <div class="navbar-center">
         <a href="index.html" aria-label="Página inicial">
-          <img src="img/icons/logo.png" alt="Logo Koketsu" class="logo" />
+          <img src="img/logo2026.png" alt="Logo Koketsu Grife" class="logo" />
         </a>
       </div>
   
@@ -162,13 +162,13 @@
   <div>
     <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-inner">
-        <div class="carousel-item active" data-bs-interval="5000">
+        <div class="carousel-item active" data-bs-interval="6000">
           <img src="img/COMP1.png" class="d-block w-100" alt="...">
         </div>
-        <div class="carousel-item" data-bs-interval="5000">
+        <div class="carousel-item" data-bs-interval="6000">
           <img src="img/COMP2.png" class="d-block w-100" alt="...">
         </div>
-        <div class="carousel-item" data-bs-interval="5000">
+        <div class="carousel-item" data-bs-interval="6000">
           <img src="img/COMP3.png" class="d-block w-100" alt="...">
         </div>
       </div>
@@ -182,7 +182,63 @@
       </button>   
     </div>
   </div>
-  
+
+  <!-- Mini Banners/Cards com Imagens - Premium Section -->
+  <section class="mini-banners-section">
+    <div class="mini-banners-header">
+      <h2 class="mini-banners-title">EXPLORAR CATEGORIAS</h2>
+      <p class="mini-banners-subtitle">Descubra nossos produtos em destaque</p>
+    </div>
+    
+    <div class="container-fluid">
+      <div class="mini-banners-grid">
+        <a href="#" class="mini-banner-card">
+          <div class="mini-banner-image" style="background-image: url('img/comp-polo-branca-frente.webp')"></div>
+          <div class="mini-banner-overlay"></div>
+          <div class="mini-banner-badge">NOVO</div>
+          <div class="mini-banner-content">
+            <h3>CAMISETAS<br>OVERSIZED</h3>
+            <p class="mini-banner-desc">Conforto e estilo</p>
+            <span class="mini-banner-link">EXPLORAR →</span>
+          </div>
+        </a>
+        
+        <a href="#" class="mini-banner-card">
+          <div class="mini-banner-image" style="background-image: url('img/moletom.png')"></div>
+          <div class="mini-banner-overlay"></div>
+          <div class="mini-banner-badge">QUENTE</div>
+          <div class="mini-banner-content">
+            <h3>COLEÇÃO<br>MOLETOM</h3>
+            <p class="mini-banner-desc">Perfeito para o inverno</p>
+            <span class="mini-banner-link">EXPLORAR →</span>
+          </div>
+        </a>
+        
+        <a href="#" class="mini-banner-card">
+          <div class="mini-banner-image" style="background-image: url('img/calça 4.png')"></div>
+          <div class="mini-banner-overlay"></div>
+          <div class="mini-banner-badge">TREND</div>
+          <div class="mini-banner-content">
+            <h3>CALÇAS<br>PREMIUM</h3>
+            <p class="mini-banner-desc">Qualidade máxima</p>
+            <span class="mini-banner-link">EXPLORAR →</span>
+          </div>
+        </a>
+        
+        <a href="#" class="mini-banner-card">
+          <div class="mini-banner-image" style="background-image: url('img/polo .png')"></div>
+          <div class="mini-banner-overlay"></div>
+          <div class="mini-banner-badge">TOP</div>
+          <div class="mini-banner-content">
+            <h3>ACESSÓRIOS<br>EXCLUSIVOS</h3>
+            <p class="mini-banner-desc">Complemente seu look</p>
+            <span class="mini-banner-link">EXPLORAR →</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <main class="container py-5">
     <div id="vitrine"></div>
     </main>
@@ -282,7 +338,27 @@
   <script src="js/navbar.js"></script>
   <script src="js/accordion.js"></script>
   <script src="js/faq.js"></script>
+  <script src="js/cart.js"></script>
   <script src="js/products.js"></script>
+
+  <script>
+    // Resetar dados padrão - forçar usar apenas API
+    if (window.ProductsData) {
+      ProductsData.default = [];
+    }
+    
+    // Inicializar carousel com intervalo de 6 segundos
+    document.addEventListener('DOMContentLoaded', function() {
+      const carouselElement = document.getElementById('carouselExampleInterval');
+      if (carouselElement) {
+        const carousel = new bootstrap.Carousel(carouselElement, {
+          interval: 6000,
+          wrap: true,
+          pause: 'hover'
+        });
+      }
+    });
+  </script>
 
 </body>
 </html>
