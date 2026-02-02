@@ -4,7 +4,7 @@ namespace App\Koketsu\Database;
 use PDO;
 use PDOException;
 use Exception;
-use App\Koketsu\Database\Config;
+use App\Koketsu\Config\Config;
 
 class Database {
     private static $instance = null;

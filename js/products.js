@@ -5,7 +5,7 @@
 
 const ProductManager = (() => {
   const PRODUCTS_PER_SLIDE = 4;
-  const API_ENDPOINT = 'api-vitrine.php';
+  const API_ENDPOINT = '/api/vitrine';
 
   /**
    * Cria o HTML de um card de produto
@@ -15,7 +15,7 @@ const ProductManager = (() => {
     const parcelasFormatadas = ProductsData.formatPrice(
       product.parcelas || product.preco / 6
     );
-    
+
     // Preço original (20% a mais para simular desconto)
     const precoOriginal = (product.preco * 1.2).toFixed(2);
     const precoOriginalFormatado = ProductsData.formatPrice(precoOriginal);
@@ -141,7 +141,7 @@ const ProductManager = (() => {
         wrap: false,
         keyboard: false
       });
-      
+
       // Remover listeners de teclado automáticos
       carouselEl.removeEventListener('keydown.bs.carousel');
     });

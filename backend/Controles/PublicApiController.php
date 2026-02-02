@@ -180,54 +180,102 @@ public function getProdutosVitrine($pagina = 0) {
 }
 
 
-private function formatarProdutosParaCarrossel(array $produtos_db): array {
-    $categorias_organizadas = [];
-    $imagem_padrao = "img/default.png"; 
+    private function formatarProdutosParaCarrossel(array $produtos_db): array {
+        $categorias_organizadas = [];
+        $imagem_padrao = "img/default.png";
 
-    foreach ($produtos_db as $produto) {
-        $nome_categoria = $produto['nome_categoria'] ?? 'OUTROS';
-        $tag_categoria = ''; // Vazio ou defina aqui se precisar de tags específicas
+        // Mapeamento de categorias (do api-vitrine.php)
+        $mapa_categorias = [
+            'Bermudas' => 'Camisas',
+            'Macacões' => 'Beachwear',
+            'Tênis' => 'Bermudas e Shorts'
+        ];
 
-        if (!isset($categorias_organizadas[$nome_categoria])) {
-            $categorias_organizadas[$nome_categoria] = [
-                'categoria' => $nome_categoria,
-                'tag' => $tag_categoria, 
-                'itens' => []
+        // Ordem desejada das categorias (do api-vitrine.php)
+        $ordem_categorias = [
+            'Camisetas',
+            'Calças',
+            'Jaquetas',
+            'Tênis',
+            'Acessórios',
+            'Bermudas',
+            'Macacões'
+        ];
+
+        foreach ($produtos_db as $produto) {
+            $nome_categoria = $produto['nome_categoria'] ?? 'OUTROS';
+            
+            // Renomear categoria se estiver no mapa
+            if (isset($mapa_categorias[$nome_categoria])) {
+                $nome_categoria = $mapa_categorias[$nome_categoria];
+            }
+
+            $tag_categoria = ''; 
+
+            if (!isset($categorias_organizadas[$nome_categoria])) {
+                $categorias_organizadas[$nome_categoria] = [
+                    'categoria' => $nome_categoria,
+                    'tag' => $tag_categoria, 
+                    'itens' => []
+                ];
+            }
+
+            $nome_imagem_bd = trim($produto['imagem_produtos'] ?? '');
+            $caminho_imagem = $imagem_padrao; 
+            
+            if (!empty($nome_imagem_bd) && $nome_imagem_bd !== 'NULL') {
+                $caminho_limpo = str_replace('\\', '/', $nome_imagem_bd);
+                $caminho_limpo = preg_replace('/^(img\/|produtos\/)/i', '', $caminho_limpo);
+                
+                if (!empty($caminho_limpo)) {
+                    $caminho_imagem = "img/" . $caminho_limpo;
+                }
+            } 
+
+            $preco = (float)str_replace(',', '.', $produto['preco_produtos']); 
+            $parcelas = $preco / 6;
+
+            $categorias_organizadas[$nome_categoria]['itens'][] = [
+                'id' => $produto['id_produto'],
+                'nome' => $produto['nome_produtos'], 
+                'preco' => $preco,
+                'img' => $caminho_imagem, 
+                'alt' => $produto['descricao_produtos'],
+                'parcelas' => $parcelas,
             ];
         }
 
-       
-        $nome_imagem_bd = trim($produto['imagem_produtos'] ?? '');
-        $caminho_imagem = $imagem_padrao; 
-        
-        if (!empty($nome_imagem_bd) && $nome_imagem_bd !== 'NULL') {
+        // Reordenar conforme a ordem definida
+        $categorias_ordenadas = [];
+        foreach ($ordem_categorias as $cat) {
+            // Se a categoria do array de ordem estiver no mapa (ex: 'Bermudas' vira 'Camisas'),
+            // precisamos usar o nome mapeado para buscar em $categorias_organizadas.
+            // O código original fazia uma verificação inversa meio confusa, vamos simplificar
+            // para respeitar o nome final.
             
-            $caminho_limpo = str_replace('\\', '/', $nome_imagem_bd);
+            // Mas seguindo EXATAMENTE o api-vitrine.php para garantir compatibilidade visual:
+            $cat_chave = $cat;
+             if (isset($mapa_categorias[$cat])) {
+                 $cat_chave = $mapa_categorias[$cat];
+             }
             
-         
-            $caminho_limpo = preg_replace('/^(img\/|produtos\/)/i', '', $caminho_limpo);
-            
-          
-            if (!empty($caminho_limpo)) {
-                $caminho_imagem = "img/" . $caminho_limpo;
+            // Se existe no array organizado (usando o nome final)
+            if (isset($categorias_organizadas[$cat_chave])) {
+                $categorias_ordenadas[$cat_chave] = $categorias_organizadas[$cat_chave];
             }
-        } 
-      
-
-        $preco = (float)str_replace(',', '.', $produto['preco_produtos']); 
-        $parcelas = $preco / 6;
-
-        $categorias_organizadas[$nome_categoria]['itens'][] = [
-            'id' => $produto['id_produto'],
-            'nome' => $produto['nome_produtos'], 
-            'preco' => $preco,
-            'img' => $caminho_imagem, 
-            'alt' => $produto['descricao_produtos'],
-            'parcelas' => $parcelas,
+             // Fallback: Tenta achar pela chave original se não achou pelo mapeado
+            elseif (isset($categorias_organizadas[$cat])) {
+                 $categorias_ordenadas[$cat] = $categorias_organizadas[$cat];
+            }
+        }
         
-        ];
-    }
+        // Adicionar categorias não listadas no final
+        foreach ($categorias_organizadas as $cat => $dados) {
+            if (!isset($categorias_ordenadas[$cat])) {
+                $categorias_ordenadas[$cat] = $dados;
+            }
+        }
 
-    return $categorias_organizadas;
-}
+        return $categorias_ordenadas;
+    }
 }
