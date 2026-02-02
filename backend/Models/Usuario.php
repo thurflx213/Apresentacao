@@ -209,6 +209,14 @@ VALUES (:nome, :email, :senha, :nivel, :imagem, NOW())";
     return $stmt->execute();
 }
 
+    public static function contarClientes($db) {
+        $sql = "SELECT COUNT(*) as total FROM tbl_usuarios WHERE nivel_acesso = 'cliente' AND excluido_em IS NULL";
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['total'] ?? 0;
+    }
+
     public function checarCredenciais(string $email,string $senha) {
     $usuario = $this->buscarUsuariosPorEmail($email);
     if (count($usuario) !== 1){

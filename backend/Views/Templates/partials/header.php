@@ -300,13 +300,13 @@ input, select, textarea {
         <i class="fa fa-user-circle fa-fw"></i> Perfil
     </a>
     <?php if ($session->get('usuario_tipo') == 'admin'){ ?>
-    <a href="#" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/avaliacoes', $current_uri); ?>">
+    <a href="/backend/avaliacao/listar" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/avaliacao', $current_uri); ?>">
         <i class="fa fa-star fa-fw"></i> Avaliações
     </a>
-    <a href="#" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/relatorios', $current_uri); ?>">
+    <a href="/backend/relatorios" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/relatorios', $current_uri); ?>">
         <i class="fa fa-bar-chart fa-fw"></i> Relatórios
     </a>
-    <a href="#" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/configuracoes', $current_uri); ?>">
+    <a href="/backend/configuracoes" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/configuracoes', $current_uri); ?>">
         <i class="fa fa-cog fa-fw"></i> Configurações
     </a><br><br>
       <?php } ?>

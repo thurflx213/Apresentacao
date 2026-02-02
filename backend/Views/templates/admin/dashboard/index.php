@@ -14,9 +14,16 @@
 
         <p class="subtitle">Esta é a sua área segura.</p>
 
-        <a href="/backend/logout" class="logout-btn">
-            <i class="fa fa-sign-out"></i> Sair do Sistema
-        </a>
+        <div class="action-buttons">
+            <a href="/backend/relatorios" class="action-btn relatorios">
+                <i class="fa fa-bar-chart"></i> 
+                <span>Visualizar Relatórios</span>
+            </a>
+            <a href="/backend/logout" class="action-btn logout">
+                <i class="fa fa-sign-out"></i> 
+                <span>Sair do Sistema</span>
+            </a>
+        </div>
     </div>
 </div>
 <style>
@@ -63,23 +70,87 @@
 .dashboard-card .subtitle {
     color: #bbb;
     font-size: 16px;
-    margin-bottom: 25px;
+    margin-bottom: 30px;
 }
 
-.logout-btn {
-    display: inline-block;
-    background: #e63946;
-    padding: 12px 22px;
-    color: #fff;
+.action-buttons {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
     border-radius: 8px;
     text-decoration: none;
     font-weight: bold;
-    transition: 0.2s;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
 }
 
-.logout-btn:hover {
-    background: #ff4d5b;
-    box-shadow: 0 0 10px rgba(255, 80, 80, 0.4);
+.action-btn i {
+    font-size: 18px;
+}
+
+.action-btn span {
+    font-size: 16px;
+}
+
+.action-btn.relatorios {
+    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+    color: #1a1a1a;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+}
+
+.action-btn.relatorios:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+}
+
+.action-btn.logout {
+    background: linear-gradient(135deg, #e63946 0%, #f44336 100%);
+    color: #fff;
+    box-shadow: 0 4px 15px rgba(230, 57, 70, 0.3);
+}
+
+.action-btn.logout:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(230, 57, 70, 0.4);
+}
+
+.action-btn:active {
+    transform: translateY(-1px);
+}
+
+@media (max-width: 768px) {
+    .dashboard-container {
+        padding: 20px;
+    }
+
+    .dashboard-card {
+        width: 100%;
+        padding: 20px;
+    }
+
+    .dashboard-card .welcome {
+        font-size: 24px;
+    }
+
+    .dashboard-card .user-type {
+        font-size: 18px;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+
+    .action-btn {
+        justify-content: center;
+        width: 100%;
+    }
 }
 
 </style>

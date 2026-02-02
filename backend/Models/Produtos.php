@@ -188,4 +188,12 @@ public function atualizarProduto(string $id_produto, string $nome, string $descr
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+    public static function contarProdutos($db) {
+        $sql = "SELECT COUNT(*) as total FROM tbl_produtos WHERE excluido_em IS NULL";
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['total'] ?? 0;
+    }
+
     }

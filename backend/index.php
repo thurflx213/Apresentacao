@@ -11,9 +11,11 @@ $router = new Router();
 
 $rotas = Rotas::get();
 $router->setNamespace('App\Koketsu\Controles');
-$router->get('/backend/relatorios', 'RelatoriosController@exibirRelatorios');
+$router->get('/backend/relatorios', 'Admin\RelatoriosController@index');
+$router->get('/backend/relatorios/detalhado', 'Admin\RelatoriosController@relatorioDetalhado');
+$router->get('/backend/relatorios/financeiro', 'Admin\RelatoriosController@relatorioFinanceiro');
+$router->get('/backend/relatorios/produtos', 'Admin\RelatoriosController@relatorioProdutos');
 $router->get('/backend/register', 'AuthController@register');
-$router->get('/admin/relatorios', 'RelatoriosController@index');
 $router->post('/backend/pedido/listar', 'PedidosController@pesquisarPedido');
 $router->get('/backend/pedido/listar', 'PedidosController@viewListarPedido'); 
 

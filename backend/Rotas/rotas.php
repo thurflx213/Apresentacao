@@ -32,7 +32,7 @@ class Rotas
                  "/cor/{id}/relatorio/{data1}/{data2}" => "CoresController@relatorioCores",
               // Clientes
                  "cliente/dashboard" => "Cliente\DashboardController@index",
-                 "/backend/cliente/editar/{id}" => "Cliente\DashboardController@viewEditarCliente",
+                 "cliente/editar/{id}" => "Cliente\DashboardController@viewEditarCliente",
               // Perfil
                  "/perfis"        => "PerfilController@index",
                  "/perfil/criar"  => "PerfilController@viewCriarPerfil",
@@ -83,6 +83,11 @@ class Rotas
                  "/backend/avaliacao/listar" => "AvaliacaoController@viewListarAvaliacoes",
                  "/backend/avaliacao/editar/{id}" => "AvaliacaoController@viewEditarAvaliacoes",
                  "/backend/avaliacao/excluir/{id}" => "AvaliacaoController@viewExcluirAvaliacoes",
+              //Relatórios
+                 "/backend/relatorios" => "Admin\RelatoriosController@index",
+                 "/backend/relatorios/detalhado" => "Admin\RelatoriosController@relatorioDetalhado",
+                 "/backend/relatorios/financeiro" => "Admin\RelatoriosController@relatorioFinanceiro",
+                 "/backend/relatorios/produtos" => "Admin\RelatoriosController@relatorioProdutos",
               //Carrinho
                  "/backend/carrinho" => "CarrinhoController@index",
                  "/backend/carrinho/criar" => "CarrinhoController@viewCriarCarrinho",
@@ -114,7 +119,7 @@ class Rotas
         "POST" => [
                  "/api/pedidos" => 'PublicApiController@salvarPedido',
                 // Clientes
-                "/backend/cliente/atualizar/{id}" => "Cliente\DashboardController@atualizarCliente",
+                "/cliente/atualizar/{id}" => "Cliente\DashboardController@atualizarCliente",
                 // Usuarios 
                 "/usuario/salvar" => "UsuarioController@salvarUsuario",
                 "/usuario/atualizar" => "UsuarioController@atualizarUsuario",

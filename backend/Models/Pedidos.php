@@ -342,5 +342,13 @@ class Pedidos {
             return false;
         }
     }
+
+    public static function contarPedidos($db) {
+        $sql = "SELECT COUNT(*) as total FROM tbl_pedidos WHERE excluido_em IS NULL";
+        $stmt = $db->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['total'] ?? 0;
+    }
     
 }
