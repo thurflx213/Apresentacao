@@ -1,0 +1,185 @@
+/* --- ESTILO GERAL --- */
+:root {
+    --primary-yellow: #FFD000; /* NOVA COR PRINCIPAL */
+    --black-deep: #0a0a0a;
+    --dark-grey: #121212;
+    --light-grey: #1c1c1c;
+}
+
+
+body {
+    background-color: #000 !important;
+    font-family: 'Inter', sans-serif;
+}
+
+.gold-text { color: var(--gold); }
+
+/* --- SIDEBAR DE FILTROS --- */
+.filter-card {
+    background: rgba(18, 18, 18, 0.8);
+    border: 1px solid var(--gold);
+    border-radius: 8px;
+    padding: 25px;
+    backdrop-filter: blur(10px);
+}
+
+.filter-group {
+    margin-bottom: 30px;
+    border-bottom: 1px solid var(--light-grey);
+    padding-bottom: 20px;
+}
+
+.filter-label {
+    color: var(--gold);
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+/* Tamanhos Customizados */
+.size-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+.size-input { display: none; }
+.size-label {
+    border: 1px solid var(--light-grey);
+    color: #fff;
+    text-align: center;
+    padding: 8px 0;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: 0.3s;
+}
+
+.size-input:checked + .size-label {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(190, 155, 75, 0.1);
+}
+
+/* Cores Glow */
+.color-btn {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    background-color: var(--color);
+    transition: 0.3s;
+}
+
+.color-btn.active { border-color: var(--gold); transform: scale(1.2); }
+
+/* --- CARDS DE PRODUTOS --- */
+.product-card {
+    background: transparent;
+    transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+}
+
+.product-img-box {
+    position: relative;
+    background: #fff; /* Fundo branco para destacar a peça conforme ref 4 */
+    overflow: hidden;
+    border-radius: 4px;
+}
+
+.product-img-box img {
+    width: 100%;
+    transition: 0.5s;
+    padding: 20px;
+}
+
+.product-card:hover .product-img-box img {
+    transform: scale(1.1);
+}
+
+/* Badge de Status */
+.p-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 4px 12px;
+    font-size: 0.65rem;
+    font-weight: 900;
+    z-index: 2;
+}
+.p-badge.gold { background: var(--gold); color: #000; }
+
+/* Ações e Hover */
+.product-actions {
+    position: absolute;
+    right: -50px;
+    top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: 0.3s;
+}
+
+.product-card:hover .product-actions { right: 10px; }
+
+.product-actions button {
+    background: #000;
+    color: #fff;
+    border: 1px solid var(--gold);
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+.product-actions button:hover { background: var(--gold); color: #000; }
+
+/* Detalhes do Texto */
+.product-details { padding: 15px 0; text-align: center; }
+.category { color: var(--gold); font-size: 0.7rem; font-weight: bold; margin-bottom: 5px; }
+.name { color: #fff; font-size: 0.95rem; font-weight: 500; height: 40px; }
+.current-price { color: #fff; font-size: 1.2rem; font-weight: 800; }
+.old-price { color: #666; text-decoration: line-through; font-size: 0.85rem; margin-right: 10px; }
+
+.btn-buy-now {
+    margin-top: 15px;
+    width: 100%;
+    background: transparent;
+    border: 1px solid #fff;
+    color: #fff;
+    padding: 8px;
+    font-weight: bold;
+    font-size: 0.75rem;
+    transition: 0.3s;
+}
+
+.btn-buy-now:hover { background: #fff; color: #000; }
+
+/* Paginação */
+.pagination-premium li a {
+    color: #fff;
+    padding: 10px 15px;
+    text-decoration: none;
+    border: 1px solid var(--light-grey);
+    margin: 0 5px;
+    transition: 0.3s;
+}
+
+.pagination-premium li a.active { border-color: var(--gold); color: var(--gold); }
+.catalog-hero {
+    background: linear-gradient(to bottom, #000 0%, #0a0a0a 100%);
+    border-bottom: 1px solid rgba(255, 208, 0, 0.2);
+    padding: 80px 0 60px;
+}
+
+.catalog-hero h1 {
+    font-weight: 900;
+    letter-spacing: 4px;
+    color: var(--primary-yellow);
+    text-shadow: 0 0 25px rgba(255, 208, 0, 0.25);
+}
+
+.catalog-hero p {
+    letter-spacing: 3px;
+    font-size: 0.8rem;
+    opacity: 0.6;
+}
