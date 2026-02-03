@@ -21,8 +21,8 @@ faqs.forEach((btn) => {
 
 async function fetchProductsFromDatabase() {
     try {
-        // Busca os dados da nova rota de API configurada no router.php
-        const response = await fetch('/api/vitrine');
+        // Busca os dados do arquivo físico da API (compatível sem router)
+        const response = await fetch('/api/vitrine.php');
 
         if (!response.ok) {
             throw new Error(`Erro HTTP: ${response.status}`);
@@ -32,16 +32,15 @@ async function fetchProductsFromDatabase() {
 
         // Se a API retornar um JSON vazio (sem produtos)
         if (!Array.isArray(produtosDoBD) || produtosDoBD.length === 0) {
-            console.warn("API retornou dados vazios. Usando array local.");
-            return typeof ProductsData !== 'undefined' ? ProductsData.getDefault() : [];
+            console.warn("API retornou dados vazios.");
+            return [];
         }
 
         return produtosDoBD;
 
     } catch (error) {
-        console.error("Falha ao conectar com a API PHP. Usando array local como fallback.", error);
-        // Em caso de falha, usa o array global definido no outro arquivo
-        return typeof ProductsData !== 'undefined' ? ProductsData.getDefault() : [];
+        console.error("Falha ao conectar com a API PHP.", error);
+        return [];
     }
 }
 

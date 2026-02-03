@@ -5,20 +5,27 @@
 
 const ProductManager = (() => {
   const PRODUCTS_PER_SLIDE = 4;
-  const API_ENDPOINT = '/api/vitrine';
+  const API_ENDPOINT = '/api/vitrine.php';
+
+  /**
+   * Formata valor para moeda
+   */
+  const formatPrice = (value) => {
+    return parseFloat(value).toFixed(2).replace('.', ',');
+  };
 
   /**
    * Cria o HTML de um card de produto
    */
   const createProductCard = (product) => {
-    const precoFormatado = ProductsData.formatPrice(product.preco);
-    const parcelasFormatadas = ProductsData.formatPrice(
+    const precoFormatado = formatPrice(product.preco);
+    const parcelasFormatadas = formatPrice(
       product.parcelas || product.preco / 6
     );
 
     // Preço original (20% a mais para simular desconto)
     const precoOriginal = (product.preco * 1.2).toFixed(2);
-    const precoOriginalFormatado = ProductsData.formatPrice(precoOriginal);
+    const precoOriginalFormatado = formatPrice(precoOriginal);
 
     let badges = '';
     if (product.desconto) {
@@ -148,7 +155,7 @@ const ProductManager = (() => {
   };
 
   /**
-   * Busca produtos da API ou usa dados padrão como fallback
+   * Busca produtos da API
    */
   const fetchProducts = async () => {
     try {
@@ -165,13 +172,11 @@ const ProductManager = (() => {
         return data;
       }
 
-      // Fallback para dados padrão
-      console.warn('API retornou dados vazios. Usando dados padrão.');
-      return ProductsData.getDefault();
+      console.error('API retornou dados vazios.');
+      return [];
     } catch (error) {
       console.error('Erro ao buscar produtos:', error);
-      // Fallback para dados padrão em caso de erro
-      return ProductsData.getDefault();
+      return [];
     }
   };
 

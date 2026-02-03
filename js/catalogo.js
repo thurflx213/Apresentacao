@@ -3,7 +3,7 @@
  */
 
 const CatalogManager = (() => {
-    const API_ENDPOINT = '/api/vitrine';
+    const API_ENDPOINT = '/api/vitrine.php';
     let allProducts = [];
 
     /**
@@ -34,11 +34,11 @@ const CatalogManager = (() => {
 
             if (Array.isArray(data) && data.length > 0) return data;
 
-            console.warn('Usando fallback para catálogo');
-            return ProductsData.getDefault();
+            console.error('API retornou lista vazia ou inválida.');
+            return [];
         } catch (e) {
             console.error('Erro ao carregar catálogo:', e);
-            return ProductsData.getDefault();
+            return [];
         }
     };
 

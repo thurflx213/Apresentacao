@@ -3,6 +3,14 @@
 
 $path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
 
+// Se a rota for a raiz, serve o index.html
+if ($path === '/' || $path === '') {
+    if (file_exists(__DIR__ . '/index.html')) {
+        include __DIR__ . '/index.html';
+        return true;
+    }
+}
+
 // Se o arquivo existir fisicamente, sirva-o (imagens, css, js, html)
 if (file_exists(__DIR__ . $path) && !is_dir(__DIR__ . $path)) {
     return false; // Retorna false para o servidor embutido servir o arquivo
