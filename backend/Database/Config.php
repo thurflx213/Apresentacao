@@ -7,19 +7,19 @@ class Config
     public static function get()
     {
         return [
-            'database' => array (
-  'driver' => 'mysql',
-  'mysql' =>
-  array (
-    'host' => 'localhost',
-    'db_name' => 'koketsu',
-    'username' => 'root',
-    'password' => '',
-    'charset' => 'utf8',
-    'port' => '3306',
-  ),
-)
-        ];
+            'database' => [
+          'driver' => 'mysql',
+            'mysql' =>[
+              'host' =>  'localhost',
+              'db_name' =>  'koketsu',
+              'username' =>  'root',
+              'password' =>  '',
+              'charset' => 'utf8',
+              'port' => '3306',
+            ]
+            ]
+            ];
+        }
 
 //         return [
 //             'database' => array (
@@ -35,5 +35,5 @@ class Config
 //   ),
 // )
 //         ];
-    }
 }
+

@@ -251,7 +251,7 @@
                                 <td><?php echo date('d/m/Y H:i', strtotime($pedido['data_pedido'])); ?></td>
                                 <td><?php echo htmlspecialchars($pedido['nome_usuarios'] ?? 'Não informado'); ?></td>
                                 <td><?php echo htmlspecialchars($pedido['email_usuarios'] ?? 'Não informado'); ?></td>
-                                <td class="valor">R$ <?php echo number_format($pedido['valor_total_pedido'] ?? 0, 2, ',', '.'); ?></td>
+                                <td class="valor">R$ <?php echo number_format($pedido['total_pedido'] ?? 0, 2, ',', '.'); ?></td>
                                 <td>
                                     <?php
                                     $status = $pedido['status_pedido'] ?? 'Desconhecido';

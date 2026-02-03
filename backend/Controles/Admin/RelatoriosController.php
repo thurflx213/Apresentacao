@@ -1,13 +1,13 @@
 <?php
 
-namespace App\koketsu\Controles\Admin;
+namespace App\Koketsu\Controles\Admin;
 
-use App\koketsu\Models\Produtos;
-use App\koketsu\Models\Pedidos;
-use App\koketsu\Models\Usuario;
-use App\koketsu\Models\Categoria;
-use App\koketsu\Core\View;
-use App\koketsu\Database\Database;
+use App\Koketsu\Models\Produtos;
+use App\Koketsu\Models\Pedidos;
+use App\Koketsu\Models\Usuario;
+use App\Koketsu\Models\Categoria;
+use App\Koketsu\Core\View;
+use App\Koketsu\Database\Database;
 
 class RelatoriosController extends AuthenticatedController
 {
@@ -50,15 +50,15 @@ class RelatoriosController extends AuthenticatedController
         $sql = "SELECT 
                     p.id_pedido,
                     p.data_pedido,
-                    p.valor_total_pedido,
+                    p.total_pedido,
                     p.status_pedido,
                     u.nome_usuarios,
                     u.email_usuarios,
                     COUNT(ip.id_itens_pedidos) as quantidade_itens
                 FROM tbl_pedidos p
                 LEFT JOIN tbl_usuarios u ON p.id_usuario = u.id_usuarios
-                LEFT JOIN tbl_itenspedidos ip ON p.id_pedido = ip.id_pedido
-                GROUP BY p.id_pedido, p.data_pedido, p.valor_total_pedido, p.status_pedido, u.nome_usuarios, u.email_usuarios
+                LEFT JOIN tbl_itens_pedidos ip ON p.id_pedido = ip.id_pedido
+                GROUP BY p.id_pedido, p.data_pedido, p.total_pedido, p.status_pedido, u.nome_usuarios, u.email_usuarios
                 ORDER BY p.data_pedido DESC
                 LIMIT 100";
         
@@ -80,11 +80,11 @@ class RelatoriosController extends AuthenticatedController
         
         // Receita total
         $sql = "SELECT 
-                    SUM(valor_total_pedido) as receita_total,
+                    SUM(total_pedido) as receita_total,
                     COUNT(id_pedido) as total_pedidos,
-                    AVG(valor_total_pedido) as ticket_medio,
-                    MIN(valor_total_pedido) as menor_venda,
-                    MAX(valor_total_pedido) as maior_venda
+                    AVG(total_pedido) as ticket_medio,
+                    MIN(total_pedido) as menor_venda,
+                    MAX(total_pedido) as maior_venda
                 FROM tbl_pedidos
                 WHERE status_pedido IN ('Entregue', 'Em Entrega')";
         
@@ -95,7 +95,7 @@ class RelatoriosController extends AuthenticatedController
         // Vendas por mês
         $sqlMeses = "SELECT 
                         DATE_FORMAT(data_pedido, '%Y-%m') as mes,
-                        SUM(valor_total_pedido) as valor,
+                        SUM(total_pedido) as valor,
                         COUNT(id_pedido) as quantidade
                     FROM tbl_pedidos
                     WHERE status_pedido IN ('Entregue', 'Em Entrega')
@@ -122,7 +122,7 @@ class RelatoriosController extends AuthenticatedController
         
         // Produtos mais vendidos
         $sql = "SELECT 
-                    pr.id_produtos,
+                    pr.id_produto,
                     pr.nome_produtos,
                     pr.preco_produtos,
                     c.nome_categorias,
@@ -130,9 +130,9 @@ class RelatoriosController extends AuthenticatedController
                     SUM(ip.quantidade_itens_pedidos) as quantidade_total,
                     SUM(ip.preco_item_pedido * ip.quantidade_itens_pedidos) as receita
                 FROM tbl_produtos pr
-                LEFT JOIN tbl_categorias c ON pr.id_categorias = c.id_categorias
-                LEFT JOIN tbl_itenspedidos ip ON pr.id_produtos = ip.id_produtos
-                GROUP BY pr.id_produtos, pr.nome_produtos, pr.preco_produtos, c.nome_categorias
+                LEFT JOIN tbl_categorias c ON pr.id_categoria = c.id_categorias
+                LEFT JOIN tbl_itens_pedidos ip ON pr.id_produto = ip.id_produto
+                GROUP BY pr.id_produto, pr.nome_produtos, pr.preco_produtos, c.nome_categorias
                 ORDER BY quantidade_total DESC
                 LIMIT 50";
         
@@ -150,7 +150,7 @@ class RelatoriosController extends AuthenticatedController
     
     private function obterVendasTotais($db)
     {
-        $sql = "SELECT SUM(valor_total_pedido) as total FROM tbl_pedidos WHERE status_pedido IN ('Entregue', 'Em Entrega')";
+        $sql = "SELECT SUM(total_pedido) as total FROM tbl_pedidos WHERE status_pedido IN ('Entregue', 'Em Entrega')";
         $stmt = $db->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -161,7 +161,7 @@ class RelatoriosController extends AuthenticatedController
     {
         $sql = "SELECT 
                     DATE_FORMAT(data_pedido, '%Y-%m') as mes,
-                    SUM(valor_total_pedido) as valor
+                    SUM(total_pedido) as valor
                 FROM tbl_pedidos
                 WHERE status_pedido IN ('Entregue', 'Em Entrega')
                 GROUP BY DATE_FORMAT(data_pedido, '%Y-%m')
@@ -195,8 +195,8 @@ class RelatoriosController extends AuthenticatedController
                     pr.nome_produtos,
                     COUNT(ip.id_itens_pedidos) as quantidade
                 FROM tbl_produtos pr
-                LEFT JOIN tbl_itenspedidos ip ON pr.id_produtos = ip.id_produtos
-                GROUP BY pr.id_produtos, pr.nome_produtos
+                LEFT JOIN tbl_itens_pedidos ip ON pr.id_produto = ip.id_produto
+                GROUP BY pr.id_produto, pr.nome_produtos
                 ORDER BY quantidade DESC
                 LIMIT 8";
         
@@ -248,9 +248,9 @@ class RelatoriosController extends AuthenticatedController
     {
         $sql = "SELECT 
                     c.nome_categorias,
-                    COUNT(p.id_produtos) as quantidade
+                    COUNT(p.id_produto) as quantidade
                 FROM tbl_categorias c
-                LEFT JOIN tbl_produtos p ON c.id_categorias = p.id_categorias
+                LEFT JOIN tbl_produtos p ON c.id_categorias = p.id_categoria
                 GROUP BY c.id_categorias, c.nome_categorias
                 ORDER BY quantidade DESC
                 LIMIT 6";

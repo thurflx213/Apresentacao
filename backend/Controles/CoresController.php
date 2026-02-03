@@ -1,5 +1,5 @@
 <?php
-namespace App\Koketsu\controles;
+namespace App\Koketsu\Controles;
 
 use App\Koketsu\Models\Cor;
 use App\Koketsu\Database\Database;
@@ -72,10 +72,23 @@ class CoresController {
             Redirect::redirecionarComMensagem("cor/create", "error", "Erro ao criar cor. Tente novamente.");
         }
     }
-    public function atualizarCor(){
-        echo "Atualizar cor";
+    public function atualizarCor($id){
+        if($this->cores->atualizarCor(
+            $id, // id_cores matches first argument in Model::atualizarCor($id_cores, $id_produto, $cor, $quantidade)
+            $_POST["id_produto"],
+            $_POST["cor_cores"],
+            $_POST["quantidade_cores"]
+        )){
+            Redirect::redirecionarComMensagem("cor/listar", "success", "Cor atualizada com sucesso!");
+        }else{
+            Redirect::redirecionarComMensagem("cor/editar/$id", "error", "Erro ao atualizar cor.");
+        }
     }
-    public function deletarCor(){
-        echo "Deletar cor";
+    public function deletarCor($id){
+        if($this->cores->deletarCor($id)){
+            Redirect::redirecionarComMensagem("cor/listar", "success", "Cor deletada com sucesso!");
+        }else{
+            Redirect::redirecionarComMensagem("cor/listar", "error", "Erro ao deletar cor.");
+        }
     }  
 }

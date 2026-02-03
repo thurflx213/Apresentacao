@@ -259,7 +259,7 @@ input, select, textarea {
          alt="Foto de perfil"
          onerror="this.src='/img/logoperf.jpg';">
 </div>
-  <h5 class="w3-margin-top">Bem-vindo, <strong><?= htmlspecialchars($session->get('usuario_tipo')); ?></strong></h5>
+  <h5 class="w3-margin-top">Bem-vindo, <strong><?= htmlspecialchars($session->get('usuario_nome')); ?></strong></h5>
   <div class="w3-margin-top">
     <a href="#" title="Mensagens"><i class="fa fa-envelope w3-hover-text-yellow"></i></a>
     <a href="#" title="Perfil" style="margin: 0 10px;"><i class="fa fa-user w3-hover-text-yellow"></i></a>

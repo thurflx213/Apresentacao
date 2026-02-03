@@ -1,100 +1,73 @@
-<div class="dashboard-container w3-animate-opacity">
-    <div class="w3-container w3-margin-top">
-        <h2 class="w3-text-yellow w3-xlarge">
-            <i class="fa fa-user-circle"></i> Bem-vindo, <?= htmlspecialchars($nomeUsuario ?? 'Cliente') ?>!
-        </h2>
-        
-        <hr class="w3-border-yellow">
-
-        <div class="w3-row-padding w3-margin-top">
-            <!-- Card Editar Perfil -->
-            <div class="w3-col m4 w3-margin-bottom">
-                <div class="w3-card-4 w3-padding-large dashboard-card">
-                    <div class="w3-center">
-                        <i class="fa fa-user-edit w3-xxlarge w3-text-yellow"></i>
-                        <h4>Editar Perfil</h4>
-                        <p>Atualize seus dados pessoais, foto e senha</p>
-                        <a href="/backend/cliente/editar/<?= htmlspecialchars($usuarioId ?? '0') ?>" class="w3-button w3-yellow w3-text-black w3-round-large w3-block">
-                            <i class="fa fa-edit"></i> Editar
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card Meus Pedidos -->
-            <div class="w3-col m4 w3-margin-bottom">
-                <div class="w3-card-4 w3-padding-large dashboard-card">
-                    <div class="w3-center">
-                        <i class="fa fa-shopping-cart w3-xxlarge w3-text-yellow"></i>
-                        <h4>Meus Pedidos</h4>
-                        <p>Acompanhe seus pedidos</p>
-                        <a href="/backend/pedidos" class="w3-button w3-yellow w3-text-black w3-round-large w3-block">
-                            <i class="fa fa-list"></i> Ver Pedidos
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card Configurações -->
-            <div class="w3-col m4 w3-margin-bottom">
-                <div class="w3-card-4 w3-padding-large dashboard-card">
-                    <div class="w3-center">
-                        <i class="fa fa-cog w3-xxlarge w3-text-yellow"></i>
-                        <h4>Configurações</h4>
-                        <p>Gerencie suas preferências</p>
-                        <a href="#" class="w3-button w3-yellow w3-text-black w3-round-large w3-block">
-                            <i class="fa fa-sliders"></i> Configurar
-                        </a>
-                    </div>
-                </div>
-            </div>
+<div class="client-dashboard">
+    <header class="dash-header">
+        <div>
+            <h2>👋 Bem-vindo, <span class="username"><?= htmlspecialchars($nomeUsuario ?? 'Cliente') ?></span>!</h2>
+            <p class="muted">Acesse rapidamente suas principais ações</p>
         </div>
-    </div>
-</div>
+        <div>
+            <a href="/backend/logout" class="logout-btn"><i class="fa fa-sign-out"></i> Sair</a>
+        </div>
+    </header>
 
-<div class="w3-container w3-margin-top w3-margin-bottom">
-    <a href="/backend/logout" class="logout-btn">
-        <i class="fa fa-sign-out"></i> Sair do Sistema
-    </a>
+    <section class="cards-grid">
+        <a href="/backend/cliente/editar/<?= htmlspecialchars($usuarioId ?? '0') ?>" class="card card-action">
+            <div class="card-icon"><i class="fa fa-user-circle"></i></div>
+            <div class="card-body">
+                <h3>Editar Perfil</h3>
+                <p class="muted">Atualize seus dados pessoais, foto e senha</p>
+            </div>
+            <div class="card-cta">Editar <i class="fa fa-arrow-right"></i></div>
+        </a>
+
+        <a href="/backend/pedidos" class="card card-action">
+            <div class="card-icon"><i class="fa fa-shopping-cart"></i></div>
+            <div class="card-body">
+                <h3>Meus Pedidos</h3>
+                <p class="muted">Acompanhe o status de suas compras</p>
+            </div>
+            <div class="card-cta">Ver Pedidos <i class="fa fa-arrow-right"></i></div>
+        </a>
+
+        <a href="#" class="card card-action">
+            <div class="card-icon"><i class="fa fa-cog"></i></div>
+            <div class="card-body">
+                <h3>Configurações</h3>
+                <p class="muted">Gerencie suas preferências</p>
+            </div>
+            <div class="card-cta">Configurar <i class="fa fa-arrow-right"></i></div>
+        </a>
+    </section>
 </div>
 
 <style>
-    .dashboard-container {
-        background-color: #1e1e1e;
-        color: #f0f0f0;
-        padding: 20px;
-        border-radius: 8px;
+    :root{
+        --bg:#0f0f10;
+        --card:#1f1f23;
+        --muted:#a8a9ad;
+        --accent:#ffd700;
+        --accent-2:#ffed4e;
+        --glass: rgba(255,255,255,0.03);
     }
 
-    .dashboard-card {
-        background-color: #2a2a2a !important;
-        color: #f0f0f0;
-        border: 2px solid #333;
-        transition: 0.3s;
-    }
+    .client-dashboard{max-width:1200px;margin:24px auto;padding:20px;}
 
-    .dashboard-card:hover {
-        border-color: #ffcc00;
-        box-shadow: 0 0 15px rgba(255, 204, 0, 0.3);
-    }
+    .dash-header{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;background:linear-gradient(180deg,var(--card),#2b2b2b);border-radius:10px;border-top:4px solid var(--accent);box-shadow:0 12px 30px rgba(0,0,0,0.6);}
+    .dash-header h2{margin:0;color:#fff;font-size:20px}
+    .dash-header .username{color:var(--accent);font-weight:700}
+    .muted{color:var(--muted);margin:4px 0 0}
 
-    .logout-btn {
-        display: inline-block;
-        background: #e63946;
-        padding: 12px 22px;
-        color: #fff;
-        border-radius: 8px;
-        text-decoration: none;
-        font-weight: bold;
-        transition: 0.2s;
-    }
+    .logout-btn{background:#e63946;color:#fff;padding:10px 14px;border-radius:8px;text-decoration:none;font-weight:700}
 
-    .logout-btn:hover {
-        background: #ff4d5b;
-        box-shadow: 0 0 10px rgba(255, 80, 80, 0.4);
-    }
+    .cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:20px}
 
-    .w3-text-yellow {
-        color: #ffcc00 !important;
-    }
+    .card{display:flex;align-items:center;gap:18px;padding:22px;border-radius:12px;background:linear-gradient(180deg,#232326,#1b1b1d);box-shadow:0 8px 24px rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.03);text-decoration:none;color:#fff;transition:transform .18s ease,box-shadow .18s ease}
+    .card:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(0,0,0,0.7);border-color:rgba(255,215,0,0.18)}
+
+    .card-icon{width:64px;height:64px;border-radius:12px;background:linear-gradient(180deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;color:#111;font-size:26px}
+    .card-body h3{margin:0;font-size:18px}
+    .card-body p{margin:6px 0 0;color:var(--muted)}
+    .card-cta{margin-left:auto;color:var(--muted);font-weight:700}
+
+    @media(max-width:900px){.cards-grid{grid-template-columns:1fr 1fr}}
+    @media(max-width:600px){.cards-grid{grid-template-columns:1fr}.dash-header{flex-direction:column;align-items:flex-start;gap:10px}}
 </style>

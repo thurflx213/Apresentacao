@@ -95,7 +95,7 @@ class ItensPedidosController extends AdminController {
     /**
      * Processa a atualização de um item de pedido.
      */
-    public function atualizarItensPedidos(int $id) {
+    public function atualizarItemPedido(int $id) {
         $quantidade = $_POST['quantidade'] ?? null;
         $preco_unitario = $_POST['preco_unitario'] ?? null;
         
@@ -112,4 +112,26 @@ class ItensPedidosController extends AdminController {
     }
     
     // public function excluirItemPedido(int $id) { ... }
+    public function viewExcluirItemPedido(int $id) {
+        View::render("itenspedidos/delete", ["id" => $id]);
+    }
+
+    public function deletarItemPedido(int $id) {
+         if ($this->itenspedidos->excluirItemPedido($id)) {
+            Redirect::redirecionarComMensagem("/itenspedidos/listar", "success", "Item de Pedido excluído com sucesso!");
+        } else {
+            Redirect::redirecionarComMensagem("/itenspedidos/listar", "error", "Erro ao excluir Item de Pedido.");
+        }
+    }
+    
+    public function relatorioitenspedidos($id, $data1, $data2){
+        View::render("itenspedidos/relatorio",
+           ["id" => $id, "data1" => $data1, "data2" => $data2]
+        );
+    }
+
+    public function viewlistaritenspedidos($pagina = 1){
+        $this->viewListarItemPedido($pagina);
+    }
+
 }

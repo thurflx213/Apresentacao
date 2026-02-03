@@ -1,5 +1,5 @@
 <?php
-namespace App\Koketsu\controles;
+namespace App\Koketsu\Controles;
 
 use App\Koketsu\Models\Categoria;
 use App\Koketsu\Database\Database;
@@ -70,11 +70,23 @@ class CategoriasController {
             Redirect::redirecionarComMensagem("categoria/create", "error", "Erro ao criar categoria. Tente novamente.");
         }
     }
-    public function atualizarCategoria(){
-        echo "Atualizar categoria";
+    public function atualizarCategoria($id){
+        if($this->categoria->atualizarCategoria(
+            $id,
+            $_POST["nome_categorias"],
+            $_POST["descricao_categorias"]
+        )){
+            Redirect::redirecionarComMensagem("categoria/listar", "success", "Categoria atualizada com sucesso!");
+        }else{
+            Redirect::redirecionarComMensagem("categoria/editar/$id", "error", "Erro ao atualizar categoria.");
+        }
     }
-    public function deletarCategoria(){
-        echo "Deletar categoria";
+    public function deletarCategoria($id){
+        if($this->categoria->deletarCategoria($id)){
+            Redirect::redirecionarComMensagem("categoria/listar", "success", "Categoria deletada com sucesso!");
+        }else{
+            Redirect::redirecionarComMensagem("categoria/listar", "error", "Erro ao deletar categoria.");
+        }
     }   
 
 }

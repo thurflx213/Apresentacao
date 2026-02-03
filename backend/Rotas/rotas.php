@@ -33,6 +33,42 @@ class Rotas
               // Clientes
                  "cliente/dashboard" => "Cliente\DashboardController@index",
                  "cliente/editar/{id}" => "Cliente\DashboardController@viewEditarCliente",
+                 "cliente/pedidos" => "Cliente\PedidosController@index",
+                   // --- API REST UNIVERSAL ---
+                   // Produtos
+                   '/api/produtos/{id}' => 'PublicApiController@getProdutoById',
+                   // Pedidos
+                   '/api/pedidos/{id}' => 'PublicApiController@getPedidoById',
+                   // Usuarios
+                   '/api/usuarios' => 'PublicApiController@getUsuarios',
+                   '/api/usuarios/{id}' => 'PublicApiController@getUsuarioById',
+                   // Categorias
+                   '/api/categorias' => 'PublicApiController@getCategorias',
+                   '/api/categorias/{id}' => 'PublicApiController@getCategoriaById',
+                   // Cores
+                   '/api/cores' => 'PublicApiController@getCores',
+                   '/api/cores/{id}' => 'PublicApiController@getCorById',
+                   // Perfis
+                   '/api/perfis' => 'PublicApiController@getPerfis',
+                   '/api/perfis/{id}' => 'PublicApiController@getPerfilById',
+                   // Tamanhos
+                   '/api/tamanhos' => 'PublicApiController@getTamanhos',
+                   '/api/tamanhos/{id}' => 'PublicApiController@getTamanhoById',
+                   // ItensPedidos
+                   '/api/itenspedidos/{id}' => 'PublicApiController@getItemPedidoById',
+                   // Avaliacao
+                   '/api/avaliacoes' => 'PublicApiController@getAvaliacoes',
+                   '/api/avaliacoes/{id}' => 'PublicApiController@getAvaliacaoById',
+                   // Imagens
+                   '/api/imagens' => 'PublicApiController@getImagens',
+                   '/api/imagens/{id}' => 'PublicApiController@getImagemById',
+                   // Carrinho
+                   '/api/carrinho' => 'PublicApiController@getCarrinho',
+                   '/api/carrinho/{id}' => 'PublicApiController@getCarrinhoById',
+                   // Estoque
+                   '/api/estoque' => 'PublicApiController@getEstoque',
+                   '/api/estoque/{id}' => 'PublicApiController@getEstoqueById',
+                 "cliente/pedidos/detalhes/{id}" => "Cliente\PedidosController@detalhes",
               // Perfil
                  "/perfis"        => "PerfilController@index",
                  "/perfil/criar"  => "PerfilController@viewCriarPerfil",
