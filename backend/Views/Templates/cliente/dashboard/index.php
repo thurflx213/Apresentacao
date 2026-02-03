@@ -19,7 +19,7 @@
             <div class="card-cta">Editar <i class="fa fa-arrow-right"></i></div>
         </a>
 
-        <a href="/backend/pedidos" class="card card-action">
+        <a href="/backend/cliente/pedidos" class="card card-action">
             <div class="card-icon"><i class="fa fa-shopping-cart"></i></div>
             <div class="card-body">
                 <h3>Meus Pedidos</h3>

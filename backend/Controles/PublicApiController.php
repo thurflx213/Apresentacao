@@ -9,7 +9,6 @@ use App\Koketsu\Models\Cor;
 use App\Koketsu\Models\Perfil;
 use App\Koketsu\Models\Tamanho;
 use App\Koketsu\Models\ItensPedidos;
-use App\Koketsu\Models\Avaliacao;
 use App\Koketsu\Models\Imagem;
 use App\Koketsu\Models\Carrinho;
 use App\Koketsu\Models\EstoqueMovimentacao;
@@ -18,37 +17,33 @@ use App\Koketsu\Database\Database;
 class PublicApiController {
     private $produtosModel;
     private $pedidosModel;
-    private $usuarioModel;
-    private $categoriaModel;
-    private $corModel;
-    private $perfilModel;
-    private $tamanhoModel;
-    private $itensPedidosModel;
-    private $avaliacaoModel;
-    private $imagemModel;
-    private $carrinhoModel;
-    private $estoqueModel;
     private $db;
 
     public function __construct() {
         $this->db = Database::getInstance();
         $this->produtosModel = new Produtos($this->db);
         $this->pedidosModel = new Pedidos($this->db);
-        $this->usuarioModel = new Usuario($this->db);
-        $this->categoriaModel = new Categoria($this->db);
-        $this->corModel = new Cor($this->db);
-        $this->perfilModel = new Perfil($this->db);
-        $this->tamanhoModel = new Tamanho($this->db);
-        $this->itensPedidosModel = new ItensPedidos($this->db);
-        $this->avaliacaoModel = new Avaliacao($this->db);
-        $this->imagemModel = new Imagem($this->db);
-        $this->carrinhoModel = new Carrinho($this->db);
-        $this->estoqueModel = new EstoqueMovimentacao($this->db);
     }
 
     // ==================== PRODUTOS ====================
     public function getProdutos() {
-        $dados = $this->produtosModel->buscarProdutosAtivos();
+        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+        $registros_por_pagina = 10;
+        $offset = ($page - 1) * $registros_por_pagina;
+        
+        // Total de registros
+        $sqlCount = "SELECT COUNT(*) as total FROM tbl_produtos WHERE excluido_em IS NULL";
+        $stmtCount = $this->db->prepare($sqlCount);
+        $stmtCount->execute();
+        $total = $stmtCount->fetch(\PDO::FETCH_ASSOC)['total'];
+        $total_paginas = ceil($total / $registros_por_pagina);
+        
+        // Dados paginados
+        $sql = "SELECT * FROM tbl_produtos WHERE excluido_em IS NULL LIMIT " . intval($registros_por_pagina) . " OFFSET " . intval($offset);
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        $dados = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        
         foreach ($dados as &$produto) {
             $produto['caminho_imagem'] = '/backend/upload/' . $produto['imagem_produtos'];
         }
@@ -56,7 +51,16 @@ class PublicApiController {
         
         header('Content-Type: application/json');
         http_response_code(200);
-        echo json_encode(['status' => 'success', 'data' => $dados], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        echo json_encode([
+            'status' => 'success',
+            'data' => $dados,
+            'paginacao' => [
+                'pagina_atual' => $page,
+                'registros_por_pagina' => $registros_por_pagina,
+                'total_registros' => $total,
+                'total_paginas' => $total_paginas
+            ]
+        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         exit;
     }
 
@@ -78,11 +82,39 @@ class PublicApiController {
 
     // ==================== PEDIDOS ====================
     public function getPedidos() {
-        $pedidos = $this->pedidosModel->buscarPedidos();
+        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+        $registros_por_pagina = 10;
+        $offset = ($page - 1) * $registros_por_pagina;
+        
+        // Total de registros
+        $sqlCount = "SELECT COUNT(*) as total FROM tbl_pedidos WHERE excluido_em IS NULL";
+        $stmtCount = $this->db->prepare($sqlCount);
+        $stmtCount->execute();
+        $total = $stmtCount->fetch(\PDO::FETCH_ASSOC)['total'];
+        $total_paginas = ceil($total / $registros_por_pagina);
+        
+        // Dados paginados com JOIN para pegar o id_usuario
+        $sql = "SELECT p.id_pedido, p.id_perfil, p.data_pedido, p.total_pedido, p.status_pedido, p.criado_em, p.atualizado_em, pf.id_usuarios 
+                FROM tbl_pedidos p 
+                LEFT JOIN tbl_perfil pf ON p.id_perfil = pf.id_perfil 
+                WHERE p.excluido_em IS NULL 
+                LIMIT " . intval($registros_por_pagina) . " OFFSET " . intval($offset);
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        $pedidos = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         
         header('Content-Type: application/json');
         http_response_code(200);
-        echo json_encode(['status' => 'success', 'data' => $pedidos], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        echo json_encode([
+            'status' => 'success',
+            'data' => $pedidos,
+            'paginacao' => [
+                'pagina_atual' => $page,
+                'registros_por_pagina' => $registros_por_pagina,
+                'total_registros' => $total,
+                'total_paginas' => $total_paginas
+            ]
+        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         exit;
     }
 
@@ -135,14 +167,35 @@ class PublicApiController {
 
     // ==================== USUARIOS ====================
     public function getUsuarios() {
-        $sql = "SELECT id_usuarios, nome_usuarios, email_usuarios, nivel_acesso, foto_usuarios FROM tbl_usuarios WHERE excluido_em IS NULL";
+        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+        $registros_por_pagina = 10;
+        $offset = ($page - 1) * $registros_por_pagina;
+        
+        // Total de registros
+        $sqlCount = "SELECT COUNT(*) as total FROM tbl_usuarios WHERE excluido_em IS NULL";
+        $stmtCount = $this->db->prepare($sqlCount);
+        $stmtCount->execute();
+        $total = $stmtCount->fetch(\PDO::FETCH_ASSOC)['total'];
+        $total_paginas = ceil($total / $registros_por_pagina);
+        
+        // Dados paginados
+        $sql = "SELECT id_usuarios, nome_usuarios, email_usuarios, nivel_acesso, foto_usuarios FROM tbl_usuarios WHERE excluido_em IS NULL LIMIT " . intval($registros_por_pagina) . " OFFSET " . intval($offset);
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         $usuarios = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         
         header('Content-Type: application/json');
         http_response_code(200);
-        echo json_encode(['status' => 'success', 'data' => $usuarios], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        echo json_encode([
+            'status' => 'success',
+            'data' => $usuarios,
+            'paginacao' => [
+                'pagina_atual' => $page,
+                'registros_por_pagina' => $registros_por_pagina,
+                'total_registros' => $total,
+                'total_paginas' => $total_paginas
+            ]
+        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         exit;
     }
 
@@ -179,14 +232,35 @@ class PublicApiController {
 
     // ==================== CATEGORIAS ====================
     public function getCategorias() {
-        $sql = "SELECT id_categorias, nome_categorias FROM tbl_categorias WHERE excluido_em IS NULL";
+        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+        $registros_por_pagina = 10;
+        $offset = ($page - 1) * $registros_por_pagina;
+        
+        // Total de registros
+        $sqlCount = "SELECT COUNT(*) as total FROM tbl_categorias WHERE excluido_em IS NULL";
+        $stmtCount = $this->db->prepare($sqlCount);
+        $stmtCount->execute();
+        $total = $stmtCount->fetch(\PDO::FETCH_ASSOC)['total'];
+        $total_paginas = ceil($total / $registros_por_pagina);
+        
+        // Dados paginados
+        $sql = "SELECT id_categorias, nome_categorias FROM tbl_categorias WHERE excluido_em IS NULL LIMIT " . intval($registros_por_pagina) . " OFFSET " . intval($offset);
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         $categorias = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         
         header('Content-Type: application/json');
         http_response_code(200);
-        echo json_encode(['status' => 'success', 'data' => $categorias], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        echo json_encode([
+            'status' => 'success',
+            'data' => $categorias,
+            'paginacao' => [
+                'pagina_atual' => $page,
+                'registros_por_pagina' => $registros_por_pagina,
+                'total_registros' => $total,
+                'total_paginas' => $total_paginas
+            ]
+        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         exit;
     }
 
@@ -223,20 +297,41 @@ class PublicApiController {
 
     // ==================== CORES ====================
     public function getCores() {
-        $sql = "SELECT id_cores, nome_cores FROM tbl_cores WHERE excluido_em IS NULL";
+        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+        $registros_por_pagina = 10;
+        $offset = ($page - 1) * $registros_por_pagina;
+        
+        // Total de registros
+        $sqlCount = "SELECT COUNT(*) as total FROM tbl_cores WHERE excluido_em IS NULL";
+        $stmtCount = $this->db->prepare($sqlCount);
+        $stmtCount->execute();
+        $total = $stmtCount->fetch(\PDO::FETCH_ASSOC)['total'];
+        $total_paginas = ceil($total / $registros_por_pagina);
+        
+        // Dados paginados
+        $sql = "SELECT id_cores, cor_cores FROM tbl_cores WHERE excluido_em IS NULL LIMIT " . intval($registros_por_pagina) . " OFFSET " . intval($offset);
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         $cores = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         
         header('Content-Type: application/json');
         http_response_code(200);
-        echo json_encode(['status' => 'success', 'data' => $cores], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        echo json_encode([
+            'status' => 'success',
+            'data' => $cores,
+            'paginacao' => [
+                'pagina_atual' => $page,
+                'registros_por_pagina' => $registros_por_pagina,
+                'total_registros' => $total,
+                'total_paginas' => $total_paginas
+            ]
+        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         exit;
     }
 
     public function getCorById($id) {
         $id = (int)$id;
-        $sql = "SELECT id_cores, nome_cores FROM tbl_cores WHERE id_cores = ? AND excluido_em IS NULL";
+        $sql = "SELECT id_cores, cor_cores FROM tbl_cores WHERE id_cores = ? AND excluido_em IS NULL";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$id]);
         $cor = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -267,14 +362,35 @@ class PublicApiController {
 
     // ==================== PERFIS ====================
     public function getPerfis() {
-        $sql = "SELECT id_perfil, endereco_perfil, id_usuarios FROM tbl_perfil WHERE excluido_em IS NULL";
+        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+        $registros_por_pagina = 10;
+        $offset = ($page - 1) * $registros_por_pagina;
+        
+        // Total de registros
+        $sqlCount = "SELECT COUNT(*) as total FROM tbl_perfil WHERE excluido_em IS NULL";
+        $stmtCount = $this->db->prepare($sqlCount);
+        $stmtCount->execute();
+        $total = $stmtCount->fetch(\PDO::FETCH_ASSOC)['total'];
+        $total_paginas = ceil($total / $registros_por_pagina);
+        
+        // Dados paginados
+        $sql = "SELECT id_perfil, endereco_perfil, id_usuarios FROM tbl_perfil WHERE excluido_em IS NULL LIMIT " . intval($registros_por_pagina) . " OFFSET " . intval($offset);
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         $perfis = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         
         header('Content-Type: application/json');
         http_response_code(200);
-        echo json_encode(['status' => 'success', 'data' => $perfis], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        echo json_encode([
+            'status' => 'success',
+            'data' => $perfis,
+            'paginacao' => [
+                'pagina_atual' => $page,
+                'registros_por_pagina' => $registros_por_pagina,
+                'total_registros' => $total,
+                'total_paginas' => $total_paginas
+            ]
+        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         exit;
     }
 
@@ -311,20 +427,41 @@ class PublicApiController {
 
     // ==================== TAMANHOS ====================
     public function getTamanhos() {
-        $sql = "SELECT id_tamanhos, nome_tamanhos FROM tbl_tamanhos WHERE excluido_em IS NULL";
+        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+        $registros_por_pagina = 10;
+        $offset = ($page - 1) * $registros_por_pagina;
+        
+        // Total de registros
+        $sqlCount = "SELECT COUNT(*) as total FROM tbl_tamanhos WHERE excluido_em IS NULL";
+        $stmtCount = $this->db->prepare($sqlCount);
+        $stmtCount->execute();
+        $total = $stmtCount->fetch(\PDO::FETCH_ASSOC)['total'];
+        $total_paginas = ceil($total / $registros_por_pagina);
+        
+        // Dados paginados
+        $sql = "SELECT id_tamanhos, tamanho_tamanhos FROM tbl_tamanhos WHERE excluido_em IS NULL LIMIT " . intval($registros_por_pagina) . " OFFSET " . intval($offset);
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         $tamanhos = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         
         header('Content-Type: application/json');
         http_response_code(200);
-        echo json_encode(['status' => 'success', 'data' => $tamanhos], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        echo json_encode([
+            'status' => 'success',
+            'data' => $tamanhos,
+            'paginacao' => [
+                'pagina_atual' => $page,
+                'registros_por_pagina' => $registros_por_pagina,
+                'total_registros' => $total,
+                'total_paginas' => $total_paginas
+            ]
+        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         exit;
     }
 
     public function getTamanhoById($id) {
         $id = (int)$id;
-        $sql = "SELECT id_tamanhos, nome_tamanhos FROM tbl_tamanhos WHERE id_tamanhos = ? AND excluido_em IS NULL";
+        $sql = "SELECT id_tamanhos, tamanho_tamanhos FROM tbl_tamanhos WHERE id_tamanhos = ? AND excluido_em IS NULL";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$id]);
         $tamanho = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -355,20 +492,41 @@ class PublicApiController {
 
     // ==================== ITENS PEDIDOS ====================
     public function getItenspedidos() {
-        $sql = "SELECT id_itens_pedidos, id_pedido, id_produtos, quantidade_itens_pedidos, preco_item_pedido FROM tbl_itenspedidos WHERE excluido_em IS NULL";
+        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+        $registros_por_pagina = 10;
+        $offset = ($page - 1) * $registros_por_pagina;
+        
+        // Total de registros
+        $sqlCount = "SELECT COUNT(*) as total FROM tbl_itens_pedidos WHERE excluido_em IS NULL";
+        $stmtCount = $this->db->prepare($sqlCount);
+        $stmtCount->execute();
+        $total = $stmtCount->fetch(\PDO::FETCH_ASSOC)['total'];
+        $total_paginas = ceil($total / $registros_por_pagina);
+        
+        // Dados paginados
+        $sql = "SELECT id_itens_pedidos, id_pedido, id_produto, quantidade, preco_unitario FROM tbl_itens_pedidos WHERE excluido_em IS NULL LIMIT " . intval($registros_por_pagina) . " OFFSET " . intval($offset);
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         $itens = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         
         header('Content-Type: application/json');
         http_response_code(200);
-        echo json_encode(['status' => 'success', 'data' => $itens], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        echo json_encode([
+            'status' => 'success',
+            'data' => $itens,
+            'paginacao' => [
+                'pagina_atual' => $page,
+                'registros_por_pagina' => $registros_por_pagina,
+                'total_registros' => $total,
+                'total_paginas' => $total_paginas
+            ]
+        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         exit;
     }
 
     public function getItemPedidoById($id) {
         $id = (int)$id;
-        $sql = "SELECT id_itens_pedidos, id_pedido, id_produtos, quantidade_itens_pedidos, preco_item_pedido FROM tbl_itenspedidos WHERE id_itens_pedidos = ? AND excluido_em IS NULL";
+        $sql = "SELECT id_itens_pedidos, id_pedido, id_produto, quantidade, preco_unitario FROM tbl_itens_pedidos WHERE id_itens_pedidos = ? AND excluido_em IS NULL";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$id]);
         $item = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -399,20 +557,41 @@ class PublicApiController {
 
     // ==================== AVALIAÇÕES ====================
     public function getAvaliacoes() {
-        $sql = "SELECT id_avaliacao, id_usuarios, id_produtos, estrela_avaliacao, comentario_avaliacao FROM tbl_avaliacao WHERE excluido_em IS NULL";
+        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+        $registros_por_pagina = 10;
+        $offset = ($page - 1) * $registros_por_pagina;
+        
+        // Total de registros
+        $sqlCount = "SELECT COUNT(*) as total FROM tbl_avaliacoes WHERE excluido_em IS NULL";
+        $stmtCount = $this->db->prepare($sqlCount);
+        $stmtCount->execute();
+        $total = $stmtCount->fetch(\PDO::FETCH_ASSOC)['total'];
+        $total_paginas = ceil($total / $registros_por_pagina);
+        
+        // Dados paginados
+        $sql = "SELECT id_avaliacoes, id_cliente, id_produto, nota_avaliacoes, comentario_avaliacoes FROM tbl_avaliacoes WHERE excluido_em IS NULL LIMIT " . intval($registros_por_pagina) . " OFFSET " . intval($offset);
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         $avaliacoes = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         
         header('Content-Type: application/json');
         http_response_code(200);
-        echo json_encode(['status' => 'success', 'data' => $avaliacoes], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        echo json_encode([
+            'status' => 'success',
+            'data' => $avaliacoes,
+            'paginacao' => [
+                'pagina_atual' => $page,
+                'registros_por_pagina' => $registros_por_pagina,
+                'total_registros' => $total,
+                'total_paginas' => $total_paginas
+            ]
+        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         exit;
     }
 
     public function getAvaliacaoById($id) {
         $id = (int)$id;
-        $sql = "SELECT id_avaliacao, id_usuarios, id_produtos, estrela_avaliacao, comentario_avaliacao FROM tbl_avaliacao WHERE id_avaliacao = ? AND excluido_em IS NULL";
+        $sql = "SELECT id_avaliacoes, id_cliente, id_produto, nota_avaliacoes, comentario_avaliacoes FROM tbl_avaliacoes WHERE id_avaliacoes = ? AND excluido_em IS NULL";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$id]);
         $avaliacao = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -443,20 +622,41 @@ class PublicApiController {
 
     // ==================== IMAGENS ====================
     public function getImagens() {
-        $sql = "SELECT id_imagem, caminho_imagem, id_produtos FROM tbl_imagens WHERE excluido_em IS NULL";
+        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+        $registros_por_pagina = 10;
+        $offset = ($page - 1) * $registros_por_pagina;
+        
+        // Total de registros
+        $sqlCount = "SELECT COUNT(*) as total FROM tbl_imagem WHERE excluido_em IS NULL";
+        $stmtCount = $this->db->prepare($sqlCount);
+        $stmtCount->execute();
+        $total = $stmtCount->fetch(\PDO::FETCH_ASSOC)['total'];
+        $total_paginas = ceil($total / $registros_por_pagina);
+        
+        // Dados paginados
+        $sql = "SELECT id_imagem, caminho_imagem, id_produto FROM tbl_imagem WHERE excluido_em IS NULL LIMIT " . intval($registros_por_pagina) . " OFFSET " . intval($offset);
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         $imagens = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         
         header('Content-Type: application/json');
         http_response_code(200);
-        echo json_encode(['status' => 'success', 'data' => $imagens], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        echo json_encode([
+            'status' => 'success',
+            'data' => $imagens,
+            'paginacao' => [
+                'pagina_atual' => $page,
+                'registros_por_pagina' => $registros_por_pagina,
+                'total_registros' => $total,
+                'total_paginas' => $total_paginas
+            ]
+        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         exit;
     }
 
     public function getImagemById($id) {
         $id = (int)$id;
-        $sql = "SELECT id_imagem, caminho_imagem, id_produtos FROM tbl_imagens WHERE id_imagem = ? AND excluido_em IS NULL";
+        $sql = "SELECT id_imagem, caminho_imagem, id_produto FROM tbl_imagem WHERE id_imagem = ? AND excluido_em IS NULL";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$id]);
         $imagem = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -487,20 +687,41 @@ class PublicApiController {
 
     // ==================== CARRINHO ====================
     public function getCarrinho() {
-        $sql = "SELECT id_carrinho, id_usuarios, id_produtos, quantidade_carrinho FROM tbl_carrinho WHERE excluido_em IS NULL";
+        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+        $registros_por_pagina = 10;
+        $offset = ($page - 1) * $registros_por_pagina;
+        
+        // Total de registros
+        $sqlCount = "SELECT COUNT(*) as total FROM tbl_carrinho WHERE excluido_em IS NULL";
+        $stmtCount = $this->db->prepare($sqlCount);
+        $stmtCount->execute();
+        $total = $stmtCount->fetch(\PDO::FETCH_ASSOC)['total'];
+        $total_paginas = ceil($total / $registros_por_pagina);
+        
+        // Dados paginados
+        $sql = "SELECT id_carrinho, id_perfil, total_carrinho, status_carrinho FROM tbl_carrinho WHERE excluido_em IS NULL LIMIT " . intval($registros_por_pagina) . " OFFSET " . intval($offset);
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         $carrinho = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         
         header('Content-Type: application/json');
         http_response_code(200);
-        echo json_encode(['status' => 'success', 'data' => $carrinho], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        echo json_encode([
+            'status' => 'success',
+            'data' => $carrinho,
+            'paginacao' => [
+                'pagina_atual' => $page,
+                'registros_por_pagina' => $registros_por_pagina,
+                'total_registros' => $total,
+                'total_paginas' => $total_paginas
+            ]
+        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         exit;
     }
 
     public function getCarrinhoById($id) {
         $id = (int)$id;
-        $sql = "SELECT id_carrinho, id_usuarios, id_produtos, quantidade_carrinho FROM tbl_carrinho WHERE id_carrinho = ? AND excluido_em IS NULL";
+        $sql = "SELECT id_carrinho, id_perfil, total_carrinho, status_carrinho FROM tbl_carrinho WHERE id_carrinho = ? AND excluido_em IS NULL";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$id]);
         $item = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -531,20 +752,41 @@ class PublicApiController {
 
     // ==================== ESTOQUE ====================
     public function getEstoque() {
-        $sql = "SELECT id_estoque_movimentacao, id_produtos, tipo_movimentacao, quantidade_movimentacao, data_movimentacao FROM tbl_estoquemovimentacao WHERE excluido_em IS NULL";
+        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+        $registros_por_pagina = 10;
+        $offset = ($page - 1) * $registros_por_pagina;
+        
+        // Total de registros
+        $sqlCount = "SELECT COUNT(*) as total FROM tbl_estoque_movimentacao WHERE excluido_em IS NULL";
+        $stmtCount = $this->db->prepare($sqlCount);
+        $stmtCount->execute();
+        $total = $stmtCount->fetch(\PDO::FETCH_ASSOC)['total'];
+        $total_paginas = ceil($total / $registros_por_pagina);
+        
+        // Dados paginados
+        $sql = "SELECT id_estoque_movimentacao, id_produto, descricao_estoque_movimentacao, quantidade_estoque_movimentacao, data_estoque_movimentacao FROM tbl_estoque_movimentacao WHERE excluido_em IS NULL LIMIT " . intval($registros_por_pagina) . " OFFSET " . intval($offset);
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         $estoque = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         
         header('Content-Type: application/json');
         http_response_code(200);
-        echo json_encode(['status' => 'success', 'data' => $estoque], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        echo json_encode([
+            'status' => 'success',
+            'data' => $estoque,
+            'paginacao' => [
+                'pagina_atual' => $page,
+                'registros_por_pagina' => $registros_por_pagina,
+                'total_registros' => $total,
+                'total_paginas' => $total_paginas
+            ]
+        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         exit;
     }
 
     public function getEstoqueById($id) {
         $id = (int)$id;
-        $sql = "SELECT id_estoque_movimentacao, id_produtos, tipo_movimentacao, quantidade_movimentacao, data_movimentacao FROM tbl_estoquemovimentacao WHERE id_estoque_movimentacao = ? AND excluido_em IS NULL";
+        $sql = "SELECT id_estoque_movimentacao, id_produto, descricao_estoque_movimentacao, quantidade_estoque_movimentacao, data_estoque_movimentacao FROM tbl_estoque_movimentacao WHERE id_estoque_movimentacao = ? AND excluido_em IS NULL";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$id]);
         $item = $stmt->fetch(\PDO::FETCH_ASSOC);
