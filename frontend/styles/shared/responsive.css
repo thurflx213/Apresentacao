@@ -1,0 +1,165 @@
+/* ================================================
+   RESPONSIVO GLOBAL - Koketsu Grife
+   Ajustes comuns para todas as páginas
+   ================================================ */
+
+/* Evita overflow horizontal */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* NAVBAR (páginas internas) */
+@media (max-width: 992px) {
+  .navbar {
+    padding-left: 16px;
+    padding-right: 16px;
+    height: 88px;
+  }
+
+  .navbar-section,
+  .navbar-center,
+  .navbar-end {
+    flex: 1;
+  }
+
+  .navbar-center {
+    position: static !important;
+    transform: none !important;
+    text-align: center;
+  }
+
+  .icon-link,
+  .icon-button {
+    font-size: 0.85rem;
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    height: 80px;
+    flex-wrap: wrap;
+  }
+
+  .navbar-section,
+  .navbar-center,
+  .navbar-end {
+    width: 100%;
+    justify-content: center !important;
+    text-align: center;
+  }
+
+  .navbar-section {
+    order: 1;
+  }
+
+  .navbar-center {
+    order: 2;
+    margin: 6px 0;
+  }
+
+  .navbar-end {
+    order: 3;
+    gap: 10px;
+  }
+
+  .icon-button {
+    padding: 6px 12px;
+    border-radius: 20px;
+  }
+
+  .offcanvas {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    height: 76px;
+  }
+
+  .logo {
+    max-height: 64px;
+  }
+}
+
+/* CONTAINERS */
+@media (max-width: 992px) {
+  .container,
+  .container-fluid {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container,
+  .container-fluid {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+/* GRIDS E CARDS */
+@media (max-width: 992px) {
+  .products-grid,
+  .categories-grid,
+  .testimonials-grid,
+  .faq-mini-grid {
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .products-grid,
+  .categories-grid,
+  .testimonials-grid,
+  .faq-mini-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .products-grid,
+  .categories-grid,
+  .testimonials-grid,
+  .faq-mini-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* TABELAS */
+@media (max-width: 768px) {
+  table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+  }
+}
+
+/* SEÇÕES ESPECÍFICAS */
+@media (max-width: 768px) {
+  .conteudo-principal {
+    margin: 30px auto;
+  }
+
+  .card-conteudo {
+    padding: 30px 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .card-conteudo h1 {
+    font-size: 1.6rem;
+  }
+
+  .card-conteudo h2 {
+    font-size: 1.2rem;
+  }
+}

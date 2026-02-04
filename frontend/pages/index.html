@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="../styles/shared/components.css">
   <link rel="stylesheet" href="../styles/shared/variables.css">
   <link rel="stylesheet" href="../styles/shared/main.css">
+  <link rel="stylesheet" href="../styles/shared/responsive.css">
   <link rel="stylesheet" href="../styles/shared/footer.css">
   <link rel="stylesheet" href="../styles/pages/index-homepage.css">
 </head>
@@ -204,6 +205,63 @@
   </header>
 
   <main>
+    <!-- BENEFÍCIOS -->
+    <section class="benefits-bar">
+      <div class="benefits-container">
+        <div class="benefit-item">
+          <i class="bi bi-truck"></i>
+          <div>
+            <h3>Entrega rápida</h3>
+            <p>Envio em até 24h úteis</p>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <i class="bi bi-arrow-left-right"></i>
+          <div>
+            <h3>Troca fácil</h3>
+            <p>Primeira troca grátis</p>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <i class="bi bi-shield-check"></i>
+          <div>
+            <h3>Compra segura</h3>
+            <p>Pagamento protegido</p>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <i class="bi bi-credit-card"></i>
+          <div>
+            <h3>Parcelamento</h3>
+            <p>Até 6x sem juros</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROVA SOCIAL -->
+    <section class="social-proof">
+      <div class="social-proof-content">
+        <div>
+          <h2>Mais de 12.000 clientes satisfeitos</h2>
+          <p>Estilo premium com qualidade reconhecida e entrega rápida.</p>
+        </div>
+        <div class="social-proof-metrics">
+          <div class="metric">
+            <strong>4,9/5</strong>
+            <span>Avaliações</span>
+          </div>
+          <div class="metric">
+            <strong>+25 mil</strong>
+            <span>Pedidos entregues</span>
+          </div>
+          <div class="metric">
+            <strong>98%</strong>
+            <span>Recomendam</span>
+          </div>
+        </div>
+      </div>
+    </section>
     <!-- NOSSAS CATEGORIAS -->
     <section class="categories-section">
       <h2 class="section-title">NOSSAS CATEGORIAS</h2>
@@ -250,11 +308,28 @@
       </div>
     </section>
 
+    <!-- CAMPANHA -->
+    <section class="campaign-banner">
+      <div class="campaign-content">
+        <h2>Semana do Look Completo</h2>
+        <p>Combos selecionados com descontos exclusivos por tempo limitado.</p>
+        <a href="catalogo.html" class="btn-explore">Ver campanha</a>
+      </div>
+    </section>
+
     <!-- PRODUTOS EM DESTAQUE -->
     <section class="featured-products-section">
       <h2 class="section-title">PRODUTOS EM DESTAQUE</h2>
       <div class="products-grid" id="vitrine">
         <!-- Produtos serão inseridos dinamicamente via JavaScript -->
+      </div>
+    </section>
+
+    <!-- MAIS VENDIDOS -->
+    <section class="best-sellers-section">
+      <h2 class="section-title">MAIS VENDIDOS</h2>
+      <div class="products-grid" id="best-sellers">
+        <!-- Pode reutilizar os cards via JS se desejar -->
       </div>
     </section>
 
@@ -273,6 +348,73 @@
       </div>
     </section>
 
+    <!-- SELOS DE CONFIANÇA -->
+    <section class="trust-section">
+      <div class="trust-content">
+        <h2>Confiança e autenticidade</h2>
+        <p>Peças exclusivas com qualidade premium, atendimento dedicado e experiência segura do início ao fim.</p>
+      </div>
+      <div class="trust-badges">
+        <div class="trust-badge">
+          <i class="bi bi-patch-check"></i>
+          <span>Autenticidade garantida</span>
+        </div>
+        <div class="trust-badge">
+          <i class="bi bi-lock"></i>
+          <span>Checkout seguro</span>
+        </div>
+        <div class="trust-badge">
+          <i class="bi bi-geo-alt"></i>
+          <span>Rastreamento completo</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- DEPOIMENTOS -->
+    <section class="testimonials-section">
+      <h2 class="section-title">O QUE DIZEM</h2>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <p>“Qualidade impecável e entrega rápida. Recomendo demais!”</p>
+          <span>— Lucas M.</span>
+        </div>
+        <div class="testimonial-card">
+          <p>“Caimento perfeito e acabamento premium. Compra certa.”</p>
+          <span>— Rafael S.</span>
+        </div>
+        <div class="testimonial-card">
+          <p>“A coleção é exclusiva de verdade. Atendimento top.”</p>
+          <span>— André P.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ RÁPIDO -->
+    <section class="faq-mini">
+      <h2 class="section-title">DÚVIDAS RÁPIDAS</h2>
+      <div class="faq-mini-grid">
+        <div class="faq-mini-item">
+          <h3>Como funciona a troca?</h3>
+          <p>Primeira troca grátis em até 7 dias.</p>
+        </div>
+        <div class="faq-mini-item">
+          <h3>Quais formas de pagamento?</h3>
+          <p>Cartão, Pix e boleto com total segurança.</p>
+        </div>
+        <div class="faq-mini-item">
+          <h3>Qual o prazo de entrega?</h3>
+          <p>Envio em até 24h úteis + prazo dos Correios.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA FINAL -->
+    <section class="final-cta">
+      <h2>Assine e ganhe 10% OFF</h2>
+      <p>Receba lançamentos e ofertas exclusivas primeiro.</p>
+      <a href="#newsletterForm" class="btn-explore">Quero meu desconto</a>
+    </section>
+
     <!-- NEWSLETTER -->
     <section class="newsletter-section">
       <h2>FIQUE POR DENTRO DAS NOVIDADES</h2>
@@ -285,6 +427,10 @@
       </form>
     </section>
   </main>
+
+  <a href="https://wa.me/5500000000000" class="whatsapp-float" target="_blank" aria-label="Fale no WhatsApp">
+    <i class="bi bi-whatsapp"></i>
+  </a>
 
   <!-- FOOTER -->
   <footer class="site-footer">

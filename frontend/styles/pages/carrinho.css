@@ -130,3 +130,19 @@ body {
         text-align: center;
       }
     }
+
+    @media (max-width: 576px) {
+      table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+
+      td img {
+        width: 50px;
+      }
+
+      .quantidade input {
+        width: 50px;
+      }
+    }

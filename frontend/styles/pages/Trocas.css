@@ -106,3 +106,27 @@
   color: #222;
   font-weight: 600;
 }
+
+@media (max-width: 768px) {
+  .conteudo-principal {
+    margin: 30px auto;
+  }
+
+  .card-conteudo {
+    padding: 30px 20px;
+  }
+
+  .card-conteudo h1 {
+    font-size: 1.8rem;
+  }
+
+  .card-conteudo h2 {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .card-conteudo {
+    padding: 24px 16px;
+  }
+}
