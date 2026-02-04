@@ -1,31 +1,350 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Produto</title>
-  <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="../styles/shared/responsive.css">
-  <link rel="stylesheet" href="../styles/pages/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Produto | Koketsu Grife</title>
+    <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../node_modules/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/shared/variables.css">
+    <link rel="stylesheet" href="../styles/shared/main.css">
+    <link rel="stylesheet" href="../styles/shared/responsive.css">
+    <link rel="stylesheet" href="../styles/shared/footer.css">
+    <link rel="stylesheet" href="../styles/pages/produto.css">
 </head>
-<body>
-  <header class="bg-dark text-white text-center py-4">
-    <h1>Detalhes do Produto</h1>
-    <button class="btn btn-light mt-3" onclick="window.location.href='index.html'">Voltar para a loja</button>
-  </header>
 
-  
-<main>
-      <picture>
-        <source srcset="../img/manutencao.webp" type="image/webp">
-        <img class="manutencao" src="../img/manutencao.png" alt="">
-      </picture>
-  </main>
+<body class="bg-black text-white">
 
-  <footer class="bg-dark text-white text-center py-3">
-    <p>&copy; 2025 Koketsu Grife</p>
-  </footer>
+    <!-- NAVBAR -->
+    <header>
+        <nav id="navbar" class="navbar d-flex align-items-center px-4 sticky-top">
+            <div class="navbar-section d-flex align-items-center">
+                <a href="catalogo.html" class="icon-link text-white" aria-label="Voltar para catálogo">
+                    <i class="bi bi-arrow-left"></i> <span class="ms-1">Catálogo</span>
+                </a>
+            </div>
 
-  <script src="../js/script.js"></script>
+            <div class="navbar-center">
+                <a href="index.html" aria-label="Página inicial">
+                    <picture>
+                        <source srcset="../img/logo.webp" type="image/webp">
+                        <img src="../img/logo.png" alt="Logo Koketsu Grife" class="logo" />
+                    </picture>
+                </a>
+            </div>
+
+            <div class="navbar-end d-flex justify-content-end align-items-center">
+                <a href="login.html" class="icon-link" aria-label="Fazer login">
+                    <i class="bi bi-person"></i> Login
+                </a>
+                <a href="carrinho.html" class="icon-button" aria-label="Abrir carrinho">
+                    <i class="bi bi-bag"></i> <span id="cart-count" class="cart-count">0</span>
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- MAIN -->
+    <main class="container-fluid px-3 px-md-5 py-5">
+        <div class="row g-4">
+            <!-- Coluna de Imagens -->
+            <div class="col-12 col-lg-6">
+                <div class="product-images">
+                    <!-- Imagem Principal -->
+                    <div class="main-image-container">
+                        <picture>
+                            <source id="main-img-webp" type="image/webp">
+                            <img id="main-image" src="" alt="Produto" class="main-image">
+                        </picture>
+                        <span id="product-badge" class="product-badge-large"></span>
+                    </div>
+
+                    <!-- Imagens Miniatura (Carousel) -->
+                    <div class="thumbnail-carousel">
+                        <button class="carousel-btn prev-btn" aria-label="Anterior">
+                            <i class="bi bi-chevron-left"></i>
+                        </button>
+                        <div class="thumbnails-container">
+                            <div class="thumbnails" id="thumbnails">
+                                <!-- Gerado dinamicamente -->
+                            </div>
+                        </div>
+                        <button class="carousel-btn next-btn" aria-label="Próximo">
+                            <i class="bi bi-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coluna de Informações -->
+            <div class="col-12 col-lg-6">
+                <div class="product-info">
+                    <!-- Categoria e Avaliação -->
+                    <div class="info-header">
+                        <span class="category-badge" id="product-category">Camisetas</span>
+                        <div class="rating">
+                            <span class="stars">
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                            </span>
+                            <span class="rating-count">(<span id="rating-count">156</span> avaliações)</span>
+                        </div>
+                    </div>
+
+                    <!-- Nome e Preço -->
+                    <h1 id="product-name" class="product-title">Polo Canelada Premium Branca</h1>
+                    <div class="price-section">
+                        <span class="price-original" id="price-original">R$ 219,90</span>
+                        <span class="price-current" id="price-current">R$ 179,90</span>
+                        <span class="price-discount" id="price-discount">15% OFF</span>
+                    </div>
+
+                    <!-- Descrição -->
+                    <p id="product-description" class="product-description">
+                        Polo premium com textura canelada sofisticada. Tecido de alta qualidade, gola diferenciada e
+                        acabamento perfeito. Elegância e conforto para todas as ocasiões.
+                    </p>
+
+                    <!-- Benefícios -->
+                    <div class="benefits">
+                        <div class="benefit-item">
+                            <i class="bi bi-box-seam"></i>
+                            <span>Frte grátis acima de R$200</span>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="bi bi-arrow-repeat"></i>
+                            <span>Troca grátis em 7 dias</span>
+                        </div>
+                        <div class="benefit-item">
+                            <i class="bi bi-credit-card"></i>
+                            <span>Parcele em até 6x</span>
+                        </div>
+                    </div>
+
+                    <!-- Seleção de Tamanho -->
+                    <div class="selection-group">
+                        <label class="selection-label">Tamanho <span class="text-warning">*</span></label>
+                        <div class="sizes-grid" id="sizes-grid">
+                            <!-- Gerado dinamicamente -->
+                        </div>
+                    </div>
+
+                    <!-- Seleção de Cor -->
+                    <div class="selection-group">
+                        <label class="selection-label">Cor <span class="text-warning">*</span></label>
+                        <div class="colors-grid" id="colors-grid">
+                            <!-- Gerado dinamicamente -->
+                        </div>
+                    </div>
+
+                    <!-- Quantidade -->
+                    <div class="selection-group">
+                        <label class="selection-label">Quantidade</label>
+                        <div class="quantity-selector">
+                            <button id="qty-minus" class="qty-btn">−</button>
+                            <input id="qty-input" type="number" value="1" min="1" max="10">
+                            <button id="qty-plus" class="qty-btn">+</button>
+                        </div>
+                    </div>
+
+                    <!-- Botões de Ação -->
+                    <div class="action-buttons">
+                        <button id="btn-add-cart" class="btn-primary">
+                            <i class="bi bi-bag-plus"></i> Adicionar ao Carrinho
+                        </button>
+                        <button id="btn-favorite" class="btn-secondary" title="Adicionar aos favoritos">
+                            <i class="bi bi-heart"></i>
+                        </button>
+                    </div>
+
+                    <!-- Parcelas -->
+                    <div class="installment-info">
+                        <strong>Parcelado em até 6x</strong>
+                        <p>6x de <span id="installment-value">R$ 29,98</span> sem juros</p>
+                    </div>
+
+                    <!-- Abas de Informações -->
+                    <div class="info-tabs mt-5">
+                        <div class="tabs-header">
+                            <button class="tab-btn active" data-tab="specifications">
+                                Especificações
+                            </button>
+                            <button class="tab-btn" data-tab="reviews">
+                                Avaliações
+                            </button>
+                            <button class="tab-btn" data-tab="shipping">
+                                Frete e Entrega
+                            </button>
+                        </div>
+
+                        <div class="tabs-content">
+                            <!-- Especificações -->
+                            <div class="tab-pane active" data-tab="specifications">
+                                <div class="specs-table">
+                                    <div class="spec-row">
+                                        <span class="spec-label">Tipo:</span>
+                                        <span class="spec-value" id="spec-type">Polo</span>
+                                    </div>
+                                    <div class="spec-row">
+                                        <span class="spec-label">Material:</span>
+                                        <span class="spec-value" id="spec-material">100% Algodão</span>
+                                    </div>
+                                    <div class="spec-row">
+                                        <span class="spec-label">Tamanhos:</span>
+                                        <span class="spec-value">P, M, G, GG</span>
+                                    </div>
+                                    <div class="spec-row">
+                                        <span class="spec-label">Cores:</span>
+                                        <span class="spec-value">Branco, Preto, Azul</span>
+                                    </div>
+                                    <div class="spec-row">
+                                        <span class="spec-label">Cuidados:</span>
+                                        <span class="spec-value">Lavar em água morna, não desbotar</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Avaliações -->
+                            <div class="tab-pane" data-tab="reviews">
+                                <div class="reviews-section">
+                                    <div class="review-item">
+                                        <div class="review-header">
+                                            <span class="review-author">João Silva</span>
+                                            <span class="review-stars">★★★★★</span>
+                                        </div>
+                                        <p class="review-text">Produto excelente! Qualidade impecável, chegou rápido e bem embalado. Recomendo!</p>
+                                    </div>
+                                    <div class="review-item">
+                                        <div class="review-header">
+                                            <span class="review-author">Maria Santos</span>
+                                            <span class="review-stars">★★★★☆</span>
+                                        </div>
+                                        <p class="review-text">Muito bom, só achei um pouco caro. Mas a qualidade compensa.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Frete e Entrega -->
+                            <div class="tab-pane" data-tab="shipping">
+                                <div class="shipping-info">
+                                    <h5>Informações de Frete</h5>
+                                    <ul>
+                                        <li><strong>Frete Grátis:</strong> Acima de R$ 200</li>
+                                        <li><strong>Prazo:</strong> 7 a 15 dias úteis</li>
+                                        <li><strong>Rastreamento:</strong> Código enviado por e-mail</li>
+                                        <li><strong>Trocas:</strong> Até 7 dias após recebimento</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- PRODUTOS RELACIONADOS -->
+    <section class="related-products">
+        <div class="container-fluid px-3 px-md-5">
+            <h2 class="section-title">Produtos Relacionados</h2>
+            <div class="related-grid" id="related-products">
+                <!-- Gerado dinamicamente -->
+            </div>
+        </div>
+    </section>
+
+    <!-- INFO COMPLEMENTAR -->
+    <div class="top-bar">
+        <div class="info-box">
+            <i class="bi bi-clock"></i>
+            <div>
+                <h4>ATENDIMENTO</h4>
+                <p>SEG A SEX DAS 08H-11:30 E DAS 13H-17:30H</p>
+            </div>
+        </div>
+        <div class="info-box">
+            <i class="bi bi-box-seam"></i>
+            <div>
+                <h4>TROCAS E DEVOLUÇÕES</h4>
+                <p>ATÉ 7 DIAS PARA TROCAS OU DEVOLUÇÕES</p>
+            </div>
+        </div>
+        <div class="info-box">
+            <i class="bi bi-truck"></i>
+            <div>
+                <h4>FRETE</h4>
+                <p>GRÁTIS PARA COMPRAS ACIMA DE R$349<br>PARA TODO O BRASIL</p>
+            </div>
+        </div>
+        <div class="info-box">
+            <i class="bi bi-credit-card"></i>
+            <div>
+                <h4>PARCELAMENTO</h4>
+                <p>EM ATÉ 6X SEM JUROS NO CARTÃO</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="coluna-footer newsletter">
+                <h3 class="titulo">Faça parte da nossa família e receba acessos exclusivos e novidades.</h3>
+                <p>Inscreva-se para ter acesso a exclusivo á venda antecipada, novidades promoções.</p>
+                <form action="/contato/salvar" method="POST" class="form-email">
+                    <div class="input-group">
+                        <input type="email" name="email_contato" placeholder="Seu e-mail" required>
+                        <button type="submit">OK</button>
+                    </div>
+                </form>
+                <div class="redes-sociais-icones mt-4">
+                    <a href="#"><i class="bi bi-instagram me-3"></i></a>
+                    <a href="#"><i class="bi bi-facebook me-3"></i></a>
+                    <a href="#"><i class="bi bi-tiktok"></i></a>
+                </div>
+            </div>
+
+            <div class="coluna-footer">
+                <h3 class="titulo">INSTITUCIONAL</h3>
+                <a href="sobre.html">Sobre a Koketsu</a>
+                <a href="politica.html">Política de Privacidade</a>
+                <a href="fidelidade.html">Programa de Fidelidade</a>
+            </div>
+
+            <div class="coluna-footer">
+                <h3 class="titulo">AJUDA</h3>
+                <a href="duvidas.html">Dúvidas Frequentes</a>
+                <a href="Trocas.html">Trocas e Devoluções</a>
+                <a href="frete.html">Frete e Entrega</a>
+            </div>
+
+            <div class="coluna-footer">
+                <h3 class="titulo">FALE CONOSCO</h3>
+                <p class="small">Seg a Sáb (exceto feriados)<br>09h às 19h</p>
+                <p class="email-sac">sac@koketsu.com.br</p>
+                <a href="https://WhatsApp.com" target="_blank" class="btn-whatsapp-footer">
+                    WHATSAPP <i class="bi bi-whatsapp"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="copyright-container">
+            <div class="container">
+                <p>© 2026 KOKETSU GRIFE. TODOS OS DIREITOS RESERVADOS.</p>
+                <div class="pagamentos">
+                    <i class="bi bi-credit-card-2-back mx-1"></i>
+                    <i class="bi bi-qr-code mx-1"></i>
+                    <i class="bi bi-bank mx-1"></i>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/produto.js"></script>
 </body>
-</html>
+
