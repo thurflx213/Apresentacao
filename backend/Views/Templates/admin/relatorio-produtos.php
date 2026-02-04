@@ -268,7 +268,7 @@
                         ?>
                         <?php foreach ($produtosMaisVendidos as $index => $produto): ?>
                             <tr>
-                                <td><strong>#<?php echo $produto['id_produtos']; ?></strong></td>
+                                <td><strong>#<?php echo $produto['id_produto']; ?></strong></td>
                                 <td><?php echo htmlspecialchars(substr($produto['nome_produtos'], 0, 50)); ?></td>
                                 <td>
                                     <span class="categoria">

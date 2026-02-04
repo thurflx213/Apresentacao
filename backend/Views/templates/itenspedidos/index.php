@@ -2,40 +2,6 @@
      <h5><b><i class="fa fa-shopping-basket"></i> Itens de Pedidos</b></h5>
 </header>
 
-<div class="w3-row-padding w3-margin-bottom">
-         <div class="w3-quarter">
-        <div class="w3-container w3-theme w3-padding-16">
-         <div class="w3-left"><i class="fa fa-tags w3-xxxlarge"></i></div>
-         <div class="w3-right"><h3>120</h3></div>
-         <div class="w3-clear"></div>
-         <h4>Produtos</h4>
-        </div>
-     </div>
-     <div class="w3-quarter">
-        <div class="w3-container w3-black w3-padding-16">
-         <div class="w3-left"><i class="fa fa-shopping-cart w3-xxxlarge"></i></div>
-         <div class="w3-right"><h3><?= $total_itenspedidos ?? 'N/A' ?></h3></div>
-         <div class="w3-clear"></div>
-         <h4>Total de Itens</h4>
-        </div>
-     </div>
-     <div class="w3-quarter">
-        <div class="w3-container w3-yellow w3-text-black w3-padding-16">
-         <div class="w3-left"><i class="fa fa-users w3-xxxlarge"></i></div>
-         <div class="w3-right"><h3>56</h3></div>
-         <div class="w3-clear"></div>
-         <h4>Clientes</h4>
-        </div>
-     </div>
-     <div class="w3-quarter">
-        <div class="w3-container w3-dark-grey w3-padding-16">
-         <div class="w3-left"><i class="fa fa-star w3-xxxlarge"></i></div>
-         <div class="w3-right"><h3>4.8★</h3></div>
-         <div class="w3-clear"></div>
-         <h4>Avaliações</h4>
-        </div>
-     </div>
-</div>
 
 <div class="w3-container w3-margin-bottom">
     <h3><i class="fa fa-list-ul"></i> Lista de Itens de Pedidos</h3>
@@ -71,7 +37,7 @@
                     </a>
                 </td>
                 <td>
-                    <?= htmlspecialchars($itempedido['nome_produto'] ?? 'ID ' . $itempedido['id_produto']) ?>
+                    <?= htmlspecialchars($itempedido['nome_produtos'] ?? 'ID ' . $itempedido['id_produto']) ?>
                 </td>
                 <td><?= htmlspecialchars($itempedido['quantidade']) ?></td>
                 <td>R$ <?= number_format($itempedido['preco_unitario'], 2, ',', '.') ?></td>

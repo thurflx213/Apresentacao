@@ -32,7 +32,7 @@
                     <?php foreach ($itens as $it): ?>
                         <tr style="border-top:1px solid rgba(255,255,255,0.03);">
                             <td><?= htmlspecialchars($it['nome_produtos'] ?? 'Produto') ?></td>
-                            <td><?= htmlspecialchars($it['quantidade_itens_pedidos'] ?? 0) ?></td>
+                            <td><?= htmlspecialchars($it['quantidade'] ?? 0) ?></td>
                             <td>R$ <?= number_format($it['preco_unitario'] ?? 0,2,',','.') ?></td>
                             <td>R$ <?= number_format(($it['quantidade'] * ($it['preco_unitario'] ?? 0)),2,',','.') ?></td>
                         </tr>

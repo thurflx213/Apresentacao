@@ -6,6 +6,8 @@ use App\Koketsu\Models\Produtos;
 use App\Koketsu\Models\Pedidos;
 use App\Koketsu\Models\Usuario;
 use App\Koketsu\Models\Categoria;
+use App\Koketsu\Controles\Admin\AuthenticatedController;
+use App\Koketsu\Core\Redirect;
 use App\Koketsu\Core\View;
 use App\Koketsu\Database\Database;
 
@@ -39,7 +41,7 @@ class RelatoriosController extends AuthenticatedController
             'nomeUsuario' => $_SESSION['usuario_nome'] ?? 'Admin'
         ];
         
-        View::renderizar('admin/relatorios', $data);
+        View::render('admin/relatorios', $data);
     }
     
     public function relatorioDetalhado()
@@ -56,7 +58,7 @@ class RelatoriosController extends AuthenticatedController
                     u.email_usuarios,
                     COUNT(ip.id_itens_pedidos) as quantidade_itens
                 FROM tbl_pedidos p
-                LEFT JOIN tbl_usuarios u ON p.id_usuario = u.id_usuarios
+                LEFT JOIN tbl_usuarios u ON id_usuarios = u.id_usuarios
                 LEFT JOIN tbl_itens_pedidos ip ON p.id_pedido = ip.id_pedido
                 GROUP BY p.id_pedido, p.data_pedido, p.total_pedido, p.status_pedido, u.nome_usuarios, u.email_usuarios
                 ORDER BY p.data_pedido DESC
@@ -71,7 +73,7 @@ class RelatoriosController extends AuthenticatedController
             'nomeUsuario' => $_SESSION['usuario_nome'] ?? 'Admin'
         ];
         
-        View::renderizar('admin/relatorio-detalhado', $data);
+        View::render('admin/relatorio-detalhado', $data);
     }
     
     public function relatorioFinanceiro()
@@ -113,7 +115,7 @@ class RelatoriosController extends AuthenticatedController
             'nomeUsuario' => $_SESSION['usuario_nome'] ?? 'Admin'
         ];
         
-        View::renderizar('admin/relatorio-financeiro', $data);
+        View::render('admin/relatorio-financeiro', $data);
     }
     
     public function relatorioProdutos()
@@ -127,8 +129,8 @@ class RelatoriosController extends AuthenticatedController
                     pr.preco_produtos,
                     c.nome_categorias,
                     COUNT(ip.id_itens_pedidos) as total_vendido,
-                    SUM(ip.quantidade_itens_pedidos) as quantidade_total,
-                    SUM(ip.preco_item_pedido * ip.quantidade_itens_pedidos) as receita
+                    SUM(ip.quantidade) as quantidade_total,
+                    SUM(ip.preco_unitario * ip.quantidade) as receita
                 FROM tbl_produtos pr
                 LEFT JOIN tbl_categorias c ON pr.id_categoria = c.id_categorias
                 LEFT JOIN tbl_itens_pedidos ip ON pr.id_produto = ip.id_produto
@@ -145,7 +147,7 @@ class RelatoriosController extends AuthenticatedController
             'nomeUsuario' => $_SESSION['usuario_nome'] ?? 'Admin'
         ];
         
-        View::renderizar('admin/relatorio-produtos', $data);
+        View::render('admin/relatorio-produtos', $data);
     }
     
     private function obterVendasTotais($db)

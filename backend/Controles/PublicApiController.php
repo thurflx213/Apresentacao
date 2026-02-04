@@ -120,7 +120,7 @@ class PublicApiController {
 
     public function getPedidoById($id) {
         $id = (int)$id;
-        $pedido = $this->pedidosModel->buscarPorId($id);
+        $pedido = $this->pedidosModel->buscarPedidoPorId($id);
         
         header('Content-Type: application/json');
         if ($pedido) {
@@ -143,7 +143,7 @@ class PublicApiController {
             ]);
             exit;
         }
-        $novoPedidoId = $this->pedidosModel->criarPedido($carrinho);
+        $novoPedidoId = $this->pedidosModel->inserirPedido($carrinho);
         if ($novoPedidoId) {
             http_response_code(201);
             echo json_encode([

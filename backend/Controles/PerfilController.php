@@ -58,7 +58,7 @@ class PerfilController {
             $_POST["data_cadastro"],
             "Ativo"
         )){
-            Redirect::redirecionarComMensagem("perfil/listar", "success", "perfil criado com sucesso!");
+            Redirect::redirecionarComMensagem("/perfil/listar", "success", "perfil criado com sucesso!");
         }else{
             Redirect::redirecionarComMensagem("perfil/create", "error", "Erro ao criar perfil. Tente novamente.");
         }
@@ -71,17 +71,17 @@ class PerfilController {
             $_POST["data_cadastro"],
             $_POST["id_usuarios"]
         )){
-            Redirect::redirecionarComMensagem("perfil/listar", "success", "Perfil atualizado com sucesso!");
+            Redirect::redirecionarComMensagem("/perfil/listar", "success", "Perfil atualizado com sucesso!");
         }else{
-            Redirect::redirecionarComMensagem("perfil/editar/$id", "error", "Erro ao atualizar perfil.");
+            Redirect::redirecionarComMensagem("/perfil/editar/$id", "error", "Erro ao atualizar perfil.");
         }
     }
 
     public function deletarPerfil($id) {
         if($this->perfil->deletarPerfil($id)){
-            Redirect::redirecionarComMensagem("perfil/listar", "success", "Perfil deletado com sucesso!");
+            Redirect::redirecionarComMensagem("/perfil/listar", "success", "Perfil deletado com sucesso!");
         }else{
-            Redirect::redirecionarComMensagem("perfil/listar", "error", "Erro ao deletar perfil.");
+            Redirect::redirecionarComMensagem("/perfil/listar", "error", "Erro ao deletar perfil.");
         }
     }
 }
