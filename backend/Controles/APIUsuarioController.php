@@ -28,7 +28,7 @@ class APIUsuarioController{
         ]);
         exit;
         }
-        $registros_por_pagina = $pagina===0 ? 200 : 5;
+        $registros_por_pagina = $pagina===0 ? 20 : 5;
         $pagina = $pagina===0 ? 1 : (int)$pagina;
        $dados = $this->usuarioModel->paginacaoAPI($pagina,$registros_por_pagina);
        foreach ($dados['data'] as $usuario){

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\koketsu\Rotas;
+namespace App\Koketsu\Rotas;
 
 class Rotas
 {
