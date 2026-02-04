@@ -9,7 +9,8 @@ use App\Koketsu\Core\Session;
 <title>Koketsu | Loja de Roupas</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
+<link rel="stylesheet" href="/frontend/node_modules/bootstrap/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="/frontend/node_modules/bootstrap-icons/font/bootstrap-icons.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <style>
@@ -170,11 +171,27 @@ footer {
   background-color: #555;
 }
 
+/* ======= OVERLAY / ANIMAÇÕES ======= */
+.w3-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 900;
+  display: none;
+}
+
+.w3-animate-left {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
 
 
 </style>
 </head>
-<body class="w3-light-grey">
+<body class="bg-dark text-light">
 
   <?php
     $session = new Session();

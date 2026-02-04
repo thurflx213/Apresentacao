@@ -1,0 +1,218 @@
+/* ================================================
+   TIPOGRAFIA PADRONIZADA - Koketsu Grife
+   Todas as páginas devem usar essas classes
+   ================================================ */
+
+/* TÍTULOS PRINCIPAIS */
+.hero-title,
+h1 {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  margin: var(--space-4) 0 var(--space-3) 0;
+}
+
+h2,
+.section-title {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  margin: var(--space-5) 0 var(--space-3) 0;
+  letter-spacing: -0.5px;
+}
+
+h3,
+.subsection-title {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  margin: var(--space-3) 0 var(--space-2) 0;
+}
+
+h4 {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  margin: var(--space-3) 0 var(--space-2) 0;
+}
+
+h5 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  margin: var(--space-2) 0 var(--space-1) 0;
+}
+
+h6 {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: var(--space-2) 0 var(--space-1) 0;
+}
+
+/* BODY TEXT */
+p {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  margin: 0 0 var(--space-3) 0;
+  color: inherit;
+}
+
+/* SMALL TEXT */
+.text-sm,
+small {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.text-xs {
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-tight);
+}
+
+/* BUTTON TEXT */
+.btn,
+button {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+}
+
+/* LABEL TEXT */
+label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  display: block;
+  margin-bottom: var(--space-2);
+}
+
+/* CARD TITLES */
+.card-title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  line-height: var(--line-height-tight);
+}
+
+/* CARD PRICE */
+.card-price,
+.price {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary);
+}
+
+.price-original {
+  font-size: var(--font-size-sm);
+  text-decoration: line-through;
+  color: var(--color-text-muted);
+}
+
+/* FAQ */
+.faq-question {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: color var(--transition-normal);
+}
+
+.faq-answer {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-loose);
+  color: var(--color-text-muted);
+}
+
+/* MENU ITEMS */
+.nav-item,
+.menu-item {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* FOOTER TEXT */
+.footer-title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-3);
+}
+
+.footer-text,
+.footer-link {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  color: var(--color-text-light);
+}
+
+/* BADGE TEXT */
+.badge {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* HERO SECTION */
+.hero-subtitle {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-text-muted);
+  margin: var(--space-3) 0;
+}
+
+/* BREADCRUMB */
+.breadcrumb-item {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+/* ========== RESPONSIVE FONT SIZES ========== */
+
+/* Tablets (768px+) */
+@media (max-width: 768px) {
+  h1,
+  .hero-title {
+    font-size: var(--font-size-3xl);
+  }
+
+  h2,
+  .section-title {
+    font-size: var(--font-size-2xl);
+  }
+
+  h3,
+  .subsection-title {
+    font-size: var(--font-size-xl);
+  }
+
+  .faq-question {
+    font-size: var(--font-size-base);
+  }
+}
+
+/* Mobile (480px and below) */
+@media (max-width: 480px) {
+  h1,
+  .hero-title {
+    font-size: var(--font-size-2xl);
+  }
+
+  h2,
+  .section-title {
+    font-size: var(--font-size-xl);
+  }
+
+  h3,
+  .subsection-title {
+    font-size: var(--font-size-lg);
+  }
+
+  .card-title {
+    font-size: var(--font-size-sm);
+  }
+
+  .nav-item,
+  .menu-item {
+    font-size: var(--font-size-xs);
+  }
+}

@@ -1,0 +1,254 @@
+// EXEMPLO DE DADOS PARA TESTE DA API
+// Coloque este conteúdo em api/vitrine.php ou use como referência
+
+[
+  {
+    "categoria": "CAMISETAS",
+    "tag": "Premium Masculino",
+    "itens": [
+      {
+        "id": 1,
+        "nome": "Calça Chino Bege Premium",
+        "preco": "299.90",
+        "img": "../img/calça-1.jpg",
+        "novo": true,
+        "desconto": null,
+        "oferta": null
+      },
+      {
+        "id": 2,
+        "nome": "Polo Canaleta Branca",
+        "preco": "189.90",
+        "img": "../img/polo-1.jpg",
+        "novo": false,
+        "desconto": null,
+        "oferta": "EXCLUSIVO"
+      },
+      {
+        "id": 3,
+        "nome": "Calça Alfaiataria Azul Marinho",
+        "preco": "299.90",
+        "img": "../img/calça-2.jpg",
+        "novo": true,
+        "desconto": null,
+        "oferta": null
+      },
+      {
+        "id": 4,
+        "nome": "Calça Chino Khaki",
+        "preco": "299.90",
+        "img": "../img/calça-3.jpg",
+        "novo": false,
+        "desconto": null,
+        "oferta": "EXCLUSIVO"
+      },
+      {
+        "id": 5,
+        "nome": "Camiseta Overcoming Limits Preta",
+        "preco": "149.90",
+        "img": "../img/camiseta-1.jpg",
+        "novo": true,
+        "desconto": null,
+        "oferta": null
+      },
+      {
+        "id": 6,
+        "nome": "Calça Alfaiataria Cinza",
+        "preco": "299.90",
+        "img": "../img/calça-4.jpg",
+        "novo": true,
+        "desconto": null,
+        "oferta": null
+      },
+      {
+        "id": 7,
+        "nome": "Camiseta Overcoming Preta",
+        "preco": "149.90",
+        "img": "../img/camiseta-2.jpg",
+        "novo": false,
+        "desconto": null,
+        "oferta": "EXCLUSIVO"
+      },
+      {
+        "id": 8,
+        "nome": "Calça Chino Bege Premium",
+        "preco": "299.90",
+        "img": "../img/calça-5.jpg",
+        "novo": true,
+        "desconto": null,
+        "oferta": null
+      }
+    ]
+  },
+  {
+    "categoria": "CALÇAS",
+    "tag": "Alfaiataria e Cargo",
+    "itens": [
+      {
+        "id": 101,
+        "nome": "Calça Cargo Preta Premium",
+        "preco": "349.90",
+        "img": "../img/cargo-1.jpg",
+        "novo": false,
+        "desconto": null,
+        "oferta": null
+      },
+      {
+        "id": 102,
+        "nome": "Calça Jeans Escuro",
+        "preco": "199.90",
+        "img": "../img/jeans-1.jpg",
+        "novo": true,
+        "desconto": null,
+        "oferta": null
+      },
+      {
+        "id": 103,
+        "nome": "Calça Jogger Cinza",
+        "preco": "239.90",
+        "img": "../img/jogger-1.jpg",
+        "novo": false,
+        "desconto": null,
+        "oferta": "NOVO"
+      },
+      {
+        "id": 104,
+        "nome": "Calça Cargo Bege",
+        "preco": "329.90",
+        "img": "../img/cargo-2.jpg",
+        "novo": false,
+        "desconto": null,
+        "oferta": null
+      }
+    ]
+  },
+  {
+    "categoria": "POLOS",
+    "tag": "Piqué Premium",
+    "itens": [
+      {
+        "id": 201,
+        "nome": "Polo Piqué Premium Branco",
+        "preco": "189.90",
+        "img": "../img/polo-premium-1.jpg",
+        "novo": true,
+        "desconto": null,
+        "oferta": null
+      },
+      {
+        "id": 202,
+        "nome": "Polo Piqué Premium Preto",
+        "preco": "189.90",
+        "img": "../img/polo-premium-2.jpg",
+        "novo": false,
+        "desconto": null,
+        "oferta": null
+      },
+      {
+        "id": 203,
+        "nome": "Polo Piqué Premium Azul",
+        "preco": "189.90",
+        "img": "../img/polo-premium-3.jpg",
+        "novo": true,
+        "desconto": null,
+        "oferta": null
+      },
+      {
+        "id": 204,
+        "nome": "Polo Piqué Premium Cinza",
+        "preco": "189.90",
+        "img": "../img/polo-premium-4.jpg",
+        "novo": false,
+        "desconto": null,
+        "oferta": null
+      }
+    ]
+  },
+  {
+    "categoria": "LOOKS COMPLETOS",
+    "tag": "Coleção Exclusiva",
+    "itens": [
+      {
+        "id": 301,
+        "nome": "Look Casual Premium #1",
+        "preco": "599.90",
+        "img": "../img/look-1.jpg",
+        "novo": true,
+        "desconto": null,
+        "oferta": null
+      },
+      {
+        "id": 302,
+        "nome": "Look Streetwear #1",
+        "preco": "649.90",
+        "img": "../img/look-2.jpg",
+        "novo": true,
+        "desconto": null,
+        "oferta": "NOVO"
+      },
+      {
+        "id": 303,
+        "nome": "Look Formal Premium",
+        "preco": "799.90",
+        "img": "../img/look-3.jpg",
+        "novo": false,
+        "desconto": null,
+        "oferta": "EXCLUSIVO"
+      },
+      {
+        "id": 304,
+        "nome": "Look Casual Sport",
+        "preco": "549.90",
+        "img": "../img/look-4.jpg",
+        "novo": false,
+        "desconto": null,
+        "oferta": null
+      }
+    ]
+  }
+]
+
+// =========================================
+// INSTRUÇÕES PARA USAR ESTE ARQUIVO
+// =========================================
+
+/*
+1. Se estiver usando PHP, criar arquivo em:
+   backend/Api/VitrolController.php
+   ou
+   api/vitrine.php
+
+2. Exemplo em PHP:
+   
+   <?php
+   
+   header('Content-Type: application/json');
+   
+   $data = [
+     [
+       "categoria": "CAMISETAS",
+       "tag": "Premium Masculino",
+       "itens": [...]
+     ],
+     ...
+   ];
+   
+   echo json_encode($data);
+   ?>
+
+3. Se estiver usando Node/Express:
+   
+   app.get('/api/vitrine', (req, res) => {
+     const data = [...] // Array acima
+     res.json(data);
+   });
+
+4. Para teste rápido sem backend:
+   Edite js/products.js:
+   
+   const fetchProducts = async () => {
+     return [
+       // Copie os dados deste arquivo aqui
+     ];
+   };
+*/

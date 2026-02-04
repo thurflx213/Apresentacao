@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Carrinho</title>
+  <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="../node_modules/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles/shared/variables.css">
+  <link rel="stylesheet" href="../styles/shared/main.css">
+  <link rel="stylesheet" href="../styles/shared/footer.css">
+  <link rel="stylesheet" href="../styles/pages/carrinho.css">
+  <link rel="stylesheet" href="../styles/pages/frete.css">
+<link rel="stylesheet" href="../styles/pages/carrinho.css">
+</head>
+<body>
+    <div class="page-content">
+    <header>
+        <!-- Navbar personalizada -->
+        <nav id="navbar" class="navbar d-flex align-items-center px-4 sticky-top">
+          <!-- Esquerda: Menu e Pesquisa -->
+          <div class="navbar-section d-flex align-items-center">
+            <button class="btn btn-link text-white d-flex align-items-center p-0 me-3" data-bs-toggle="offcanvas" data-bs-target="#menuOffcanvas">
+              <i class="bi bi-list fs-5"></i> <span class="ms-1">Menu</span>
+            </button>
+      
+          </div>
+      
+          <!-- Centro: Logo -->
+          <div class="navbar-center">
+            <a href="index.html" aria-label="Página inicial">
+              <picture>
+                <source srcset="../img/logo.webp" type="image/webp">
+                <img src="../img/logo.png" alt="Logo Koketsu Grife" class="logo" />
+              </picture>
+            </a>
+          </div>
+      
+          <!-- Direita: Login e Carrinho -->
+          <div class="navbar-end d-flex justify-content-end align-items-center">
+            <a href="login.html" class="icon-link"><i class="bi bi-person"></i> Login</a>
+            <a href="https://instagram.com" class="icon-button"><i class="bi bi-bag"></i> Carrinho</a>
+          </div>
+        </nav>
+
+        </header>
+        
+         <div class="container">
+  <div class="carrinho-card">
+    <h1><i class="bi bi-cart-fill"></i> Seu Carrinho</h1>
+
+    <table id="cartTable">
+      <thead>
+        <tr>
+          <th>Produto</th>
+          <th>Preço</th>
+          <th>Quantidade</th>
+          <th>Total</th>
+          <th>Remover</th>
+        </tr>
+      </thead>
+      <tbody id="cartItems">
+        <!-- Preenchido dinamicamente -->
+      </tbody>
+    </table>
+
+    <div class="resumo-pedido">
+      <h2>Resumo do Pedido</h2>
+      <p>Subtotal: <span id="subtotal">R$ 0,00</span></p>
+      <p>Frete: <span id="frete">R$ 20,00</span></p>
+      <p><strong>Total: <span id="totalFinal">R$ 0,00</span></strong></p>
+      <button class="checkout-btn" id="checkoutBtn">Finalizar Compra</button>
+    </div>
+  </div>
+</div>
+  <footer>
+    <div class="container">
+        <div class="coluna-footer">
+            <h3 class="titulo">FAÇA PARTE DA NOSSA FAMILIA</h3>
+            <p>Inscreva-se para ter acesso a exclusivo á venda antecipada, novidades promoções.</p>
+            <form action="mailto:seuemail@exemplo.com" method="POST" enctype="text/plain" class="form-email">
+              <label for="email">Digite seu e-mail:</label>
+              <input type="email" id="email" name="email" placeholder="E-mail" required>
+              <button type="submit">Confirmar</button>
+            </form>
+
+        </div>
+        <div class="coluna-footer">
+            <h3 class="titulo">INSTITUCIONAL</h3>
+            <p><a href="sobre.html" class="hover-destaque">Sobre a Koketsu</a></p>
+        </div>
+
+        <div class="coluna-footer">
+            <h3 class="titulo">ATENDIMENTO AO CLIENTE</h3>
+            <a href="duvidas.html"><p>Dúvidas Frequentes</p></a>
+            <a href="Trocas.html"><P>Trocas e Devoluções</P></a>
+            <a href="politica.html"><P>Politica de Privacidade</P></a>
+            <a href="frete.html"><P>Frete e Entrega</P></a>
+        </div>
+
+        <div class="coluna-footer">
+          <h3 class="titulo">MINHA CONTA</h3>
+          <a href="#"><p>Minha Conta</p></a>
+          <a href="carrinho.html"><p>Carrinho</p></a>
+          <a href="fidelidade.html"><p>Programa de Fidelidade</p></a>
+          
+
+        <h3 class="titulo fale-conosco">FALE CONOSCO</h3>
+        <p>Atendimento:</p>
+        <p>Segunda a Sabado (exceto feriados) das 09h ás 19h</p>
+        <p>E-mail: sac@Koketsu.com.br</p>
+        <A  href="https://WhatsApp.com" target="_blank"><button type="button" class="btn3">WhatsApp  <img src="../img/icons/whatsapp.svg" alt=""></button></A>
+       </div>
+       <div class="copyright">
+        <p>© 2025 Koketsu Grife. Todos os direitos reservados. Koketsu comércio de roupas. calçados e acessorios ltda.</p>
+        <p></p>
+      </div>
+  </div>
+</footer>
+
+<script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/navbar.js"></script>
+  <script src="../js/cart.js"></script>
+  <script src="../js/script.js"></script>
+
+  <script>
+    /**
+     * Exibir itens do carrinho na página
+     */
+    function getWebpPath(path) {
+      if (!path) return path;
+      return path.replace(/\.(jpg|jpeg|png)$/i, '.webp');
+    }
+
+    function renderCartItems() {
+      const cart = CartManager.getCart();
+      const tbody = document.getElementById('cartItems');
+      const subtotalEl = document.getElementById('subtotal');
+      const frete = 20;
+      const freteEl = document.getElementById('frete');
+      const totalFinalEl = document.getElementById('totalFinal');
+      
+      tbody.innerHTML = '';
+      
+      if (cart.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="5" style="text-align: center; padding: 40px;">
+              <p>Seu carrinho está vazio</p>
+              <a href="index.html" class="btn btn-primary mt-3">Voltar para a loja</a>
+            </td>
+          </tr>
+        `;
+        subtotalEl.textContent = 'R$ 0,00';
+        totalFinalEl.textContent = 'R$ 0,00';
+        return;
+      }
+      
+      let subtotal = 0;
+      
+      cart.forEach(item => {
+        const itemTotal = item.preco * item.quantidade;
+        subtotal += itemTotal;
+        
+        const row = document.createElement('tr');
+        const imgSrc = item.img && item.img.startsWith('img/') ? `../${item.img}` : item.img;
+        const webpSrc = getWebpPath(imgSrc);
+        row.innerHTML = `
+          <td>
+            <picture>
+              <source srcset="${webpSrc}" type="image/webp">
+              <img src="${imgSrc}" alt="${item.nome}" style="width: 60px; height: 60px; object-fit: cover; margin-right: 10px;">
+            </picture>
+            ${item.nome}
+          </td>
+          <td>R$ ${item.preco.toFixed(2).replace('.', ',')}</td>
+          <td class="quantidade">
+            <input type="number" value="${item.quantidade}" min="1" class="qty-input" data-product-id="${item.id}">
+          </td>
+          <td>R$ ${itemTotal.toFixed(2).replace('.', ',')}</td>
+          <td>
+            <button class="remove-btn" data-product-id="${item.id}" style="border: none; background: none; cursor: pointer; color: var(--color-danger, #dc3545);">
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+      
+      const total = subtotal + frete;
+      subtotalEl.textContent = 'R$ ' + subtotal.toFixed(2).replace('.', ',');
+      freteEl.textContent = 'R$ ' + frete.toFixed(2).replace('.', ',');
+      totalFinalEl.textContent = 'R$ ' + total.toFixed(2).replace('.', ',');
+      
+      attachCartEventListeners();
+    }
+    
+    /**
+     * Anexar eventos aos botões de remover e inputs de quantidade
+     */
+    function attachCartEventListeners() {
+      // Remover itens
+      document.querySelectorAll('.remove-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const productId = btn.dataset.productId;
+          CartManager.removeFromCart(productId);
+          renderCartItems();
+        });
+      });
+      
+      // Atualizar quantidade
+      document.querySelectorAll('.qty-input').forEach(input => {
+        input.addEventListener('change', (e) => {
+          const productId = input.dataset.productId;
+          const quantity = parseInt(input.value);
+          CartManager.updateQuantity(productId, quantity);
+          renderCartItems();
+        });
+      });
+    }
+    
+    // Renderizar ao carregar a página
+    document.addEventListener('DOMContentLoaded', renderCartItems);
+    
+    // Atualizar quando o carrinho mudar
+    window.addEventListener('cartUpdated', renderCartItems);
+  </script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "name": "koketsu-workspace",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Workspace tooling for Koketsu Grife",
+  "scripts": {
+    "optimize:images": "node tools/optimize-images.js"
+  },
+  "dependencies": {
+    "sharp": "^0.33.5"
+  }
+}

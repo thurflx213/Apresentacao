@@ -1,6 +1,12 @@
 <?php
 namespace App\Koketsu;
-require_once __DIR__ . '/../vendor/autoload.php';
+$autoloadPath = __DIR__ . '/../vendor/autoload.php';
+if (!file_exists($autoloadPath)) {
+  http_response_code(503);
+  echo 'Dependências do backend não encontradas. Execute composer install.';
+  return;
+}
+require_once $autoloadPath;
 if (!isset($_SESSION)) {
   session_start();
  }

@@ -2,18 +2,49 @@
 // router.php
 
 $path = parse_url($_SERVER["REQUEST_URI"], PHP_URL_PATH);
+$frontendDir = __DIR__ . '/frontend';
+$pagesDir = $frontendDir . '/pages';
 
-// Se a rota for a raiz, serve o index.html
+// Se a rota for a raiz, serve o index.html da pasta pages
 if ($path === '/' || $path === '') {
-    if (file_exists(__DIR__ . '/index.html')) {
-        include __DIR__ . '/index.html';
+    $indexPath = $pagesDir . '/index.html';
+    if (file_exists($indexPath)) {
+        include $indexPath;
         return true;
     }
 }
 
-// Se o arquivo existir fisicamente, sirva-o (imagens, css, js, html)
-if (file_exists(__DIR__ . $path) && !is_dir(__DIR__ . $path)) {
-    return false; // Retorna false para o servidor embutido servir o arquivo
+// Se for uma página HTML, tenta servir a partir de frontend/pages
+if (substr($path, -5) === '.html') {
+    $pagePath = $pagesDir . $path;
+    if (file_exists($pagePath)) {
+        include $pagePath;
+        return true;
+    }
+}
+
+// Serve arquivos estáticos a partir de frontend (css, js, imagens)
+$requestedPath = realpath($frontendDir . $path);
+$frontendRoot = realpath($frontendDir);
+if ($requestedPath && $frontendRoot && strpos($requestedPath, $frontendRoot) === 0 && is_file($requestedPath)) {
+    $ext = strtolower(pathinfo($requestedPath, PATHINFO_EXTENSION));
+    $mimeTypes = [
+        'css' => 'text/css',
+        'js' => 'application/javascript',
+        'png' => 'image/png',
+        'jpg' => 'image/jpeg',
+        'jpeg' => 'image/jpeg',
+        'webp' => 'image/webp',
+        'svg' => 'image/svg+xml',
+        'gif' => 'image/gif',
+        'woff' => 'font/woff',
+        'woff2' => 'font/woff2'
+    ];
+    if (isset($mimeTypes[$ext])) {
+        header('Content-Type: ' . $mimeTypes[$ext]);
+    }
+    readfile($requestedPath);
+    return true;
 }
 
 // Se a rota for para a API ou Backend, redireciona para o index do backend
