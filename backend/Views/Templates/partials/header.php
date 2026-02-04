@@ -296,7 +296,7 @@ input, select, textarea {
     <?php
       }
     ?>
-    <a href="/backend/" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/cliente', $current_uri); ?>">
+    <a href="/backend/cliente/pedidos" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/cliente/pedidos', $current_uri); ?>">
         <i class="fa fa-user-circle fa-fw"></i> Perfil
     </a>
     <?php if ($session->get('usuario_tipo') == 'admin'){ ?>

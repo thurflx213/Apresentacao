@@ -34,7 +34,7 @@
                             <td><?= htmlspecialchars($it['nome_produtos'] ?? 'Produto') ?></td>
                             <td><?= htmlspecialchars($it['quantidade_itens_pedidos'] ?? 0) ?></td>
                             <td>R$ <?= number_format($it['preco_unitario'] ?? 0,2,',','.') ?></td>
-                            <td>R$ <?= number_format(($it['quantidade_itens_pedidos'] * ($it['preco_unitario'] ?? 0)),2,',','.') ?></td>
+                            <td>R$ <?= number_format(($it['quantidade'] * ($it['preco_unitario'] ?? 0)),2,',','.') ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -45,7 +45,7 @@
     </section>
 
     <div style="margin-top:18px;">
-        <a class="w3-button w3-grey" href="/backend/cliente/pedidos">← Voltar</a>
+        <a class="w3-button w3-yellow" href="/backend/cliente/pedidos">← Voltar</a>
     </div>
 
     <style>

@@ -335,7 +335,7 @@ function carregarPedidos() {
     }
     
     // Carrega pedidos da API de forma simples
-    fetch(`/api/pedidos?page=1`)
+    fetch(`/backend/api/pedidos?page=1`)
         .then(response => {
             console.log('Resposta HTTP:', response.status);
             if (!response.ok) {
@@ -399,6 +399,7 @@ function criarCartaoPedido(pedido) {
         'enviado': 'Enviado',
         'entregue': 'Entregue',
         'cancelado': 'Cancelado',
+        'concluido': 'Concluído',
         'pago': 'Pago'
     }[pedido.status_pedido?.toLowerCase()] || pedido.status_pedido;
     
