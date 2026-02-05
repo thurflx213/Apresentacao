@@ -284,9 +284,6 @@ input, select, textarea {
     <a href="/backend/produtos/listar" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/produtos/listar', $current_uri); ?>">
         <i class="fa fa-tags fa-fw"></i> Produtos
     </a>
-    <a href="/backend/relatorios" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/relatorios', $current_uri); ?>">
-        <i class="fa fa-bar-chart fa-fw"></i> Relatórios
-    </a>
     <a href="/backend/pedido/listar" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/pedido/listar', $current_uri); ?>">
         <i class="fa fa-shopping-cart fa-fw"></i> Pedidos
     </a>

@@ -1,105 +1,144 @@
-<header class="w3-container" style="padding-top:5px">
-    <div class="w3-container">
-        <h3><i class="fa fa-list"></i> Listar Pedidos</h3>
+<style>
+    /* Estilos Customizados para a Listagem Koketsu */
+    .koketsu-search-card {
+        background-color: #1a1a1a !important;
+        border: 1px solid #333;
+        border-radius: 15px !important;
+    }
+    .koketsu-table {
+        border-collapse: separate;
+        border-spacing: 0 10px;
+        color: #ddd;
+    }
+    .koketsu-table thead tr {
+        background-color: transparent !important;
+        color: #888;
+        text-transform: uppercase;
+        font-size: 12px;
+        letter-spacing: 1px;
+    }
+    .koketsu-table tbody tr {
+        background-color: #1a1a1a !important;
+        transition: transform 0.2s, background-color 0.2s;
+    }
+    .koketsu-table tbody tr:hover {
+        background-color: #222 !important;
+        transform: scale(1.005);
+    }
+    .koketsu-table td {
+        padding: 15px !important;
+        border: none !important;
+        vertical-align: middle !important;
+    }
+    .koketsu-table td:first-child { border-radius: 12px 0 0 12px; }
+    .koketsu-table td:last-child { border-radius: 0 12px 12px 0; }
+
+    .price-tag {
+        color: #f2cc7d;
+        font-weight: 800;
+        font-size: 1.1em;
+    }
+    .status-badge {
+        font-size: 11px;
+        text-transform: uppercase;
+        padding: 6px 12px !important;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+    }
+    .btn-action {
+        background-color: #333;
+        color: #fff;
+        border: none;
+        margin: 0 2px;
+        transition: 0.3s;
+    }
+    .btn-action:hover { background-color: #f2cc7d !important; color: #000 !important; }
+</style>
+
+<header class="w3-container" style="padding-top:20px">
+    <div class="w3-row">
+        <div class="w3-col l8 m12">
+            <h3 style="color: white; font-weight: 700;"><i class="fa fa-list-ul text-yellow"></i> Meus Pedidos</h3>
+        </div>
     </div>
 
-    <div class="w3-panel w3-card-4 w3-round-large w3-dark-grey w3-padding">
-
-        <a href="/backend/pedido/criar" class="w3-button w3-round-large w3-yellow w3-hover-lime w3-margin-bottom w3-large" style="font-weight: 600;">
-            <i class="fa fa-plus-circle"></i> Novo Pedido
-        </a>
-        
-        <form action="/backend/pedido/listar" method="POST" class="w3-container w3-padding-small" style="padding: 0!important;">
-            <div class="w3-row-padding" style="margin: 0 -16px;">
-                <div class="w3-col l4 m6 s12 w3-padding-small">
-                    <input 
-                        type="text" 
-                        name="id_pedido" 
-                        class="w3-input w3-border w3-round-large" 
-                        placeholder="Buscar por ID, Nome do Cliente ou Endereço..."
-                        value="<?= htmlspecialchars($_POST['id_pedido'] ?? '') ?>"
-                        style="background-color: #222; color: #fff; border-color: #555;">
-                </div>
-                <div class="w3-col l2 m3 s12 w3-padding-small">
-                    <button type="submit" class="w3-button w3-round-large w3-green w3-hover-khaki w3-block" style="font-weight: 600;">
-                        <i class="fa fa-search"></i> Pesquisar
-                    </button>
-                </div>
-                
-                <?php if (isset($_POST['id_pedido']) && !empty($_POST['id_pedido'])): ?>
-                    <div class="w3-col l2 m3 s12 w3-padding-small">
-                        <a href="/backend/pedido/listar/" class="w3-button w3-round-large w3-red w3-hover-pink w3-block">
-                            <i class="fa fa-times-circle"></i> Limpar
-                        </a>
-                    </div>
-                <?php endif; ?>
+    <div class="w3-panel koketsu-search-card w3-padding-16">
+        <div class="w3-row-padding">
+            <div class="w3-col l3 m12 w3-margin-bottom">
+                <a href="/backend/pedido/criar" class="w3-button w3-round-large w3-block" 
+                   style="background: #f2cc7d; color: #000; font-weight: 900; height: 45px; padding-top: 10px;">
+                    <i class="fa fa-plus"></i> NOVO PEDIDO
+                </a>
             </div>
-        </form>
+            
+            <div class="w3-col l9 m12">
+                <form action="/backend/pedido/listar" method="POST">
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" name="id_pedido" 
+                               class="w3-input w3-round-large" 
+                               placeholder="Pesquisar por ID, cliente ou endereço..."
+                               value="<?= htmlspecialchars($_POST['id_pedido'] ?? '') ?>"
+                               style="background-color: #111; color: #fff; border: 1px solid #444; height: 45px;">
+                        
+                        <button type="submit" class="w3-button w3-round-large w3-grey w3-hover-amber" style="height: 45px; font-weight: 700;">
+                            <i class="fa fa-search"></i>
+                        </button>
+
+                        <?php if (!empty($_POST['id_pedido'])): ?>
+                            <a href="/backend/pedido/listar/" class="w3-button w3-round-large w3-red" style="height: 45px; padding-top: 10px;">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        <?php endif; ?>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
-<hr style="border-color: #333;">
-
-
-<?php if (isset($pedidos) && is_array($pedidos) && count($pedidos) > 0): ?>
-    <div class="w3-container w3-responsive w3-margin-top">
-        <table class="w3-table w3-bordered w3-border w3-hoverable w3-text-white" style="border-collapse: separate; border-spacing: 0 8px;">
+    <?php if (isset($pedidos) && is_array($pedidos) && count($pedidos) > 0): ?>
+    <div class="w3-responsive" style="padding: 0 8px;">
+        <table class="w3-table koketsu-table">
             <thead>
-                <tr style="background-color: #282828;">
-                    <th style="width: 5%;">ID</th>
-                    <th style="width: 15%;">Cliente/Perfil</th> 
-                    <th style="width: 10%;">Data</th>
+                <tr>
+                    <th>ID</th>
+                    <th>Cliente</th> 
+                    <th>Data</th>
                     <th>Endereço</th> 
-                    <th style="width: 10%;">Total</th>
-                    <th style="width: 5%;" class="w3-center">Itens</th> 
-                    <th style="width: 10%;" class="w3-center">Status</th>
-                    <th style="width: 15%;" class="w3-center">Ações</th>
+                    <th>Total</th>
+                    <th class="w3-center">Status</th>
+                    <th class="w3-center">Ações</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($pedidos as $pedido): 
                     $status = strtolower($pedido['status_pedido']);
-                    $status_classe = 'w3-dark-grey';
-                    $status_icon = 'fa-question-circle';
+                    $bg_badge = 'w3-grey';
                     
-                    if ($status === 'pago' || $status === 'enviado' || $status === 'concluido') {
-                        $status_classe = 'w3-green';
-                        $status_icon = 'fa-check-circle';
-                    } elseif ($status === 'pendente' || $status === 'em processamento') {
-                        $status_classe = 'w3-yellow w3-text-black';
-                        $status_icon = 'fa-clock-o';
-                    } elseif ($status === 'cancelado') {
-                        $status_classe = 'w3-red';
-                        $status_icon = 'fa-times-circle';
-                    }
+                    if (in_array($status, ['pago', 'enviado', 'concluido'])) $bg_badge = 'w3-green';
+                    elseif (in_array($status, ['pendente', 'em processamento'])) $bg_badge = 'w3-amber w3-text-black';
+                    elseif ($status === 'cancelado') $bg_badge = 'w3-red';
                 ?>
-                <tr class="w3-card w3-dark-grey w3-hover-black" style="border-bottom: 2px solid #333;">
-                    <td><?= htmlspecialchars($pedido['id_pedido']) ?></td>
-                    <td><?= htmlspecialchars($pedido['nome_cliente'] ?? 'N/A') ?></td> 
-                    <td><?= date('d/m/Y H:i', strtotime($pedido['data_pedido'])) ?></td> 
-                    <td><?= htmlspecialchars($pedido['endereco_perfil'] ?? 'N/A') ?></td> 
-                    
-                    <td style="font-weight: 700; color: #ffcc00;">R$ <?= number_format($pedido['total_pedido'], 2, ',', '.') ?></td>
-                    
-                    <td class="w3-center"><?= htmlspecialchars($pedido['total_itens'] ?? 0) ?></td> 
+                <tr>
+                    <td style="color: #666; font-family: monospace;">#<?= $pedido['id_pedido'] ?></td>
+                    <td style="font-weight: 600; color: #fff;"><?= htmlspecialchars($pedido['nome_cliente'] ?? 'N/A') ?></td> 
+                    <td style="font-size: 0.9em; color: #888;"><?= date('d/m/y H:i', strtotime($pedido['data_pedido'])) ?></td> 
+                    <td style="font-size: 0.85em; max-width: 250px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                        <?= htmlspecialchars($pedido['endereco_perfil'] ?? 'Sem endereço') ?>
+                    </td> 
+                    <td class="price-tag">R$ <?= number_format($pedido['total_pedido'], 2, ',', '.') ?></td>
                     
                     <td class="w3-center">
-                        <span class="w3-tag w3-round <?= $status_classe ?>" style="min-width: 90px; padding: 6px 10px; font-weight: 600;">
-                            <i class="fa <?= $status_icon ?>"></i> <?= ucfirst(htmlspecialchars($pedido['status_pedido'])) ?>
+                        <span class="w3-tag w3-round-large status-badge <?= $bg_badge ?>">
+                            <?= ucfirst(htmlspecialchars($pedido['status_pedido'])) ?>
                         </span>
                     </td>
                     
-                    <td class="w3-center w3-padding-small">
-                        <a class="w3-button w3-round w3-small w3-teal w3-hover-dark-grey"
-                            href="/backend/pedido/detalhes/<?= htmlspecialchars($pedido['id_pedido']) ?>" 
-                            title="Detalhes"><i class="fa fa-info-circle"></i></a>
-                            
-                        <a class="w3-button w3-round w3-small w3-blue w3-hover-dark-grey"
-                            href="/backend/pedido/editar/<?= htmlspecialchars($pedido['id_pedido']) ?>"
-                            title="Editar"><i class="fa fa-edit"></i></a>
-                            
-                        <a class="w3-button w3-round w3-small w3-red w3-hover-dark-grey"
-                            href="/backend/pedido/deletar/<?= htmlspecialchars($pedido['id_pedido']) ?>"
-                            title="Excluir"><i class="fa fa-trash"></i></a>
+                    <td class="w3-center">
+                        <div style="display: flex; justify-content: center;">
+                            <a class="w3-button w3-round-large btn-action" href="/backend/pedido/detalhes/<?= $pedido['id_pedido'] ?>" title="Ver"><i class="fa fa-eye"></i></a>
+                            <a class="w3-button w3-round-large btn-action" href="/backend/pedido/editar/<?= $pedido['id_pedido'] ?>" title="Editar"><i class="fa fa-edit"></i></a>
+                            <a class="w3-button w3-round-large btn-action w3-hover-red" href="/backend/pedido/deletar/<?= $pedido['id_pedido'] ?>" title="Excluir"><i class="fa fa-trash"></i></a>
+                        </div>
                     </td>
                 </tr>
                 <?php endforeach; ?>
@@ -107,39 +146,34 @@
         </table>
     </div>
 
-    
     <?php if (empty($_POST['id_pedido']) && isset($paginacao)): ?>
-        <div class="w3-container w3-padding-16">
-            <div class="paginacao-controls" style="display:flex; justify-content:space-between; align-items:center;">
-                <div class="page-selector" style="display:flex; align-items:center;">
-                    <div class="page-nav">
-                        <?php if (($paginacao['pagina_atual'] ?? 1) > 1): ?>
-                            <a class="w3-button w3-round w3-dark-grey w3-hover-amber" href="/backend/pedido/listar/<?= $paginacao['pagina_atual'] - 1 ?>">« Anterior</a>
-                        <?php endif; ?>
-                        <span class="w3-tag w3-amber w3-round-large" style="margin:0 10px; font-weight: 600;">Página <?= $paginacao['pagina_atual'] ?? 1 ?> de <?= $paginacao['ultima_pagina'] ?? 1 ?></span>
-                        <?php if (($paginacao['pagina_atual'] ?? 1) < ($paginacao['ultima_pagina'] ?? 1)): ?>
-                            <a class="w3-button w3-round w3-dark-grey w3-hover-amber" href="/backend/pedido/listar/<?= $paginacao['pagina_atual'] + 1 ?>">Próximo »</a>
-                        <?php endif; ?>
-                    </div>
+        <div class="w3-container w3-padding-32">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div class="w3-bar koketsu-search-card">
+                    <?php if (($paginacao['pagina_atual'] ?? 1) > 1): ?>
+                        <a href="/backend/pedido/listar/<?= $paginacao['pagina_atual'] - 1 ?>" class="w3-button w3-text-white">«</a>
+                    <?php endif; ?>
+                    
+                    <button class="w3-button" style="background: #f2cc7d; color: #000; font-weight: 900;">
+                        Página <?= $paginacao['pagina_atual'] ?>
+                    </button>
+                    
+                    <?php if (($paginacao['pagina_atual'] ?? 1) < ($paginacao['ultima_pagina'] ?? 1)): ?>
+                        <a href="/backend/pedido/listar/<?= $paginacao['pagina_atual'] + 1 ?>" class="w3-button w3-text-white">»</a>
+                    <?php endif; ?>
                 </div>
-                <small class="w3-text-light-grey">
-                    Exibindo **<?= $paginacao['de'] ?? 0 ?>** a **<?= $paginacao['para'] ?? 0 ?>** de **<?= $paginacao['total'] ?? 0 ?>** pedidos.
-                </small>
+                <span style="color: #555; font-size: 12px; font-weight: 700; text-transform: uppercase;">
+                    Total: <?= $paginacao['total'] ?? 0 ?> Pedidos
+                </span>
             </div>
         </div>
     <?php endif; ?>
 
-<?php else: ?>
-    <div class="w3-container w3-panel w3-pale-yellow w3-border w3-round-large w3-margin-top w3-padding-16">
-        <p style="color: #000;">
-            <i class="fa fa-exclamation-triangle"></i> Nenhum pedido encontrado. 
-            <?php if (isset($_POST['id_pedido'])): ?>
-                Tente uma nova busca ou <a href="/backend/pedido/listar" class="w3-text-blue">limpe o filtro.</a>
-            <?php else: ?>
-                <a href="/backend/pedido/criar" class="w3-text-blue">Crie um novo pedido.</a>
-            <?php endif; ?>
-        </p>
-    </div>
-<?php endif; ?>
-
-<div style="height: 100px;"></div>
+    <?php else: ?>
+        <div class="w3-center w3-padding-64">
+            <i class="fa fa-folder-open-o w3-text-grey" style="font-size: 48px;"></i>
+            <p class="w3-text-grey">Nenhum pedido encontrado nesta busca.</p>
+            <a href="/backend/pedido/listar" class="w3-text-amber">Limpar filtros e voltar</a>
+        </div>
+    <?php endif; ?>
+</header>

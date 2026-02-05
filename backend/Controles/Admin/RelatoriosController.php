@@ -56,7 +56,7 @@ class RelatoriosController extends AuthenticatedController
                     p.status_pedido,
                     u.nome_usuarios,
                     u.email_usuarios,
-                    COUNT(ip.id_itens_pedidos) as quantidade_itens
+                    COUNT(ip.id_itens_pedidos) as quantidade
                 FROM tbl_pedidos p
                 LEFT JOIN tbl_usuarios u ON id_usuarios = u.id_usuarios
                 LEFT JOIN tbl_itens_pedidos ip ON p.id_pedido = ip.id_pedido

@@ -47,7 +47,7 @@
         <div class="form-group">
             <label for="nivel_acesso">Tipo:</label>
             <select id="nivel_acesso" name="nivel_acesso" required>
-                <option value="usuario" <?php echo ($usuario['nivel_acesso'] === 'usuario') ? 'selected' : ''; ?>>Usuário</option>
+                <option value="cliente" <?php echo ($usuario['nivel_acesso'] === 'cliente') ? 'selected' : ''; ?>>Cliente</option>
                 <option value="vendedor" <?php echo ($usuario['nivel_acesso'] === 'vendedor') ? 'selected' : ''; ?>>Vendedor</option>
                 <option value="admin" <?php echo ($usuario['nivel_acesso'] === 'admin') ? 'selected' : ''; ?>>Admin</option>
             </select>

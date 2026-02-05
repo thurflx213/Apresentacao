@@ -276,7 +276,7 @@
                                         <?php echo htmlspecialchars($status); ?>
                                     </span>
                                 </td>
-                                <td><?php echo $pedido['quantidade_itens'] ?? 0; ?></td>
+                                <td><?php echo $pedido['quantidade'] ?? 0; ?></td>
                             </tr>
                         <?php endforeach; ?>
                     <?php else: ?>

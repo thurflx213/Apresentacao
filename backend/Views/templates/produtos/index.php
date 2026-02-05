@@ -1,254 +1,253 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<div class="w3-row-padding w3-margin-bottom">
-    
-
-<div class="w3-container w3-margin-top w3-card w3-dark-grey w3-round-large w3-padding">
-    <h3 class="w3-text-yellow"><i class="fa fa-bar-chart"></i> Estoque de Produtos</h3>
-    <canvas id="vendasChart" style="max-height: 350px;"></canvas>
-</div>
-
-<hr class="w3-border-dark-grey">
-<script>
-    const dados_php = <?php echo json_encode($produto); ?>; 
-    console.log(dados_php)
-    const labels = dados_php.map(item => item.produto);
-    const dataValues = dados_php.map(item => item.total);
-
-    const corAmarela = 'rgba(255, 193, 7, 0.8)'; 
-    const corFundo = 'rgba(255, 193, 7, 0.3)'; 
-
-    const data = {
-        labels: labels,
-        datasets: [{
-            label: 'Total de Produtos',
-            backgroundColor: corAmarela,
-            borderColor: corAmarela,
-            data: dataValues,
-            borderRadius: 5
-        }]
-    };
-
-    const config = {
-        type: 'bar',
-        data: data,
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                x: {
-                    grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                    ticks: { color: 'white' }
-                },
-                y: {
-                    beginAtZero: true,
-                    ticks: { stepSize: 1, color: 'white' },
-                    grid: { color: 'rgba(255, 255, 255, 0.1)' }
-                }
-            },
-            plugins: {
-                legend: { labels: { color: 'white' } },
-                title: {
-                    display: true,
-                    text: 'Produtos por Categoria',
-                    color: 'white'
-                }
-            }
-        },
-    };
-
-    var myChart = new Chart(document.getElementById('vendasChart'), config);
-
-   
-</script>
-
-
 
 <style>
-    /* Container Principal (Afastado do Menu) */
-.page-wrapper {
-    padding-left: 10px; 
-    padding-right: 20px;
-    padding-top: 20px;
-    width: 100%;
-    box-sizing: border-box;
-    display: flex; 
-    flex-direction: column;
-}
+    /* --- AJUSTES GERAIS --- */
+    .page-wrapper {
+        padding: 20px;
+        width: 100%;
+        box-sizing: border-box;
+        background-color: #0c0c0c;
+        min-height: 100vh;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-/* Botão Principal (Pequeno e no Canto Esquerdo) */
-.btn-main-action {
-    display: inline-flex; 
-    align-self: flex-start; /* Coloca o botão no canto esquerdo (Flex Start) */
-    
-    background: #dfd155ff; /* Cor amarela/dourada */
-    padding: 10px 15px;
-    color: #000000ff;
-    border: none;
-    font-size: 15px;
-    font-weight: 600;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: 0.2s;
-    text-decoration: none; 
-    margin-bottom: 20px; 
-    
-    align-items: center;
-    gap: 8px;
-}
+    .page-title {
+        font-size: 28px;
+        font-weight: 800;
+        color: #ffffff;
+        text-transform: uppercase;
+        margin-bottom: 5px;
+    }
 
-/* Estilo do Breadcrumb */
-.header-breadcrumb {
-    color: #bbb;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #333;
-}
-/* ... suas regras existentes ... */
+    .header-breadcrumb {
+        color: #888;
+        margin-bottom: 25px;
+        border-bottom: 1px solid #222;
+        padding-bottom: 10px;
+    }
 
-/* 1. AUMENTA O CONTEÚDO DA CÉLULA (Palavras/Texto) */
-#Produtos tbody td {
-    min-height: 150px; 
-    padding: 20px 10px !important; 
-    vertical-align: middle; 
-    
-    /* Mantém o texto maior para leitura */
-    font-size: 1.15em; /* Reduzido levemente para 1.05em */
-    line-height: 1.4; 
-}
+    /* --- CARD DO GRÁFICO --- */
+    .chart-container-card {
+        background: #111;
+        border: 1px solid #333;
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 35px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
 
-/* Garante que a imagem se ajuste bem dentro da nova altura */
-#Produtos tbody td img {
-    width: 120px !important; 
-    height: auto; 
-    max-height: 120px; 
-    object-fit: contain;
-}
+    /* --- BARRA DE PESQUISA --- */
+    .actions-bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 30px;
+    }
 
-/* 2. REFINAMENTO DOS BOTÕES (Editar/Inativar/Ativar) */
-.w3-button {
-    /* Padding reduzido para um tamanho mais confortável */
-    padding: 8px 12px !important; 
-    /* Tamanho da fonte dos botões reduzido para evitar que pareçam gigantes */
-    font-size: 0.95em !important; 
-    font-weight: bold; 
-    margin: 4px 0; 
-    min-width: 80px; /* Largura mínima um pouco menor */
-    border-radius: 4px; /* Adiciona um pequeno arredondamento se o w3.css não tiver */
-}
+    .search-group {
+        flex: 1;
+        max-width: 500px;
+    }
 
-/* Ajuste das Tags de Status (Ativo/Inativo) para manter a proporção */
-.w3-tag {
-    font-size: 0.85em !important; 
-    padding: 3px 7px !important;
-}
+    .search-input {
+        width: 100%;
+        background: #1a1a1a;
+        border: 1px solid #444;
+        padding: 15px;
+        border-radius: 12px;
+        color: #fff;
+        font-size: 16px;
+        transition: 0.3s;
+    }
 
-/* Defina a classe que deve ser aplicada à linha inteira (<tr>) */
-.w3-striped > tbody > tr.w3-pale-red,
-    .w3-striped > tbody > tr.w3-pale-red:nth-child(even),
-    .w3-striped > tbody > tr.w3-pale-red:nth-child(odd) 
-    {
-        background-color: #f0a3a3ff !important; 
+    .search-input:focus {
+        border-color: #f2cc7d;
+        box-shadow: 0 0 10px rgba(242, 204, 125, 0.1);
+        outline: none;
+    }
+
+    .btn-main-action {
+        background: #f2cc7d;
         color: #000 !important;
-    }
-    .w3-striped > tbody > tr.w3-pale-red {
-        background-color: #5b0000 !important;
-        color: white !important;
+        padding: 15px 25px;
+        border-radius: 12px;
+        font-weight: 800;
+        text-decoration: none;
+        text-transform: uppercase;
+        font-size: 14px;
+        transition: 0.3s;
     }
 
-/* ... restante do seu estilo ... */
+    .btn-main-action:hover { background: #fff; transform: translateY(-2px); }
+
+    /* --- TABELA --- */
+    .custom-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 15px;
+    }
+
+    .custom-table thead th {
+        color: #666;
+        text-transform: uppercase;
+        font-size: 13px;
+        padding: 10px 20px;
+    }
+
+    .custom-table tbody tr {
+        background: #161616;
+        transition: 0.3s;
+    }
+
+    .custom-table td {
+        padding: 20px !important;
+        color: #ccc;
+        font-size: 16px;
+        vertical-align: middle;
+    }
+
+    .custom-table td:first-child { border-radius: 15px 0 0 15px; }
+    .custom-table td:last-child { border-radius: 0 15px 15px 0; }
+
+    .prod-img {
+        width: 110px;
+        height: 110px;
+        object-fit: cover;
+        border-radius: 12px;
+        border: 2px solid #333;
+    }
+
+    .prod-name {
+        font-weight: 700;
+        color: #fff;
+        font-size: 18px;
+        display: block;
+    }
+
+    .badge-status {
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 800;
+    }
+    .status-ativo { background: rgba(40, 167, 69, 0.15); color: #28a745; border: 1px solid #28a745; }
+    .status-inativo { background: rgba(220, 53, 69, 0.15); color: #dc3545; border: 1px solid #dc3545; }
+
+    .btn-edit { background: #2196F3; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 700; }
+    .btn-delete { background: #f44336; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 700; }
 </style>
-<div class="page-wrapper list-page">
 
-    <h3 class="page-title"><i class="fa fa-cubes"></i> Gerenciar Produtos</h3>
-
-     <header class="header-breadcrumb">
+<div class="page-wrapper">
+    <h3 class="page-title"><i class="fa fa-cubes" style="color: #f2cc7d;"></i> Gerenciar Produtos</h3>
+    <header class="header-breadcrumb">
         <h5><b><i class="fa fa-dashboard"></i> Painel de produtos - Koketsu</b></h5>
     </header>
-    <form action="/backend/produtos/listar" method="POST" class="w3-container w3-padding-small" style="padding: 0!important;">
-            <div class="w3-row-padding" style="margin: 0 -16px;">
-                <div class="w3-col l4 m6 s12 w3-padding-small">
-                    <input 
-                        type="text" 
-                        name="nome_produtos" 
-                        class="w3-input w3-border w3-round-large" 
-                        placeholder="Buscar por Nome do Produto"
-                        value="<?= htmlspecialchars($_POST['nome_produtos'] ?? '') ?>"
-                        style="background-color: #222; color: #fff; border-color: #555;">
-                </div>
-                <div class="w3-col l2 m3 s12 w3-padding-small">
-                    <button type="submit" class="w3-button w3-round-large w3-amber w3-hover-khaki w3-block" style="font-weight: 600;">
-                        <i class="fa fa-search"></i> Pesquisar
-                    </button>
-                </div>
-                
-                <?php if (isset($_POST['nome_produtos']) && !empty($_POST['nome_produtos'])): ?>
-                    <div class="w3-col l2 m3 s12 w3-padding-small">
-                        <a href="/backend/produtos/listar/" class="w3-button w3-round-large w3-red w3-hover-pink w3-block">
-                            <i class="fa fa-times-circle"></i> Limpar
-                        </a>
-                    </div>
-                <?php endif; ?>
-            </div>
-        </form>
 
-    <a href="/backend/produtos/criar" class="btn-main-action">
-        <i class="fa fa-plus-circle"></i> Adicionar Novo Produto
-    </a>
-    
-   
+    <div class="chart-container-card">
+        <h4 style="color: #f2cc7d; margin-top: 0; font-weight: 700;"><i class="fa fa-bar-chart"></i> Estoque por Categoria</h4>
+        <div style="height: 350px;">
+            <canvas id="vendasChart"></canvas>
+        </div>
+    </div>
 
+    <div class="actions-bar">
+        <div class="search-group">
+            <input type="text" id="inputBusca" class="search-input" placeholder="Digite o nome do produto para filtrar...">
+        </div>
+
+        <a href="/backend/produtos/criar" class="btn-main-action">
+            <i class="fa fa-plus-circle"></i> Adicionar Novo Produto
+        </a>
     </div>
 
     <main>
-        <table id="Produtos" class="w3-table w3-striped">
-            
+        <table class="custom-table" id="tabelaProdutos">
             <thead>
-                <tr class="w3-light-grey">
+                <tr>
                     <th>Foto</th>
-                    <th>Nome</th>
-                    <th>Descrição</th>
-                    <th>Status</th>
-                    <th>Editar</th>
-                    <th>Excluir</th>
+                    <th>Informações do Produto</th>
+                    <th>Descrição Curta</th>
+                    <th style="text-align: center;">Status</th>
+                    <th style="text-align: center;">Ações</th>
                 </tr>
             </thead>
-            
             <tbody>
-                <?php foreach ($produtos as $produto): 
-                    $is_inativo = !empty($produto['excluido_em']); 
+                <?php foreach ($produtos as $p): 
+                    $is_inativo = !empty($p['excluido_em']); 
                 ?>
-
-                <tr class="<?= $is_inativo ? 'w3-pale-red' : '' ?>"> 
-                    <td><img src="/backend/upload/<?= htmlspecialchars($produto['imagem_produtos']); ?>" style="width:100px;"></td>
-                    <td><?= htmlspecialchars($produto['nome_produtos']); ?></td>
-                    <td><?= htmlspecialchars($produto['descricao_produtos']); ?></td>
-                    
-                    <td>
-                        <?php if ($is_inativo): ?>
-                            <span class="w3-button w3-red w3-small w3-round-medium">Inativo</span>
-                        <?php else: ?>
-                            <span class="w3-button w3-green w3-small w3-round-medium">Ativo</span>
-                        <?php endif; ?>
+                <tr class="item-produto <?= $is_inativo ? 'tr-inativo' : '' ?>"> 
+                    <td width="150">
+                        <img src="/backend/upload/<?= htmlspecialchars($p['imagem_produtos']); ?>" class="prod-img" onerror="this.src='https://placehold.co/150x150?text=Sem+Foto'">
                     </td>
-                    
                     <td>
-                        <a class="w3-button w3-round w3-blue w3-text-black w3-padding-small"
-                           href="/backend/produtos/editar/<?= $produto['id_produto']; ?>">Editar</a>
+                        <span class="prod-name nome-produto"><?= htmlspecialchars($p['nome_produtos']); ?></span>
+                        <small style="color: #666;">ID: #<?= $p['id_produto'] ?></small>
                     </td>
-                    
-                    <td>
-                        <?php if ($is_inativo): ?>
-                            <a href="/backend/produtos/ativar/<?= htmlspecialchars($produto['id_produto']) ?>"
-                               class="w3-button w3-small w3-green w3-round-medium">Ativar</a>
-                        <?php else: ?>
-                            <a href="/backend/produtos/excluir/<?= htmlspecialchars($produto['id_produto']) ?>"
-                               class="w3-button w3-small w3-red w3-round-medium">Inativar</a>
-                        <?php endif; ?>
+                    <td style="max-width: 350px; line-height: 1.5; color: #aaa;">
+                        <?= htmlspecialchars($p['descricao_produtos']); ?>
+                    </td>
+                    <td style="text-align: center;">
+                        <span class="badge-status <?= $is_inativo ? 'status-inativo' : 'status-ativo' ?>">
+                            <?= $is_inativo ? 'Inativo' : 'Ativo' ?>
+                        </span>
+                    </td>
+                    <td style="text-align: center;">
+                        <div style="display: flex; gap: 10px; justify-content: center;">
+                            <a href="/backend/produtos/editar/<?= $p['id_produto']; ?>" class="btn-edit">Editar</a>
+                            <?php if ($is_inativo): ?>
+                                <a href="/backend/produtos/ativar/<?= $p['id_produto'] ?>" class="btn-edit" style="background: #4CAF50;">Ativar</a>
+                            <?php else: ?>
+                                <a href="/backend/produtos/excluir/<?= $p['id_produto'] ?>" class="btn-delete">Inativar</a>
+                            <?php endif; ?>
+                        </div>
                     </td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
     </main>
-    
 </div>
+
+<script>
+    // --- LÓGICA DE FILTRO EM TEMPO REAL ---
+    document.getElementById('inputBusca').addEventListener('keyup', function() {
+        let busca = this.value.toLowerCase();
+        let linhas = document.querySelectorAll('.item-produto');
+
+        linhas.forEach(linha => {
+            let nomeProduto = linha.querySelector('.nome-produto').textContent.toLowerCase();
+            if (nomeProduto.includes(busca)) {
+                linha.style.display = ""; // Mostra se bater com a busca ou se estiver vazio
+            } else {
+                linha.style.display = "none"; // Esconde se não bater
+            }
+        });
+    });
+
+    // --- GRÁFICO ---
+    const dadosGrafico = <?php echo json_encode($produto); ?>; 
+    if (dadosGrafico && dadosGrafico.length > 0) {
+        new Chart(document.getElementById('vendasChart'), {
+            type: 'bar',
+            data: {
+                labels: dadosGrafico.map(item => item.produto),
+                datasets: [{
+                    label: 'Estoque',
+                    data: dadosGrafico.map(item => item.total),
+                    backgroundColor: '#f2cc7d',
+                    borderRadius: 10
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { ticks: { color: '#888' } },
+                    y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#888' } }
+                }
+            }
+        });
+    }
+</script>
