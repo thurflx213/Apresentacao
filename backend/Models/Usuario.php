@@ -41,7 +41,7 @@ function buscarUsuariosAtivos() {
 }
 
 function buscarUsuariosAdmin() {
-    $sql = "SELECT COUNT(*) AS total_admin FROM tbl_usuarios WHERE nivel_acesso = 'admin' ";
+    $sql = "SELECT COUNT(*) AS total_admin FROM tbl_usuarios WHERE nivel_acesso = 'admin' and excluido_em IS NULL";
     $stmt = $this->db->prepare($sql);
     $stmt->execute();
     return $stmt->fetch(PDO::FETCH_COLUMN);

@@ -93,13 +93,16 @@ public function paginacao(int $pagina = 1, int $porPagina = 50, ?string $nomeBus
     return $stmt->fetchColumn();
 }
   // Inserir novo produto
-  function inserirProduto(string $nome, string $descricao, string $imagem) {
+  function inserirProduto(string $nome, string $descricao, float $preco, int $estoque, int $categoria, string $imagem) {
     $sql = "INSERT INTO tbl_produtos 
-            (nome_produtos, descricao_produtos,imagem_produtos, excluido_em, criado_em)
-            VALUES (:nome, :descricao, :imagem, 'Ativo', NOW())";
+            (nome_produtos, descricao_produtos, preco_produtos, estoque_produtos, id_categoria, imagem_produtos, excluido_em, criado_em)
+            VALUES (:nome, :descricao, :preco, :estoque, :categoria, :imagem, NULL, NOW())";
     $stmt = $this->db->prepare($sql);
     $stmt->bindParam(':nome', $nome);
     $stmt->bindParam(':descricao', $descricao);
+    $stmt->bindParam(':preco', $preco);
+    $stmt->bindParam(':estoque', $estoque, PDO::PARAM_INT);
+    $stmt->bindParam(':categoria', $categoria, PDO::PARAM_INT);
     $stmt->bindParam(':imagem', $imagem);
     if($stmt->execute()) {
       return $this->db->lastInsertId();

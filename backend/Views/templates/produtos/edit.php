@@ -1,164 +1,235 @@
 <div class="page-wrapper">
 
-    <h3 class="page-title"><i class="fa fa-pencil"></i> Editando Produto: <?= htmlspecialchars($produtos['nome_produtos']); ?></h3>
+    <h3 class="page-title"><i class="fa fa-pencil" style="color: #f2cc7d;"></i> Editando Produto: <?= htmlspecialchars($produtos['nome_produtos']); ?></h3>
+    <p class="page-subtitle"><i class="fa fa-info-circle"></i> Altere os detalhes do produto e faça o upload da imagem se desejar atualizar.</p>
 
-    <form action="/backend/produtos/atualizar" method="post" enctype="multipart/form-data" class="form-card">
-
-        <input type="text" id="id_produto" name="id_produto" value="<?php echo $produtos['id_produto']; ?>" hidden>
-
-        <div class="form-group">
-            <label for="nome_produtos">Nome:</label>
-            <input type="text" id="nome_produtos" name="nome_produtos" value="<?php echo $produtos['nome_produtos']; ?>" required>
-        </div>
-
-        <div class="form-group">
-            <label for="descricao_produtos">Descrição:</label>
-            <textarea id="descricao_produtos" name="descricao_produtos" rows="4" required><?php echo $produtos['descricao_produtos']; ?></textarea>
-        </div>
-
-        <div class="form-group">
-            <label for="preco_produtos">Preço:</label>
-            <input type="number" step="0.01" id="preco_produtos" name="preco_produtos" value="<?php echo $produtos['preco_produtos']; ?>" required>
-        </div>
-
-        <div class="form-group">
-            <label for="estoque_produtos">Estoque:</label>
-            <input type="number" id="estoque_produtos" name="estoque_produtos" value="<?php echo $produtos['estoque_produtos']; ?>" required>
-        </div>
+    <form action="/backend/produtos/atualizar" method="post" enctype="multipart/form-data" class="form-card-modern">
         
-        <div class="form-group">
-            <label for="imagem_produtos">Substituir Foto:</label>
-            <input type="file" id="imagem_produtos" name="imagem_produtos">
-            <small class="text-note">Deixe em branco para manter a foto atual.</small>
+        <input type="hidden" name="id_produto" value="<?= $produtos['id_produto']; ?>">
+
+        <div class="form-content">
+            <div class="form-inputs">
+                <div class="form-group">
+                    <label for="nome_produtos">NOME DO PRODUTO:</label>
+                    <input type="text" id="nome_produtos" name="nome_produtos" value="<?= htmlspecialchars($produtos['nome_produtos']); ?>" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="descricao_produtos">DESCRIÇÃO DETALHADA:</label>
+                    <textarea id="descricao_produtos" name="descricao_produtos" rows="5" required><?= htmlspecialchars($produtos['descricao_produtos']); ?></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="preco_produtos">PREÇO (R$):</label>
+                        <input type="number" step="0.01" id="preco_produtos" name="preco_produtos" value="<?= $produtos['preco_produtos']; ?>" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="estoque_produtos">ESTOQUE:</label>
+                        <input type="number" id="estoque_produtos" name="estoque_produtos" value="<?= $produtos['estoque_produtos']; ?>" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_categoria">ID DA CATEGORIA:</label>
+                    <input type="number" id="id_categoria" name="id_categoria" value="<?= $produtos['id_categoria']; ?>" required>
+                </div>
+            </div>
+
+            <div class="form-upload-section">
+                <div class="image-preview-container" onclick="document.getElementById('imagem_produtos').click();">
+                    <?php 
+                        $fotoAtual = !empty($produtos['imagem_produtos']) ? $produtos['imagem_produtos'] : '/img/placeholder-produto.png';
+                    ?>
+                    <img id="imgPreview" src="<?= $fotoAtual; ?>" alt="Preview">
+                    <div class="upload-overlay">
+                        <i class="fa fa-camera"></i>
+                        <span>Alterar Foto</span>
+                    </div>
+                </div>
+                <input type="file" id="imagem_produtos" name="imagem_produtos" hidden accept="image/*" onchange="previewImage(this);">
+                <small class="upload-tip">JPG, PNG ou WebP</small>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label for="id_categoria">ID da Categoria:</label>
-            <input type="number" id="id_categoria" name="id_categoria" value="<?php echo $produtos['id_categoria']; ?>" required>
+        <div class="form-actions">
+            <button type="submit" class="btn-save-modern">
+                <i class="fa fa-save"></i> SALVAR ALTERAÇÕES
+            </button>
+            <a href="/backend/produtos/listar" class="btn-back-link">
+                <i class="fa fa-arrow-left"></i> Voltar para a lista
+            </a>
         </div>
-
-        <button type="submit" class="btn-save" style="margin-bottom: 10px;">
-            <i class="fa fa-save"></i> Salvar Alterações
-        </button>
-        
-        <a href="/backend/produtos/listar" class="btn-cancelar">
-            <i class="fa fa-times-circle"></i> Cancelar
-        </a>
 
     </form>
 
 </div>
-<style>
-/* ------------------------------------------------------------------------------------------------- */
-/* O SEU CSS EXISTENTE FOI MANTIDO AQUI E ALGUNS PEQUENOS AJUSTES PARA O FORMULÁRIO DE PRODUTOS */
-/* ------------------------------------------------------------------------------------------------- */
-.page-wrapper {
-    /* Ajustei o padding-left para o padrão de 270px se você estiver usando um menu lateral de 250px */
-    padding-left: 10px; 
-    padding-right: 220px;
-    padding-top: 0px; 
-    width: 100%;
-    box-sizing: border-box;
 
-    display: flex; 
-    flex-direction: column;
+<script>
+// Função para mostrar a foto nova assim que o usuário seleciona o arquivo
+function previewImage(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('imgPreview').src = e.target.result;
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
 }
+</script>
 
-.form-card {
-    background: #111;
-    padding: 25px;
-    border-radius: 12px;
-    width: 420px;
-    margin-left: auto;
-    margin-right: auto;
-    
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+<style>
+/* Layout Base */
+.page-wrapper {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .page-title {
-    font-size: 26px;
-    font-weight: 600;
-    margin-bottom: 15px;
-    color: #ffffff;
-    width: 420px; 
-    margin-left: auto;
-    margin-right: auto;
+    color: #fff;
+    font-size: 24px;
+    margin-bottom: 5px;
     text-align: left;
+    width: 100%;
+    max-width: 900px;
 }
 
+.page-subtitle {
+    color: #888;
+    font-size: 14px;
+    margin-bottom: 25px;
+    width: 100%;
+    max-width: 900px;
+}
+
+/* Card do Formulário */
+.form-card-modern {
+    background: #111;
+    border: 1px solid #222;
+    padding: 30px;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 900px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.form-content {
+    display: grid;
+    grid-template-columns: 1fr 300px; /* Coluna dados e Coluna Foto */
+    gap: 30px;
+}
+
+/* Inputs */
 .form-group {
+    margin-bottom: 20px;
     display: flex;
     flex-direction: column;
-    margin-bottom: 16px;
 }
 
 .form-group label {
-    margin-bottom: 6px;
-    font-size: 15px;
-    color: #ddd;
+    color: #e2c93e; /* Dourado Koketsu */
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 8px;
 }
 
-.form-group input,
-.form-group select,
-.form-group textarea { /* Adicionado textarea aqui */
+.form-group input, .form-group textarea {
     background: #1a1a1a;
     border: 1px solid #333;
-    padding: 10px;
-    border-radius: 6px;
     color: #fff;
-    font-size: 15px;
-}
-
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus { /* Adicionado textarea aqui */
-    border-color: #e2c93eff;
-    outline: none;
-}
-
-/* Estilo para a nota de rodapé do campo de arquivo */
-.text-note {
-    font-size: 12px;
-    color: #bbb;
-    margin-top: 5px;
-}
-
-.btn-save {
-    width: 100%;
-    background: #dfd155ff;
     padding: 12px;
-    color: #000000ff;
+    border-radius: 8px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+/* Seção de Upload */
+.image-preview-container {
+    width: 100%;
+    height: 250px;
+    background: #1a1a1a;
+    border: 2px dashed #333;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.image-preview-container:hover {
+    border-color: #e2c93e;
+}
+
+.image-preview-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.upload-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.image-preview-container:hover .upload-overlay {
+    opacity: 1;
+}
+
+.upload-overlay i { color: #fff; font-size: 30px; margin-bottom: 10px; }
+.upload-overlay span { color: #fff; font-size: 14px; }
+.upload-tip { color: #666; display: block; text-align: center; margin-top: 10px; }
+
+/* Botões */
+.form-actions {
+    margin-top: 30px;
+    border-top: 1px solid #222;
+    padding-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn-save-modern {
+    background: #dfd155;
+    color: #000;
     border: none;
-    font-size: 16px;
+    padding: 15px 40px;
+    font-weight: bold;
     border-radius: 8px;
     cursor: pointer;
-    transition: 0.2s;
+    transition: 0.3s;
 }
 
-.btn-save:hover {
-    background: #e49e1cff;
-    box-shadow: 0 0 10px rgba(241, 220, 25, 0.4);
+.btn-save-modern:hover {
+    background: #fff;
+    transform: translateY(-2px);
 }
 
-.btn-cancelar {
-    display: block; 
-    width: 100%;
-    text-align: center;
-    background: #555; 
-    padding: 12px;
-    color: #fff;
-    border: none;
-    font-size: 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.2s;
-    text-decoration: none; 
+.btn-back-link {
+    color: #888;
+    text-decoration: none;
+    font-size: 14px;
 }
 
-.btn-cancelar:hover {
-    background: #777;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-}
+.btn-back-link:hover { color: #fff; }
 
+/* Responsivo */
+@media (max-width: 768px) {
+    .form-content { grid-template-columns: 1fr; }
+    .form-upload-section { order: -1; } /* Foto em cima no celular */
+}
 </style>

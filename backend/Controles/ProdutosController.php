@@ -130,6 +130,9 @@ if (empty($_POST["nome_produtos"]) || empty($_FILES['imagem_produtos']['name']))
         if ($this->produtos->inserirProduto(
             $_POST["nome_produtos"],
             $_POST["descricao_produtos"],
+            $_POST['preco_produtos'],
+            $_POST['estoque_produtos'], 
+            $_POST['id_categoria'],
             $imagem
         )) {
             Redirect::redirecionarComMensagem("/produtos/listar", "success", "Produtos cadastrado com sucesso!");

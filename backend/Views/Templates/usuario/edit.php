@@ -1,18 +1,29 @@
 <div class="page-wrapper">
+    <h3 class="page-title">
+        <i class="fa fa-pencil" style="color: #f2cc7d;"></i> 
+        Editando Usuário: <span style="color: #f2cc7d;"><?= htmlspecialchars($usuario['nome_usuarios']); ?></span>
+    </h3>
 
-    <h3 class="page-title"><i class="fa fa-pencil"></i> Editando Usuário: <?= htmlspecialchars($usuario['nome_usuarios']); ?></h3>
+    <header class="header-breadcrumb">
+        <h5><b><i class="fa fa-info-circle"></i> Altere as informações abaixo e clique em salvar para atualizar o registro.</b></h5>
+    </header>
 
     <form action="/backend/usuario/atualizar" method="post" enctype="multipart/form-data" class="form-card">
-
         <input type="text" id="id_usuarios" name="id_usuarios" value="<?php echo $usuario['id_usuarios']; ?>" hidden>
 
-        <!-- Seção de Foto de Perfil com Preview -->
         <div class="profile-photo-section">
             <div class="photo-container">
                 <img id="photoPreview" 
-                     src="<?php echo !empty($usuario['foto_usuarios']) ? htmlspecialchars($usuario['foto_usuarios']) : '/img/logoperf.jpg'; ?>" 
-                     alt="Foto de perfil de <?= htmlspecialchars($usuario['nome_usuarios']); ?>"
-                     class="profile-photo">
+                     src="<?php 
+                        // CAMINHO CORRIGIDO: pasta onde as fotos são salvas
+                        $caminho_base = '/backend/upload/usuarios/';
+                        echo (!empty($usuario['foto_usuarios'])) 
+                             ? $caminho_base . htmlspecialchars($usuario['foto_usuarios']) 
+                             : '/img/logoperf.jpg'; 
+                     ?>" 
+                     alt="Foto de perfil"
+                     class="profile-photo"
+                     onerror="this.onerror=null;this.src='/img/logoperf.jpg';">
             </div>
             
             <div class="photo-upload">
@@ -30,7 +41,7 @@
         </div>
 
         <div class="form-group">
-            <label for="nome_usuarios">Nome:</label>
+            <label for="nome_usuarios">Nome Completo:</label>
             <input type="text" id="nome_usuarios" name="nome_usuarios" value="<?php echo htmlspecialchars($usuario['nome_usuarios']); ?>" required>
         </div>
 
@@ -40,12 +51,12 @@
         </div>
 
         <div class="form-group">
-            <label for="senha_usuarios">Nova Senha (deixe em branco para não alterar):</label>
-            <input type="password" id="senha_usuarios" name="senha_usuarios" value=""> 
+            <label for="senha_usuarios">Nova Senha (deixe vazio para manter):</label>
+            <input type="password" id="senha_usuarios" name="senha_usuarios" placeholder="••••••••"> 
         </div>
 
         <div class="form-group">
-            <label for="nivel_acesso">Tipo:</label>
+            <label for="nivel_acesso">Nível de Acesso:</label>
             <select id="nivel_acesso" name="nivel_acesso" required>
                 <option value="cliente" <?php echo ($usuario['nivel_acesso'] === 'cliente') ? 'selected' : ''; ?>>Cliente</option>
                 <option value="vendedor" <?php echo ($usuario['nivel_acesso'] === 'vendedor') ? 'selected' : ''; ?>>Vendedor</option>
@@ -53,213 +64,167 @@
             </select>
         </div>
 
-        <button type="submit" class="btn-save" style="margin-bottom: 10px;">
-            <i class="fa fa-save"></i> Salvar Alterações
-        </button>
+        <div class="actions-container">
+            <button type="submit" class="btn-save">
+                <i class="fa fa-save"></i> Salvar Alterações
+            </button>
 
-        <a href="/backend/usuario/listar" class="btn-cancelar">
-            <i class="fa fa-times-circle"></i> Cancelar
-        </a>
-
+            <a href="/backend/usuario/listar" class="btn-cancelar">
+                <i class="fa fa-arrow-left"></i> Voltar para a lista
+            </a>
+        </div>
     </form>
-
 </div>
+
 <style>
+    /* Centralização Absoluta */
+    .page-wrapper {
+        padding: 40px 20px;
+        width: 100%;
+        min-height: 100vh;
+        background-color: #0c0c0c;
+        font-family: 'Segoe UI', sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center; 
+        justify-content: flex-start;
+        box-sizing: border-box;
+    }
 
-.page-wrapper {
-    padding-left: 10px; 
-    padding-right: 220px;
-    padding-top: 20px; 
-    width: 100%;
-    box-sizing: border-box;
+    .page-title {
+        font-size: 24px;
+        font-weight: 800;
+        color: #ffffff;
+        text-transform: uppercase;
+        margin-bottom: 5px;
+        text-align: center;
+    }
 
-    display: flex; 
-    flex-direction: column;
-}
+    .header-breadcrumb {
+        color: #888;
+        margin-bottom: 25px;
+        border-bottom: 1px solid #222;
+        padding-bottom: 15px;
+        text-align: center;
+        width: 100%;
+        max-width: 500px;
+    }
 
-.form-card {
-    background: #111;
-    padding: 25px;
-    border-radius: 12px;
-    width: 420px;
-    margin-left: auto;
-    margin-right: auto;
-    
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-}
+    .form-card {
+        background: #111;
+        padding: 30px;
+        border-radius: 15px;
+        width: 100%;
+        max-width: 500px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.7);
+        border: 1px solid #333;
+    }
 
-.page-title {
-    font-size: 26px;
-    font-weight: 600;
-    margin-bottom: 15px;
-    color: #ffffff;
-    width: 420px; 
-    margin-left: auto;
-    margin-right: auto;
-    text-align: left;
-}
+    .profile-photo-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 30px;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.02);
+        border-radius: 12px;
+        border: 1px dashed #444;
+    }
 
-/* Seção de Foto de Perfil */
-.profile-photo-section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 25px;
-    padding: 20px;
-    background: #1a1a1a;
-    border-radius: 10px;
-    border: 1px solid #333;
-}
+    .photo-container {
+        width: 120px;
+        height: 120px;
+    }
 
-.photo-container {
-    position: relative;
-    width: 120px;
-    height: 120px;
-}
+    .profile-photo {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #f2cc7d;
+        box-shadow: 0 0 15px rgba(242, 204, 125, 0.3);
+    }
 
-.profile-photo {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid #dfd155;
-    box-shadow: 0 0 15px rgba(223, 209, 85, 0.3);
-    transition: all 0.3s ease;
-}
+    .upload-label {
+        background: #f2cc7d;
+        color: #000;
+        padding: 10px 20px;
+        border-radius: 30px;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 12px;
+        text-transform: uppercase;
+        transition: 0.3s ease;
+    }
 
-.profile-photo:hover {
-    box-shadow: 0 0 20px rgba(223, 209, 85, 0.5);
-    transform: scale(1.02);
-}
+    .upload-label:hover { background: #fff; }
+    .file-input { display: none; }
+    .upload-hint { font-size: 11px; color: #555; margin-top: 5px; }
 
-.photo-upload {
-    text-align: center;
-    width: 100%;
-}
+    .form-group {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 18px;
+    }
 
-.upload-label {
-    display: inline-block;
-    background: #dfd155;
-    color: #000;
-    padding: 10px 20px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-    transition: all 0.2s ease;
-    font-size: 14px;
-}
+    .form-group label {
+        margin-bottom: 8px;
+        font-size: 12px;
+        font-weight: 700;
+        color: #f2cc7d;
+        text-transform: uppercase;
+    }
 
-.upload-label:hover {
-    background: #e49e1c;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(223, 209, 85, 0.3);
-}
+    .form-group input, .form-group select {
+        background: #1a1a1a;
+        border: 1px solid #333;
+        padding: 12px;
+        border-radius: 8px;
+        color: #fff;
+        outline: none;
+    }
 
-.file-input {
-    display: none;
-}
+    .form-group input:focus { border-color: #f2cc7d; }
 
-.upload-hint {
-    font-size: 12px;
-    color: #888;
-    margin-top: 8px;
-}
+    .actions-container {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 20px;
+    }
 
-.form-group {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 16px;
-}
+    .btn-save {
+        background: #f2cc7d;
+        color: #000;
+        padding: 15px;
+        border: none;
+        font-weight: 800;
+        text-transform: uppercase;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
 
-.form-group label {
-    margin-bottom: 6px;
-    font-size: 15px;
-    color: #ddd;
-}
+    .btn-save:hover { background: #fff; transform: translateY(-2px); }
 
-.form-group input,
-.form-group select {
-    background: #1a1a1a;
-    border: 1px solid #333;
-    padding: 10px;
-    border-radius: 6px;
-    color: #fff;
-    font-size: 15px;
-}
-
-.form-group input:focus,
-.form-group select:focus {
-    border-color: #e2c93eff;
-    outline: none;
-    box-shadow: 0 0 8px rgba(226, 201, 62, 0.2);
-}
-
-.btn-save {
-    width: 100%;
-    background: #dfd155ff;
-    padding: 12px;
-    color: #000000ff;
-    border: none;
-    font-size: 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.2s;
-    font-weight: 600;
-}
-
-.btn-save:hover {
-    background: #e49e1cff;
-    box-shadow: 0 0 10px rgba(241, 220, 25, 0.4);
-    transform: translateY(-2px);
-}
-
-.btn-cancelar {
-    display: block;
-    width: 100%;
-    text-align: center;
-    background: #555;
-    padding: 12px;
-    color: #fff;
-    border: none;
-    font-size: 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.2s;
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.btn-cancelar:hover {
-    background: #777;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-    transform: translateY(-2px);
-}
-
+    .btn-cancelar {
+        text-align: center;
+        padding: 12px;
+        color: #666;
+        text-decoration: none;
+        font-size: 13px;
+    }
 </style>
 
 <script>
 function previewPhoto(event) {
     const file = event.target.files[0];
-    
     if (file) {
-        // Validar tamanho do arquivo (2MB máx)
         if (file.size > 2 * 1024 * 1024) {
-            alert('Arquivo muito grande! Máximo 2MB.');
-            event.target.value = '';
+            alert('Máximo 2MB permitido.');
             return;
         }
-        
-        // Validar tipo de arquivo
-        const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-        if (!validTypes.includes(file.type)) {
-            alert('Tipo de arquivo inválido! Use JPG, PNG, GIF ou WebP.');
-            event.target.value = '';
-            return;
-        }
-        
-        // Mostrar preview
         const reader = new FileReader();
         reader.onload = function(e) {
             document.getElementById('photoPreview').src = e.target.result;
