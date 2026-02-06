@@ -26,7 +26,20 @@ public function __construct() {
 
     public function index(){
      $this->viewListarPedido();
-} 
+}   
+
+public function viewAtivarPedido(int $id){
+         $dados = $this->pedidos->buscarPedidoPorId($id);
+         View::render("pedidos/ativar",["pedido" => $dados]);
+    }
+    public function ativarPedido(){
+        $id = (int)$_POST['id_pedido'];
+        if ($this->pedidos->ativarPedido($id)) {
+            Redirect::redirecionarComMensagem("/pedido/listar", "success", "Pedido ativado com sucesso!");
+        } else {
+            Redirect::redirecionarComMensagem("/pedido/listar", "error", "Erro ao ativar pedido.");
+        }
+    }
 
     // Método para exibir um único pedido
     public function viewPedidoUnico(int $id_pedido) {
@@ -199,7 +212,24 @@ public function __construct() {
         }
     }
 
-    // Método para excluir (soft delete) um pedido
+    // Método para exibir a view de confirmação de exclusão
+    public function viewExcluirPedido($id) {
+        $dados = $this->pedidos->buscarPedidoPorId($id);
+        View::render("/pedidos/delete", ["pedido" => $dados]);
+    }
+
+    // Método para processar a exclusão/ativação (soft delete toggle) via POST
+    public function deletarPedido() {
+        $id = (int)$_POST['id_pedido'];
+        if ($this->pedidos->deletarPedido($id)) {
+            Redirect::redirecionarComMensagem("/pedido/listar", "success", "Status do pedido alterado com sucesso!");
+        } else {
+            Redirect::redirecionarComMensagem("/pedido/listar", "error", "Erro ao alterar status do pedido.");
+        }
+    }
+
+
+    // Método para excluir (soft delete) um pedido - DEPRECATED - usar deletarPedido
     public function excluirPedido(int $id_pedido) {
         if ($this->pedidos->excluirPedido($id_pedido)) {
             Redirect::redirecionarComMensagem("/pedido/listar", "success", "Pedido #" . $id_pedido . " excluído com sucesso (soft delete).");

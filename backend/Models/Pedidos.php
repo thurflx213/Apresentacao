@@ -40,7 +40,7 @@ class Pedidos {
                 FROM tbl_pedidos
                 LEFT JOIN tbl_perfil ON tbl_pedidos.id_perfil = tbl_perfil.id_perfil
                 LEFT JOIN tbl_usuarios ON tbl_perfil.id_usuarios = tbl_usuarios.id_usuarios
-                WHERE tbl_pedidos.id_pedido = :id_pedido AND tbl_pedidos.excluido_em IS NULL";
+                WHERE tbl_pedidos.id_pedido = :id_pedido";
 
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':id_pedido', $id, PDO::PARAM_INT);
@@ -156,82 +156,81 @@ class Pedidos {
         }
     
     // Função de paginação
-    public function paginacao(int $pagina = 1, int $por_pagina = 100, ?string $busca = null): array{
+public function paginacao(int $pagina = 1, int $por_pagina = 100, ?string $busca = null): array{
 
-    $offset = ($pagina - 1) * $por_pagina;
-    
-    if ($busca) {
-        $busca_formatada = '%' . $busca . '%';
-        $totalQuery = "SELECT COUNT(*) FROM `tbl_pedidos` 
-            LEFT JOIN tbl_perfil ON tbl_pedidos.id_perfil = tbl_perfil.id_perfil
-            LEFT JOIN tbl_usuarios ON tbl_perfil.id_usuarios = tbl_usuarios.id_usuarios
-            WHERE tbl_pedidos.excluido_em IS NULL 
-            AND (
-                CAST(tbl_pedidos.id_pedido AS CHAR) LIKE :busca
-                OR LOWER(tbl_usuarios.nome_usuarios) LIKE LOWER(:busca)
-                OR LOWER(tbl_perfil.endereco_perfil) LIKE LOWER(:busca)
-            )";
-        $totalStmt = $this->db->prepare($totalQuery);
-        $totalStmt->bindParam(':busca', $busca_formatada);
-        $totalStmt->execute();
-    } else {
-        $totalQuery = "SELECT COUNT(*) FROM `tbl_pedidos` WHERE excluido_em IS NULL";
-        $totalStmt = $this->db->query($totalQuery);
-    }
-    
-    $total_de_registros = $totalStmt->fetchColumn();
+$offset = ($pagina - 1) * $por_pagina;
 
-    if ($busca) {
-        $busca_formatada = '%' . $busca . '%';
-        $dataQuery = "SELECT 
-            tbl_pedidos.*, 
-            tbl_perfil.endereco_perfil, 
-            tbl_usuarios.nome_usuarios AS nome_cliente 
-        FROM tbl_pedidos 
+if ($busca) {
+    $busca_formatada = '%' . $busca . '%';
+    $totalQuery = "SELECT COUNT(*) FROM `tbl_pedidos` 
         LEFT JOIN tbl_perfil ON tbl_pedidos.id_perfil = tbl_perfil.id_perfil
         LEFT JOIN tbl_usuarios ON tbl_perfil.id_usuarios = tbl_usuarios.id_usuarios
-        WHERE tbl_pedidos.excluido_em IS NULL 
-        AND (
+        WHERE (
             CAST(tbl_pedidos.id_pedido AS CHAR) LIKE :busca
             OR LOWER(tbl_usuarios.nome_usuarios) LIKE LOWER(:busca)
             OR LOWER(tbl_perfil.endereco_perfil) LIKE LOWER(:busca)
-        )
-        LIMIT :limit OFFSET :offset";
-        
-        $dataStmt = $this->db->prepare($dataQuery);
-        $dataStmt->bindParam(':busca', $busca_formatada);
-        $dataStmt->bindValue(':limit', $por_pagina, PDO::PARAM_INT);
-        $dataStmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-    } else {
-        $dataQuery = "SELECT 
-            tbl_pedidos.*, 
-            tbl_perfil.endereco_perfil, 
-            tbl_usuarios.nome_usuarios AS nome_cliente 
-        FROM tbl_pedidos 
-        LEFT JOIN tbl_perfil ON tbl_pedidos.id_perfil = tbl_perfil.id_perfil
-        LEFT JOIN tbl_usuarios ON tbl_perfil.id_usuarios = tbl_usuarios.id_usuarios
-        WHERE tbl_pedidos.excluido_em IS NULL 
-        LIMIT :limit OFFSET :offset";
-        
-        $dataStmt = $this->db->prepare($dataQuery);
-        $dataStmt->bindValue(':limit', $por_pagina, PDO::PARAM_INT);
-        $dataStmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-    }
+        )";
+    $totalStmt = $this->db->prepare($totalQuery);
+    $totalStmt->bindParam(':busca', $busca_formatada);
+    $totalStmt->execute();
+} else {
+    $totalQuery = "SELECT COUNT(*) FROM `tbl_pedidos`";
+    $totalStmt = $this->db->query($totalQuery);
+}
+
+$total_de_registros = $totalStmt->fetchColumn();
+
+if ($busca) {
+    $busca_formatada = '%' . $busca . '%';
+    $dataQuery = "SELECT 
+        tbl_pedidos.*, 
+        tbl_perfil.endereco_perfil, 
+        tbl_usuarios.nome_usuarios AS nome_cliente 
+    FROM tbl_pedidos 
+    LEFT JOIN tbl_perfil ON tbl_pedidos.id_perfil = tbl_perfil.id_perfil
+    LEFT JOIN tbl_usuarios ON tbl_perfil.id_usuarios = tbl_usuarios.id_usuarios
+    WHERE (
+        CAST(tbl_pedidos.id_pedido AS CHAR) LIKE :busca
+        OR LOWER(tbl_usuarios.nome_usuarios) LIKE LOWER(:busca)
+        OR LOWER(tbl_perfil.endereco_perfil) LIKE LOWER(:busca)
+    )
+    ORDER BY tbl_pedidos.excluido_em ASC, tbl_pedidos.id_pedido DESC
+    LIMIT :limit OFFSET :offset";
     
-    $dataStmt->execute();
-    $dados = $dataStmt->fetchAll(PDO::FETCH_ASSOC);
+    $dataStmt = $this->db->prepare($dataQuery);
+    $dataStmt->bindParam(':busca', $busca_formatada);
+    $dataStmt->bindValue(':limit', $por_pagina, PDO::PARAM_INT);
+    $dataStmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+} else {
+    $dataQuery = "SELECT 
+        tbl_pedidos.*, 
+        tbl_perfil.endereco_perfil, 
+        tbl_usuarios.nome_usuarios AS nome_cliente 
+    FROM tbl_pedidos 
+    LEFT JOIN tbl_perfil ON tbl_pedidos.id_perfil = tbl_perfil.id_perfil
+    LEFT JOIN tbl_usuarios ON tbl_perfil.id_usuarios = tbl_usuarios.id_usuarios
+    ORDER BY tbl_pedidos.excluido_em ASC, tbl_pedidos.id_pedido DESC
+    LIMIT :limit OFFSET :offset";
+    
+    $dataStmt = $this->db->prepare($dataQuery);
+    $dataStmt->bindValue(':limit', $por_pagina, PDO::PARAM_INT);
+    $dataStmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+}
 
-    $lastPage = ceil($total_de_registros / $por_pagina);
+$dataStmt->execute();
+$dados = $dataStmt->fetchAll(PDO::FETCH_ASSOC);
 
-    return [
-        'data' => $dados,
-        'total' => (int) $total_de_registros,
-        'por_pagina' => (int) $por_pagina,
-        'pagina_atual' => (int) $pagina,
-        'ultima_pagina' => (int) $lastPage,
-        'de' => $offset + 1,
-        'para' => $offset + count($dados)
-    ];
+$lastPage = ceil($total_de_registros / $por_pagina);
+
+return [
+    'data' => $dados,
+    'total' => (int) $total_de_registros,
+    'por_pagina' => (int) $por_pagina,
+    'pagina_atual' => (int) $pagina,
+    'ultima_pagina' => (int) $lastPage,
+    'de' => $offset + 1,
+    'para' => $offset + count($dados)
+];
 }
   public function paginacaoAPI(int $pagina = 1, int $por_pagina = 50): array{
         $totalQuery = "SELECT COUNT(*) FROM `tbl_pedidos`";
@@ -342,6 +341,36 @@ class Pedidos {
             return false;
         }
     }
+
+    // Toggle de ativação/desativação de pedido (igual ao deletarUsuario)
+    public function deletarPedido(int $id_pedido) {
+        try {
+            $agora = date("Y-m-d H:i:s");
+            $pedido = $this->buscarPedidoPorId($id_pedido);
+            
+            // Se já está excluído, ativa (NULL). Se está ativo, exclui (data atual)
+            $excluido_em = $pedido['excluido_em'] != NULL ? NULL : $agora;
+            
+            $sql = "UPDATE tbl_pedidos SET excluido_em = :excluido_em WHERE id_pedido = :id_pedido";
+            $stmt = $this->db->prepare($sql);
+            $stmt->bindParam(':id_pedido', $id_pedido, PDO::PARAM_INT);
+            $stmt->bindParam(':excluido_em', $excluido_em);
+            return $stmt->execute();
+        } catch (PDOException $e) {
+            error_log("Erro ao alterar status do Pedido #{$id_pedido}: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    public function ativarPedido(int $id) {
+    $coluna = NULL; 
+    $sql = "UPDATE tbl_pedidos SET excluido_em = :excluido_em WHERE id_pedido = :id";
+    $stmt = $this->db->prepare($sql);
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    $stmt->bindParam(':excluido_em', $coluna, PDO::PARAM_NULL); 
+    
+    return $stmt->execute();
+}
 
     public static function contarPedidos($db) {
         $sql = "SELECT COUNT(*) as total FROM tbl_pedidos WHERE excluido_em IS NULL";

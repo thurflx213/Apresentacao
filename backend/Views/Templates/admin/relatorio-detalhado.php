@@ -3,234 +3,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Relatório Detalhado de Pedidos</title>
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <title>Relatório Detalhado - Painel Koketsu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        /* Estilos Base */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        
+        body { 
+            background-color: #000; 
+            color: #fff; 
+            display: flex; 
+            min-height: 100vh; 
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            color: #e0e0e0;
-            min-height: 100vh;
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: #111;
+            padding: 20px;
+            border-right: 1px solid #333;
+            flex-shrink: 0;
         }
 
-        .header {
-            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-            color: #1a1a1a;
-            padding: 20px 40px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            margin-bottom: 30px;
+        .profile-section { text-align: center; padding-bottom: 20px; border-bottom: 1px solid #333; }
+        .profile-img { width: 80px; height: 80px; border-radius: 50%; border: 2px solid #ffd700; margin-bottom: 10px; }
+        .profile-name { font-size: 0.9em; color: #ccc; }
+
+        .menu-list { list-style: none; margin-top: 20px; }
+        .menu-item { padding: 12px; transition: 0.3s; cursor: pointer; display: flex; align-items: center; color: #fff; text-decoration: none; }
+        .menu-item:hover { background: #222; color: #ffd700; }
+        .menu-item i { margin-right: 15px; width: 20px; }
+
+        /* Conteúdo Principal */
+        .main-content { flex-grow: 1; padding: 40px; background-color: #0a0a0a; }
+
+        /* Header Amarelo Koketsu */
+        .page-header {
+            background: #ffcc00;
+            color: #000;
+            padding: 15px 30px;
+            border-radius: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 30px;
         }
 
-        .header h1 {
-            font-size: 2em;
-        }
-
-        .header a {
-            background: #1a1a1a;
-            color: #ffd700;
-            padding: 10px 20px;
+        .btn-voltar {
+            background: #111;
+            color: #ffcc00;
+            padding: 8px 20px;
             border-radius: 5px;
             text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
+            font-weight: bold;
+            font-size: 0.8em;
+            transition: 0.3s;
         }
 
-        .header a:hover {
-            background: #2a2a2a;
-        }
+        .btn-voltar:hover { background: #222; }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px 40px 20px;
+        /* Info Box */
+        .info-card {
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 5px solid #ffcc00;
+            color: #ccc;
         }
+        .info-card strong { color: #ffcc00; }
 
-        .table-container {
-            background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        /* Tabela Estilizada */
+        .table-wrapper {
+            background: #1a1a1a;
+            border-radius: 10px;
             overflow: hidden;
-            border-top: 3px solid #ffd700;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
+        table { width: 100%; border-collapse: collapse; }
+        
         table th {
-            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-            color: #1a1a1a;
+            background-color: #ffcc00;
+            color: #000;
             padding: 15px;
-            font-weight: 600;
             text-align: left;
             text-transform: uppercase;
-            font-size: 0.9em;
-            letter-spacing: 1px;
+            font-size: 0.8em;
         }
 
         table td {
             padding: 15px;
-            border-bottom: 1px solid #444;
+            border-bottom: 1px solid #333;
+            color: #ddd;
+            font-size: 0.9em;
         }
 
-        table tbody tr {
-            transition: background-color 0.2s ease;
-        }
+        table tr:hover { background: #252525; }
 
-        table tbody tr:hover {
-            background-color: rgba(255, 215, 0, 0.05);
-        }
-
-        table tbody tr:nth-child(even) {
-            background-color: rgba(255, 255, 255, 0.02);
-        }
-
-        .status-badge {
-            display: inline-block;
+        /* Badges de Status - CORRIGIDAS E COMPLETAS */
+        .badge {
             padding: 6px 12px;
             border-radius: 20px;
-            font-size: 0.85em;
-            font-weight: 600;
+            font-size: 0.75em;
+            font-weight: bold;
             text-transform: uppercase;
-        }
-
-        .status-entregue {
-            background-color: rgba(76, 175, 80, 0.2);
-            color: #4caf50;
-            border: 1px solid #4caf50;
-        }
-
-        .status-pendente {
-            background-color: rgba(255, 193, 7, 0.2);
-            color: #ffc107;
-            border: 1px solid #ffc107;
-        }
-
-        .status-cancelado {
-            background-color: rgba(244, 67, 54, 0.2);
-            color: #f44336;
-            border: 1px solid #f44336;
-        }
-
-        .status-processando {
-            background-color: rgba(33, 150, 243, 0.2);
-            color: #2196f3;
-            border: 1px solid #2196f3;
-        }
-
-        .status-em-entrega {
-            background-color: rgba(156, 39, 176, 0.2);
-            color: #9c27b0;
-            border: 1px solid #9c27b0;
-        }
-
-        .valor {
-            font-weight: 600;
-            color: #ffd700;
-        }
-
-        .pagination {
-            margin-top: 30px;
+            display: inline-block;
+            min-width: 90px;
             text-align: center;
         }
 
-        .pagination a {
-            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-            color: #1a1a1a;
-            padding: 10px 15px;
-            margin: 0 5px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: 600;
-            display: inline-block;
-            transition: transform 0.2s ease;
-        }
+        /* Cores dos Status */
+        .status-pendente  { color: #ffbb33; border: 1px solid #ffbb33; background: rgba(255, 187, 51, 0.1); }
+        .status-pago      { color: #00C851; border: 1px solid #00C851; background: rgba(0, 200, 81, 0.1); }
+        .status-enviado   { color: #33b5e5; border: 1px solid #33b5e5; background: rgba(51, 181, 229, 0.1); }
+        .status-entregue  { color: #e6d119ff; border: 1px solid #e6d119ff; background: rgba(230, 209, 25, 0.1); }
+        .status-concluido { color: #e025b8ff; border: 1px solid #e025b8ff; background: rgba(224, 37, 184, 0.1); }
+        .status-cancelado { color: #ff4444; border: 1px solid #ff4444; background: rgba(255, 68, 68, 0.1); }
+        /* Fallback para status desconhecido */
+        .status-default   { color: #bbb; border: 1px solid #bbb; background: rgba(255, 255, 255, 0.1); }
 
-        .pagination a:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
-        }
-
-        .info-box {
-            background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            border-left: 4px solid #ffd700;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-        }
-
-        .info-box p {
-            margin: 10px 0;
-        }
-
-        .info-box strong {
-            color: #ffd700;
-        }
-
-        @media (max-width: 768px) {
-            .header {
-                flex-direction: column;
-                gap: 15px;
-                align-items: flex-start;
-            }
-
-            table {
-                font-size: 0.9em;
-            }
-
-            table th, table td {
-                padding: 10px;
-            }
-
-            .header h1 {
-                font-size: 1.5em;
-            }
-        }
-
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .table-container {
-            animation: slideIn 0.5s ease-out;
-        }
-
-        .info-box {
-            animation: slideIn 0.5s ease-out;
-        }
+        .price { color: #ffcc00; font-weight: bold; }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>📋 Relatório Detalhado de Pedidos</h1>
-        <a href="/backend/relatorios">← Voltar</a>
-    </div>
 
-    <div class="container">
-        <div class="info-box">
-            <p><strong>Total de Pedidos:</strong> <?php echo count($pedidos ?? []); ?></p>
-            <p><strong>Data da Geração:</strong> <?php echo date('d/m/Y H:i:s'); ?></p>
+ 
+
+    <main class="main-content">
+        <div class="page-header">
+            <h2><i class="fas fa-file-alt"></i> Relatório Detalhado de Pedidos</h2>
+            <a href="/backend/relatorios" class="btn-voltar">← VOLTAR</a>
         </div>
 
-        <div class="table-container">
+        <div class="info-card">
+            <p><strong>Total de Pedidos Encontrados:</strong> <?php echo count($pedidos ?? []); ?></p>
+            <p><strong>Relatório gerado em:</strong> <?php echo date('d/m/Y H:i:s'); ?></p>
+        </div>
+
+        <div class="table-wrapper">
             <table>
                 <thead>
                     <tr>
@@ -240,7 +151,7 @@
                         <th>Email</th>
                         <th>Valor Total</th>
                         <th>Status</th>
-                        <th>Itens</th>
+                        <th>Qtd Itens</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -248,41 +159,41 @@
                         <?php foreach ($pedidos as $pedido): ?>
                             <tr>
                                 <td><strong>#<?php echo $pedido['id_pedido']; ?></strong></td>
-                                <td><?php echo date('d/m/Y H:i', strtotime($pedido['data_pedido'])); ?></td>
+                                <td><?php echo date('d/m/Y', strtotime($pedido['data_pedido'])); ?></td>
                                 <td><?php echo htmlspecialchars($pedido['nome_usuarios'] ?? 'Não informado'); ?></td>
-                                <td><?php echo htmlspecialchars($pedido['email_usuarios'] ?? 'Não informado'); ?></td>
-                                <td class="valor">R$ <?php echo number_format($pedido['total_pedido'] ?? 0, 2, ',', '.'); ?></td>
+                                <td><?php echo htmlspecialchars($pedido['email_usuarios'] ?? '---'); ?></td>
+                                <td class="price">R$ <?php echo number_format($pedido['total_pedido'] ?? 0, 2, ',', '.'); ?></td>
                                 <td>
-                                    <?php
-                                    $status = $pedido['status_pedido'] ?? 'Desconhecido';
-                                    $statusClass = 'status-pendente';
-                                    
-                                    switch(strtolower($status)) {
-                                        case 'entregue':
-                                            $statusClass = 'status-entregue';
-                                            break;
-                                        case 'em entrega':
-                                            $statusClass = 'status-em-entrega';
-                                            break;
-                                        case 'cancelado':
-                                            $statusClass = 'status-cancelado';
-                                            break;
-                                        case 'processando':
-                                            $statusClass = 'status-processando';
-                                            break;
-                                    }
+                                    <?php 
+                                        // Normaliza o status para o CSS (minúsculo, sem espaços e sem acentos básicos)
+                                        $status_original = $pedido['status_pedido'] ?? 'pendente';
+                                        $status_formatado = strtolower(trim($status_original));
+                                        
+                                        // Mapeamento de nomes amigáveis para classes CSS
+                                        $mapa_classes = [
+                                            'pago' => 'status-pago',
+                                            'concluido' => 'status-concluido',
+                                            'concluído' => 'status-concluido',
+                                            'enviado' => 'status-enviado',
+                                            'entregue' => 'status-entregue',
+                                            'cancelado' => 'status-cancelado',
+                                            'pendente' => 'status-pendente'
+                                        ];
+
+                                        $classe_css = $mapa_classes[$status_formatado] ?? 'status-default';
                                     ?>
-                                    <span class="status-badge <?php echo $statusClass; ?>">
-                                        <?php echo htmlspecialchars($status); ?>
+                                    <span class="badge <?php echo $classe_css; ?>">
+                                        <?php echo htmlspecialchars($status_original); ?>
                                     </span>
                                 </td>
-                                <td><?php echo $pedido['quantidade'] ?? 0; ?></td>
+                                <td style="text-align: center;"><?php echo $pedido['quantidade'] ?? 0; ?></td>
                             </tr>
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="7" style="text-align: center; padding: 30px;">
-                                <strong>Nenhum pedido encontrado</strong>
+                            <td colspan="7" style="text-align: center; padding: 50px; color: #666;">
+                                <i class="fas fa-search" style="font-size: 2em; margin-bottom: 10px; display: block;"></i>
+                                Nenhum pedido encontrado na base de dados.
                             </td>
                         </tr>
                     <?php endif; ?>
@@ -290,9 +201,10 @@
             </table>
         </div>
 
-        <div style="text-align: center; margin-top: 40px; color: #888;">
-            <p>© 2025 Koketsu Store. Relatório Confidencial.</p>
-        </div>
-    </div>
+        <footer style="margin-top: 30px; text-align: center; font-size: 0.8em; color: #444;">
+            &copy; <?php echo date('Y'); ?> Koketsu Store - Gestão de Relatórios
+        </footer>
+    </main>
+
 </body>
 </html>

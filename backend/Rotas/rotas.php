@@ -30,7 +30,12 @@ class Rotas
                  "/cor/editar/{id}"   => "CoresController@viewEditarCor",
                  "/cor/excluir/{id}"  => "CoresController@viewExcluirCor",
                  "/cor/{id}/relatorio/{data1}/{data2}" => "CoresController@relatorioCores",
-              // Clientes
+                // Clientes
+                 "/clientes" => "ClientesController@index",
+                 "/cliente/listar" => "ClientesController@index",
+                 "/cliente/listar/{pagina}" => "ClientesController@index",
+                 "/cliente/editar/{id}" => "ClientesController@viewEditarCliente",
+                 "/cliente/excluir/{id}" => "ClientesController@viewExcluirCliente",
                  "cliente/dashboard" => "Cliente\DashboardController@index",
                  "cliente/editar/{id}" => "Cliente\DashboardController@viewEditarCliente",
                  "cliente/pedidos" => "Cliente\PedidosController@index",
@@ -98,10 +103,11 @@ class Rotas
                   "/pedido/criar" => "PedidosController@viewCriarPedidos",
                   "/pedido/listar" => "PedidosController@viewListarPedido",
                   "/pedido/listar/{id}" => "PedidosController@viewPedidoUnico",
-                  "pedido/detalhes/{id}" => "PedidosController@viewPedidoUnico",
+                  "/pedido/detalhes/{id}" => "PedidosController@viewPedidoUnico",
                   "/pedido/editar/{id}" => "PedidosController@viewEditarPedido",
                   "/pedido/excluir/{id}" => "PedidosController@viewExcluirPedido",
                   "/pedido/{id}/relatorio/{data1}/{data2}" => "Pedidos@relatorioPedido",
+                  "/pedido/ativar/{id}" => "PedidosController@viewAtivarPedido",
                   '/api/pedidos' => 'PublicApiController@getPedidos',
                   '/api/pedidos/{pagina}' => 'PublicApiController@getPedidos',
               //Produtos
@@ -142,6 +148,8 @@ class Rotas
                  "/backend/Imagens/listar" => "ImagensController@viewListarImagem",
                  "/backend/Imagens/editar/{id}" => "ImagensController@viewEditarImagem",
                  "/backend/Imagens/excluir/{id}" => "ImagensController@viewExcluirImagem",
+                  "/backend/cliente/listar" => "ClientesController@index",
+                  "/backend/cliente/listar/{pagina}" => "ClientesController@index",
                
 
               // Login
@@ -187,7 +195,8 @@ class Rotas
                 //Pedidos
                 "/pedido/salvar" => "PedidosController@salvarPedido",
                 "/pedido/atualizar/{id}" => "PedidosController@atualizarPedidos",
-                "/pedido/deletar/{id}" => "PedidosController@viewExcluirPedido",
+                "/pedido/deletar" => "PedidosController@deletarPedido",
+                "/pedido/ativar" => "PedidosController@ativarPedido",
                 "/pedido/listar" => "PedidosController@viewListarPedido",
                 //produtos
                 "/produtos/salvar" => "ProdutosController@salvarProduto",

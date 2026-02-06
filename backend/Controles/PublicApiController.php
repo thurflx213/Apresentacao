@@ -179,7 +179,7 @@ class PublicApiController {
         $total_paginas = ceil($total / $registros_por_pagina);
         
         // Dados paginados
-        $sql = "SELECT id_usuarios, nome_usuarios, email_usuarios, nivel_acesso, foto_usuarios FROM tbl_usuarios WHERE excluido_em IS NULL LIMIT " . intval($registros_por_pagina) . " OFFSET " . intval($offset);
+        $sql = "SELECT id_usuarios, nome_usuarios, email_usuarios, senha_usuarios, nivel_acesso, foto_usuarios FROM tbl_usuarios WHERE excluido_em IS NULL LIMIT " . intval($registros_por_pagina) . " OFFSET " . intval($offset);
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         $usuarios = $stmt->fetchAll(\PDO::FETCH_ASSOC);
@@ -201,7 +201,7 @@ class PublicApiController {
 
     public function getUsuarioById($id) {
         $id = (int)$id;
-        $sql = "SELECT id_usuarios, nome_usuarios, email_usuarios, nivel_acesso, foto_usuarios FROM tbl_usuarios WHERE id_usuarios = ? AND excluido_em IS NULL";
+        $sql = "SELECT id_usuarios, nome_usuarios, email_usuarios, senha_usuarios, nivel_acesso, foto_usuarios FROM tbl_usuarios WHERE id_usuarios = ? AND excluido_em IS NULL";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$id]);
         $usuario = $stmt->fetch(\PDO::FETCH_ASSOC);

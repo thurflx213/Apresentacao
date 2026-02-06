@@ -1,44 +1,236 @@
-<div class="container" style="max-width: 600px; margin: 40px auto; padding: 25px; border: 1px solid #eee; border-radius: 6px; background-color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-    
-    <h2 style="text-align: center; color: #333; margin-bottom: 30px; border-bottom: 2px solid #ffc107; padding-bottom: 10px;">Novo Pedido</h2>
+<div class="page-wrapper">
+    <div class="top-navigation">
+        <a href="/backend/itenspedidos/listar" class="btn-back-lux">
+            <i class="fa fa-arrow-left"></i> VOLTAR À LISTA
+        </a>
+    </div>
 
-    <form action="/backend/pedido/salvar" method="post" style="display: flex; flex-direction: column; gap: 20px;">
-        
-        <div>
-            <h4 style="color: #555; margin-bottom: 15px;">Informações Básicas</h4>
-
-            <label for="id_perfil" style="display: block; margin-bottom: 5px; font-weight: bold; color: #333;">ID do Perfil (Obrigatório):</label>
-            <input type="number" id="id_perfil" name="id_perfil" placeholder="Ex: 5 (Deve existir na tabela de Perfis)" required style="width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 15px;">
-
-            <label for="data_pedido" style="display: block; margin-bottom: 5px; font-weight: bold; color: #333;">Data do Pedido:</label>
-            <input type="date" id="data_pedido" name="data_pedido" required style="width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 15px;">
-
-            <label for="total_pedido" style="display: block; margin-bottom: 5px; font-weight: bold; color: #333;">Total do Pedido (R$):</label>
-            <input type="number" step="0.01" id="total_pedido" name="total_pedido" placeholder="500.00" required style="width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 15px;">
-
-            <label for="status_pedido" style="display: block; margin-bottom: 5px; font-weight: bold; color: #333;">Status:</label>
-            <select id="status_pedido" name="status_pedido" required style="width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;">
-                <option value="pendente" selected>Pendente</option>
-                <option value="pago">Pago</option>
-                <option value="cancelado">Cancelado</option>
-            </select>
+    <div class="premium-card">
+        <div class="card-header">
+            <h2 class="gold-gradient-text">
+                <i class="fa fa-plus-circle"></i> NOVO PEDIDO
+            </h2>
+            <p class="subtitle">Preencha os dados abaixo para registrar uma nova transação no sistema.</p>
         </div>
 
-        <div style="border: 1px solid #ffc107; padding: 15px; border-radius: 5px; background-color: #fffaf0;">
-            <h4 style="color: #555; margin-top: 0; margin-bottom: 15px;">Item (Produto Inicial)</h4>
-
-            <label for="id_produto" style="display: block; margin-bottom: 5px; font-weight: bold; color: #333;">ID do Produto:</label>
-            <input type="number" id="id_produto" name="itens[0][id_produto]" placeholder="Ex: 101 (Deve existir na tabela de Produtos)" required style="width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 15px;">
-
-            <label for="quantidade" style="display: block; margin-bottom: 5px; font-weight: bold; color: #333;">Quantidade:</label>
-            <input type="number" id="quantidade" name="itens[0][quantidade]" placeholder="1" value="1" required style="width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; margin-bottom: 15px;">
+        <form action="/backend/itenspedidos/salvar" method="post" class="modern-form">
             
-            <label for="preco_unitario" style="display: block; margin-bottom: 5px; font-weight: bold; color: #333;">Preço Unitário (R$):</label>
-            <input type="number" step="0.01" id="preco_unitario" name="itens[0][preco_unitario]" placeholder="10.50" required style="width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;">
-        </div>
-        
-        <button type="submit" style="padding: 12px 20px; background-color: #ffc107; color: #333; border: none; border-radius: 4px; cursor: pointer; font-size: 18px; font-weight: bold; transition: background-color 0.3s ease;">
-            Salvar Pedido
-        </button>
-    </form>
+            <div class="form-section">
+                <h4 class="section-title"><i class="fa fa-info-circle"></i> Informações Básicas</h4>
+                
+                <div class="grid-row">
+                    <div class="grid-col">
+                        <label class="label-premium">ID do Perfil (Cliente)</label>
+                        <div class="input-wrapper">
+                            <i class=""></i>
+                            <input type="number" name="id_perfil" placeholder="Ex: 5" required class="input-dark">
+                        </div>
+                    </div>
+                    <div class="grid-col">
+                        <label class="label-premium">Data do Pedido</label>
+                        <div class="input-wrapper">
+                            <input type="date" name="data_pedido" value="<?= date('Y-m-d') ?>" required class="input-dark">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid-row">
+                    <div class="grid-col">
+                        <label class="label-premium">Valor Total (R$)</label>
+                        <div class="input-wrapper">
+                            <span class="currency-label">R$</span>
+                            <input type="number" step="0.01" name="total_pedido" placeholder="0.00" required class="input-dark padding-currency">
+                        </div>
+                    </div>
+                    <div class="grid-col">
+                        <label class="label-premium">Status Inicial</label>
+                        <div class="select-wrapper">
+                            <select name="status_pedido" class="select-luxury">
+                                <option value="pendente">PENDENTE</option>
+                                <option value="pago">PAGO</option>
+                                <option value="cancelado">CANCELADO</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section highlight-section">
+                <h4 class="section-title"><i class="fa fa-box-open"></i> Item (Produto Inicial)</h4>
+                
+                <div class="grid-row">
+                    <div class="grid-col">
+                        <label class="label-premium">ID do Produto</label>
+                        <input type="number" name="itens[0][id_produto]" placeholder="Ex: 101" required class="input-dark">
+                    </div>
+                    <div class="grid-col" style="flex: 0.5;">
+                        <label class="label-premium">Quantidade</label>
+                        <input type="number" name="itens[0][quantidade]" value="1" required class="input-dark text-center">
+                    </div>
+                    <div class="grid-col">
+                        <label class="label-premium">Preço Unitário (R$)</label>
+                        <div class="input-wrapper">
+                            <span class="currency-label">R$</span>
+                            <input type="number" step="0.01" name="itens[0][preco_unitario]" placeholder="0.00" required class="input-dark padding-currency">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-footer">
+                <button type="submit" class="btn-save-gold">
+                    <i class="fa fa-check"></i> CRIAR PEDIDO
+                </button>
+            </div>
+        </form>
+    </div>
 </div>
+
+<style>
+    /* Reset e Base do Dashboard */
+    .page-wrapper {
+        padding: 40px 20px;
+        max-width: 850px;
+        margin: 0 auto;
+        min-height: 100vh;
+    }
+
+    /* Navegação */
+    .top-navigation { margin-bottom: 25px; }
+    .btn-back-lux {
+        color: #f2cc7d;
+        text-decoration: none;
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 1px;
+        border: 1px solid rgba(242, 204, 125, 0.2);
+        padding: 10px 20px;
+        border-radius: 50px;
+        transition: 0.3s;
+    }
+    .btn-back-lux:hover {
+        background: rgba(242, 204, 125, 0.1);
+        border-color: #f2cc7d;
+    }
+
+    /* Card Premium */
+    .premium-card {
+        background: #111;
+        border: 1px solid #222;
+        border-radius: 20px;
+        padding: 45px;
+        box-shadow: 0 30px 60px rgba(0,0,0,0.7);
+    }
+
+    .card-header { text-align: center; margin-bottom: 40px; }
+    .gold-gradient-text {
+        background: linear-gradient(135deg, #f2cc7d 0%, #b8860b 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-size: 28px;
+        font-weight: 900;
+        letter-spacing: 2px;
+        margin: 0;
+    }
+    .subtitle { color: #666; font-size: 13px; margin-top: 8px; }
+
+    /* Seções do Formulário */
+    .form-section { margin-bottom: 35px; }
+    .section-title {
+        color: #555;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #222;
+        padding-bottom: 10px;
+    }
+    .highlight-section {
+        background: #161616;
+        padding: 25px;
+        border-radius: 15px;
+        border: 1px dashed #333;
+    }
+
+    /* Inputs e Grid */
+    .grid-row { display: flex; gap: 20px; margin-bottom: 20px; }
+    .grid-col { flex: 1; }
+    
+    .label-premium {
+        display: block;
+        color: #f2cc7d;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+    }
+
+    .input-wrapper { position: relative; display: flex; align-items: center; }
+    .icon-inner, .currency-label {
+        position: absolute;
+        left: 15px;
+        color: #555;
+        font-size: 13px;
+    }
+
+    .input-dark {
+        background: #1a1a1a !important;
+        border: 1px solid #333;
+        color: #fff;
+        padding: 14px 15px;
+        border-radius: 10px;
+        width: 100%;
+        font-size: 15px;
+        transition: 0.3s;
+        box-sizing: border-box;
+    }
+    .input-dark:focus {
+        border-color: #f2cc7d;
+        outline: none;
+        box-shadow: 0 0 10px rgba(242, 204, 125, 0.1);
+    }
+    .padding-currency { padding-left: 45px; }
+    .text-center { text-align: center; }
+
+    /* Select Customizado */
+    .select-luxury {
+        background: #1a1a1a;
+        color: #fff;
+        border: 1px solid #333;
+        padding: 14px;
+        border-radius: 10px;
+        width: 100%;
+        appearance: none;
+        cursor: pointer;
+    }
+
+    /* Botão Salvar */
+    .btn-save-gold {
+        background: linear-gradient(180deg, #f2cc7d 0%, #d4a74a 100%);
+        color: #000;
+        border: none;
+        padding: 20px;
+        width: 100%;
+        border-radius: 12px;
+        font-weight: 900;
+        font-size: 15px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        cursor: pointer;
+        transition: 0.3s;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+    .btn-save-gold:hover {
+        transform: translateY(-2px);
+        filter: brightness(1.1);
+    }
+
+    /* Dark Mode p/ o seletor de data */
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        filter: invert(1);
+    }
+
+    @media (max-width: 600px) {
+        .grid-row { flex-direction: column; }
+    }
+</style>

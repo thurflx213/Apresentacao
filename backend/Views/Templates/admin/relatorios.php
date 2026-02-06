@@ -3,10 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Relatórios - Dashboard</title>
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <title>Relatórios - Koketsu Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     <style>
+        :root {
+            --primary-gold: #ffd700;
+            --secondary-gold: #b8860b;
+            --bg-dark: #0f0f0f;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --border-color: rgba(255, 215, 0, 0.15);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -14,276 +24,282 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            color: #e0e0e0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(255, 215, 0, 0.03) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(255, 215, 0, 0.03) 0%, transparent 40%);
+            color: #f0f0f0;
             min-height: 100vh;
+            line-height: 1.6;
         }
 
+        /* Header Estilo Moderno */
         .header {
-            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-            color: #1a1a1a;
-            padding: 20px 40px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            margin-bottom: 30px;
+            background: rgba(15, 15, 15, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 40px 60px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 40px;
         }
 
         .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 5px;
-        }
-
-        .header p {
-            font-size: 1.1em;
-            opacity: 0.9;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 20px 40px 20px;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-
-        .stat-card {
-            background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
-            padding: 25px;
-            border-radius: 12px;
-            border-left: 5px solid #ffd700;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            cursor: pointer;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 25px rgba(255, 215, 0, 0.2);
-        }
-
-        .stat-card h3 {
-            font-size: 0.95em;
-            color: #b0b0b0;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .stat-value {
-            font-size: 2.5em;
-            font-weight: bold;
-            color: #ffd700;
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #ffd700, #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             margin-bottom: 10px;
         }
 
-        .stat-icon {
-            font-size: 3em;
-            opacity: 0.3;
-            margin-top: 15px;
+        .header p {
+            color: #888;
+            font-weight: 400;
+            letter-spacing: 0.5px;
         }
 
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 40px 60px 40px;
+        }
+
+        /* Grid de Estatísticas Elevadas */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            border-radius: 24px;
+            backdrop-filter: blur(5px);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--primary-gold);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .stat-card h3 {
+            font-size: 0.8rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #fff;
+            z-index: 2;
+            position: relative;
+        }
+
+        .stat-icon {
+            position: absolute;
+            right: 20px;
+            bottom: 15px;
+            font-size: 4rem;
+            opacity: 0.1;
+            filter: grayscale(1);
+            transition: 0.4s;
+        }
+
+        .stat-card:hover .stat-icon {
+            opacity: 0.3;
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        /* Gráficos em Containers Minimalistas */
         .charts-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
             gap: 30px;
-            margin-bottom: 40px;
+            margin-bottom: 50px;
         }
 
         .chart-container {
-            background: linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 100%);
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-            border-top: 3px solid #ffd700;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 35px;
+            border-radius: 24px;
         }
 
         .chart-container h3 {
-            color: #ffd700;
-            margin-bottom: 20px;
-            font-size: 1.3em;
+            color: var(--primary-gold);
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chart-container h3::before {
+            content: "";
+            width: 4px;
+            height: 20px;
+            background: var(--primary-gold);
+            border-radius: 10px;
         }
 
         .chart-wrapper {
             position: relative;
-            height: 300px;
-            margin-bottom: 20px;
+            height: 350px;
         }
 
+        /* Botões Estilo Dashboard Luxo */
         .actions-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            display: flex;
+            flex-wrap: wrap;
             gap: 15px;
-            margin-bottom: 40px;
+            justify-content: center;
         }
 
         .action-button {
-            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-            color: #1a1a1a;
-            border: none;
-            padding: 15px 25px;
-            border-radius: 8px;
-            font-size: 1em;
+            background: #1a1a1a;
+            color: var(--primary-gold);
+            border: 1px solid var(--border-color);
+            padding: 18px 35px;
+            border-radius: 50px;
+            font-size: 0.9rem;
             font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
             text-decoration: none;
-            display: inline-block;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .action-button:hover {
+            background: var(--primary-gold);
+            color: #000;
             transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
-        }
-
-        .action-button:active {
-            transform: translateY(-1px);
+            box-shadow: 0 10px 20px rgba(255, 215, 0, 0.2);
         }
 
         .footer-text {
             text-align: center;
-            color: #888;
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid #444;
-            font-size: 0.9em;
+            color: #555;
+            margin-top: 60px;
+            padding: 30px;
+            font-size: 0.85rem;
+            border-top: 1px solid #222;
+        }
+
+        @media (max-width: 1024px) {
+            .charts-grid { grid-template-columns: 1fr; }
         }
 
         @media (max-width: 768px) {
-            .header {
-                padding: 15px 20px;
-            }
-
-            .header h1 {
-                font-size: 1.8em;
-            }
-
-            .charts-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .stat-card {
-                padding: 20px;
-            }
-
-            .stat-value {
-                font-size: 2em;
-            }
+            .header { padding: 30px 20px; }
+            .container { padding: 0 20px 40px 20px; }
         }
 
-        /* Animação de entrada */
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        /* Animações */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .stat-card, .chart-container {
-            animation: slideIn 0.5s ease-out;
+            animation: fadeIn 0.6s ease-out forwards;
         }
-
-        .stat-card:nth-child(1) { animation-delay: 0.1s; }
-        .stat-card:nth-child(2) { animation-delay: 0.2s; }
-        .stat-card:nth-child(3) { animation-delay: 0.3s; }
-        .stat-card:nth-child(4) { animation-delay: 0.4s; }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>📊 Relatórios do Sistema</h1>
-        <p>Bem-vindo, <?php echo htmlspecialchars($nomeUsuario ?? 'Admin'); ?>! Visualize aqui todos os dados e análises do seu negócio.</p>
+        <h1><i class="fas fa-chart-pie"></i> Relatórios Koketsu</h1>
+        <p>Dashboard de Análise e Monitoramento em Tempo Real</p>
     </div>
 
     <div class="container">
-        <!-- Estatísticas Principais -->
         <div class="stats-grid">
             <div class="stat-card">
-                <h3>💰 Vendas Totais</h3>
+                <h3>Vendas Totais</h3>
                 <div class="stat-value">R$ <?php echo number_format($vendastotais ?? 0, 2, ',', '.'); ?></div>
-                <div class="stat-icon">📈</div>
+                <div class="stat-icon">💰</div>
             </div>
 
             <div class="stat-card">
-                <h3>📦 Total de Produtos</h3>
+                <h3>Produtos em Catálogo</h3>
                 <div class="stat-value"><?php echo $produtostotais ?? 0; ?></div>
-                <div class="stat-icon">🛍️</div>
+                <div class="stat-icon">📦</div>
             </div>
 
             <div class="stat-card">
-                <h3>👥 Total de Clientes</h3>
+                <h3>Base de Clientes</h3>
                 <div class="stat-value"><?php echo $clientestotais ?? 0; ?></div>
-                <div class="stat-icon">👤</div>
+                <div class="stat-icon">👥</div>
             </div>
 
             <div class="stat-card">
-                <h3>📋 Total de Pedidos</h3>
+                <h3>Volume de Pedidos</h3>
                 <div class="stat-value"><?php echo $pedidostotais ?? 0; ?></div>
-                <div class="stat-icon">🎁</div>
+                <div class="stat-icon">📋</div>
             </div>
         </div>
 
-        <!-- Gráficos Principais -->
         <div class="charts-grid">
             <div class="chart-container">
-                <h3>📈 Vendas por Mês (últimos 12 meses)</h3>
+                <h3>Performance de Vendas</h3>
                 <div class="chart-wrapper">
                     <canvas id="vendasPorMesChart"></canvas>
                 </div>
             </div>
 
             <div class="chart-container">
-                <h3>🏆 Top 8 Produtos Mais Vendidos</h3>
+                <h3>Produtos Elite (Top 8)</h3>
                 <div class="chart-wrapper">
                     <canvas id="produtosMaisVendidosChart"></canvas>
                 </div>
             </div>
 
             <div class="chart-container">
-                <h3>📊 Status dos Pedidos</h3>
+                <h3>Fluxo de Status</h3>
                 <div class="chart-wrapper">
                     <canvas id="statusPedidosChart"></canvas>
                 </div>
             </div>
 
             <div class="chart-container">
-                <h3>🏪 Produtos por Categoria</h3>
+                <h3>Mix por Categoria</h3>
                 <div class="chart-wrapper">
                     <canvas id="categoriasChart"></canvas>
                 </div>
             </div>
         </div>
 
-        <!-- Ações Rápidas -->
         <div class="actions-grid">
-            <a href="/backend/relatorios/detalhado" class="action-button">📋 Relatório Detalhado de Pedidos</a>
-            <a href="/backend/relatorios/financeiro" class="action-button">💵 Relatório Financeiro</a>
-            <a href="/backend/relatorios/produtos" class="action-button">📦 Análise de Produtos</a>
-            <a href="/backend/admin/dashboard" class="action-button">← Voltar ao Dashboard</a>
+            <a href="/backend/relatorios/detalhado" class="action-button"><i class="fas fa-list-check"></i> Relatório Detalhado</a>
+            <a href="/backend/relatorios/financeiro" class="action-button"><i class="fas fa-wallet"></i> Financeiro</a>
+            <a href="/backend/relatorios/produtos" class="action-button"><i class="fas fa-box-open"></i> Análise de Produtos</a>
+            <a href="/backend/admin/dashboard" class="action-button"><i class="fas fa-arrow-left"></i> Voltar ao Dash</a>
         </div>
 
         <div class="footer-text">
-            <p>© 2025 Koketsu Store. Todos os dados são atualizados automaticamente.</p>
+            <p>© 2026 Koketsu Store • Todos os dados protegidos e criptografados.</p>
         </div>
     </div>
 
     <script>
         // Configuração global dos gráficos
         Chart.defaults.color = '#b0b0b0';
-        Chart.defaults.borderColor = '#444';
-        Chart.defaults.font.family = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
+        Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.1)';
+        Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
 
         const chartColors = {
             primary: '#ffd700',
@@ -305,13 +321,13 @@
                     label: 'Vendas (R$)',
                     data: vendasPorMesData.data,
                     borderColor: chartColors.primary,
-                    backgroundColor: 'rgba(255, 215, 0, 0.1)',
+                    backgroundColor: 'rgba(255, 215, 0, 0.05)',
                     borderWidth: 3,
                     fill: true,
                     tension: 0.4,
                     pointRadius: 5,
                     pointBackgroundColor: chartColors.primary,
-                    pointBorderColor: '#2a2a2a',
+                    pointBorderColor: '#000',
                     pointBorderWidth: 2,
                     pointHoverRadius: 7
                 }]
@@ -322,18 +338,12 @@
                 plugins: {
                     legend: {
                         display: true,
-                        labels: {
-                            usePointStyle: true,
-                            padding: 20,
-                            font: { size: 12, weight: 'bold' }
-                        }
+                        labels: { usePointStyle: true, padding: 20 }
                     }
                 },
                 scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: { color: 'rgba(255, 215, 0, 0.1)' }
-                    }
+                    y: { beginAtZero: true, grid: { color: 'rgba(255, 255, 255, 0.05)' } },
+                    x: { grid: { display: false } }
                 }
             }
         });
@@ -349,34 +359,23 @@
                     label: 'Quantidade Vendida',
                     data: produtosData.data,
                     backgroundColor: [
-                        chartColors.primary,
-                        chartColors.secondary,
-                        chartColors.tertiary,
-                        chartColors.quaternary,
-                        chartColors.quinary,
-                        chartColors.senary,
-                        'rgba(255, 193, 7, 0.8)',
-                        'rgba(244, 67, 54, 0.8)'
+                        chartColors.primary, chartColors.secondary, chartColors.tertiary,
+                        chartColors.quaternary, chartColors.quinary, chartColors.senary,
+                        '#d4af37', '#daa520'
                     ],
-                    borderColor: '#1a1a1a',
-                    borderWidth: 2,
-                    borderRadius: 8
+                    borderColor: 'rgba(0,0,0,0)',
+                    borderWidth: 0,
+                    borderRadius: 10
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 indexAxis: 'y',
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                },
+                plugins: { legend: { display: false } },
                 scales: {
-                    x: {
-                        beginAtZero: true,
-                        grid: { color: 'rgba(255, 215, 0, 0.1)' }
-                    }
+                    x: { grid: { color: 'rgba(255, 255, 255, 0.05)' } },
+                    y: { grid: { display: false } }
                 }
             }
         });
@@ -391,27 +390,19 @@
                 datasets: [{
                     data: statusData.data,
                     backgroundColor: [
-                        chartColors.primary,
-                        chartColors.secondary,
-                        chartColors.tertiary,
-                        chartColors.quaternary,
-                        chartColors.quinary
+                        chartColors.primary, chartColors.secondary, chartColors.tertiary,
+                        chartColors.quaternary, chartColors.quinary
                     ],
-                    borderColor: '#2a2a2a',
-                    borderWidth: 3
+                    borderColor: '#0f0f0f',
+                    borderWidth: 5
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                cutout: '70%',
                 plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            padding: 15,
-                            font: { size: 12, weight: 'bold' }
-                        }
-                    }
+                    legend: { position: 'bottom', labels: { padding: 20, usePointStyle: true } }
                 }
             }
         });
@@ -428,32 +419,21 @@
                     data: categoriasData.data,
                     borderColor: chartColors.primary,
                     backgroundColor: 'rgba(255, 215, 0, 0.15)',
-                    borderWidth: 3,
-                    pointRadius: 5,
+                    borderWidth: 2,
+                    pointRadius: 4,
                     pointBackgroundColor: chartColors.primary,
-                    pointBorderColor: '#2a2a2a',
-                    pointBorderWidth: 2,
-                    fill: true,
-                    tension: 0.3
+                    fill: true
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: true,
-                        labels: {
-                            padding: 15,
-                            font: { size: 12, weight: 'bold' }
-                        }
-                    }
-                },
                 scales: {
                     r: {
-                        beginAtZero: true,
-                        grid: { color: 'rgba(255, 215, 0, 0.1)' },
-                        ticks: { color: '#b0b0b0' }
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                        angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
+                        pointLabels: { color: '#888', font: { size: 10 } },
+                        ticks: { display: false }
                     }
                 }
             }

@@ -77,6 +77,32 @@ function buscarUsuariosAdmin() {
         ];
     }
 
+    public function paginacaoClientes(int $pagina = 1, int $porPagina = 50) {
+        $offset = ($pagina - 1) * $porPagina;
+        $sql = "SELECT id_usuarios, nome_usuarios, email_usuarios, nivel_acesso, excluido_em, foto_usuarios, criado_em 
+                FROM tbl_usuarios 
+                WHERE nivel_acesso = 'cliente'
+                LIMIT :offset, :porPagina";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $stmt->bindParam(':porPagina', $porPagina, PDO::PARAM_INT);
+        $stmt->execute();
+        $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $totalStmt = $this->db->prepare("SELECT COUNT(*) FROM tbl_usuarios WHERE nivel_acesso = 'cliente'");
+        $totalStmt->execute();
+        $total = $totalStmt->fetchColumn();
+        $totalPaginas = ceil($total / $porPagina);
+
+        return [
+            'data' => $dados,
+            'total' => (int) $total,
+            'por_pagina' => (int) $porPagina,
+            'pagina_atual' => (int) $pagina,
+            'total_paginas' => (int) $totalPaginas
+        ];
+    }
+
     public function paginacaoAPI(int $pagina = 1, int $por_pagina = 10): array{
         $totalQuery = "SELECT COUNT(*) FROM `tbl_usuarios`";
         $totalStmt = $this->db->query($totalQuery);

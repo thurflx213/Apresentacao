@@ -115,7 +115,7 @@
 
 <div class="navbar-fixa">
     <a href="../../index.html">
-        <img src="/img/logo.png" alt="Koketsu Logo" height="50px">
+        <img src="/img/logo.png" alt="Koketsu Logo" height="80px">
     </a>
 </div>
 

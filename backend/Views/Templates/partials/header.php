@@ -255,7 +255,7 @@ input, select, textarea {
     
     <img src="<?php echo htmlspecialchars($foto_exibir); ?>" 
          class="w3-circle" 
-         style="width:100px; height:100px; object-fit: cover; border:2px solid #ffcc00;"
+         style="width:120px; height:120px; object-fit: cover; border:2px solid #ffcc00;"
          alt="Foto de perfil"
          onerror="this.src='/img/logoperf.jpg';">
 </div>
@@ -291,15 +291,16 @@ input, select, textarea {
         <i class="fa fa-dropbox fa-fw"></i> ItensPedidos
     </a>
     <?php if ($session->get('usuario_tipo') == 'admin'){ ?>
-    <a href="/backend/usuario/listar" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/perfil/listar', $current_uri); ?>">
+    <a href="/backend/cliente/listar" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/cliente/listar', $current_uri); ?>">
         <i class="fa fa-users fa-fw"></i> Clientes
+    </a>
+   
+    <a href="/backend/cliente/editar/<?= htmlspecialchars($usuarioId ?? '0') ?>" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/cliente/editar', $current_uri); ?>">
+        <i class="fa fa-user-circle fa-fw"></i> Perfil
     </a>
     <?php
       }
     ?>
-    <a href="/backend/cliente/editar/<?= htmlspecialchars($usuarioId ?? '0') ?>" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/cliente/editar', $current_uri); ?>">
-        <i class="fa fa-user-circle fa-fw"></i> Perfil
-    </a>
     
     <a href="/backend/avaliacao/listar" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/avaliacao', $current_uri); ?>">
         <i class="fa fa-star fa-fw"></i> Avaliações
