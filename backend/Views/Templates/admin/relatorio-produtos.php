@@ -1,370 +1,330 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Análise de Produtos | Koketsu</title>
-    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        :root {
-            --primary-gold: #ffd700;
-            --dark-bg: #121212;
-            --card-bg: #1e1e1e;
-            --text-gray: #b0b0b0;
-        }
+<style>
+    /* Estilos de Relatório de Produtos */
+    .rep-container {
+        padding-top: 10px;
+    }
 
-        body {
-            font-family: 'Inter', 'Segoe UI', sans-serif;
-            background-color: var(--dark-bg);
-            color: #ffffff;
-            margin: 0;
-        }
+    /* Header Estilo Koketsu */
+    .rep-header {
+        background: var(--bg-card);
+        padding: 24px;
+        border-radius: 16px;
+        border: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        box-shadow: var(--shadow-sm);
+    }
 
-        /* Header Estilo Koketsu */
-        .header {
-            background: #000;
-            padding: 20px 5%;
-            border-bottom: 2px solid var(--primary-gold);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
+    .rep-header h1 {
+        font-size: 1.8em;
+        margin: 0;
+        font-weight: 800;
+        letter-spacing: -1px;
+        color: var(--text-main);
+    }
 
-        .header h1 {
-            font-size: 1.5rem;
-            margin: 0;
-            font-weight: 700;
-            letter-spacing: 1px;
-        }
+    .btn-panel {
+        background: var(--accent);
+        color: #000;
+        padding: 10px 20px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 0.85em;
+        transition: 0.3s;
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 15px rgba(197, 160, 45, 0.2);
+    }
 
-        .btn-voltar {
-            background: transparent;
-            color: var(--primary-gold);
-            border: 1px solid var(--primary-gold);
-            padding: 8px 18px;
-            border-radius: 4px;
-            text-decoration: none;
-            transition: 0.3s;
-            font-size: 0.9rem;
-        }
+    .btn-panel:hover {
+        background: var(--text-main);
+        color: var(--bg-main);
+        transform: translateY(-2px);
+    }
 
-        .btn-voltar:hover {
-            background: var(--primary-gold);
-            color: #000;
-        }
+    /* Dashboard Cards */
+    .stats-flex {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
 
-        .container {
-            max-width: 1400px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
+    .card-stat {
+        background: var(--bg-card);
+        padding: 24px;
+        border-radius: 16px;
+        border: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        box-shadow: var(--shadow-sm);
+        transition: 0.3s;
+    }
+    
+    .card-stat:hover {
+        border-color: var(--accent);
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-md);
+    }
 
-        /* Dashboard Cards */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
+    .card-icon {
+        background: rgba(255, 215, 0, 0.1);
+        color: var(--accent);
+        width: 56px;
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 14px;
+        font-size: 1.6rem;
+    }
 
-        .stat-card {
-            background: var(--card-bg);
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid #333;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
+    .card-info span {
+        display: block;
+        color: var(--text-muted);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 800;
+        margin-bottom: 4px;
+    }
 
-        .stat-icon {
-            background: rgba(255, 215, 0, 0.1);
-            color: var(--primary-gold);
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 10px;
-            font-size: 1.5rem;
-        }
+    .card-info strong {
+        font-size: 1.3rem;
+        color: var(--text-main);
+        font-weight: 800;
+    }
 
-        .stat-info span {
-            display: block;
-            color: var(--text-gray);
-            font-size: 0.8rem;
-            text-transform: uppercase;
-        }
+    /* Busca */
+    .search-row {
+        margin-bottom: 25px;
+        position: relative;
+    }
 
-        .stat-info strong {
-            font-size: 1.2rem;
-            color: #fff;
-        }
+    .search-row input {
+        width: 100%;
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        padding: 15px 20px 15px 45px;
+        border-radius: 12px;
+        color: var(--text-main);
+        outline: none;
+        transition: 0.3s;
+        box-shadow: var(--shadow-sm);
+    }
 
-        /* Busca */
-        .search-container {
-            margin-bottom: 25px;
-            position: relative;
-        }
+    .search-row input:focus {
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(197, 160, 45, 0.1);
+    }
 
-        .search-container input {
-            width: 100%;
-            background: var(--card-bg);
-            border: 1px solid #333;
-            padding: 15px 20px 15px 45px;
-            border-radius: 8px;
-            color: white;
-            outline: none;
-            transition: 0.3s;
-        }
+    .search-row i {
+        position: absolute;
+        left: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--accent);
+    }
 
-        .search-container input:focus {
-            border-color: var(--primary-gold);
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.1);
-        }
+    /* Tabela Premium */
+    .table-box {
+        background: var(--bg-card);
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid var(--border-color);
+        box-shadow: var(--shadow-sm);
+    }
 
-        .search-container i {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-gray);
-        }
+    .prod-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
 
-        /* Tabela Premium */
-        .table-wrapper {
-            background: var(--card-bg);
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid #333;
-        }
+    .prod-table thead th {
+        background: var(--bg-main);
+        color: var(--accent);
+        text-align: left;
+        padding: 20px;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 800;
+        border-bottom: 1px solid var(--border-color);
+    }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+    .prod-table tbody td {
+        padding: 18px 20px;
+        border-bottom: 1px solid var(--border-color);
+        font-size: 0.95rem;
+        color: var(--text-main);
+    }
 
-        thead th {
-            background: #252525;
-            color: var(--primary-gold);
-            text-align: left;
-            padding: 18px;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            cursor: pointer;
-        }
+    .prod-table tbody tr:hover {
+        background: rgba(var(--accent), 0.02);
+    }
 
-        tbody td {
-            padding: 15px 18px;
-            border-bottom: 1px solid #2a2a2a;
-            font-size: 0.95rem;
-        }
+    /* Estilos de Célula */
+    .flex-prod {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
 
-        tbody tr:hover {
-            background: rgba(255, 255, 255, 0.02);
-        }
+    .circle-avatar {
+        width: 38px;
+        height: 38px;
+        background: var(--bg-main);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        font-weight: 800;
+        color: var(--accent);
+        border: 1px solid var(--border-color);
+    }
 
-        /* Estilos de Célula */
-        .product-cell {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+    .perf-badge {
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 10px;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
 
-        .product-img {
-            width: 40px;
-            height: 40px;
-            background: #333;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            color: var(--primary-gold);
-            border: 1px solid #444;
-        }
+    .perf-high { background: rgba(255, 71, 87, 0.1); color: #ff4757; border: 1px solid rgba(255, 71, 87, 0.2); }
+    .perf-mid { background: rgba(255, 165, 2, 0.1); color: #ffa502; border: 1px solid rgba(255, 165, 2, 0.2); }
+    .perf-low { background: rgba(46, 213, 115, 0.1); color: #2ed573; border: 1px solid rgba(46, 213, 115, 0.2); }
 
-        .badge-status {
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 700;
-        }
+    .bar-outer {
+        width: 100px;
+        height: 6px;
+        background: var(--bg-main);
+        border-radius: 10px;
+        margin-top: 8px;
+        overflow: hidden;
+    }
 
-        .hot { background: rgba(255, 71, 87, 0.15); color: #ff4757; }
-        .popular { background: rgba(255, 165, 2, 0.15); color: #ffa502; }
-        .low { background: rgba(46, 213, 115, 0.15); color: #2ed573; }
+    .bar-inner {
+        height: 100%;
+        border-radius: 10px;
+        background: var(--accent);
+    }
+</style>
 
-        .progress-container {
-            width: 100px;
-            height: 6px;
-            background: #333;
-            border-radius: 10px;
-            margin-top: 8px;
-        }
-
-        .progress-bar {
-            height: 100%;
-            border-radius: 10px;
-            background: var(--primary-gold);
-        }
-    </style>
-</head>
-<body>
-
-    <div class="header">
+<div class="rep-container">
+    <div class="rep-header">
         <h1><i class="fas fa-chart-line"></i> Análise de Produtos</h1>
-        <a href="/backend/relatorios" class="btn-voltar"><i class="fas fa-chevron-left"></i> Painel</a>
+        <a href="/backend/relatorios" class="btn-panel"><i class="fas fa-chevron-left"></i> Painel</a>
     </div>
 
-    <div class="container">
-        <?php 
-            $totalProdutos = count($produtosMaisVendidos ?? []);
-            $totalReceita = array_sum(array_column($produtosMaisVendidos ?? [], 'receita'));
-            $maxQuantidade = $totalProdutos > 0 ? max(array_column($produtosMaisVendidos, 'quantidade_total')) : 0;
-        ?>
+    <?php 
+        $totalProdutos = count($produtosMaisVendidos ?? []);
+        $totalReceita = array_sum(array_column($produtosMaisVendidos ?? [], 'receita'));
+        $maxQuantidade = $totalProdutos > 0 ? max(array_column($produtosMaisVendidos, 'quantidade_total')) : 0;
+    ?>
 
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-box"></i></div>
-                <div class="stat-info">
-                    <span>Itens Analisados</span>
-                    <strong><?php echo $totalProdutos; ?> Produtos</strong>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-dollar-sign"></i></div>
-                <div class="stat-info">
-                    <span>Receita Total Acumulada</span>
-                    <strong style="color: var(--primary-gold);">R$ <?php echo number_format($totalReceita, 2, ',', '.'); ?></strong>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-calendar-alt"></i></div>
-                <div class="stat-info">
-                    <span>Data do Relatório</span>
-                    <strong><?php echo date('d/m/Y H:i'); ?></strong>
-                </div>
+    <div class="stats-flex">
+        <div class="card-stat">
+            <div class="card-icon"><i class="fas fa-box"></i></div>
+            <div class="card-info">
+                <span>Itens Analisados</span>
+                <strong><?php echo $totalProdutos; ?> Produtos</strong>
             </div>
         </div>
-
-        <div class="search-container">
-            <i class="fas fa-search"></i>
-            <input type="text" id="searchInput" placeholder="Filtrar por nome, categoria ou código...">
+        <div class="card-stat">
+            <div class="card-icon"><i class="fas fa-dollar-sign"></i></div>
+            <div class="card-info">
+                <span>Receita Acumulada</span>
+                <strong style="color: var(--accent);">R$ <?php echo number_format($totalReceita, 2, ',', '.'); ?></strong>
+            </div>
         </div>
-
-        <div class="table-wrapper">
-            <table id="produtosTable">
-                <thead>
-                    <tr>
-                        <th onclick="sortTable(0)">Cód.</th>
-                        <th onclick="sortTable(1)">Produto</th>
-                        <th onclick="sortTable(2)">Categoria</th>
-                        <th onclick="sortTable(3)">Preço</th>
-                        <th onclick="sortTable(4)">Vendas</th>
-                        <th onclick="sortTable(5)">Qtd Total</th>
-                        <th onclick="sortTable(6)">Receita</th>
-                        <th>Performance</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if (!empty($produtosMaisVendidos)): ?>
-                        <?php foreach ($produtosMaisVendidos as $produto): ?>
-                            <?php 
-                                $qtd = $produto['quantidade_total'] ?? 0;
-                                // Nova lógica baseada em quantidade absoluta solicitada pelo usuário
-                                if ($qtd > 40) {
-                                    $statusClass = 'hot';
-                                    $statusText = '🔥 ALTA';
-                                } elseif ($qtd >= 15) {
-                                    $statusClass = 'popular';
-                                    $statusText = '⭐ MÉDIA';
-                                } else {
-                                    $statusClass = 'low';
-                                    $statusText = '📉 BAIXA';
-                                }
-                                
-                                // Mantém a barra de progresso baseada no máximo para visualização proporcional
-                                $perc = ($maxQuantidade > 0) ? ($qtd / $maxQuantidade * 100) : 0;
-                            ?>
-                            <tr>
-                                <td style="color: var(--text-gray);">#<?php echo $produto['id_produto']; ?></td>
-                                <td>
-                                    <div class="product-cell">
-                                        <div class="product-img"><?php echo strtoupper(substr($produto['nome_produtos'], 0, 2)); ?></div>
-                                        <span><?php echo htmlspecialchars($produto['nome_produtos']); ?></span>
-                                    </div>
-                                </td>
-                                <td><span style="color: #96ceb4;"><?php echo $produto['nome_categorias'] ?? 'Geral'; ?></span></td>
-                                <td>R$ <?php echo number_format($produto['preco_produtos'], 2, ',', '.'); ?></td>
-                                <td><?php echo $produto['total_vendido']; ?>x</td>
-                                <td><strong><?php echo $produto['quantidade_total']; ?></strong></td>
-                                <td style="color: var(--primary-gold); font-weight: 600;">
-                                    R$ <?php echo number_format($produto['receita'], 2, ',', '.'); ?>
-                                </td>
-                                <td>
-                                    <span class="badge-status <?php echo $statusClass; ?>"><?php echo $statusText; ?></span>
-                                    <div class="progress-container">
-                                        <div class="progress-bar" style="width: <?php echo $perc; ?>%;"></div>
-                                    </div>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                </tbody>
-            </table>
+        <div class="card-stat">
+            <div class="card-icon"><i class="fas fa-calendar-check"></i></div>
+            <div class="card-info">
+                <span>Data do Relatório</span>
+                <strong><?php echo date('d/m/Y H:i'); ?></strong>
+            </div>
         </div>
     </div>
 
-    <script>
-        // Mesmo JS funcional que você já tinha, mas otimizado para o novo layout
-        document.getElementById('searchInput').addEventListener('keyup', function() {
-            const val = this.value.toLowerCase();
-            document.querySelectorAll('#produtosTable tbody tr').forEach(row => {
-                row.style.display = row.innerText.toLowerCase().includes(val) ? '' : 'none';
-            });
+    <div class="search-row">
+        <i class="fas fa-search"></i>
+        <input type="text" id="searchInputProd" placeholder="Filtrar por nome, categoria ou código...">
+    </div>
+
+    <div class="table-box">
+        <table class="prod-table" id="relatorioProdTable">
+            <thead>
+                <tr>
+                    <th style="width: 80px;">Cód.</th>
+                    <th>Produto</th>
+                    <th>Categoria</th>
+                    <th>Preço</th>
+                    <th>Vendas</th>
+                    <th>Qtd Total</th>
+                    <th>Receita</th>
+                    <th style="width: 180px;">Performance</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (!empty($produtosMaisVendidos)): ?>
+                    <?php foreach ($produtosMaisVendidos as $produto): ?>
+                        <?php 
+                            $qtd = $produto['quantidade_total'] ?? 0;
+                            if ($qtd > 40) {
+                                $perfClass = 'perf-high';
+                                $perfText = '🔥 ALTA';
+                            } elseif ($qtd >= 15) {
+                                $perfClass = 'perf-mid';
+                                $perfText = '⭐ MÉDIA';
+                            } else {
+                                $perfClass = 'perf-low';
+                                $perfText = '📉 BAIXA';
+                            }
+                            $perc = ($maxQuantidade > 0) ? ($qtd / $maxQuantidade * 100) : 0;
+                        ?>
+                        <tr>
+                            <td style="color: var(--text-muted); font-family: monospace; font-weight: bold;">#<?php echo $produto['id_produto']; ?></td>
+                            <td>
+                                <div class="flex-prod">
+                                    <div class="circle-avatar"><?php echo strtoupper(substr($produto['nome_produtos'], 0, 2)); ?></div>
+                                    <span style="font-weight: 700;"><?php echo htmlspecialchars($produto['nome_produtos']); ?></span>
+                                </div>
+                            </td>
+                            <td><span style="color: var(--text-muted); font-weight: 600;"><?php echo $produto['nome_categorias'] ?? 'Geral'; ?></span></td>
+                            <td>R$ <?php echo number_format($produto['preco_produtos'], 2, ',', '.'); ?></td>
+                            <td style="font-weight: 700;"><?php echo $produto['total_vendido']; ?>x</td>
+                            <td style="font-weight: 800; color: var(--text-main);"><?php echo $produto['quantidade_total']; ?></td>
+                            <td style="color: var(--accent); font-weight: 800;">
+                                R$ <?php echo number_format($produto['receita'], 2, ',', '.'); ?>
+                            </td>
+                            <td>
+                                <span class="perf-badge <?php echo $perfClass; ?>"><?php echo $perfText; ?></span>
+                                <div class="bar-outer">
+                                    <div class="bar-inner" style="width: <?php echo $perc; ?>%;"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    document.getElementById('searchInputProd').addEventListener('keyup', function() {
+        const val = this.value.toLowerCase();
+        document.querySelectorAll('#relatorioProdTable tbody tr').forEach(row => {
+            row.style.display = row.innerText.toLowerCase().includes(val) ? '' : 'none';
         });
-
-        function sortTable(n) {
-            const table = document.getElementById("produtosTable");
-            let rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-            switching = true;
-            dir = "asc";
-            while (switching) {
-                switching = false;
-                rows = table.rows;
-                for (i = 1; i < (rows.length - 1); i++) {
-                    shouldSwitch = false;
-                    x = rows[i].getElementsByTagName("TD")[n];
-                    y = rows[i + 1].getElementsByTagName("TD")[n];
-                    
-                    let xVal = x.innerText.replace('R$', '').replace('.', '').replace(',', '.').trim();
-                    let yVal = y.innerText.replace('R$', '').replace('.', '').replace(',', '.').trim();
-                    
-                    if (dir == "asc") {
-                        if (isNaN(xVal) ? x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase() : parseFloat(xVal) > parseFloat(yVal)) {
-                            shouldSwitch = true; break;
-                        }
-                    } else if (dir == "desc") {
-                        if (isNaN(xVal) ? x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase() : parseFloat(xVal) < parseFloat(yVal)) {
-                            shouldSwitch = true; break;
-                        }
-                    }
-                }
-                if (shouldSwitch) {
-                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-                    switching = true;
-                    switchcount ++;
-                } else {
-                    if (switchcount == 0 && dir == "asc") { dir = "desc"; switching = true; }
-                }
-            }
-        }
-    </script>
-</body>
-</html>
+    });
+</script>

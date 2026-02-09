@@ -37,7 +37,7 @@ class Rotas
                  "/cliente/editar/{id}" => "ClientesController@viewEditarCliente",
                  "/cliente/excluir/{id}" => "ClientesController@viewExcluirCliente",
                  "cliente/dashboard" => "Cliente\DashboardController@index",
-                 "cliente/editar/{id}" => "Cliente\DashboardController@viewEditarCliente",
+                 "/cliente/meu-perfil/{id}" => "Cliente\DashboardController@viewEditarCliente",
                  "cliente/pedidos" => "Cliente\PedidosController@index",
                    // --- API REST UNIVERSAL ---
                    // Produtos
@@ -158,12 +158,18 @@ class Rotas
                  '/login' => 'AuthController@login',
                  '/logout' => 'AuthController@logout',
                  '/admin/dashboard' => 'Admin\DashboardController@index',
-          ],
+                 '/configuracoes' => 'ConfiguracoesController@index',
+                 '/manutencao' => 'PublicApiController@viewManutencao',
+           ],
 
         "POST" => [
                  "/api/pedidos" => 'PublicApiController@salvarPedido',
+                 "/api/produtos" => 'PublicApiController@createProduto',
+                 "/api/clientes" => 'PublicApiController@createUsuario',
+                 "/api/estoque" => 'PublicApiController@createEstoque',
+                 "/configuracoes/manutencao" => 'ConfiguracoesController@salvarManutencao',
                 // Clientes
-                "/cliente/atualizar/{id}" => "Cliente\DashboardController@atualizarCliente",
+                 "/cliente/perfil-atualizar/{id}" => "Cliente\DashboardController@atualizarCliente",
                 // Usuarios 
                 "/usuario/salvar" => "UsuarioController@salvarUsuario",
                 "/usuario/atualizar" => "UsuarioController@atualizarUsuario",

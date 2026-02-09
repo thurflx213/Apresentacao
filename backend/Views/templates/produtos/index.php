@@ -6,34 +6,35 @@
         padding: 20px;
         width: 100%;
         box-sizing: border-box;
-        background-color: #0c0c0c;
+        background-color: var(--bg-main) !important;
         min-height: 100vh;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--text-main);
     }
 
     .page-title {
         font-size: 28px;
         font-weight: 800;
-        color: #ffffff;
+        color: var(--text-main);
         text-transform: uppercase;
         margin-bottom: 5px;
     }
 
     .header-breadcrumb {
-        color: #888;
+        color: var(--text-muted);
         margin-bottom: 25px;
-        border-bottom: 1px solid #222;
+        border-bottom: 1px solid var(--border-color);
         padding-bottom: 10px;
     }
 
     /* --- CARD DO GRÁFICO --- */
     .chart-container-card {
-        background: #111;
-        border: 1px solid #333;
-        border-radius: 15px;
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
         padding: 25px;
         margin-bottom: 35px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        box-shadow: var(--shadow-md);
     }
 
     /* --- BARRA DE PESQUISA --- */
@@ -52,23 +53,24 @@
 
     .search-input {
         width: 100%;
-        background: #1a1a1a;
-        border: 1px solid #444;
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
         padding: 15px;
         border-radius: 12px;
-        color: #fff;
+        color: var(--text-main);
         font-size: 16px;
         transition: 0.3s;
+        box-shadow: var(--shadow-sm);
     }
 
     .search-input:focus {
-        border-color: #f2cc7d;
-        box-shadow: 0 0 10px rgba(242, 204, 125, 0.1);
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(197, 160, 45, 0.1);
         outline: none;
     }
 
     .btn-main-action {
-        background: #f2cc7d;
+        background: var(--accent);
         color: #000 !important;
         padding: 15px 25px;
         border-radius: 12px;
@@ -77,9 +79,10 @@
         text-transform: uppercase;
         font-size: 14px;
         transition: 0.3s;
+        box-shadow: var(--shadow-sm);
     }
 
-    .btn-main-action:hover { background: #fff; transform: translateY(-2px); }
+    .btn-main-action:hover { background: var(--text-main); color: var(--bg-main) !important; transform: translateY(-2px); }
 
     /* --- TABELA --- */
     .custom-table {
@@ -89,53 +92,69 @@
     }
 
     .custom-table thead th {
-        color: #666;
+        color: var(--text-muted);
         text-transform: uppercase;
-        font-size: 13px;
+        font-size: 11px;
         padding: 10px 20px;
+        font-weight: 800;
+        letter-spacing: 1px;
     }
 
     .custom-table tbody tr {
-        background: #161616;
-        transition: 0.3s;
+        background: var(--bg-card);
+        transition: all 0.3s ease;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--border-color);
+    }
+
+    .custom-table tbody tr:hover { 
+        transform: scale(1.01);
+        box-shadow: var(--shadow-md);
+        border-color: var(--accent);
     }
 
     .custom-table td {
         padding: 20px !important;
-        color: #ccc;
+        color: var(--text-main);
         font-size: 16px;
         vertical-align: middle;
+        border-top: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--border-color);
     }
 
-    .custom-table td:first-child { border-radius: 15px 0 0 15px; }
-    .custom-table td:last-child { border-radius: 0 15px 15px 0; }
+    .custom-table td:first-child { border-radius: 15px 0 0 15px; border-left: 1px solid var(--border-color); }
+    .custom-table td:last-child { border-radius: 0 15px 15px 0; border-right: 1px solid var(--border-color); }
 
     .prod-img {
         width: 110px;
         height: 110px;
         object-fit: cover;
         border-radius: 12px;
-        border: 2px solid #333;
+        border: 2px solid var(--border-color);
+        box-shadow: var(--shadow-sm);
     }
 
     .prod-name {
         font-weight: 700;
-        color: #fff;
+        color: var(--text-main);
         font-size: 18px;
         display: block;
     }
 
     .badge-status {
         padding: 8px 16px;
-        border-radius: 8px;
-        font-size: 12px;
+        border-radius: 20px;
+        font-size: 11px;
         font-weight: 800;
+        text-transform: uppercase;
     }
-    .status-ativo { background: rgba(40, 167, 69, 0.15); color: #28a745; border: 1px solid #28a745; }
-    .status-inativo { background: rgba(220, 53, 69, 0.15); color: #dc3545; border: 1px solid #dc3545; }
+    .status-ativo { background: rgba(40, 167, 69, 0.1); color: #28a745; border: 1px solid rgba(40, 167, 69, 0.3); }
+    .status-inativo { background: rgba(220, 53, 69, 0.1); color: #dc3545; border: 1px solid rgba(220, 53, 69, 0.3); }
 
-    .btn-edit { background: #2196F3; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 700; }
-    .btn-delete { background: #f44336; color: #fff; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 700; }
+    .btn-edit { background: var(--bg-main); color: #2196F3; border: 1px solid #2196F3; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 700; transition: 0.3s; }
+    .btn-edit:hover { background: #2196F3; color: #fff; }
+    .btn-delete { background: var(--bg-main); color: #f44336; border: 1px solid #f44336; padding: 10px 20px; border-radius: 8px; text-decoration: none; font-weight: 700; transition: 0.3s; }
+    .btn-delete:hover { background: #f44336; color: #fff; }
 </style>
 
 <div class="page-wrapper">
@@ -228,6 +247,12 @@
     // --- GRÁFICO ---
     const dadosGrafico = <?php echo json_encode($produto); ?>; 
     if (dadosGrafico && dadosGrafico.length > 0) {
+        // Obter cores do CSS para o gráfico
+        const style = getComputedStyle(document.body);
+        const textColor = style.getPropertyValue('--text-muted').trim() || '#888';
+        const gridColor = style.getPropertyValue('--border-color').trim() || 'rgba(0,0,0,0.1)';
+        const accentColor = style.getPropertyValue('--accent').trim() || '#f2cc7d';
+
         new Chart(document.getElementById('vendasChart'), {
             type: 'bar',
             data: {
@@ -235,17 +260,30 @@
                 datasets: [{
                     label: 'Estoque',
                     data: dadosGrafico.map(item => item.total),
-                    backgroundColor: '#f2cc7d',
+                    backgroundColor: accentColor,
                     borderRadius: 10
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: { legend: { display: false } },
+                plugins: { 
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: style.getPropertyValue('--bg-card').trim(),
+                        titleColor: style.getPropertyValue('--text-main').trim(),
+                        bodyColor: style.getPropertyValue('--text-main').trim(),
+                        borderColor: style.getPropertyValue('--border-color').trim(),
+                        borderWidth: 1
+                    }
+                },
                 scales: {
-                    x: { ticks: { color: '#888' } },
-                    y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#888' } }
+                    x: { ticks: { color: textColor }, grid: { display: false } },
+                    y: { 
+                        beginAtZero: true, 
+                        grid: { color: gridColor }, 
+                        ticks: { color: textColor } 
+                    }
                 }
             }
         });

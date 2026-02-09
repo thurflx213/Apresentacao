@@ -1,103 +1,139 @@
- <header class="w3-container" style="padding-top:22px">
-    <h5><b><i class="fa fa-dashboard"></i> Painel de Controle - Koketsu</b></h5>
-  </header>
+<style>
+    /* Estilos de Cores */
+    .color-wrapper { padding-top: 10px; }
+    
+    .color-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--border-color);
+    }
+    
+    .color-title h1 { font-size: 2em; font-weight: 800; color: var(--text-main); margin: 0; letter-spacing: -1px; }
+    .color-title p { color: var(--text-muted); font-size: 0.9em; margin-top: 4px; }
 
+    .btn-add-color {
+        background: var(--accent);
+        color: #000;
+        padding: 12px 24px;
+        border-radius: 12px;
+        text-decoration: none;
+        font-weight: 800;
+        text-transform: uppercase;
+        font-size: 0.8em;
+        letter-spacing: 1px;
+        transition: 0.3s;
+        box-shadow: 0 4px 15px rgba(197, 160, 45, 0.2);
+    }
+    .btn-add-color:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(197, 160, 45, 0.3); background: var(--text-main); color: var(--bg-main); }
 
-<div class="w3-row-padding w3-margin-bottom">
-    <div class="w3-quarter">
-      <div class="w3-container w3-theme w3-padding-16">
-        <div class="w3-left"><i class="fa fa-tags w3-xxxlarge"></i></div>
-        <div class="w3-right">
-          <h3>120</h3>
-        </div>
-        <div class="w3-clear"></div>
-        <h4>Produtos</h4>
-      </div>
-    </div>
-    <div class="w3-quarter">
-      <div class="w3-container w3-black w3-padding-16">
-        <div class="w3-left"><i class="fa fa-shopping-cart w3-xxxlarge"></i></div>
-        <div class="w3-right">
-          <h3>87</h3>
-        </div>
-        <div class="w3-clear"></div>
-        <h4>Pedidos</h4>
-      </div>
-    </div>
-    <div class="w3-quarter">
-      <div class="w3-container w3-yellow w3-text-black w3-padding-16">
-        <div class="w3-left"><i class="fa fa-users w3-xxxlarge"></i></div>
-        <div class="w3-right">
-          <h3>56</h3>
-        </div>
-        <div class="w3-clear"></div>
-        <h4>Clientes</h4>
-      </div>
-    </div>
-    <div class="w3-quarter">
-      <div class="w3-container w3-dark-grey w3-padding-16">
-        <div class="w3-left"><i class="fa fa-star w3-xxxlarge"></i></div>
-        <div class="w3-right">
-          <h3>4.8★</h3>
-        </div>
-        <div class="w3-clear"></div>
-        <h4>Avaliações</h4>
-      </div>
-    </div>
-  </div>
+    /* Table Design */
+    .table-container {
+        background: var(--bg-card);
+        border-radius: 16px;
+        border: 1px solid var(--border-color);
+        overflow: hidden;
+        box-shadow: var(--shadow-sm);
+    }
 
-  <?php if (isset($cores) && count($cores) > 0): ?>
- <table border="1" cellpadding="5" cellspacing="0" class="w3-table w3-striped w3-bordered w3-border w3-hoverable w3-white">
-     <thead>
-         <tr>
-            <th>Id-Cores</th>
-            <th>Id-Produto</th>
-            <th>Cor</th>
-            <th>Quantidade</th>
-            <th>Editar</th>
-            <th>Excluir</th>
-        </tr>
-     </thead>
-     <tbody>
-         <?php foreach ($cores as $cor): ?>
-        <tr>
-            <td><?= htmlspecialchars($cor['id_cores']) ?></td>
-            <td><?= htmlspecialchars($cor['id_produto']) ?></td>
-            <td><?= htmlspecialchars($cor['cor_cores']) ?></td>
-             <td><?= htmlspecialchars($cor['quantidade_cores']) ?></td>
-            <td><?php if(!empty($cor['excluido_em'])) {
-                echo " <b style= 'background-color: red;'>Inativo</b>";
-            }else{
-                echo "Ativo";
-            }
-            ?></td>
-            <td>
-                <a class="w3-button w3-round w3-blue w3-hover-red w3-padding-large w3-margin-right"
-                   href="/backend/cor/editar/<?= htmlspecialchars($cor['id_cores']) ?>">Editar</a>
-            </td>
-            <td>
-                <a class="w3-button w3-round w3-red w3-hover-red w3-padding-large w3-margin-right"
-                   href="/backend/cor/excluir/<?= htmlspecialchars($cor['id_cores']) ?>">Excluir</a>
-            </td>
-        </tr>
-          <?php endforeach; ?>
-     </tbody>
-   </table>
-   <div class="paginacao-controls" style="display:flex; justify-content:space-between; align-items:center; margin-top:20px;">
-    <div class="page-selector" style="display:flex; align-items:center;">
-        <div class="page-nav">
-            <?php if ($paginacao['pagina_atual'] > 1): ?>
-                <a href="/backend/cor/listar/<?= $paginacao['pagina_atual'] - 1 ?>">Anterior</a>
-            <?php endif; ?>
-            <span style="margin:0 10px;">Página <?= $paginacao['pagina_atual'] ?> de <?= $paginacao['ultima_pagina'] ?></span>
-            <?php if ($paginacao['pagina_atual'] < $paginacao['ultima_pagina']): ?>
-                <a href="/backend/cor/listar/<?= $paginacao['pagina_atual'] + 1 ?>">Próximo</a>
-            <?php endif; ?>
+    .color-table { width: 100%; border-collapse: collapse; }
+    .color-table thead th { background: var(--bg-main); color: var(--accent); text-align: left; padding: 18px 20px; font-size: 0.75em; text-transform: uppercase; letter-spacing: 1px; font-weight: 800; border-bottom: 1px solid var(--border-color); }
+    .color-table tbody td { padding: 18px 20px; border-bottom: 1px solid var(--border-color); color: var(--text-main); font-size: 0.95em; }
+    .color-table tr:hover { background: rgba(var(--accent), 0.02); }
+
+    .badge-status { padding: 5px 12px; border-radius: 8px; font-size: 10px; font-weight: 900; text-transform: uppercase; display: inline-block; }
+    .status-active { background: rgba(46, 213, 115, 0.1); color: #2ed573; border: 1px solid rgba(46, 213, 115, 0.2); }
+    .status-inactive { background: rgba(255, 71, 87, 0.1); color: #ff4757; border: 1px solid rgba(255, 71, 87, 0.2); }
+
+    .action-btns { display: flex; gap: 8px; justify-content: center; }
+    .btn-edit-color { color: var(--accent); background: rgba(var(--accent), 0.1); width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 8px; transition: 0.3s; border: 1px solid transparent; }
+    .btn-edit-color:hover { background: var(--accent); color: #000; }
+    .btn-del-color { color: #ff4757; background: rgba(255, 71, 87, 0.1); width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 8px; transition: 0.3s; border: 1px solid transparent; }
+    .btn-del-color:hover { background: #ff4757; color: #fff; }
+
+    /* Color Indicator */
+    .color-preview { width: 24px; height: 24px; border-radius: 6px; border: 1px solid var(--border-color); display: inline-block; vertical-align: middle; margin-right: 10px; }
+
+    /* Pagination */
+    .pag-nav { margin-top: 30px; display: flex; justify-content: center; gap: 10px; align-items: center; }
+    .pag-link { padding: 8px 16px; border-radius: 10px; background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main); text-decoration: none; font-size: 0.9em; font-weight: 600; transition: 0.3s; }
+    .pag-link:hover { border-color: var(--accent); color: var(--accent); }
+    .pag-current { color: var(--accent); font-weight: 800; font-size: 0.95em; }
+</style>
+
+<div class="color-wrapper">
+    <header class="color-header">
+        <div class="color-title">
+            <h1>🎨 Gerenciamento de Cores</h1>
+            <p>Controle o catálogo de cores disponíveis para seus produtos.</p>
         </div>
+        <a href="/backend/cor/criar" class="btn-add-color">Nova Cor</a>
+    </header>
+
+    <?php if (isset($cores) && count($cores) > 0): ?>
+    <div class="table-container">
+        <table class="color-table">
+            <thead>
+                <tr>
+                    <th style="width: 80px;">ID Cor</th>
+                    <th style="width: 100px;">ID Prod.</th>
+                    <th>Cor</th>
+                    <th>Quantidade</th>
+                    <th>Status</th>
+                    <th style="width: 120px; text-align: center;">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($cores as $cor): ?>
+                <tr>
+                    <td style="font-family: monospace; font-weight: 700; color: var(--text-muted);">#C<?= str_pad($cor['id_cores'], 3, '0', STR_PAD_LEFT) ?></td>
+                    <td style="font-family: monospace; color: var(--text-muted);">#P<?= str_pad($cor['id_produto'], 3, '0', STR_PAD_LEFT) ?></td>
+                    <td style="font-weight: 800;">
+                        <span class="color-preview" style="background-color: <?= htmlspecialchars($cor['cor_cores']) ?>;"></span>
+                        <?= htmlspecialchars($cor['cor_cores']) ?>
+                    </td>
+                    <td style="font-weight: 700; color: var(--accent);"><?= htmlspecialchars($cor['quantidade_cores']) ?> un.</td>
+                    <td>
+                        <?php if(!empty($cor['excluido_em'])): ?>
+                            <span class="badge-status status-inactive">Inativo</span>
+                        <?php else: ?>
+                            <span class="badge-status status-active">Ativo</span>
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <div class="action-btns">
+                            <a href="/backend/cor/editar/<?= htmlspecialchars($cor['id_cores']) ?>" class="btn-edit-color" title="Editar"><i class="fa fa-edit"></i></a>
+                            <a href="/backend/cor/excluir/<?= htmlspecialchars($cor['id_cores']) ?>" class="btn-del-color" title="Excluir"><i class="fa fa-trash"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
     </div>
+
+    <div class="pag-nav">
+        <?php if ($paginacao['pagina_atual'] > 1): ?>
+            <a href="/backend/cor/listar/<?= $paginacao['pagina_atual'] - 1 ?>" class="pag-link"><i class="fa fa-chevron-left"></i> Anterior</a>
+        <?php endif; ?>
+        
+        <span class="pag-current">Página <?= $paginacao['pagina_atual'] ?> de <?= $paginacao['ultima_pagina'] ?></span>
+        
+        <?php if ($paginacao['pagina_atual'] < $paginacao['ultima_pagina']): ?>
+            <a href="/backend/cor/listar/<?= $paginacao['pagina_atual'] + 1 ?>" class="pag-link">Próximo <i class="fa fa-chevron-right"></i></a>
+        <?php endif; ?>
+    </div>
+    
+    <?php else: ?>
+        <div style="background: var(--bg-card); border: 2px dashed var(--border-color); padding: 60px; text-align: center; border-radius: 16px;">
+            <i class="fa fa-palette" style="font-size: 3em; color: var(--text-muted); margin-bottom: 20px; display: block;"></i>
+            <h2 style="color: var(--text-main); font-weight: 800;">Nenhuma cor encontrada</h2>
+            <p style="color: var(--text-muted);">Configure as variações cromáticas dos seus produtos.</p>
+            <a href="/backend/cor/criar" style="color: var(--accent); font-weight: 800; text-decoration: none; margin-top: 15px; display: inline-block;">Adicionar primeira cor</a>
+        </div>
+    <?php endif; ?>
 </div>
-  <?php else: ?>
-      <div>Nenhum usuário encontrado.</div>
-  <?php endif; ?>
 
  

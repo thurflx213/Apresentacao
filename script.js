@@ -1,5 +1,5 @@
 const faqs = document.querySelectorAll(".faq-question");
-  
+
 faqs.forEach((btn) => {
   btn.addEventListener("click", () => {
     const parent = btn.parentElement;
@@ -28,7 +28,7 @@ const produtos = [
       { id: "calca2", nome: "CALÇA DE MOLETOM - FREEDOM", preco: "200,00", img: "img/calça 2.png", alt: "Calça jeans azul" },
       { id: "calca3", nome: "CALÇA DE MOLETOM - FREEDOM", preco: "200,00", img: "img/calça 3.png", alt: "Calça jeans azul" },
       { id: "calca4", nome: "CALÇA Y2K - BAGGY", preco: "200,00", img: "img/calça 4.png", alt: "Calça jeans azul" },
-     
+
     ]
   },
   {
@@ -78,7 +78,7 @@ produtos.forEach(secao => {
     const col = document.createElement("div");
     col.className = "col-12 col-sm-6 col-md-4 col-lg-3";
     col.innerHTML = `
-      <a href="produto.html?id=${prod.id}" class="text-decoration-none text-dark">
+      <a href="produto.php?id=${prod.id}" class="text-decoration-none text-dark">
         <div class="card h-100">
           <img src="${prod.img}" class="card-img-top" alt="${prod.alt}">
           <div class="card-body text-center">

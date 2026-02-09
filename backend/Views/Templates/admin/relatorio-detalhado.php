@@ -1,210 +1,208 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Relatório Detalhado - Painel Koketsu</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        /* Estilos Base */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        
-        body { 
-            background-color: #000; 
-            color: #fff; 
-            display: flex; 
-            min-height: 100vh; 
-        }
+<style>
+    /* Estilos de Relatório Detalhado */
+    .detalhado-wrapper {
+        padding-top: 10px;
+    }
 
-        /* Sidebar */
-        .sidebar {
-            width: 250px;
-            background-color: #111;
-            padding: 20px;
-            border-right: 1px solid #333;
-            flex-shrink: 0;
-        }
+    /* Header Estilo Koketsu */
+    .rep-header {
+        background: var(--bg-card);
+        padding: 24px;
+        border-radius: 16px;
+        border: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        box-shadow: var(--shadow-sm);
+    }
 
-        .profile-section { text-align: center; padding-bottom: 20px; border-bottom: 1px solid #333; }
-        .profile-img { width: 80px; height: 80px; border-radius: 50%; border: 2px solid #ffd700; margin-bottom: 10px; }
-        .profile-name { font-size: 0.9em; color: #ccc; }
+    .rep-header h2 {
+        font-size: 1.6em;
+        margin: 0;
+        font-weight: 800;
+        letter-spacing: -1px;
+        color: var(--text-main);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    
+    .rep-header h2 i { color: var(--accent); }
 
-        .menu-list { list-style: none; margin-top: 20px; }
-        .menu-item { padding: 12px; transition: 0.3s; cursor: pointer; display: flex; align-items: center; color: #fff; text-decoration: none; }
-        .menu-item:hover { background: #222; color: #ffd700; }
-        .menu-item i { margin-right: 15px; width: 20px; }
+    .btn-voltar-rep {
+        background: var(--accent);
+        color: #000;
+        padding: 10px 20px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 0.85em;
+        transition: 0.3s;
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 15px rgba(197, 160, 45, 0.2);
+    }
 
-        /* Conteúdo Principal */
-        .main-content { flex-grow: 1; padding: 40px; background-color: #0a0a0a; }
+    .btn-voltar-rep:hover {
+        background: var(--text-main);
+        color: var(--bg-main);
+        transform: translateX(-5px);
+    }
 
-        /* Header Amarelo Koketsu */
-        .page-header {
-            background: #ffcc00;
-            color: #000;
-            padding: 15px 30px;
-            border-radius: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
+    /* Info Card */
+    .info-box {
+        background: var(--bg-card);
+        padding: 20px;
+        border-radius: 12px;
+        margin-bottom: 25px;
+        border-left: 5px solid var(--accent);
+        color: var(--text-muted);
+        box-shadow: var(--shadow-sm);
+        font-size: 0.9em;
+    }
+    .info-box strong { color: var(--accent); }
 
-        .btn-voltar {
-            background: #111;
-            color: #ffcc00;
-            padding: 8px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 0.8em;
-            transition: 0.3s;
-        }
+    /* Tabela Premium */
+    .table-card {
+        background: var(--bg-card);
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid var(--border-color);
+        box-shadow: var(--shadow-sm);
+    }
 
-        .btn-voltar:hover { background: #222; }
+    .detalhado-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
 
-        /* Info Box */
-        .info-card {
-            background: #1a1a1a;
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            border-left: 5px solid #ffcc00;
-            color: #ccc;
-        }
-        .info-card strong { color: #ffcc00; }
+    .detalhado-table thead th {
+        background: var(--bg-main);
+        color: var(--accent);
+        text-align: left;
+        padding: 18px 20px;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 800;
+        border-bottom: 1px solid var(--border-color);
+    }
 
-        /* Tabela Estilizada */
-        .table-wrapper {
-            background: #1a1a1a;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
+    .detalhado-table tbody td {
+        padding: 18px 20px;
+        border-bottom: 1px solid var(--border-color);
+        font-size: 0.92rem;
+        color: var(--text-main);
+    }
 
-        table { width: 100%; border-collapse: collapse; }
-        
-        table th {
-            background-color: #ffcc00;
-            color: #000;
-            padding: 15px;
-            text-align: left;
-            text-transform: uppercase;
-            font-size: 0.8em;
-        }
+    .detalhado-table tbody tr:hover {
+        background: rgba(var(--accent), 0.02);
+    }
 
-        table td {
-            padding: 15px;
-            border-bottom: 1px solid #333;
-            color: #ddd;
-            font-size: 0.9em;
-        }
+    /* Badges de Status Premium */
+    .badge-status {
+        padding: 6px 14px;
+        border-radius: 10px;
+        font-size: 10px;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        display: inline-block;
+        min-width: 100px;
+        text-align: center;
+        border-width: 1px;
+        border-style: solid;
+    }
 
-        table tr:hover { background: #252525; }
+    .status-pendente  { color: #ffa502; border-color: rgba(255, 165, 2, 0.3); background: rgba(255, 165, 2, 0.1); }
+    .status-pago      { color: #2ed573; border-color: rgba(46, 213, 115, 0.3); background: rgba(46, 213, 115, 0.1); }
+    .status-enviado   { color: #1e90ff; border-color: rgba(30, 144, 255, 0.3); background: rgba(30, 144, 255, 0.1); }
+    .status-entregue  { color: #eccc68; border-color: rgba(236, 204, 104, 0.3); background: rgba(236, 204, 104, 0.1); }
+    .status-concluido { color: #ff4757; border-color: rgba(255, 71, 87, 0.3); background: rgba(255, 71, 87, 0.1); }
+    .status-cancelado { color: #a4b0be; border-color: rgba(164, 176, 190, 0.3); background: rgba(164, 176, 190, 0.1); }
+    .status-default   { color: var(--text-muted); border-color: var(--border-color); background: var(--bg-main); }
 
-        /* Badges de Status - CORRIGIDAS E COMPLETAS */
-        .badge {
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.75em;
-            font-weight: bold;
-            text-transform: uppercase;
-            display: inline-block;
-            min-width: 90px;
-            text-align: center;
-        }
+    .price-tag { 
+        color: var(--accent); 
+        font-weight: 800; 
+        font-family: 'Inter', sans-serif;
+    }
+</style>
 
-        /* Cores dos Status */
-        .status-pendente  { color: #ffbb33; border: 1px solid #ffbb33; background: rgba(255, 187, 51, 0.1); }
-        .status-pago      { color: #00C851; border: 1px solid #00C851; background: rgba(0, 200, 81, 0.1); }
-        .status-enviado   { color: #33b5e5; border: 1px solid #33b5e5; background: rgba(51, 181, 229, 0.1); }
-        .status-entregue  { color: #e6d119ff; border: 1px solid #e6d119ff; background: rgba(230, 209, 25, 0.1); }
-        .status-concluido { color: #e025b8ff; border: 1px solid #e025b8ff; background: rgba(224, 37, 184, 0.1); }
-        .status-cancelado { color: #ff4444; border: 1px solid #ff4444; background: rgba(255, 68, 68, 0.1); }
-        /* Fallback para status desconhecido */
-        .status-default   { color: #bbb; border: 1px solid #bbb; background: rgba(255, 255, 255, 0.1); }
+<div class="detalhado-wrapper">
+    <div class="rep-header">
+        <h2><i class="fas fa-file-invoice-dollar"></i> Relatório Detalhado de Pedidos</h2>
+        <a href="/backend/relatorios" class="btn-voltar-rep"><i class="fas fa-arrow-left"></i> Voltar</a>
+    </div>
 
-        .price { color: #ffcc00; font-weight: bold; }
-    </style>
-</head>
-<body>
+    <div class="info-box">
+        <p><strong>Total de Pedidos:</strong> <?php echo count($pedidos ?? []); ?> registros encontrados</p>
+        <p><strong>Referência:</strong> Dados consolidados até <?php echo date('d/m/Y H:i'); ?></p>
+    </div>
 
- 
-
-    <main class="main-content">
-        <div class="page-header">
-            <h2><i class="fas fa-file-alt"></i> Relatório Detalhado de Pedidos</h2>
-            <a href="/backend/relatorios" class="btn-voltar">← VOLTAR</a>
-        </div>
-
-        <div class="info-card">
-            <p><strong>Total de Pedidos Encontrados:</strong> <?php echo count($pedidos ?? []); ?></p>
-            <p><strong>Relatório gerado em:</strong> <?php echo date('d/m/Y H:i:s'); ?></p>
-        </div>
-
-        <div class="table-wrapper">
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID Pedido</th>
-                        <th>Data</th>
-                        <th>Cliente</th>
-                        <th>Email</th>
-                        <th>Valor Total</th>
-                        <th>Status</th>
-                        <th>Qtd Itens</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php if (!empty($pedidos)): ?>
-                        <?php foreach ($pedidos as $pedido): ?>
-                            <tr>
-                                <td><strong>#<?php echo $pedido['id_pedido']; ?></strong></td>
-                                <td><?php echo date('d/m/Y', strtotime($pedido['data_pedido'])); ?></td>
-                                <td><?php echo htmlspecialchars($pedido['nome_usuarios'] ?? 'Não informado'); ?></td>
-                                <td><?php echo htmlspecialchars($pedido['email_usuarios'] ?? '---'); ?></td>
-                                <td class="price">R$ <?php echo number_format($pedido['total_pedido'] ?? 0, 2, ',', '.'); ?></td>
-                                <td>
-                                    <?php 
-                                        // Normaliza o status para o CSS (minúsculo, sem espaços e sem acentos básicos)
-                                        $status_original = $pedido['status_pedido'] ?? 'pendente';
-                                        $status_formatado = strtolower(trim($status_original));
-                                        
-                                        // Mapeamento de nomes amigáveis para classes CSS
-                                        $mapa_classes = [
-                                            'pago' => 'status-pago',
-                                            'concluido' => 'status-concluido',
-                                            'concluído' => 'status-concluido',
-                                            'enviado' => 'status-enviado',
-                                            'entregue' => 'status-entregue',
-                                            'cancelado' => 'status-cancelado',
-                                            'pendente' => 'status-pendente'
-                                        ];
-
-                                        $classe_css = $mapa_classes[$status_formatado] ?? 'status-default';
-                                    ?>
-                                    <span class="badge <?php echo $classe_css; ?>">
-                                        <?php echo htmlspecialchars($status_original); ?>
-                                    </span>
-                                </td>
-                                <td style="text-align: center;"><?php echo $pedido['quantidade'] ?? 0; ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                    <?php else: ?>
+    <div class="table-card">
+        <table class="detalhado-table">
+            <thead>
+                <tr>
+                    <th style="width: 120px;">ID Pedido</th>
+                    <th>Data</th>
+                    <th>Cliente</th>
+                    <th>Email</th>
+                    <th>Valor Total</th>
+                    <th>Status</th>
+                    <th style="text-align: center;">Itens</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (!empty($pedidos)): ?>
+                    <?php foreach ($pedidos as $pedido): ?>
                         <tr>
-                            <td colspan="7" style="text-align: center; padding: 50px; color: #666;">
-                                <i class="fas fa-search" style="font-size: 2em; margin-bottom: 10px; display: block;"></i>
-                                Nenhum pedido encontrado na base de dados.
+                            <td style="font-family: monospace; font-weight: 800; color: var(--text-muted);">
+                                #<?php echo str_pad($pedido['id_pedido'], 5, '0', STR_PAD_LEFT); ?>
+                            </td>
+                            <td><?php echo date('d/m/Y', strtotime($pedido['data_pedido'])); ?></td>
+                            <td style="font-weight: 700;"><?php echo htmlspecialchars($pedido['nome_usuarios'] ?? 'Consumidor Final'); ?></td>
+                            <td style="color: var(--text-muted); font-size: 0.85em;"><?php echo htmlspecialchars($pedido['email_usuarios'] ?? '---'); ?></td>
+                            <td class="price-tag">R$ <?php echo number_format($pedido['total_pedido'] ?? 0, 2, ',', '.'); ?></td>
+                            <td>
+                                <?php 
+                                    $status_map = [
+                                        'pago' => 'status-pago',
+                                        'concluido' => 'status-concluido',
+                                        'concluído' => 'status-concluido',
+                                        'enviado' => 'status-enviado',
+                                        'entregue' => 'status-entregue',
+                                        'cancelado' => 'status-cancelado',
+                                        'pendente' => 'status-pendente'
+                                    ];
+                                    $s = strtolower(trim($pedido['status_pedido'] ?? 'pendente'));
+                                    $cls = $status_map[$s] ?? 'status-default';
+                                ?>
+                                <span class="badge-status <?php echo $cls; ?>">
+                                    <?php echo htmlspecialchars($pedido['status_pedido'] ?? 'Pendente'); ?>
+                                </span>
+                            </td>
+                            <td style="text-align: center; font-weight: 800; color: var(--accent);">
+                                <?php echo $pedido['quantidade'] ?? 0; ?>
                             </td>
                         </tr>
-                    <?php endif; ?>
-                </tbody>
-            </table>
-        </div>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 60px; color: var(--text-muted);">
+                            <i class="fas fa-ghost" style="font-size: 3em; opacity: 0.2; margin-bottom: 15px; display: block;"></i>
+                            Nenhum pedido registrado no sistema.
+                        </td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
+    </div>
 
-        <footer style="margin-top: 30px; text-align: center; font-size: 0.8em; color: #444;">
-            &copy; <?php echo date('Y'); ?> Koketsu Store - Gestão de Relatórios
-        </footer>
-    </main>
-
-</body>
-</html>
+    <footer style="margin-top: 50px; text-align: center; font-size: 0.8em; color: var(--text-muted); padding-bottom: 40px;">
+        &copy; <?php echo date('Y'); ?> Koketsu Store • Sistema de Inteligência de Vendas
+    </footer>
+</div>

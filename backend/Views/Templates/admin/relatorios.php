@@ -10,11 +10,8 @@
     
     <style>
         :root {
-            --primary-gold: #ffd700;
-            --secondary-gold: #b8860b;
-            --bg-dark: #0f0f0f;
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --border-color: rgba(255, 215, 0, 0.15);
+            --primary-gold: var(--accent);
+            --secondary-gold: var(--accent-hover);
         }
 
         * {
@@ -25,18 +22,18 @@
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg-dark);
+            background-color: var(--bg-main) !important;
             background-image: 
-                radial-gradient(circle at 10% 20%, rgba(255, 215, 0, 0.03) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(255, 215, 0, 0.03) 0%, transparent 40%);
-            color: #f0f0f0;
+                radial-gradient(circle at 10% 20%, rgba(197, 160, 45, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(197, 160, 45, 0.05) 0%, transparent 40%);
+            color: var(--text-main);
             min-height: 100vh;
             line-height: 1.6;
         }
 
         /* Header Estilo Moderno */
         .header {
-            background: rgba(15, 15, 15, 0.8);
+            background: var(--glass-bg);
             backdrop-filter: blur(10px);
             padding: 40px 60px;
             border-bottom: 1px solid var(--border-color);
@@ -46,14 +43,14 @@
         .header h1 {
             font-size: 2.5rem;
             font-weight: 800;
-            background: linear-gradient(to right, #ffd700, #fff);
+            background: linear-gradient(to right, var(--accent), var(--text-main));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 10px;
         }
 
         .header p {
-            color: #888;
+            color: var(--text-muted);
             font-weight: 400;
             letter-spacing: 0.5px;
         }
@@ -73,7 +70,7 @@
         }
 
         .stat-card {
-            background: var(--card-bg);
+            background: var(--bg-card);
             border: 1px solid var(--border-color);
             padding: 30px;
             border-radius: 24px;
@@ -81,18 +78,18 @@
             position: relative;
             overflow: hidden;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: var(--shadow-sm);
         }
 
         .stat-card:hover {
             transform: translateY(-10px);
-            background: rgba(255, 255, 255, 0.05);
-            border-color: var(--primary-gold);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            border-color: var(--accent);
+            box-shadow: var(--shadow-md);
         }
 
         .stat-card h3 {
             font-size: 0.8rem;
-            color: #888;
+            color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 2px;
             margin-bottom: 15px;
@@ -101,7 +98,7 @@
         .stat-value {
             font-size: 2.2rem;
             font-weight: 800;
-            color: #fff;
+            color: var(--text-main);
             z-index: 2;
             position: relative;
         }
@@ -111,13 +108,13 @@
             right: 20px;
             bottom: 15px;
             font-size: 4rem;
-            opacity: 0.1;
+            opacity: 0.05;
             filter: grayscale(1);
             transition: 0.4s;
         }
 
         .stat-card:hover .stat-icon {
-            opacity: 0.3;
+            opacity: 0.15;
             transform: scale(1.1) rotate(-5deg);
         }
 
@@ -130,17 +127,18 @@
         }
 
         .chart-container {
-            background: var(--card-bg);
+            background: var(--bg-card);
             border: 1px solid var(--border-color);
             padding: 35px;
             border-radius: 24px;
+            box-shadow: var(--shadow-sm);
         }
 
         .chart-container h3 {
-            color: var(--primary-gold);
+            color: var(--accent);
             margin-bottom: 30px;
             font-size: 1.1rem;
-            font-weight: 600;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
             display: flex;
@@ -152,7 +150,7 @@
             content: "";
             width: 4px;
             height: 20px;
-            background: var(--primary-gold);
+            background: var(--accent);
             border-radius: 10px;
         }
 
@@ -170,35 +168,56 @@
         }
 
         .action-button {
-            background: #1a1a1a;
-            color: var(--primary-gold);
+            background: var(--bg-card);
+            color: var(--accent);
             border: 1px solid var(--border-color);
             padding: 18px 35px;
             border-radius: 50px;
             font-size: 0.9rem;
-            font-weight: 600;
+            font-weight: 700;
             text-decoration: none;
             transition: 0.3s;
             display: inline-flex;
             align-items: center;
             gap: 10px;
+            box-shadow: var(--shadow-sm);
         }
 
         .action-button:hover {
-            background: var(--primary-gold);
+            background: var(--accent);
             color: #000;
             transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(255, 215, 0, 0.2);
+            box-shadow: var(--shadow-md);
         }
 
         .footer-text {
             text-align: center;
-            color: #555;
+            color: var(--text-muted);
             margin-top: 60px;
             padding: 30px;
             font-size: 0.85rem;
-            border-top: 1px solid #222;
+            border-top: 1px solid var(--border-color);
         }
+
+        @media (max-width: 1024px) {
+            .charts-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .header { padding: 30px 20px; }
+            .container { padding: 0 20px 40px 20px; }
+        }
+
+        /* Animações */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stat-card, .chart-container {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+    </style>
 
         @media (max-width: 1024px) {
             .charts-grid { grid-template-columns: 1fr; }
@@ -296,9 +315,14 @@
     </div>
 
     <script>
-        // Configuração global dos gráficos
-        Chart.defaults.color = '#b0b0b0';
-        Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.1)';
+        // Configuração global dos gráficos baseada no tema
+        const style = getComputedStyle(document.body);
+        const textColor = style.getPropertyValue('--text-muted').trim() || '#888';
+        const gridColor = style.getPropertyValue('--border-color').trim() || 'rgba(0,0,0,0.1)';
+        const accentColor = style.getPropertyValue('--accent').trim() || '#ffd700';
+
+        Chart.defaults.color = textColor;
+        Chart.defaults.borderColor = gridColor;
         Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
 
         const chartColors = {

@@ -1,4 +1,16 @@
-<!DOCTYPE html>
+<?php
+$configFile = __DIR__ . "/backend/Config/settings.json";
+if (file_exists($configFile)) {
+    $config = json_decode(file_get_contents($configFile), true);
+    if (!empty($config["manutencao"])) {
+        if (!isset($_SESSION)) session_start();
+        if (($_SESSION["usuario_tipo"] ?? "") !== "admin") {
+            include __DIR__ . "/backend/Views/Templates/manutencao.php";
+            exit;
+        }
+    }
+}
+?><!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
@@ -22,7 +34,7 @@
       </div>
   
       <!-- Centro: Logo -->
-        <a href="index.html">
+        <a href="index.php">
             <img src="img/icons/logo.png" alt="Logo COMP" class="logo" />
             </a>
           
@@ -42,9 +54,9 @@
 </div>
 <div class="offcanvas-body">
   <ul class="list-unstyled">
-    <li><a class="text-white text-decoration-none d-block py-2" href="index.html">Início</a></li>
-        <li><a class="text-white text-decoration-none d-block py-2" href="produto.html">Produtos</a></li>
-        <li><a class="text-white text-decoration-none d-block py-2" href="sobre.html">Sobre</a></li>
+    <li><a class="text-white text-decoration-none d-block py-2" href="index.php">Início</a></li>
+        <li><a class="text-white text-decoration-none d-block py-2" href="produto.php">Produtos</a></li>
+        <li><a class="text-white text-decoration-none d-block py-2" href="sobre.php">Sobre</a></li>
         <li><a class="text-white text-decoration-none d-block py-2" href="#">Contato</a></li>
       
   </ul>
@@ -129,22 +141,22 @@
         </div>
         <div class="coluna-footer">
             <h3 class="titulo">INSTITUCIONAL</h3>
-            <p><a href="sobre.html" class="hover-destaque">Sobre a Koketsu</a></p>
+            <p><a href="sobre.php" class="hover-destaque">Sobre a Koketsu</a></p>
         </div>
 
         <div class="coluna-footer">
             <h3 class="titulo">ATENDIMENTO AO CLIENTE</h3>
-            <a href="duvidas.html"><p>Dúvidas Frequentes</p></a>
-            <a href="Trocas.html"><P>Trocas e Devoluções</P></a>
-            <a href="politica.html"><P>Politica de Privacidade</P></a>
-            <a href="frete.html"><P>Frete e Entrega</P></a>
+            <a href="duvidas.php"><p>Dúvidas Frequentes</p></a>
+            <a href="Trocas.php"><P>Trocas e Devoluções</P></a>
+            <a href="politica.php"><P>Politica de Privacidade</P></a>
+            <a href="frete.php"><P>Frete e Entrega</P></a>
         </div>
 
         <div class="coluna-footer">
           <h3 class="titulo">MINHA CONTA</h3>
           <a href="#"><p>Minha Conta</p></a>
-          <a href="carrinho.html"><p>Carrinho</p></a>
-          <a href="fidelidade.html"><p>Programa de Fidelidade</p></a>
+          <a href="carrinho.php"><p>Carrinho</p></a>
+          <a href="fidelidade.php"><p>Programa de Fidelidade</p></a>
           
 
         <h3 class="titulo fale-conosco">FALE CONOSCO</h3>

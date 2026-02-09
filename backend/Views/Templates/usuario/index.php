@@ -1,10 +1,18 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
 <style>
     /* --- AJUSTES GERAIS DE LAYOUT --- */
+    body {
+        background-color: var(--bg-main) !important;
+        margin: 0;
+        font-family: 'Inter', sans-serif;
+        color: var(--text-main);
+    }
+
     .page-wrapper {
         padding: 20px;
         width: 100%;
         box-sizing: border-box;
-        background-color: #0c0c0c;
         min-height: 100vh;
     }
 
@@ -12,16 +20,16 @@
         font-size: 26px;
         font-weight: 800;
         margin-bottom: 5px;
-        color: #ffffff;
+        color: var(--text-main);
         text-transform: uppercase;
         letter-spacing: -1px;
     }
 
     .header-breadcrumb {
-        color: #888;
+        color: var(--text-muted);
         margin-bottom: 25px;
-        padding-bottom: 10px;
-        border-bottom: 1px solid #222;
+        padding-bottom: 15px;
+        border-bottom: 1px solid var(--border-color);
     }
 
     /* --- DASHBOARD CARDS PREMIUM --- */
@@ -35,34 +43,39 @@
     .stat-card {
         flex: 1;
         min-width: 220px;
-        background: #1a1a1a;
-        border: 1px solid #333;
-        border-radius: 15px;
-        padding: 20px;
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 24px;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        transition: 0.3s;
+        transition: all 0.3s ease;
+        box-shadow: var(--shadow-sm);
     }
 
-    .stat-card:hover { border-color: #f2cc7d; transform: translateY(-5px); }
+    .stat-card:hover { 
+        border-color: var(--accent); 
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-md);
+    }
 
     .stat-icon {
-        font-size: 30px;
-        color: #f2cc7d;
+        font-size: 28px;
+        color: var(--accent);
         background: rgba(242, 204, 125, 0.1);
-        width: 55px;
-        height: 55px;
+        width: 52px;
+        height: 52px;
         display: flex;
         align-items: center;
         justify-content: center;
         border-radius: 12px;
     }
 
-    .stat-info h3 { margin: 0; font-size: 28px; color: #fff; font-weight: 800; }
-    .stat-info p { margin: 0; color: #666; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; font-weight: 700; }
+    .stat-info h3 { margin: 0; font-size: 28px; color: var(--text-main); font-weight: 800; }
+    .stat-info p { margin: 0; color: var(--text-muted); text-transform: uppercase; font-size: 11px; letter-spacing: 1px; font-weight: 700; }
 
-    /* --- ÁREA DE AÇÕES (BOTÃO + PESQUISA) --- */
+    /* --- ÁREA DE AÇÕES --- */
     .actions-bar {
         display: flex;
         justify-content: flex-start;
@@ -76,99 +89,106 @@
         display: inline-flex;
         align-items: center;
         gap: 10px;
-        background-color: #f2cc7d !important;
+        background-color: var(--accent) !important;
         color: #000 !important;
-        padding: 14px 24px;
+        padding: 12px 24px;
         border-radius: 10px;
-        font-weight: 800;
+        font-weight: 700;
         text-transform: uppercase;
         font-size: 13px;
-        letter-spacing: 0.5px;
         text-decoration: none;
         transition: 0.3s;
         border: none;
-        box-shadow: 0 4px 15px rgba(242, 204, 125, 0.2);
-        white-space: nowrap;
+        box-shadow: 0 4px 15px rgba(197, 160, 45, 0.2);
     }
 
-    .btn-main-action:hover { background-color: #ffffff !important; transform: scale(1.02); }
+    .btn-main-action:hover { background-color: var(--text-main) !important; color: var(--bg-main) !important; transform: scale(1.02); }
 
-    /* Estilo da Barra de Pesquisa */
-    .search-container {
-        position: relative;
-        flex: 1;
-        max-width: 400px;
-    }
-
-    .search-container i {
-        position: absolute;
-        left: 15px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: #f2cc7d;
-    }
-
+    .search-container { position: relative; flex: 1; max-width: 400px; }
+    .search-container i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--accent); }
     .search-input {
         width: 100%;
-        background: #1a1a1a;
-        border: 1px solid #333;
-        padding: 13px 15px 13px 45px;
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        padding: 12px 15px 12px 45px;
         border-radius: 10px;
-        color: #fff;
-        font-size: 14px;
-        transition: 0.3s;
+        color: var(--text-main);
         outline: none;
+        transition: 0.3s;
+        box-shadow: var(--shadow-sm);
     }
-
-    .search-input:focus {
-        border-color: #f2cc7d;
-        background: #222;
-        box-shadow: 0 0 10px rgba(242, 204, 125, 0.1);
-    }
+    .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(197, 160, 45, 0.1); }
 
     /* --- TABELA DE USUÁRIOS --- */
     .user-table {
         width: 100%;
         border-collapse: separate;
-        border-spacing: 0 10px;
-        color: #ddd;
+        border-spacing: 0 12px;
+        color: var(--text-main);
     }
 
     .user-table thead th {
-        color: #ffffff !important;
+        color: var(--text-muted) !important;
         text-transform: uppercase;
-        font-size: 12px;
-        padding: 15px;
+        font-size: 11px;
+        padding: 10px 15px;
         letter-spacing: 1.5px;
         font-weight: 800;
     }
 
     .user-table tbody tr {
-        background: #161616;
-        transition: 0.2s;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        background: var(--bg-card);
+        transition: all 0.2s ease;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--border-color);
     }
 
-    .user-table tbody tr:hover { background: #1f1f1f; }
+    .user-table tbody tr:hover { 
+        transform: scale(1.005);
+        box-shadow: var(--shadow-md);
+        border-color: var(--accent);
+    }
 
-    .user-table td { padding: 18px 15px !important; border: none; vertical-align: middle; }
-    .user-table td:first-child { border-radius: 12px 0 0 12px; }
-    .user-table td:last-child { border-radius: 0 12px 12px 0; }
+    /* ESTILO PARA USUÁRIO INATIVO */
+    .user-table tbody tr.tr-inativo {
+        opacity: 0.7;
+        border-left: 4px solid #ff4444;
+    }
 
-    .id-column { font-family: monospace; color: #aaa !important; font-weight: bold; }
-    .email-column { color: #bbb !important; }
+    .user-table td { padding: 16px 15px !important; border: none; vertical-align: middle; }
+    .user-table td:first-child { border-radius: 12px 0 0 12px; border-left: 1px solid var(--border-color); }
+    .user-table td:last-child { border-radius: 0 12px 12px 0; border-right: 1px solid var(--border-color); }
+    
+    .user-table tbody tr:hover td { border-color: var(--accent); }
 
-    .badge-status { padding: 6px 14px; border-radius: 8px; font-size: 10px; font-weight: 900; text-transform: uppercase; }
-    .badge-active { background: #d4edda; color: #155724; }
-    .badge-inactive { background: #333; color: #888; }
+    .id-column { font-family: monospace; color: var(--text-muted) !important; font-weight: bold; }
+    
+    /* BADGES DE STATUS */
+    .badge-status { padding: 6px 12px; border-radius: 20px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+    .badge-active { background: rgba(40, 167, 69, 0.1); color: #28a745; border: 1px solid rgba(40, 167, 69, 0.3); }
+    
+    /* DESTAQUE VERMELHO PARA O INATIVO */
+    .badge-inactive { 
+        background: rgba(255, 68, 68, 0.1) !important; 
+        color: #ff4444 !important; 
+        border: 1px solid rgba(255, 68, 68, 0.3);
+    }
 
-    .btn-action-small { padding: 8px 14px; border-radius: 8px; font-size: 11px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; transition: 0.3s; margin: 0 2px; }
-    .btn-edit { background: #222; color: #f2cc7d; border: 1px solid #f2cc7d; }
-    .btn-edit:hover { background: #f2cc7d; color: #000; }
-    .btn-toggle { background: transparent; border: 1px solid #444; color: #999; }
-    .btn-toggle:hover { border-color: #ff4444; color: #ff4444; }
+    /* BOTÕES DE AÇÃO */
+    .btn-action-small { padding: 8px 14px; border-radius: 8px; font-size: 11px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: 0.3s; margin: 0 2px; }
+    .btn-edit { background: var(--bg-main); color: var(--accent); border: 1px solid var(--accent); }
+    .btn-edit:hover { background: var(--accent); color: #000; }
+    
+    .btn-toggle { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); }
+    .btn-toggle:hover { border-color: #ff4444; color: #ff4444; background: rgba(255, 68, 68, 0.05); }
 
-    .tr-inativo { opacity: 0.5; filter: grayscale(0.8); }
+    /* Botão específico para Ativar (Verde) */
+    .btn-activate {
+        background: rgba(40, 167, 69, 0.05);
+        color: #28a745;
+        border: 1px solid #28a745;
+    }
+    .btn-activate:hover { background: #28a745; color: #fff; }
 </style>
 
 <div class="page-wrapper">
@@ -181,31 +201,31 @@
     <div class="dashboard-grid">
         <div class="stat-card" style="border-left: 4px solid #f2cc7d;">
             <div class="stat-info">
-                <h3><?php echo $total_admin; ?></h3>
+                <h3><?= $total_admin; ?></h3>
                 <p>Admins</p>
             </div>
             <div class="stat-icon"><i class="fa fa-shield"></i></div>
         </div>
         
-        <div class="stat-card" style="border-left: 4px solid #f2cc7d;">
+        <div class="stat-card" style="border-left: 4px solid #28a745;">
             <div class="stat-info">
-                <h3><?php echo $total_ativos; ?></h3>
+                <h3><?= $total_ativos; ?></h3>
                 <p>Ativos</p>
             </div>
-            <div class="stat-icon"><i class="fa fa-signal"></i></div>
+            <div class="stat-icon" style="color:#28a745; background:rgba(40,167,69,0.1);"><i class="fa fa-signal"></i></div>
         </div>
 
-        <div class="stat-card" style="border-left: 4px solid #f2cc7d;">
+        <div class="stat-card" style="border-left: 4px solid #ff4444;">
             <div class="stat-info">
-                <h3><?php echo $total_inativos; ?></h3>
-                <p>Inativos</p>
+                <h3><?= $total_inativos; ?></h3>
+                <p style="color: #ff4444;">Inativos</p>
             </div>
-            <div class="stat-icon"><i class="fa fa-exclamation-triangle"></i></div>
+            <div class="stat-icon" style="color:#ff4444; background:rgba(255,68,68,0.1);"><i class="fa fa-exclamation-triangle"></i></div>
         </div>
 
         <div class="stat-card" style="border-left: 4px solid #f2cc7d;">
             <div class="stat-info">
-                <h3><?php echo $total_usuarios; ?></h3>
+                <h3><?= $total_usuarios; ?></h3>
                 <p>Total Geral</p>
             </div>
             <div class="stat-icon"><i class="fa fa-users"></i></div>
@@ -237,14 +257,14 @@
             </thead>
             <tbody>
                 <?php foreach ($usuarios as $usuario): ?>
-                <?php $is_inativo = !empty($usuario['excluido_em']);?>
+                <?php $is_inativo = !empty($usuario['excluido_em']); ?>
                 
                 <tr class="<?= $is_inativo ? 'tr-inativo' : '' ?>"> 
                     <td class="id-column">#<?= $usuario['id_usuarios'] ?></td>
                     <td class="user-name" style="font-weight: 700; color: #fff; font-size: 1.05em;">
                         <?= htmlspecialchars($usuario['nome_usuarios']) ?>
                     </td>
-                    <td class="email-column"><?= htmlspecialchars($usuario['email_usuarios']) ?></td>
+                    <td class="email-column" style="color: #888;"><?= htmlspecialchars($usuario['email_usuarios']) ?></td>
                     <td>
                         <span style="color: #f2cc7d; font-size: 12px; font-weight: 800;">
                             <i class="fa fa-circle" style="font-size: 8px;"></i> <?= strtoupper($usuario['nivel_acesso']) ?>
@@ -265,11 +285,11 @@
                         </a>
                         
                         <?php if ($is_inativo): ?>
-                            <a href="/backend/usuario/ativar/<?= $usuario['id_usuarios'] ?>" class="btn-action-small btn-toggle">
+                            <a href="/backend/usuario/ativar/<?= $usuario['id_usuarios'] ?>" class="btn-action-small btn-activate">
                                 <i class="fa fa-check"></i> Ativar
                             </a>
                         <?php else: ?>
-                            <a href="/backend/usuario/excluir/<?= $usuario['id_usuarios'] ?>" class="btn-action-small btn-toggle">
+                            <a href="/backend/usuario/excluir/<?= $usuario['id_usuarios'] ?>" class="btn-action-small btn-toggle" onclick="return confirm('Inativar este usuário?')">
                                 <i class="fa fa-power-off"></i> Inativar
                             </a>
                         <?php endif; ?>
@@ -280,8 +300,6 @@
         </table>
     </main>
 </div>
-
-<div style="height: 60px;"></div>
 
 <script>
 function filterUsers() {

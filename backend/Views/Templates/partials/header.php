@@ -25,15 +25,56 @@ $current_uri = $_SERVER['REQUEST_URI'] ?? '/backend/admin/dashboard';
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script>
+    // Script bloqueante para evitar flash de cor incorreta
+    (function() {
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        if (savedTheme === 'light' || (savedTheme === 'system' && window.matchMedia('(prefers-color-scheme: light)').matches)) {
+            document.documentElement.classList.add('theme-light');
+        }
+    })();
+</script>
 <style>
+:root {
+    --bg-main: #0a0a0b;
+    --bg-sidebar: #121214;
+    --bg-top: #000000;
+    --bg-card: #161618;
+    --text-main: #f1f1f1;
+    --text-muted: #8a8a8e;
+    --border-color: #242428;
+    --accent: #dfd155;
+    --accent-hover: #ffcc00;
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.3);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+    --glass-bg: rgba(22, 22, 24, 0.7);
+    --glass-border: rgba(255, 215, 0, 0.1);
+}
+
+.theme-light {
+    --bg-main: #f4f7f9;
+    --bg-sidebar: #ffffff;
+    --bg-top: #ffffff;
+    --bg-card: #ffffff;
+    --text-main: #1a1a1c;
+    --text-muted: #5d666e;
+    --border-color: #e2e8f0;
+    --accent: #c5a02d;
+    --accent-hover: #a68421;
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+    --shadow-md: 0 8px 24px rgba(149, 157, 165, 0.2);
+    --glass-bg: rgba(255, 255, 255, 0.8);
+    --glass-border: rgba(197, 160, 45, 0.2);
+}
+
 
 /* ======= RESET GERAL ======= */
 html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: #111111 !important; /* Fundo principal mais escuro */
-  color: #f5f5f5 !important;
+  background-color: var(--bg-main) !important;
+  color: var(--text-main) !important;
   font-family: "Segoe UI", sans-serif;
   display: flex;
   flex-direction: column;
@@ -45,18 +86,19 @@ html, body {
   top: 0;
   left: 0;
   right: 0;
-  background-color: #000000ff !important;
-  color: #000 !important;
+  background-color: var(--bg-top) !important;
+  color: var(--text-main) !important;
   z-index: 1000;
   height: 80px;
   line-height: 60px;
+  border-bottom: 1px solid var(--border-color);
 }
 
 /* ====== MENU LATERAL ====== */
 .w3-sidebar {
   /* Fundo mais claro para contraste */
-  background-color: #1a1a1a !important; 
-  color: #f5f5f5 !important;
+  background-color: var(--bg-sidebar) !important; 
+  color: var(--text-main) !important;
   width: 260px !important;
   position: fixed !important;
   top: 0;
@@ -64,14 +106,14 @@ html, body {
   height: 100vh !important;
   overflow-y: auto;
   padding-top: 70px; /* Ajuste para melhor visual de perfil */
-  border-right: 1px solid #282828;
+  border-right: 1px solid var(--border-color);
 }
 
 .w3-sidebar a {
   display: flex;
   align-items: center;
   gap: 10px;
-  color: #fff !important;
+  color: var(--text-main) !important;
   background-color: transparent !important;
   padding: 12px 20px !important;
   font-size: 15px;
@@ -83,11 +125,11 @@ html, body {
 
 /* Estilo do link ativo/selecionado */
 .w3-sidebar a.active-link {
-    background-color: #dfd155ff !important; /* Amarelo/dourado do tema */
-    color: #000 !important;
+    background-color: var(--accent) !important;
+    color: var(--bg-sidebar) !important;
     font-weight: 700;
     transform: translateX(0); 
-    box-shadow: 0 0 8px #dfd155aa;
+    box-shadow: 0 4px 12px var(--accent);
 }
 
 /* Hover nos links não ativos */
@@ -113,17 +155,17 @@ html, body {
   width: 40px;
   height: 40px;
   margin: 0 6px;
-  background-color: #1a1a1a;
+  background-color: var(--bg-sidebar);
   border-radius: 50%;
-  border: 1px solid #333;
-  color: #ffcc00;
+  border: 1px solid var(--border-color);
+  color: var(--accent);
   transition: all 0.3s ease-in-out;
 }
 
 .w3-container .w3-margin-top a:hover {
-  background-color: #ffcc00;
-  color: #000;
-  box-shadow: 0 0 10px #ffcc00aa;
+  background-color: var(--accent);
+  color: var(--bg-sidebar);
+  box-shadow: 0 0 10px var(--accent);
   transform: translateY(-3px);
 }
 
@@ -158,8 +200,8 @@ html, body {
   margin-left: 260px !important;
   margin-top: 85px !important; 
   padding: 50px !important;
-  background-color: #111 !important;
-  color: #f5f5f5 !important;
+  background-color: var(--bg-main) !important;
+  color: var(--text-main) !important;
   transition: all 0.3s ease-in-out;
 }
 
@@ -171,7 +213,7 @@ hr {
 
 /* ======= BOTÕES/TABELAS (Estilos de tema escuro) ======= */
 .w3-table tr:nth-child(even) {
-    background-color: #1a1a1a !important;
+    background-color: var(--bg-sidebar) !important;
 }
 .w3-tag {
     padding: 4px 8px;
@@ -192,16 +234,16 @@ hr {
     color: white;
 }
 .w3-card, .w3-white, .w3-light-grey {
-    background-color: #000000ff !important;
-    color: #ffffffff !important;
-    border: 1px solid #222 !important;
+    background-color: var(--bg-card) !important;
+    color: var(--text-main) !important;
+    border: 1px solid var(--border-color) !important;
 }
 
 /* ======= INPUTS ======= */
 input, select, textarea {
-  background-color: #222 !important;
-  color: #fff !important;
-  border: 1px solid #555 !important;
+  background-color: var(--bg-card) !important;
+  color: var(--text-main) !important;
+  border: 1px solid var(--border-color) !important;
   border-radius: 4px;
   padding: 8px;
 }
@@ -232,7 +274,7 @@ input, select, textarea {
 <div class="w3-bar w3-top w3-theme w3-large" style="z-index:4">
   <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-black" onclick="w3_open();"><i class="fa fa-bars"></i>  Menu</button>
   <div class="w3-bar" style="background-color:#000; height:80px; display:flex; align-items:center; justify-content:center;">
-    <a href="../../index.html">
+    <a href="../../index.php">
   <img src="/img/logo.png" alt="Koketsu Logo" height="80px" >
   </a>
   </div>
@@ -262,7 +304,7 @@ input, select, textarea {
   <h5 class="w3-margin-top">Bem-vindo, <strong><?= htmlspecialchars($session->get('usuario_nome')); ?></strong></h5>
   <div class="w3-margin-top">
     <a href="#" title="Mensagens"><i class="fa fa-envelope w3-hover-text-yellow"></i></a>
-    <a href="/backend/usuario/editar/<?= htmlspecialchars($usuarioId ?? '0') ?>" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/usuario/editar', $current_uri); ?>" title="Perfil" style="margin: 0 10px;"><i class="fa fa-user w3-hover-text-yellow"></i></a>
+    <a href="/backend/cliente/meu-perfil/<?= htmlspecialchars($session->get('usuario_id') ?? '0') ?>" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/cliente/meu-perfil', $current_uri); ?>" title="Perfil" style="margin: 0 10px;"><i class="fa fa-user w3-hover-text-yellow"></i></a>
     <a href="#" title="Configurações"><i class="fa fa-cog w3-hover-text-yellow"></i></a>
   </div>
 </div>
@@ -271,45 +313,45 @@ input, select, textarea {
     <h5>Painel Koketsu</h5>
   </div>
   <div class="w3-bar-block">
-    <?php
-      if ($session->get('usuario_tipo') == 'admin'){
-    ?>
-    <a href="/backend/admin/dashboard" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/admin/dashboard', $current_uri); ?>">
-        <i class="fa fa-home fa-fw"></i> Início
-    </a>
-    
-    <a href="/backend/usuario/listar" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/usuario/listar', $current_uri); ?>">
-        <i class="fa fa-users fa-fw"></i> Listar
-    </a>
-    <a href="/backend/produtos/listar" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/produtos/listar', $current_uri); ?>">
-        <i class="fa fa-tags fa-fw"></i> Produtos
-    </a>
-    <a href="/backend/pedido/listar" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/pedido/listar', $current_uri); ?>">
-        <i class="fa fa-shopping-cart fa-fw"></i> Pedidos
-    </a>
-    <a href="/backend/itenspedidos/listar" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/itenspedidos/listar', $current_uri); ?>">
-        <i class="fa fa-dropbox fa-fw"></i> ItensPedidos
-    </a>
-    <?php if ($session->get('usuario_tipo') == 'admin'){ ?>
-    <a href="/backend/cliente/listar" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/cliente/listar', $current_uri); ?>">
-        <i class="fa fa-users fa-fw"></i> Clientes
-    </a>
-   
-    <a href="/backend/cliente/editar/<?= htmlspecialchars($usuarioId ?? '0') ?>" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/cliente/editar', $current_uri); ?>">
+    <?php if ($session->get('usuario_tipo') == 'admin'): ?>
+        <a href="/backend/admin/dashboard" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/admin/dashboard', $current_uri); ?>">
+            <i class="fa fa-home fa-fw"></i> Início (Admin)
+        </a>
+        <a href="/backend/usuario/listar" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/usuario/listar', $current_uri); ?>">
+            <i class="fa fa-users fa-fw"></i> Usuários
+        </a>
+        <a href="/backend/produtos/listar" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/produtos/listar', $current_uri); ?>">
+            <i class="fa fa-tags fa-fw"></i> Produtos
+        </a>
+        <a href="/backend/pedido/listar" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/pedido/listar', $current_uri); ?>">
+            <i class="fa fa-shopping-cart fa-fw"></i> Todos Pedidos
+        </a>
+        <a href="/backend/itenspedidos/listar" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/itenspedidos/listar', $current_uri); ?>">
+            <i class="fa fa-dropbox fa-fw"></i> Itens Pedidos
+        </a>
+        <a href="/backend/cliente/listar" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/cliente/listar', $current_uri); ?>">
+            <i class="fa fa-address-book fa-fw"></i> Clientes
+        </a>
+        <a href="/backend/avaliacao/listar" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/avaliacao', $current_uri); ?>">
+            <i class="fa fa-star fa-fw"></i> Avaliações
+        </a>
+    <?php else: ?>
+        <a href="/backend/cliente/dashboard" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/cliente/dashboard', $current_uri); ?>">
+            <i class="fa fa-home fa-fw"></i> Início
+        
+    <?php endif; ?>
+
+    <a href="/backend/cliente/meu-perfil/<?= htmlspecialchars($session->get('usuario_id') ?? '0') ?>" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/cliente/meu-perfil', $current_uri); ?>">
         <i class="fa fa-user-circle fa-fw"></i> Perfil
     </a>
-    <?php
-      }
-    ?>
-    
-    <a href="/backend/avaliacao/listar" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/avaliacao', $current_uri); ?>">
-        <i class="fa fa-star fa-fw"></i> Avaliações
-    </a>
-    
+
     <a href="/backend/configuracoes" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/configuracoes', $current_uri); ?>">
         <i class="fa fa-cog fa-fw"></i> Configurações
-    </a><br><br>
-      <?php } ?>
+    </a>
+    <br><br>
+    <a href="/backend/logout" class="w3-bar-item w3-button w3-padding" style="color: #e74c3c !important;">
+        <i class="fa fa-sign-out fa-fw"></i> Sair
+    </a>
   </div>
 </nav>
 

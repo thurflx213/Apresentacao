@@ -6,10 +6,14 @@ use App\Koketsu\Core\Redirect;
 use App\Koketsu\Core\FileManager;
 use App\Koketsu\Database\Database;
 use App\Koketsu\Models\Usuario;
+use App\Koketsu\Models\Perfil;
+use App\Koketsu\Models\Pedidos;
 use App\Koketsu\Controles\Admin\AuthenticatedController;
 
 class DashboardController extends AuthenticatedController{
     public $usuario;
+    public $perfil;
+    public $pedidos;
     public $db;
     public $gerenciarImagem;
     
@@ -17,16 +21,35 @@ class DashboardController extends AuthenticatedController{
         parent::__construct();
         $this->db = Database::getInstance();
         $this->usuario = new Usuario($this->db);
+        $this->perfil = new Perfil($this->db);
+        $this->pedidos = new Pedidos($this->db);
         $this->gerenciarImagem = new FileManager('upload');
     }
     
     public function index(): void{
-       // $dados = $this->usuario->buscarUsuarios();
+        $usuario_id = $this->session->get('usuario_id');
+        $perfil = $this->perfil->buscarPerfilPorUsuario($usuario_id);
+        
+        $pedidosRecentes = [];
+        $totalPedidos = 0;
+
+        if ($perfil) {
+            $pedidosRecentes = $this->pedidos->buscarPedidosPorCliente($perfil['id_perfil']);
+            // Limitar a 5 pedidos recentes e ordenar (o modelo busca todos, vamos limitar no PHP ou aqui)
+            usort($pedidosRecentes, function($a, $b) {
+                return strtotime($b['data_pedido']) - strtotime($a['data_pedido']);
+            });
+            $totalPedidos = count($pedidosRecentes);
+            $pedidosRecentes = array_slice($pedidosRecentes, 0, 5);
+        }
+
         View::render('cliente/dashboard/index', [
             'nomeUsuario' => $this->session->get('usuario_nome'),
-            'usuarioId' => $this->session->get('usuario_id'),
+            'usuarioId' => $usuario_id,
             'Tipo' => $this->session->get('usuario_tipo'),
-            
+            'perfil' => $perfil,
+            'pedidosRecentes' => $pedidosRecentes,
+            'totalPedidos' => $totalPedidos
         ]);
     }
 
@@ -51,25 +74,25 @@ class DashboardController extends AuthenticatedController{
 
         // Validações
         if (empty($nome)) {
-            Redirect::redirecionarComMensagem("/backend/cliente/editar/$id", "error", "Nome é obrigatório.");
+            Redirect::redirecionarComMensagem("/backend/cliente/meu-perfil/$id", "error", "Nome é obrigatório.");
         }
-
+    
         if (empty($email)) {
-            Redirect::redirecionarComMensagem("/backend/cliente/editar/$id", "error", "Email é obrigatório.");
+            Redirect::redirecionarComMensagem("/backend/cliente/meu-perfil/$id", "error", "Email é obrigatório.");
         }
-
+    
         if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
-            Redirect::redirecionarComMensagem("/backend/cliente/editar/$id", "error", "Email inválido.");
+            Redirect::redirecionarComMensagem("/backend/cliente/meu-perfil/$id", "error", "Email inválido.");
         }
-
+    
         // Se uma nova senha foi fornecida
         if (!empty($senha)) {
             if (strlen($senha) < 6) {
-                Redirect::redirecionarComMensagem("/backend/cliente/editar/$id", "error", "Senha deve ter no mínimo 6 caracteres.");
+                Redirect::redirecionarComMensagem("/backend/cliente/meu-perfil/$id", "error", "Senha deve ter no mínimo 6 caracteres.");
             }
 
             if ($senha !== $confirmarSenha) {
-                Redirect::redirecionarComMensagem("/backend/cliente/editar/$id", "error", "As senhas não conferem.");
+                Redirect::redirecionarComMensagem("/backend/cliente/meu-perfil/$id", "error", "As senhas não conferem.");
             }
         }
 
@@ -106,7 +129,7 @@ class DashboardController extends AuthenticatedController{
 
             Redirect::redirecionarComMensagem("/backend/cliente/dashboard", "success", "Perfil atualizado com sucesso!");
         } else {
-            Redirect::redirecionarComMensagem("/backend/cliente/editar/$id", "error", "Erro ao atualizar perfil. Tente novamente.");
+            Redirect::redirecionarComMensagem("/backend/cliente/meu-perfil/$id", "error", "Erro ao atualizar perfil. Tente novamente.");
         }
     }
 }

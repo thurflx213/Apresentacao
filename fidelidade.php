@@ -1,18 +1,31 @@
-<!DOCTYPE html>
+<?php
+$configFile = __DIR__ . "/backend/Config/settings.json";
+if (file_exists($configFile)) {
+    $config = json_decode(file_get_contents($configFile), true);
+    if (!empty($config["manutencao"])) {
+        if (!isset($_SESSION)) session_start();
+        if (($_SESSION["usuario_tipo"] ?? "") !== "admin") {
+            include __DIR__ . "/backend/Views/Templates/manutencao.php";
+            exit;
+        }
+    }
+}
+?><!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Sobre</title>
+  <title>Programa-de-Fidelidade</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="footer.css">
   <link rel="stylesheet" href="duvidas.css">
-  <link rel="stylesheet" href="sobre.css  ">
-  <link rel="stylesheet" href="politica.css">
+  <link rel="stylesheet" href="frete.css">
+  <link rel="stylesheet" href="fidelidade.css">
 </head>
 <body>
+    <div class="page-content">
     <header>
         <!-- Navbar personalizada -->
         <nav id="navbar" class="navbar d-flex align-items-center px-4 sticky-top">
@@ -26,14 +39,14 @@
       
           <!-- Centro: Logo -->
           <div class="navbar-center">
-            <a href="index.html">
+            <a href="index.php">
             <img src="img/icons/logo.png" alt="Logo COMP" class="logo" />
             </a>
           </div>
       
           <!-- Direita: Login e Carrinho -->
           <div class="navbar-end d-flex justify-content-end align-items-center">
-            <a href="login.html" class="icon-link"><i class="bi bi-person"></i> Login</a>
+            <a href="login.php" class="icon-link"><i class="bi bi-person"></i> Login</a>
             <a href="https://instagram.com" class="icon-button"><i class="bi bi-bag"></i> Carrinho</a>
           </div>
         </nav>
@@ -45,82 +58,64 @@
     </div>
     <div class="offcanvas-body">
       <ul class="list-unstyled">
-        <li><a class="text-white text-decoration-none d-block py-2" href="index.html">Início</a></li>
-        <li><a class="text-white text-decoration-none d-block py-2" href="produto.html">Produtos</a></li>
-        <li><a class="text-white text-decoration-none d-block py-2" href="sobre.html">Sobre</a></li>
+        <li><a class="text-white text-decoration-none d-block py-2" href="index.php">Início</a></li>
+        <li><a class="text-white text-decoration-none d-block py-2" href="produto.php">Produtos</a></li>
+        <li><a class="text-white text-decoration-none d-block py-2" href="sobre.php">Sobre</a></li>
         <li><a class="text-white text-decoration-none d-block py-2" href="#">Contato</a></li>
       </ul>
     </div>
         </header>
         <div class="sidebar">
             <ul>
-              <li><a href="index.html">Início</a></li>
-              <li><a href="sobre.html">Sobre a Koketsu</a></li>
-              <li><a href="duvidas.html">Dúvidas Frequentes</a></li>
-              <li><a href="Trocas.html">Trocas e Devoluções</a></li>
-              <li><a href="politica.html">Política de Privacidade</a></li>
-              <li><a href="frete.html">Frete e Entrega</a></li>
+              <li><a href="index.php">Início</a></li>
+              <li><a href="sobre.php">Sobre a Koketsu</a></li>
+              <li><a href="duvidas.php">Dúvidas Frequentes</a></li>
+              <li><a href="Trocas.php">Trocas e Devoluções</a></li>
+              <li><a href="politica.php">Política de Privacidade</a></li>
+              <li><a href="frete.php">Frete e Entrega</a></li>
               <li><a href="#">Minha Conta</a></li>
-              <li><a href="login.html">Carrinho</a></li>
-              <li><a href="fidelidade.html">Programa de Fidelidade</a></li>
+              <li><a href="login.php">Carrinho</a></li>
+              <li><a href="fidelidade.php">Programa de Fidelidade</a></li>
             </ul>
           </div>
-          
-    
-          <main class="conteudo">
-        <h1>Política de Privacidade</h1>
+        <main class="conteudo">
+        <h1>⭐ Programa de Fidelidade</h1>
 
         <section>
-            <h2>1. Coleta de Informações</h2>
-            <p>Coletamos dados pessoais como nome, e-mail, telefone e endereço, fornecidos pelo cliente durante o cadastro ou processo de compra. Também podemos coletar dados de navegação no site, como páginas visitadas e tempo de permanência, por meio de cookies.</p>
+            <h2>1. Como Funciona</h2>
+            <p>Nosso programa de fidelidade foi criado para recompensar nossos clientes mais fiéis. A cada compra realizada, você acumula pontos que podem ser trocados por descontos e benefícios exclusivos.</p>
         </section>
 
         <section>
-            <h2>2. Uso das Informações</h2>
+            <h2>2. Acúmulo de Pontos</h2>
             <ul>
-              <li>Processar pedidos e entregas;</li>
-              <li>Enviar comunicações sobre promoções e novidades (com consentimento);</li>
-              <li>Melhorar a experiência do usuário em nosso site;</li>
-              <li>Garantir segurança nas transações.</li>
+                <li>A cada R$ 1,00 gasto, você recebe <strong>1 ponto</strong> no programa;</li>
+                <li>Compras acima de R$ 500,00 recebem <strong>10% de pontos extras</strong>;</li>
+                <li>Pontos válidos por até 12 meses.</li>
             </ul>
         </section>
 
         <section>
-            <h2>3. Compartilhamento de Dados</h2>
-            <p>A Koketsu <strong>não compartilha, vende ou aluga</strong> seus dados pessoais com terceiros, exceto quando necessário para a entrega do pedido (como transportadoras ou meios de pagamento).</p>
-        </section>
-
-        <section>
-            <h2>4. Segurança das Informações</h2>
-            <p>Adotamos medidas de segurança técnicas e administrativas para proteger os dados contra acessos não autorizados, perdas ou alterações indevidas.</p>
-        </section>
-
-        <section>
-            <h2>5. Cookies e Tecnologias Semelhantes</h2>
-            <p>Utilizamos cookies para personalizar sua experiência e entender como nosso site está sendo utilizado. Você pode desativar os cookies a qualquer momento nas configurações do seu navegador.</p>
-        </section>
-
-        <section>
-            <h2>6. Direitos do Usuário</h2>
+            <h2>3. Benefícios</h2>
             <ul>
-              <li>Solicitar a correção ou exclusão de seus dados;</li>
-              <li>Cancelar o recebimento de e-mails promocionais;</li>
-              <li>Solicitar informações sobre o uso de seus dados pessoais.</li>
+                <li>Descontos exclusivos em produtos selecionados;</li>
+                <li>Acesso antecipado a lançamentos e promoções;</li>
+                <li>Brindes especiais em campanhas sazonais.</li>
             </ul>
         </section>
 
         <section>
-            <h2>7. Alterações na Política</h2>
-            <p>A Loja Koketsu se reserva o direito de atualizar esta política a qualquer momento. Mudanças importantes serão comunicadas através do site ou por e-mail.</p>
+            <h2>4. Como Resgatar</h2>
+            <p>Você pode acompanhar seu saldo de pontos acessando sua conta em nosso site. No checkout, escolha a opção de usar seus pontos para obter descontos imediatos.</p>
         </section>
 
         <section>
-            <h2>8. Contato</h2>
-            <p>Em caso de dúvidas, sugestões ou solicitações relacionadas à privacidade, entre em contato pelo e-mail: <a href="mailto:contato@koketsu.com.br">contato@koketsu.com.br</a></p>
+            <h2>5. Dúvidas e Suporte</h2>
+            <p>Se precisar de ajuda ou tiver dúvidas sobre o programa, entre em contato com nosso <a href="contato.php">atendimento</a>.</p>
         </section>
     </main>
-
-        
+          
+      
   <footer>
     <div class="container">
         <div class="coluna-footer">
@@ -135,22 +130,22 @@
         </div>
         <div class="coluna-footer">
             <h3 class="titulo">INSTITUCIONAL</h3>
-            <p><a href="sobre.html" class="hover-destaque">Sobre a Koketsu</a></p>
+            <p><a href="sobre.php" class="hover-destaque">Sobre a Koketsu</a></p>
         </div>
 
         <div class="coluna-footer">
             <h3 class="titulo">ATENDIMENTO AO CLIENTE</h3>
-            <a href="duvidas.html"><p>Dúvidas Frequentes</p></a>
-            <a href="Trocas.html"><P>Trocas e Devoluções</P></a>
-            <a href="politica.html"><P>Politica de Privacidade</P></a>
-            <a href="frete.html"><P>Frete e Entrega</P></a>
+            <a href="duvidas.php"><p>Dúvidas Frequentes</p></a>
+            <a href="Trocas.php"><P>Trocas e Devoluções</P></a>
+            <a href="politica.php"><P>Politica de Privacidade</P></a>
+            <a href="frete.php"><P>Frete e Entrega</P></a>
         </div>
 
         <div class="coluna-footer">
           <h3 class="titulo">MINHA CONTA</h3>
           <a href="#"><p>Minha Conta</p></a>
-          <a href="#"><p>Carrinho</p></a>
-          <a href="fidelidade.html"><p>Programa de Fidelidade</p></a>
+          <a href="carrinho.php"><p>Carrinho</p></a>
+          <a href="fidelidade.php"><p>Programa de Fidelidade</p></a>
           
 
         <h3 class="titulo fale-conosco">FALE CONOSCO</h3>

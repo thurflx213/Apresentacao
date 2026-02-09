@@ -1,6 +1,6 @@
 <div class="profile-page">
     <div class="profile-card">
-        <form action="/backend/cliente/atualizar/<?= $usuario['id_usuarios'] ?>" method="POST" enctype="multipart/form-data" class="profile-form">
+        <form action="/backend/cliente/perfil-atualizar/<?= $usuario['id_usuarios'] ?>" method="POST" enctype="multipart/form-data" class="profile-form">
             <div class="profile-header">
                 <h2><i class="fa fa-user-edit"></i> Editar Perfil</h2>
                 <a class="back-btn" href="/backend/cliente/dashboard"><i class="fa fa-arrow-left"></i> Voltar</a>

@@ -21,24 +21,25 @@ foreach ($pedidos as $p) {
         padding: 20px;
         width: 100%;
         box-sizing: border-box;
-        background-color: #0c0c0c;
+        background-color: var(--bg-main) !important;
         min-height: 100vh;
+        color: var(--text-main);
     }
 
     .page-title {
         font-size: 26px;
         font-weight: 800;
         margin-bottom: 5px;
-        color: #ffffff;
+        color: var(--text-main);
         text-transform: uppercase;
         letter-spacing: -1px;
     }
 
     .header-breadcrumb {
-        color: #888;
+        color: var(--text-muted);
         margin-bottom: 25px;
         padding-bottom: 10px;
-        border-bottom: 1px solid #222;
+        border-bottom: 1px solid var(--border-color);
     }
 
     /* --- DASHBOARD CARDS PREMIUM --- */
@@ -52,21 +53,26 @@ foreach ($pedidos as $p) {
     .stat-card {
         flex: 1;
         min-width: 220px;
-        background: #1a1a1a;
-        border: 1px solid #333;
-        border-radius: 15px;
-        padding: 20px;
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 24px;
         display: flex;
         align-items: center;
         justify-content: space-between;
         transition: 0.3s;
+        box-shadow: var(--shadow-sm);
     }
 
-    .stat-card:hover { border-color: #f2cc7d; transform: translateY(-5px); }
+    .stat-card:hover { 
+        border-color: var(--accent); 
+        transform: translateY(-5px);
+        box-shadow: var(--shadow-md);
+    }
 
     .stat-icon {
         font-size: 30px;
-        color: #f2cc7d;
+        color: var(--accent);
         background: rgba(242, 204, 125, 0.1);
         width: 55px;
         height: 55px;
@@ -76,8 +82,8 @@ foreach ($pedidos as $p) {
         border-radius: 12px;
     }
 
-    .stat-info h3 { margin: 0; font-size: 28px; color: #fff; font-weight: 800; }
-    .stat-info p { margin: 0; color: #666; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; font-weight: 700; }
+    .stat-info h3 { margin: 0; font-size: 28px; color: var(--text-main); font-weight: 800; }
+    .stat-info p { margin: 0; color: var(--text-muted); text-transform: uppercase; font-size: 11px; letter-spacing: 1px; font-weight: 700; }
 
     /* --- ÁREA DE AÇÕES (BOTÃO + PESQUISA) --- */
     .actions-bar {
@@ -93,7 +99,7 @@ foreach ($pedidos as $p) {
         display: inline-flex;
         align-items: center;
         gap: 10px;
-        background-color: #f2cc7d !important;
+        background-color: var(--accent) !important;
         color: #000 !important;
         padding: 14px 24px;
         border-radius: 10px;
@@ -108,7 +114,7 @@ foreach ($pedidos as $p) {
         white-space: nowrap;
     }
 
-    .btn-main-action:hover { background-color: #ffffff !important; transform: scale(1.02); }
+    .btn-main-action:hover { background-color: var(--text-main) !important; color: var(--bg-main) !important; transform: scale(1.02); }
 
     /* Estilo da Barra de Pesquisa */
     .search-container {
@@ -122,73 +128,78 @@ foreach ($pedidos as $p) {
         left: 15px;
         top: 50%;
         transform: translateY(-50%);
-        color: #f2cc7d;
+        color: var(--accent);
     }
 
     .search-input {
         width: 100%;
-        background: #1a1a1a;
-        border: 1px solid #333;
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
         padding: 13px 15px 13px 45px;
         border-radius: 10px;
-        color: #fff;
+        color: var(--text-main);
         font-size: 14px;
         transition: 0.3s;
         outline: none;
+        box-shadow: var(--shadow-sm);
     }
 
     .search-input:focus {
-        border-color: #f2cc7d;
-        background: #222;
-        box-shadow: 0 0 10px rgba(242, 204, 125, 0.1);
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(197, 160, 45, 0.1);
     }
 
     /* --- TABELA DE PEDIDOS --- */
     .order-table {
         width: 100%;
         border-collapse: separate;
-        border-spacing: 0 10px;
-        color: #ddd;
+        border-spacing: 0 12px;
+        color: var(--text-main);
     }
 
     .order-table thead th {
-        color: #ffffff !important;
+        color: var(--text-muted) !important;
         text-transform: uppercase;
-        font-size: 12px;
+        font-size: 11px;
         padding: 15px;
         letter-spacing: 1.5px;
         font-weight: 800;
     }
 
     .order-table tbody tr {
-        background: #161616;
-        transition: 0.2s;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        background: var(--bg-card);
+        transition: all 0.2s ease;
+        box-shadow: var(--shadow-sm);
         position: relative;
+        border: 1px solid var(--border-color);
     }
 
-    .order-table tbody tr:hover { background: #1f1f1f; }
+    .order-table tbody tr:hover { 
+        transform: scale(1.005);
+        box-shadow: var(--shadow-md);
+        border-color: var(--accent);
+    }
 
     .order-table td { padding: 18px 15px !important; border: none; vertical-align: middle; }
-    .order-table td:first-child { border-radius: 12px 0 0 12px; }
-    .order-table td:last-child { border-radius: 0 12px 12px 0; }
+    .order-table td:first-child { border-radius: 12px 0 0 12px; border-left: 1px solid var(--border-color); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); }
+    .order-table td:last-child { border-radius: 0 12px 12px 0; border-right: 1px solid var(--border-color); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); }
 
-    .id-column { font-family: monospace; color: #aaa !important; font-weight: bold; }
-    .client-column { font-weight: 700; color: #fff; font-size: 1.05em; }
-    .price-column { color: #f2cc7d; font-weight: 800; font-size: 1.1em; }
+    .id-column { font-family: monospace; color: var(--text-muted) !important; font-weight: bold; }
+    .client-column { font-weight: 700; color: var(--text-main); font-size: 1.05em; }
+    .price-column { color: var(--accent); font-weight: 800; font-size: 1.1em; }
 
-    .badge-status { padding: 6px 14px; border-radius: 8px; font-size: 10px; font-weight: 900; text-transform: uppercase; }
-    .badge-pago, .badge-concluido, .badge-enviado { background: #d4edda; color: #155724; }
-    .badge-pendente, .badge-processamento { background: #fff3cd; color: #856404; }
-    .badge-cancelado { background: #f8d7da; color: #721c24; }
+    .badge-status { padding: 6px 14px; border-radius: 20px; font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; }
+    .badge-pago, .badge-concluido, .badge-enviado { background: rgba(40, 167, 69, 0.1); color: #28a745; border: 1px solid rgba(40, 167, 69, 0.3); }
+    .badge-pendente, .badge-processamento { background: rgba(242, 204, 125, 0.1); color: var(--accent); border: 1px solid rgba(242, 204, 125, 0.3); }
+    .badge-cancelado { background: rgba(220, 53, 69, 0.1); color: #dc3545; border: 1px solid rgba(220, 53, 69, 0.3); }
 
     .btn-action-small { padding: 8px 14px; border-radius: 8px; font-size: 11px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; transition: 0.3s; margin: 0 2px; }
-    .btn-view { background: #222; color: #4dabf7; border: 1px solid #4dabf7; }
+    .btn-view { background: var(--bg-main); color: #4dabf7; border: 1px solid #4dabf7; }
     .btn-view:hover { background: #4dabf7; color: #000; }
-    .btn-edit { background: #222; color: #f2cc7d; border: 1px solid #f2cc7d; }
-    .btn-edit:hover { background: #f2cc7d; color: #000; }
-    .btn-delete { background: transparent; border: 1px solid #444; color: #999; }
-    .btn-delete:hover { border-color: #ff4444; color: #ff4444; }
+    .btn-edit { background: var(--bg-main); color: var(--accent); border: 1px solid var(--accent); }
+    .btn-edit:hover { background: var(--accent); color: #000; }
+    .btn-delete { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); }
+    .btn-delete:hover { border-color: #ff4444; color: #ff4444; background: rgba(255, 68, 68, 0.05); }
     .btn-activate { background: transparent; border: 1px solid #4caf50; color: #4caf50; }
     .btn-activate:hover { background: #4caf50; color: #fff; }
 
@@ -205,17 +216,18 @@ foreach ($pedidos as $p) {
         top: 0;
         bottom: 0;
         width: 4px;
-        background: #e63946;
+        background: #ff4444;
         border-radius: 12px 0 0 12px;
+        z-index: 2;
     }
 
     .tr-deleted .price-column {
         text-decoration: line-through;
-        color: #888 !important;
+        color: var(--text-muted) !important;
     }
 
     .badge-deleted {
-        background: #e63946;
+        background: #ff4444;
         color: #fff;
         padding: 2px 6px;
         border-radius: 4px;

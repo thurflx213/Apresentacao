@@ -80,6 +80,34 @@ class PublicApiController {
         exit;
     }
 
+    public function createProduto() {
+        header('Content-Type: application/json');
+        $data = json_decode(file_get_contents('php://input'), true);
+        if (empty($data)) {
+            http_response_code(400);
+            echo json_encode(['status' => 'error', 'message' => 'Dados inválidos']);
+            exit;
+        }
+
+        $id = $this->produtosModel->inserirProduto(
+            $data['nome_produtos'],
+            $data['descricao_produtos'] ?? '',
+            (float)$data['preco_produtos'],
+            (int)$data['estoque_produtos'],
+            (int)$data['id_categoria'],
+            $data['imagem_produtos'] ?? 'default.jpg'
+        );
+
+        if ($id) {
+            http_response_code(201);
+            echo json_encode(['status' => 'success', 'message' => 'Produto sincronizado com sucesso', 'id_produto' => $id]);
+        } else {
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'message' => 'Erro ao sincronizar produto']);
+        }
+        exit;
+    }
+
     // ==================== PEDIDOS ====================
     public function getPedidos() {
         $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
@@ -135,28 +163,49 @@ class PublicApiController {
 
     public function salvarPedido() {
         header('Content-Type: application/json');
-        $carrinho = json_decode(file_get_contents('php://input'), true);
-        if (empty($carrinho) || !is_array($carrinho)) {
-            echo json_encode([
-                'status' => 'error',
-                'message' => 'Nenhum item recebido no carrinho.'
-            ]);
+        $data = json_decode(file_get_contents('php://input'), true);
+        
+        if (empty($data)) {
+            http_response_code(400);
+            echo json_encode(['status' => 'error', 'message' => 'Dados inválidos']);
             exit;
         }
-        $novoPedidoId = $this->pedidosModel->inserirPedido($carrinho);
-        if ($novoPedidoId) {
+
+        $id_perfil = $data['id_perfil'] ?? null;
+        $data_pedido = $data['data_pedido'] ?? date('Y-m-d H:i:s');
+        $total_pedido = $data['total_pedido'] ?? 0;
+        $status_pedido = $data['status_pedido'] ?? 'pendente';
+        $itens = $data['itens'] ?? [];
+
+        if (!$id_perfil) {
+            http_response_code(400);
+            echo json_encode(['status' => 'error', 'message' => 'ID Perfil é obrigatório']);
+            exit;
+        }
+
+        $id_pedido = $this->pedidosModel->inserirPedido($id_perfil, $data_pedido, $total_pedido, $status_pedido);
+        
+        if ($id_pedido) {
+            if (!empty($itens) && is_array($itens)) {
+                $itensModel = new ItensPedidos($this->db);
+                foreach ($itens as $item) {
+                    $itensModel->inserirItemPedido(
+                        $id_pedido, 
+                        $item['id_produto'], 
+                        $item['quantidade'], 
+                        $item['preco_unitario']
+                    );
+                }
+            }
             http_response_code(201);
             echo json_encode([
-                'status' => 'success',
-                'message' => 'Pedido recebido com sucesso!',
-                'id_pedido' => $novoPedidoId
+                'status' => 'success', 
+                'message' => 'Pedido sincronizado com sucesso', 
+                'id_pedido' => $id_pedido
             ]);
         } else {
             http_response_code(500);
-            echo json_encode([
-                'status' => 'error',
-                'message' => 'Ocorreu um erro ao processar seu pedido. Tente novamente.'
-            ]);
+            echo json_encode(['status' => 'error', 'message' => 'Erro ao sincronizar pedido']);
         }
         exit;
     }
@@ -225,8 +274,23 @@ class PublicApiController {
             echo json_encode(['status' => 'error', 'message' => 'Dados inválidos']);
             exit;
         }
-        http_response_code(201);
-        echo json_encode(['status' => 'success', 'message' => 'Usuário criado com sucesso']);
+
+        $usuarioModel = new Usuario($this->db);
+        $id = $usuarioModel->inserirUsuario(
+            $data['nome_usuarios'],
+            $data['email_usuarios'],
+            $data['senha_usuarios'],
+            $data['nivel_acesso'] ?? 'cliente',
+            $data['foto_usuarios'] ?? null
+        );
+
+        if ($id) {
+            http_response_code(201);
+            echo json_encode(['status' => 'success', 'message' => 'Usuário/Cliente sincronizado com sucesso', 'id_usuarios' => $id]);
+        } else {
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'message' => 'Erro ao sincronizar usuário']);
+        }
         exit;
     }
 
@@ -810,22 +874,28 @@ class PublicApiController {
             echo json_encode(['status' => 'error', 'message' => 'Dados inválidos']);
             exit;
         }
-        http_response_code(201);
-        echo json_encode(['status' => 'success', 'message' => 'Movimentação de estoque criada com sucesso']);
+
+        $estoqueModel = new EstoqueMovimentacao($this->db);
+        $id = $estoqueModel->inserirMovimentacao(
+            $data['id_produto'],
+            $data['tipo_estoque_movimentacao'] ?? 'entrada',
+            $data['quantidade_estoque_movimentacao'],
+            $data['descricao_estoque_movimentacao'] ?? null
+        );
+
+        if ($id) {
+            http_response_code(201);
+            echo json_encode(['status' => 'success', 'message' => 'Movimentação de estoque sincronizada', 'id_estoque_movimentacao' => $id]);
+        } else {
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'message' => 'Erro ao sincronizar estoque']);
+        }
         exit;
     }
 
-    // ==================== CREATE GENÉRICO PARA PRODUTOS ====================
-    public function createProduto() {
-        header('Content-Type: application/json');
-        $data = json_decode(file_get_contents('php://input'), true);
-        if (empty($data)) {
-            http_response_code(400);
-            echo json_encode(['status' => 'error', 'message' => 'Dados inválidos']);
-            exit;
-        }
-        http_response_code(201);
-        echo json_encode(['status' => 'success', 'message' => 'Produto criado com sucesso']);
+
+    public function viewManutencao() {
+        include __DIR__ . '/../Views/Templates/manutencao.php';
         exit;
     }
 }

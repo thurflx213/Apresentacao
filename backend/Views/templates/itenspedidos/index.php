@@ -2,33 +2,36 @@
     /* Estilos Customizados Koketsu - Itens de Pedidos */
     .koketsu-header-section {
         padding: 20px 8px;
-        color: white;
+        color: var(--text-main);
     }
     
     .koketsu-table-itens {
         border-collapse: separate;
-        border-spacing: 0 10px; /* Efeito de cards separados */
-        color: #ddd;
+        border-spacing: 0 12px; /* Efeito de cards separados */
+        color: var(--text-main);
         width: 100%;
     }
     
     .koketsu-table-itens thead tr {
         background-color: transparent !important;
-        color: #888;
+        color: var(--text-muted);
         text-transform: uppercase;
         font-size: 11px;
         letter-spacing: 1.5px;
+        font-weight: 800;
     }
     
     .koketsu-table-itens tbody tr {
-        background-color: #1a1a1a !important;
-        transition: transform 0.2s, background-color 0.2s;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        background-color: var(--bg-card) !important;
+        transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--border-color);
     }
     
     .koketsu-table-itens tbody tr:hover {
-        background-color: #222 !important;
         transform: scale(1.005);
+        box-shadow: var(--shadow-md);
+        border-color: var(--accent);
     }
     
     .koketsu-table-itens td {
@@ -38,35 +41,42 @@
     }
     
     /* Arredondar pontas dos "cards" da tabela */
-    .koketsu-table-itens td:first-child { border-radius: 12px 0 0 12px; }
-    .koketsu-table-itens td:last-child { border-radius: 0 12px 12px 0; }
+    .koketsu-table-itens td:first-child { border-radius: 12px 0 0 12px; border-left: 1px solid var(--border-color); }
+    .koketsu-table-itens td:last-child { border-radius: 0 12px 12px 0; border-right: 1px solid var(--border-color); }
 
     .id-badge {
         font-family: monospace;
-        color: #666;
+        color: var(--text-muted);
         font-size: 1.1em;
+        font-weight: bold;
     }
     
     .link-pedido {
-        color: #5bc0de;
+        color: var(--accent);
         text-decoration: none;
-        font-weight: bold;
-        border-bottom: 1px dashed #5bc0de;
+        font-weight: 700;
+        border-bottom: 1px dashed var(--accent);
+        transition: 0.2s;
+    }
+
+    .link-pedido:hover {
+        color: var(--text-main);
+        border-bottom-style: solid;
     }
 
     .subtotal-gold {
-        color: #f2cc7d;
+        color: var(--accent);
         font-weight: 800;
         font-size: 1.15em;
     }
 
     .btn-action-itens {
-        background-color: #282828;
-        color: #fff;
-        border: none;
+        background-color: var(--bg-main);
+        color: var(--text-main);
+        border: 1px solid var(--border-color);
         margin: 0 3px;
-        width: 35px;
-        height: 35px;
+        width: 38px;
+        height: 38px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -74,19 +84,29 @@
     }
     
     .btn-action-itens:hover { 
-        background-color: #f2cc7d !important; 
+        background-color: var(--accent) !important; 
         color: #000 !important; 
+        border-color: var(--accent);
         transform: translateY(-2px);
+        box-shadow: var(--shadow-sm);
     }
 
     .btn-novo-item {
-        background: #f2cc7d;
-        color: #000;
+        background: var(--accent) !important;
+        color: #000 !important;
         font-weight: 900;
         text-transform: uppercase;
         letter-spacing: 1px;
         padding: 12px 24px;
         transition: 0.3s;
+        border-radius: 10px !important;
+        box-shadow: 0 4px 15px rgba(197, 160, 45, 0.2);
+    }
+
+    .btn-novo-item:hover {
+        background: var(--text-main) !important;
+        color: var(--bg-main) !important;
+        transform: translateY(-2px);
     }
 </style>
 
@@ -131,12 +151,12 @@
                         PED-<?= htmlspecialchars($itempedido['id_pedido']) ?>
                     </a>
                 </td>
-                <td style="font-weight: 600; color: #fff;">
-                    <i class="fa fa-tag" style="font-size: 12px; color: #444;"></i> 
+                <td style="font-weight: 600; color: var(--text-main);">
+                    <i class="fa fa-tag" style="font-size: 12px; color: var(--text-muted);"></i> 
                     <?= htmlspecialchars($itempedido['nome_produtos'] ?? 'Produto ID ' . $itempedido['id_produto']) ?>
                 </td>
-                <td style="font-weight: bold;"><?= htmlspecialchars($itempedido['quantidade']) ?>x</td>
-                <td style="color: #888;">R$ <?= number_format($itempedido['preco_unitario'], 2, ',', '.') ?></td>
+                <td style="font-weight: bold; color: var(--text-main);"><?= htmlspecialchars($itempedido['quantidade']) ?>x</td>
+                <td style="color: var(--text-muted);">R$ <?= number_format($itempedido['preco_unitario'], 2, ',', '.') ?></td>
                 <td style="text-align: right;" class="subtotal-gold">
                     R$ <?= number_format($subtotal, 2, ',', '.') ?>
                 </td>
@@ -161,12 +181,12 @@
     </table>
     
     <div style="margin-top: 30px; display: flex; justify-content: space-between; align-items: center; padding-bottom: 40px;">
-        <div class="w3-bar" style="background: #1a1a1a; border-radius: 12px; border: 1px solid #333;">
+        <div class="w3-bar" style="background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);">
           <?php if ($paginacao['pagina_atual'] > 1): ?>
              <a href="/backend/itenspedidos/listar/<?= $paginacao['pagina_atual'] - 1 ?>" class="w3-button w3-text-white w3-hover-amber">« Voltar</a>
           <?php endif; ?>
           
-          <span class="w3-button w3-text-amber" style="font-weight: bold; pointer-events: none;">
+          <span class="w3-button" style="font-weight: bold; pointer-events: none; color: var(--accent);">
              <?= $paginacao['pagina_atual'] ?> / <?= $paginacao['ultima_pagina'] ?>
           </span>
           
@@ -175,16 +195,16 @@
           <?php endif; ?>
         </div>
         
-        <span style="color: #444; font-size: 11px; text-transform: uppercase; font-weight: bold; letter-spacing: 1px;">
+        <span style="color: var(--text-muted); font-size: 11px; text-transform: uppercase; font-weight: bold; letter-spacing: 1px;">
             Sessão Administrativa Koketsu
         </span>
     </div>
     
     <?php else: ?>
-        <div class="w3-panel w3-round-large" style="background: #1a1a1a; border: 1px dashed #444; padding: 40px; text-align: center;">
-            <i class="fa fa-search w3-text-grey" style="font-size: 40px; margin-bottom: 15px;"></i>
-            <p style="color: #888; font-weight: bold;">Nenhum item foi encontrado para esta lista.</p>
-            <a href="/backend/itenspedidos/criar" class="w3-text-amber">Clique aqui para adicionar o primeiro item</a>
+        <div class="w3-panel w3-round-large" style="background: var(--bg-card); border: 1px dashed var(--border-color); padding: 40px; text-align: center;">
+            <i class="fa fa-search w3-text-grey" style="font-size: 40px; margin-bottom: 15px; color: var(--text-muted) !important;"></i>
+            <p style="color: var(--text-muted); font-weight: bold;">Nenhum item foi encontrado para esta lista.</p>
+            <a href="/backend/itenspedidos/criar" style="color: var(--accent); font-weight: 700;">Clique aqui para adicionar o primeiro item</a>
         </div>
     <?php endif; ?>
 </div>

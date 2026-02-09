@@ -31,46 +31,50 @@
     display: flex;
     justify-content: center;
     padding: 40px;
+    background-color: var(--bg-main) !important;
+    min-height: 100vh;
 }
 
 .dashboard-card {
-    background: #111;
+    background: var(--bg-card);
     padding: 40px;
-    border-radius: 16px;
+    border-radius: 20px;
     width: 80%;
     max-width: 900px;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-color);
 }
 
 .dashboard-card .title {
     font-size: 26px;
     margin-bottom: 30px;
-    color: #f2f2f2;
+    color: var(--accent);
+    font-weight: 800;
 }
 
 .dashboard-card .welcome {
     font-size: 32px;
     font-weight: bold;
-    color: #fff;
+    color: var(--text-main);
     margin: 10px 0;
 }
 
 .dashboard-card .user-type {
     font-size: 22px;
-    color: #ddd;
+    color: var(--text-muted);
     margin-bottom: 15px;
 }
 
 .dashboard-card .user-type span {
-    color: #00d85a; /* verde bonito */
-    font-weight: bold;
+    color: #28a745; 
+    font-weight: 800;
+    text-transform: uppercase;
 }
 
 .dashboard-card .subtitle {
-    color: #bbb;
+    color: var(--text-muted);
     font-size: 16px;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
 }
 
 .action-buttons {
@@ -82,13 +86,12 @@
 .action-btn {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    padding: 14px 28px;
-    border-radius: 8px;
+    gap: 12px;
+    padding: 16px 32px;
+    border-radius: 12px;
     text-decoration: none;
     font-weight: bold;
     transition: all 0.3s ease;
-    border: 2px solid transparent;
 }
 
 .action-btn i {
@@ -100,25 +103,29 @@
 }
 
 .action-btn.relatorios {
-    background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-    color: #1a1a1a;
-    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+    background: var(--accent);
+    color: #000;
+    box-shadow: 0 4px 15px rgba(197, 160, 45, 0.2);
 }
 
 .action-btn.relatorios:hover {
+    background: var(--text-main);
+    color: var(--bg-main);
     transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+    box-shadow: var(--shadow-md);
 }
 
 .action-btn.logout {
-    background: linear-gradient(135deg, #e63946 0%, #f44336 100%);
-    color: #fff;
-    box-shadow: 0 4px 15px rgba(230, 57, 70, 0.3);
+    background: rgba(230, 57, 70, 0.12);
+    color: #e63946;
+    border: 1px solid rgba(230, 57, 70, 0.3);
 }
 
 .action-btn.logout:hover {
+    background: #e63946;
+    color: #fff;
     transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(230, 57, 70, 0.4);
+    box-shadow: 0 6px 20px rgba(230, 57, 70, 0.2);
 }
 
 .action-btn:active {

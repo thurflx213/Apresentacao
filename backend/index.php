@@ -13,6 +13,35 @@ if (!isset($_SESSION)) {
 use Bramus\Router\Router;     
 $router = new Router();
 
+// --- INÍCIO MODO MANUTENÇÃO GLOBAL ---
+$configFile = __DIR__ . '/Config/settings.json';
+if (file_exists($configFile)) {
+    $config = json_decode(file_get_contents($configFile), true);
+    if (!empty($config['manutencao'])) {
+        $uri = $_SERVER['REQUEST_URI'];
+        $isLoggedIn = isset($_SESSION['usuario_id']);
+        $isAdmin = ($isLoggedIn && ($_SESSION['usuario_tipo'] ?? '') === 'admin');
+        
+        // Rotas permitidas mesmo em manutenção:
+        // 1. Qualquer rota que contenha 'login' ou 'auth'
+        // 2. A rota de toggle de manutenção
+        // 3. Qualquer rota se o usuário for ADMIN
+        $isSafeRoute = (
+            strpos($uri, 'login') !== false || 
+            strpos($uri, 'auth') !== false || 
+            strpos($uri, 'manutencao') !== false ||
+            strpos($uri, 'admin') !== false || /* Permite acesso a qualquer rota que contenha 'admin' */
+            $isAdmin
+        );
+
+        if (!$isSafeRoute) {
+            include __DIR__ . '/Views/Templates/manutencao.php';
+            exit;
+        }
+    }
+}
+// --- FIM MODO MANUTENÇÃO GLOBAL ---
+
 // Sanitização Global de $_POST e $_GET
 array_walk_recursive($_POST, function(&$item) {
     if (is_string($item)) {
