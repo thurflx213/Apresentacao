@@ -5,6 +5,8 @@ use App\Koketsu\Models\Avaliacao;
 use App\Koketsu\Database\Database;
 use App\Koketsu\Core\View;
 use App\Koketsu\Core\Redirect;
+use App\Koketsu\Models\Produtos;
+use App\Koketsu\Models\Usuario;
 
 class AvaliacaoController {
     public $avaliacao;
@@ -20,7 +22,16 @@ class AvaliacaoController {
     }
 
     public function viewCriarAvaliacoes() {
-        View::render("avaliacao/create");
+        $produtosModel = new Produtos($this->db);
+        $usuariosModel = new Usuario($this->db);
+        
+        $produtos = $produtosModel->buscarProdutosAtivos();
+        $usuarios = $usuariosModel->buscarUsuarios();
+        
+        View::render("avaliacao/create", [
+            "produtos" => $produtos,
+            "usuarios" => $usuarios
+        ]);
     }
 
     public function viewListarAvaliacoes() {
@@ -29,14 +40,21 @@ class AvaliacaoController {
     }
 
     public function viewEditarAvaliacoes($id) {
-        // Warning: Model doesn't have buscarPorId, using generic search or skipping
-        // Assuming search needs implementation or use existent specific
-        // For now, render view
-        View::render("avaliacao/edit", ["id" => $id]);
+        $avaliacao = $this->avaliacao->buscarPorId($id);
+        if (!$avaliacao) {
+            Redirect::redirecionarComMensagem("/backend/avaliacao/listar", "error", "Avaliação não encontrada.");
+            return;
+        }
+        View::render("avaliacao/edit", ["avaliacao" => $avaliacao]);
     }
 
     public function viewExcluirAvaliacoes($id) {
-        View::render("avaliacao/delete", ["id" => $id]);
+        $avaliacao = $this->avaliacao->buscarPorId($id);
+        if (!$avaliacao) {
+            Redirect::redirecionarComMensagem("/backend/avaliacao/listar", "error", "Avaliação não encontrada.");
+            return;
+        }
+        View::render("avaliacao/delete", ["avaliacao" => $avaliacao]);
     }
 
     public function salvarAvaliacao() {

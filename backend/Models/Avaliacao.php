@@ -1,5 +1,5 @@
 <?php
-namespace App\backend\models;
+namespace App\Koketsu\Models;
 use PDO;
 class Avaliacao {
     private $id_avaliacoes;
@@ -17,12 +17,29 @@ class Avaliacao {
         $this->db = $db;
     }
 
-    // Buscar todas as avaliações (não excluídas)
+    // Buscar todas as avaliações (não excluídas) com nomes de produtos e usuários
     public function buscarAvaliacoes() {
-        $sql = "SELECT * FROM tbl_avaliacoes WHERE excluido_em IS NULL";
+        $sql = "SELECT a.*, p.nome_produtos as produto_nome, u.nome_usuarios as cliente_nome 
+                FROM tbl_avaliacoes a
+                LEFT JOIN tbl_produtos p ON a.id_produto = p.id_produto
+                LEFT JOIN tbl_usuarios u ON a.id_cliente = u.id_usuarios
+                WHERE a.excluido_em IS NULL
+                ORDER BY a.data_avaliacao_avaliacoes DESC";
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function buscarPorId($id) {
+        $sql = "SELECT a.*, p.nome_produtos as produto_nome, u.nome_usuarios as cliente_nome 
+                FROM tbl_avaliacoes a
+                LEFT JOIN tbl_produtos p ON a.id_produto = p.id_produto
+                LEFT JOIN tbl_usuarios u ON a.id_cliente = u.id_usuarios
+                WHERE a.id_avaliacoes = :id AND a.excluido_em IS NULL";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     // Buscar avaliações de um produto específico
