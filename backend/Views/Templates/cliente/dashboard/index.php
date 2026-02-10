@@ -1,110 +1,105 @@
-<?php
-// Funções auxiliares para status de pedido
-function getStatusClass($status) {
-    switch(strtolower($status)) {
-        case 'pago': case 'concluido': return 'status-success';
-        case 'pendente': return 'status-warning';
-        case 'cancelado': return 'status-danger';
-        case 'enviado': return 'status-info';
-        default: return 'status-muted';
-    }
-}
-?>
 
-<div class="client-dashboard">
-    <!-- Header com Efeito Glass -->
-    <header class="dash-header-glass">
-        <div class="user-info">
-            <div class="welcome-text">
-                <h2>👋 Bem-vindo, <span class="accent-text"><?= htmlspecialchars($nomeUsuario ?? 'Cliente') ?></span></h2>
-                <p>Aqui está o resumo da sua conta hoje.</p>
+<div class="client-dashboard-luxury">
+    <header class="luxury-header">
+        <div class="user-profile-section">
+            <div class="welcome-box">
+                <h2>BEM-VINDO, <span class="gold-text"><?= htmlspecialchars($nomeUsuario ?? 'CLIENTE') ?></span></h2>
+                <p>Membro exclusivo Koketsu Grife</p>
             </div>
         </div>
-        <div class="quick-stats">
-            <div class="stat-item">
-                <span class="stat-value"><?= $totalPedidos ?? 0 ?></span>
-                <span class="stat-label">Pedidos Realizados</span>
+        
+        <div class="header-stats">
+            <div class="mini-stat">
+                <span class="v-label">PEDIDOS</span>
+                <span class="v-value"><?= $totalPedidos ?? 0 ?></span>
             </div>
-            <div class="stat-divider"></div>
-            <div class="stat-item">
-                <span class="stat-value"><i class="fa fa-star text-yellow"></i></span>
-                <span class="stat-label">Cliente VIP</span>
+            <div class="v-divider"></div>
+            <div class="mini-stat">
+                <span class="v-label">STATUS</span>
+                <span class="v-value gold-text"><i class="fa fa-crown"></i> VIP</span>
             </div>
         </div>
     </header>
 
-    <!-- Grid de Ações Principais -->
-    <section class="action-grid">
-        <a href="/backend/cliente/meu-perfil/<?= htmlspecialchars($usuarioId ?? '0') ?>" class="glass-card action-card">
-            <div class="card-glow"></div>
-            <div class="icon-box purple"><i class="fa fa-user-circle"></i></div>
-            <div class="card-content">
+    <section class="luxury-grid">
+        <a href="/backend/cliente/meu-perfil/<?= htmlspecialchars($usuarioId ?? '0') ?>" class="k-card">
+            <div class="k-icon"><i class="fa fa-user"></i></div>
+            <div class="k-info">
                 <h3>Meu Perfil</h3>
-                <p>Gerencie seus dados e foto</p>
+                <p>Dados e Segurança</p>
             </div>
-            <i class="fa fa-chevron-right arrow"></i>
+            <i class="fa fa-arrow-right k-arrow"></i>
         </a>
 
-        <a href="/backend/cliente/pedidos" class="glass-card action-card">
-            <div class="card-glow"></div>
-            <div class="icon-box gold"><i class="fa fa-shopping-bag"></i></div>
-            <div class="card-content">
+        <a href="/backend/cliente/pedidos" class="k-card">
+            <div class="k-icon"><i class="fa fa-shopping-bag"></i></div>
+            <div class="k-info">
                 <h3>Meus Pedidos</h3>
-                <p>Acompanhe suas compras</p>
+                <p>Histórico de Compras</p>
             </div>
-            <i class="fa fa-chevron-right arrow"></i>
+            <i class="fa fa-arrow-right k-arrow"></i>
         </a>
 
-        <a href="/backend/configuracoes" class="glass-card action-card">
-            <div class="card-glow"></div>
-            <div class="icon-box blue"><i class="fa fa-sliders"></i></div>
-            <div class="card-content">
-                <h3>Configurações</h3>
-                <p>Preferências da conta</p>
+        <a href="/backend/configuracoes" class="k-card">
+            <div class="k-icon"><i class="fa fa-cog"></i></div>
+            <div class="k-info">
+                <h3>Preferências</h3>
+                <p>Ajustes da Conta</p>
             </div>
-            <i class="fa fa-chevron-right arrow"></i>
+            <i class="fa fa-arrow-right k-arrow"></i>
         </a>
     </section>
 
-    <!-- Pedidos Recentes & Atalhos -->
-    <div class="dash-row">
-        <section class="glass-card recent-orders-col">
-            <div class="section-header">
-                <h3><i class="fa fa-history"></i> Compras Recentes</h3>
-                <a href="/backend/cliente/pedidos" class="view-all">Ver todos</a>
+    <div class="main-content-row">
+        <div class="content-box recent-orders">
+            <div class="box-header">
+                <h3><i class="fa fa-list-ul gold-text"></i> ÚLTIMAS AQUISIÇÕES</h3>
+                <a href="/backend/cliente/pedidos" class="gold-link">VER TUDO</a>
             </div>
-            
-            <div class="orders-list">
+
+            <div class="table-container">
                 <?php if (empty($pedidosRecentes)): ?>
-                    <div class="empty-state">
+                    <div class="k-empty">
                         <i class="fa fa-shopping-cart"></i>
-                        <p>Você ainda não realizou nenhum pedido.</p>
-                        <a href="/" class="shop-now">Ir para a Loja</a>
+                        <p>Nenhum pedido encontrado no seu histórico.</p>
+                        <a href="/" class="btn-gold-sm">EXPLORAR LOJA</a>
                     </div>
                 <?php else: ?>
-                    <table class="modern-table">
+                    <table class="k-table">
                         <thead>
                             <tr>
-                                <th>Pedido</th>
-                                <th>Data</th>
-                                <th>Total</th>
-                                <th>Status</th>
+                                <th>REF</th>
+                                <th>DATA</th>
+                                <th>VALOR</th>
+                                <th>STATUS</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
+                            <?php 
+                            if (!function_exists('getStatusClass')) {
+                                function getStatusClass($status) {
+                                    switch (strtolower($status)) {
+                                        case 'concluido': case 'pago': return 'status-success';
+                                        case 'pendente': return 'status-warning';
+                                        case 'cancelado': return 'status-danger';
+                                        default: return 'status-info';
+                                    }
+                                }
+                            }
+                            ?>
                             <?php foreach ($pedidosRecentes as $pedido): ?>
                             <tr>
-                                <td>#<?= $pedido['id_pedido'] ?></td>
+                                <td class="gold-text">#<?= $pedido['id_pedido'] ?></td>
                                 <td><?= date('d/m/Y', strtotime($pedido['data_pedido'])) ?></td>
-                                <td class="price">R$ <?= number_format($pedido['total_pedido'], 2, ',', '.') ?></td>
+                                <td class="bold">R$ <?= number_format($pedido['total_pedido'], 2, ',', '.') ?></td>
                                 <td>
-                                    <span class="status-badge <?= getStatusClass($pedido['status_pedido']) ?>">
-                                        <?= ucfirst($pedido['status_pedido']) ?>
+                                    <span class="k-badge <?= getStatusClass($pedido['status_pedido']) ?>">
+                                        <?= strtoupper($pedido['status_pedido']) ?>
                                     </span>
                                 </td>
                                 <td>
-                                    <a href="/backend/cliente/pedidos/detalhes/<?= $pedido['id_pedido'] ?>" class="btn-detail icon-only" title="Ver Detalhes">
+                                    <a href="/backend/cliente/pedidos/detalhes/<?= $pedido['id_pedido'] ?>" class="btn-eye">
                                         <i class="fa fa-eye"></i>
                                     </a>
                                 </td>
@@ -114,166 +109,191 @@ function getStatusClass($status) {
                     </table>
                 <?php endif; ?>
             </div>
-        </section>
+        </div>
 
-        <section class="glass-card support-col">
-            <h3><i class="fa fa-headset"></i> Precisa de ajuda?</h3>
-            <p>Nossa equipe está pronta para te atender.</p>
-            <div class="support-actions">
-                <a href="#" class="support-btn"><i class="fa fa-whatsapp"></i> WhatsApp</a>
-                <a href="#" class="support-btn"><i class="fa fa-envelope"></i> Email</a>
+        <div class="content-box support-box">
+            <h3>CONCEIRGE KOKETSU</h3>
+            <p>Atendimento prioritário para membros.</p>
+            <div class="support-links">
+                <a href="#" class="s-link"><i class="fa fa-whatsapp"></i> ATENDIMENTO VIA WHATSAPP</a>
+                <a href="#" class="s-link"><i class="fa fa-envelope"></i> SUPORTE VIA E-MAIL</a>
             </div>
-        </section>
+        </div>
     </div>
 </div>
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Montserrat:wght@300;400;600&display=swap');
 
     :root {
-        --accent: #ffd700;
-        --accent-glow: rgba(255, 215, 0, 0.2);
-        --text-muted: #a0a0a5;
-        --text-main: #fff; /* Added text-main variable */
-        --border-color: rgba(255,255,255,0.08); /* Added border-color variable */
+        --k-gold: #f2cc7d;
+        --k-gold-dark: #b8860b;
+        /* Using variables linked to global theme */
+        --bg-body-custom: var(--bg-main);
+        --bg-card-custom: var(--bg-card);
+        --text-color-custom: var(--text-main);
+        --border-custom: var(--border-color);
+        --muted-custom: var(--text-muted);
     }
 
-    /* Glass Header */
-    .dash-header-glass {
-        background: var(--glass-bg);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid var(--glass-border);
+    .client-dashboard-luxury {
+        font-family: 'Montserrat', sans-serif;
+        color: var(--text-color-custom);
+        padding: 20px;
+        background: var(--bg-body-custom);
+    }
+
+    /* Header */
+    .luxury-header {
+        background: var(--bg-card-custom);
+        border: 1px solid var(--border-custom);
         border-radius: 20px;
-        padding: 30px;
+        padding: 40px;
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 30px;
-        box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        box-shadow: var(--shadow-md);
     }
 
-    .accent-text { color: var(--accent); font-weight: 700; }
-    .dash-header-glass h2 { margin: 0; font-size: 26px; color: var(--text-main); }
-    .dash-header-glass p { margin: 5px 0 0; color: var(--text-muted); }
-
-    .quick-stats { display: flex; align-items: center; gap: 30px; }
-    .stat-item { text-align: center; }
-    .stat-value { display: block; font-size: 22px; font-weight: 700; color: var(--text-main); }
-    .stat-label { font-size: 13px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
-    .stat-divider { width: 1px; height: 40px; background: var(--border-color); }
-
-    .glass-card {
-        background: var(--glass-bg);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        border: 1px solid var(--glass-border);
-        border-radius: 18px;
-        padding: 24px;
-        position: relative;
-        overflow: hidden;
-        transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    .welcome-box h2 {
+        font-family: 'Oswald', sans-serif;
+        font-size: 2rem;
+        letter-spacing: 2px;
+        margin: 0;
+        color: var(--text-color-custom);
     }
 
-    .action-card {
+    .welcome-box p {
+        color: var(--muted-custom);
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        font-size: 0.75rem;
+        margin-top: 5px;
+    }
+
+    .header-stats { display: flex; gap: 40px; }
+    .mini-stat { text-align: right; }
+    .v-label { display: block; font-size: 0.65rem; color: var(--muted-custom); letter-spacing: 2px; }
+    .v-value { font-size: 1.5rem; font-weight: 700; font-family: 'Oswald', sans-serif; color: var(--text-color-custom); }
+    .v-divider { width: 1px; height: 45px; background: var(--border-custom); }
+
+    /* Grid de Cards */
+    .luxury-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .k-card {
+        background: var(--bg-card-custom);
+        border: 1px solid var(--border-custom);
+        padding: 30px;
+        border-radius: 15px;
         text-decoration: none;
-        color: #fff;
+        color: var(--text-color-custom);
         display: flex;
         align-items: center;
-        gap: 15px;
+        gap: 20px;
+        transition: 0.4s;
     }
 
-    .action-card:hover {
-        transform: translateY(-8px);
-        border-color: var(--accent);
-        box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    .k-card:hover {
+        transform: translateY(-5px);
+        background: var(--bg-card-custom);
+        border-color: var(--k-gold);
+        box-shadow: 0 10px 30px rgba(242, 204, 125, 0.1);
     }
 
-    .card-glow {
-        position: absolute;
-        width: 150px;
-        height: 150px;
-        background: var(--accent-glow);
-        filter: blur(60px);
-        border-radius: 50%;
-        top: -50px;
-        right: -50px;
-        opacity: 0;
-        transition: 0.3s;
-    }
-    .action-card:hover .card-glow { opacity: 1; }
-
-    .icon-box {
-        width: 54px;
-        height: 54px;
-        border-radius: 14px;
+    .k-icon {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, var(--k-gold), var(--k-gold-dark));
+        color: #000;
+        border-radius: 10px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 24px;
-        flex-shrink: 0;
+        font-size: 1.2rem;
     }
-    .icon-box.purple { background: linear-gradient(135deg, #6e45e2, #88d3ce); }
-    .icon-box.gold { background: linear-gradient(135deg, #fce38a, #f38181); }
-    .icon-box.blue { background: linear-gradient(135deg, #4facfe, #00f2fe); }
 
-    .card-content h3 { margin: 0; font-size: 18px; }
-    .card-content p { margin: 4px 0 0; font-size: 13px; color: var(--text-muted); }
-    .arrow { margin-left: auto; color: rgba(255,255,255,0.2); transition: 0.3s; }
-    .action-card:hover .arrow { color: var(--accent); transform: translateX(5px); }
+    .k-info h3 { font-family: 'Oswald', sans-serif; margin: 0; font-size: 1.1rem; letter-spacing: 1px; color: var(--text-color-custom); }
+    .k-info p { margin: 0; font-size: 0.8rem; color: var(--muted-custom); }
+    .k-arrow { margin-left: auto; opacity: 0.2; transition: 0.3s; color: var(--text-color-custom); }
+    .k-card:hover .k-arrow { opacity: 1; color: var(--k-gold); transform: translateX(5px); }
 
-    /* Rows */
-    .dash-row { display: flex; gap: 20px; }
-    .recent-orders-col { flex: 2; }
-    .support-col { flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; }
-
-    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-    .section-header h3 { margin: 0; font-size: 18px; color: var(--accent); }
-    .view-all { font-size: 13px; color: var(--text-muted); text-decoration: none; }
-    .view-all:hover { color: #fff; }
-
-    /* Table */
-    .modern-table { width: 100%; border-collapse: collapse; }
-    .modern-table th { text-align: left; padding: 12px; font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid var(--border-color); }
-    .modern-table td { padding: 16px 12px; border-bottom: 1px solid var(--border-color); font-size: 14px; color: var(--text-main); }
-    .price { font-weight: 700; color: var(--text-main); }
-
-    /* Badges */
-    .status-badge {
-        padding: 6px 14px;
-        border-radius: 20px;
-        font-size: 10px;
-        font-weight: 800;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
+    /* Main Row */
+    .main-content-row { display: flex; gap: 20px; }
+    .content-box {
+        background: var(--bg-card-custom);
+        border: 1px solid var(--border-custom);
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: var(--shadow-sm);
     }
-    .status-success { background: rgba(39, 174, 96, 0.12); color: #2ecc71; border: 1px solid rgba(39, 174, 96, 0.2); }
-    .status-warning { background: rgba(243, 156, 18, 0.12); color: #f1c40f; border: 1px solid rgba(243, 156, 18, 0.2); }
-    .status-danger { background: rgba(231, 76, 60, 0.12); color: #e74c3c; border: 1px solid rgba(231, 76, 60, 0.2); }
-    .status-info { background: rgba(52, 152, 219, 0.12); color: #3498db; border: 1px solid rgba(52, 152, 219, 0.2); }
+    .recent-orders { flex: 2; }
+    .support-box { flex: 1; text-align: center; }
 
-    .btn-detail { width: 32px; height: 32px; border-radius: 8px; background: var(--border-color); display: flex; align-items: center; justify-content: center; color: var(--text-muted); text-decoration: none; transition: 0.3s; }
-    .btn-detail:hover { background: var(--accent); color: #000; }
+    .box-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+    .box-header h3 { font-family: 'Oswald', sans-serif; margin: 0; letter-spacing: 2px; color: var(--text-color-custom); }
 
-    /* Empty State */
-    .empty-state { padding: 40px; text-align: center; color: var(--text-muted); }
-    .empty-state i { font-size: 40px; margin-bottom: 15px; opacity: 0.3; }
-    .shop-now { display: inline-block; margin-top: 15px; padding: 10px 20px; background: var(--accent); color: #111; border-radius: 30px; text-decoration: none; font-weight: 700; }
+    /* Tabela */
+    .k-table { width: 100%; border-collapse: collapse; }
+    .k-table th {
+        text-align: left;
+        padding: 15px;
+        color: var(--muted-custom);
+        font-size: 0.7rem;
+        letter-spacing: 2px;
+        border-bottom: 1px solid var(--border-custom);
+    }
+    .k-table td { padding: 20px 15px; border-bottom: 1px solid var(--border-custom); font-size: 0.9rem; color: var(--text-color-custom); }
+
+    /* Badges Status */
+    .k-badge {
+        padding: 5px 12px;
+        border-radius: 5px;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+    }
+    .status-success { background: rgba(46, 204, 113, 0.1); color: #2ecc71; border: 1px solid #2ecc71; }
+    .status-warning { background: rgba(241, 196, 15, 0.1); color: #f1c40f; border: 1px solid #f1c40f; }
+    .status-danger { background: rgba(231, 76, 60, 0.1); color: #e74c3c; border: 1px solid #e74c3c; }
+    .status-info { background: rgba(52, 152, 219, 0.1); color: #3498db; border: 1px solid #3498db; }
+
+    .btn-eye { color: var(--muted-custom); transition: 0.3s; }
+    .btn-eye:hover { color: var(--k-gold); }
 
     /* Support */
-    .support-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; max-width: 200px; padding: 12px; margin-top: 10px; border-radius: 12px; background: var(--bg-main); color: var(--text-main); text-decoration: none; font-weight: 600; border: 1px solid var(--border-color); transition: 0.3s; }
-    .support-btn:hover { background: var(--accent); color: #000; border-color: var(--accent); transform: scale(1.02); }
+    .s-link {
+        display: block;
+        padding: 15px;
+        background: var(--bg-body-custom);
+        border: 1px solid var(--border-custom);
+        border-radius: 10px;
+        margin-top: 15px;
+        text-decoration: none;
+        color: var(--text-color-custom);
+        font-size: 0.75rem;
+        font-weight: 600;
+        letter-spacing: 1px;
+        transition: 0.3s;
+    }
+    .s-link:hover { background: var(--k-gold); color: #000; font-weight: 700; border-color: var(--k-gold); }
+
+    .gold-text { color: var(--k-gold); }
+    .gold-link { color: var(--k-gold); text-decoration: none; font-size: 0.8rem; font-weight: 700; }
 
     /* Responsive */
-    @media (max-width: 900px) {
-        .stat-divider { display: none; }
-        .dash-header-glass { flex-direction: column; text-align: center; gap: 20px; }
-        .action-grid { grid-template-columns: 1fr 1fr; }
-        .dash-row { flex-direction: column; }
-    }
-
-    @media (max-width: 600px) {
-        .action-grid { grid-template-columns: 1fr; }
-        .modern-table th:nth-child(2), .modern-table td:nth-child(2) { display: none; }
+    @media (max-width: 1000px) {
+        .luxury-grid { grid-template-columns: 1fr; }
+        .main-content-row { flex-direction: column; }
     }
 </style>

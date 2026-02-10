@@ -332,7 +332,7 @@ input, select, textarea {
         <a href="/backend/cliente/listar" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/cliente/listar', $current_uri); ?>">
             <i class="fa fa-address-book fa-fw"></i> Clientes
         </a>
-        <a href="/backend/avaliacao/listar" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/avaliacao', $current_uri); ?>">
+        <a href="/backend/avaliacao/listar" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/avaliacao/listar', $current_uri); ?>">
             <i class="fa fa-star fa-fw"></i> Avaliações
         </a>
     <?php else: ?>

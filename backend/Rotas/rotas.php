@@ -119,12 +119,12 @@ class Rotas
                  "/produtos/excluir/{id}" => "ProdutosController@viewExcluirProduto",
                  "/produtos/ativar/{id}" => "ProdutosController@viewAtivarProdutos",
                  "/produtos/{id}/relatorio/{data1}/{data2}" => "ProdutosController@relatorioProduto",
-               //Avaliação
-                 "/backend/avaliacao" => "AvaliacaoController@index",
-                 "/backend/avaliacao/criar" => "AvaliacaoController@viewCriarAvaliacoes",
-                 "/backend/avaliacao/listar" => "AvaliacaoController@viewListarAvaliacoes",
-                 "/backend/avaliacao/editar/{id}" => "AvaliacaoController@viewEditarAvaliacoes",
-                 "/backend/avaliacao/excluir/{id}" => "AvaliacaoController@viewExcluirAvaliacoes",
+                //Avaliação
+                  "/avaliacao" => "AvaliacaoController@index",
+                  "/avaliacao/criar" => "AvaliacaoController@viewCriarAvaliacoes",
+                  "/avaliacao/listar" => "AvaliacaoController@viewListarAvaliacoes",
+                  "/avaliacao/editar/{id}" => "AvaliacaoController@viewEditarAvaliacoes",
+                  "/avaliacao/excluir/{id}" => "AvaliacaoController@viewExcluirAvaliacoes",
               //Relatórios
                  "/relatorios" => "Admin\RelatoriosController@index",
                  "/relatorios/detalhado" => "Admin\RelatoriosController@relatorioDetalhado",
@@ -159,6 +159,8 @@ class Rotas
                  '/logout' => 'AuthController@logout',
                  '/admin/dashboard' => 'Admin\DashboardController@index',
                  '/configuracoes' => 'ConfiguracoesController@index',
+                 '/configuracoes/exportar' => 'ConfiguracoesController@exportarDados',
+                 '/configuracoes/excluir' => 'ConfiguracoesController@excluirConta',
                  '/manutencao' => 'PublicApiController@viewManutencao',
            ],
 
@@ -168,6 +170,7 @@ class Rotas
                  "/api/clientes" => 'PublicApiController@createUsuario',
                  "/api/estoque" => 'PublicApiController@createEstoque',
                  "/configuracoes/manutencao" => 'ConfiguracoesController@salvarManutencao',
+                 "/configuracoes/salvar" => 'ConfiguracoesController@salvar',
                 // Clientes
                  "/cliente/perfil-atualizar/{id}" => "Cliente\DashboardController@atualizarCliente",
                 // Usuarios 
@@ -211,9 +214,9 @@ class Rotas
                 "/produtos/ativar" => "produtosController@ativarProduto",
                 "/produtos/listar" => "ProdutosController@viewListarProduto",
                 //avaliacao
-                "/backend/avaliacao/salvar" => "AvaliacaoController@salvarAvaliacao",
-                "/backend/avaliacao/atualizar/{id}" => "AvaliacaoController@atualizarAvaliacao",
-                "/backend/avaliacao/deletar/{id}" => "AvaliacaoController@deletarAvaliacao",
+                "/avaliacao/salvar" => "AvaliacaoController@salvarAvaliacao",
+                "/avaliacao/atualizar/{id}" => "AvaliacaoController@atualizarAvaliacao",
+                "/avaliacao/deletar/{id}" => "AvaliacaoController@deletarAvaliacao",
                 //carrinho
                 "/backend/carrinho/salvar" => "CarrinhoController@salvarCarrinho",
                 "/backend/carrinho/atualizar/{id}" => "CarrinhoController@atualizarCarrinho",                

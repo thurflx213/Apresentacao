@@ -98,19 +98,28 @@
 </div>
 
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Montserrat:wght@300;400;600&display=swap');
+
     :root {
-        --dark-bg: #0c0c0c;
-        --card-bg: #161616;
+        /* Map custom variables to global theme variables defined in header.php */
+        --dark-bg: var(--bg-main);
+        --card-bg: var(--bg-card);
         --gold: #f2cc7d;
-        --text-gray: #888;
-        --border-color: rgba(255,255,255,0.05);
+        --text-color: var(--text-main);
+        --text-gray: var(--text-muted);
+        --border-color: var(--border-color);
+        --badge-bg: rgba(242, 204, 125, 0.1);
+        --badge-text: var(--text-color);
     }
 
     .order-container {
-        padding: 20px;
-        color: #fff;
+        padding: 40px 20px;
+        color: var(--text-color);
         max-width: 1200px;
         margin: 0 auto;
+        min-height: 100vh;
+        background-color: var(--dark-bg);
+        font-family: 'Montserrat', sans-serif;
     }
 
     /* Header */
@@ -119,11 +128,16 @@
         justify-content: space-between;
         align-items: center;
         margin-bottom: 30px;
+        background: var(--card-bg);
+        padding: 20px;
+        border-radius: 12px;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
     }
 
-    .title { font-size: 24px; font-weight: 800; text-transform: uppercase; letter-spacing: -1px; }
+    .title { font-size: 24px; font-weight: 800; text-transform: uppercase; letter-spacing: -1px; margin: 0; color: var(--text-color); }
     .text-gold { color: var(--gold); }
-    .order-id { color: var(--text-gray); font-weight: 400; }
+    .order-id { color: var(--text-gray); font-weight: 400; font-size: 0.8em; }
 
     .btn-back {
         background: transparent;
@@ -135,6 +149,7 @@
         font-weight: 700;
         font-size: 13px;
         transition: 0.3s;
+        display: flex; align-items: center; gap: 8px;
     }
 
     .btn-back:hover { background: var(--gold); color: #000; }
@@ -142,7 +157,7 @@
     /* Stats Grid */
     .stats-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
         gap: 20px;
         margin-bottom: 30px;
     }
@@ -150,11 +165,12 @@
     .stat-card {
         background: var(--card-bg);
         border: 1px solid var(--border-color);
-        padding: 20px;
+        padding: 25px;
         border-radius: 15px;
         display: flex;
         align-items: center;
         gap: 15px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.03);
     }
 
     .gold-card { border-left: 4px solid var(--gold); }
@@ -162,7 +178,7 @@
     .stat-icon {
         width: 50px;
         height: 50px;
-        background: rgba(242, 204, 125, 0.1);
+        background: rgba(242, 204, 125, 0.15);
         border-radius: 12px;
         display: flex;
         align-items: center;
@@ -171,45 +187,60 @@
         font-size: 20px;
     }
 
-    .stat-info p { color: var(--text-gray); font-size: 12px; text-transform: uppercase; margin: 0; }
-    .stat-info h3 { font-size: 18px; margin: 5px 0 0; font-weight: 700; }
+    .stat-info p { color: var(--text-gray); font-size: 12px; text-transform: uppercase; margin: 0 0 5px 0; letter-spacing: 1px; }
+    .stat-info h3 { font-size: 18px; margin: 0; font-weight: 700; color: var(--text-color); }
+
+    .price-total { font-family: 'Montserrat', sans-serif; font-weight: 800 !important; }
 
     /* Badges de Status */
-    .badge-status { padding: 4px 12px; border-radius: 6px; font-size: 14px; }
-    .badge-status.cancelado { color: #ff4444; background: rgba(255, 68, 68, 0.1); }
-    .badge-status.pendente { color: var(--gold); background: rgba(242, 204, 125, 0.1); }
-    .badge-status.pago { color: #00c851; background: rgba(0, 200, 81, 0.1); }
+    .badge-status { 
+        display: inline-block;
+        padding: 6px 12px; 
+        border-radius: 6px; 
+        font-size: 14px; 
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+    .badge-status.cancelado { color: #ff4444; background: rgba(255, 68, 68, 0.1); border: 1px solid rgba(255, 68, 68, 0.2); }
+    .badge-status.pendente { color: #f39c12; background: rgba(243, 156, 18, 0.1); border: 1px solid rgba(243, 156, 18, 0.2); }
+    .badge-status.pago, .badge-status.concluido { color: #00c851; background: rgba(0, 200, 81, 0.1); border: 1px solid rgba(0, 200, 81, 0.2); }
+    .badge-status.enviado { color: #3498db; background: rgba(52, 152, 219, 0.1); border: 1px solid rgba(52, 152, 219, 0.2); }
 
     /* Sections */
     .info-section, .items-section {
         background: var(--card-bg);
         border-radius: 15px;
-        padding: 25px;
+        padding: 30px;
         margin-bottom: 25px;
         border: 1px solid var(--border-color);
+        box-shadow: 0 4px 10px rgba(0,0,0,0.03);
     }
 
     .section-title {
         font-size: 16px;
-        font-weight: 700;
-        margin-bottom: 20px;
+        font-weight: 800;
+        margin-bottom: 25px;
         color: var(--gold);
         display: flex;
         align-items: center;
         gap: 10px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
     }
 
     .address-box {
-        color: #ccc;
+        color: var(--text-color);
         line-height: 1.6;
-        background: rgba(255,255,255,0.02);
-        padding: 15px;
+        background: var(--dark-bg);
+        padding: 20px;
         border-radius: 10px;
+        border: 1px solid var(--border-color);
+        font-size: 0.95rem;
     }
 
     /* Table */
     .table-responsive { overflow-x: auto; }
-    .custom-table { width: 100%; border-collapse: collapse; }
+    .custom-table { width: 100%; border-collapse: collapse; min-width: 600px; }
     
     .custom-table thead th {
         text-align: left;
@@ -218,21 +249,31 @@
         text-transform: uppercase;
         padding: 15px;
         border-bottom: 1px solid var(--border-color);
+        background: rgba(0,0,0,0.02);
     }
 
     .custom-table tbody td {
         padding: 20px 15px;
         border-bottom: 1px solid var(--border-color);
+        color: var(--text-color);
+        vertical-align: middle;
     }
 
-    .product-cell { display: flex; align-items: center; gap: 12px; }
-    .product-icon { color: var(--gold); opacity: 0.5; }
+    .product-cell { display: flex; align-items: center; gap: 15px; }
+    .product-icon { 
+        width: 40px; height: 40px; 
+        background: rgba(242, 204, 125, 0.1); 
+        border-radius: 8px;
+        display: flex; align-items: center; justify-content: center;
+        color: var(--gold); 
+    }
 
     .qty-badge {
         background: #333;
+        color: #fff;
         padding: 5px 12px;
         border-radius: 6px;
-        font-weight: 800;
+        font-weight: 700;
         font-size: 12px;
     }
 
@@ -246,10 +287,11 @@
         color: var(--text-gray);
     }
 
-    .empty-state i { font-size: 40px; margin-bottom: 10px; display: block; }
+    .empty-state i { font-size: 40px; margin-bottom: 10px; display: block; opacity: 0.5; }
 
     @media (max-width: 768px) {
         .page-header { flex-direction: column; align-items: flex-start; gap: 15px; }
         .stats-grid { grid-template-columns: 1fr; }
+        .btn-back { width: 100%; justify-content: center; }
     }
 </style>

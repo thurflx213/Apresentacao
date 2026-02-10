@@ -1,49 +1,72 @@
-<div class="profile-page">
-    <div class="profile-card">
+
+<div class="luxury-profile-page">
+    <div class="k-profile-card">
         <form action="/backend/cliente/perfil-atualizar/<?= $usuario['id_usuarios'] ?>" method="POST" enctype="multipart/form-data" class="profile-form">
-            <div class="profile-header">
-                <h2><i class="fa fa-user-edit"></i> Editar Perfil</h2>
-                <a class="back-btn" href="/backend/cliente/dashboard"><i class="fa fa-arrow-left"></i> Voltar</a>
+            
+            <div class="k-header-luxury">
+                <div class="h-title">
+                    <span class="gold-line"></span>
+                    <h2>EDITAR PERFIL</h2>
+                </div>
+                <a class="k-back-link" href="/backend/cliente/dashboard">
+                    <i class="fa fa-chevron-left"></i> VOLTAR
+                </a>
             </div>
 
-            <div class="profile-body">
-                <div class="left-col">
-                    <div class="avatar-wrap">
+            <div class="k-profile-body">
+                <div class="k-photo-section">
+                    <div class="k-avatar-container">
+                        <div class="avatar-shadow"></div>
                         <img id="preview-foto" 
                              src="<?= !empty($usuario['foto_usuarios']) ? '/backend/upload/usuarios/' . htmlspecialchars($usuario['foto_usuarios']) : '/img/logoperf.jpg' ?>" 
-                             alt="Foto Perfil" class="avatar">
-                        <label class="edit-photo" for="foto_usuarios"><i class="fa fa-camera"></i></label>
-                        <input type="file" name="foto_usuarios" id="foto_usuarios" accept="image/*" onchange="previewFoto(event)" />
+                             alt="Foto Perfil" class="k-avatar-main">
                         
+                        <label class="k-upload-trigger" for="foto_usuarios">
+                            <i class="fa fa-camera"></i>
+                        </label>
+                        <input type="file" name="foto_usuarios" id="foto_usuarios" accept="image/*" onchange="previewFoto(event)" style="display: none;" />
                     </div>
                 </div>
 
-                <div class="right-col">
-                    <div class="field-row">
-                        <label>Nome Completo</label>
-                        <input type="text" name="nome_usuarios" value="<?= htmlspecialchars($usuario['nome_usuarios'] ?? '') ?>" required />
-                    </div>
-
-                    <div class="field-row">
-                        <label>Email</label>
-                        <input type="email" name="email_usuarios" value="<?= htmlspecialchars($usuario['email_usuarios'] ?? '') ?>" required />
-                    </div>
-
-                    <div class="field-row two-cols">
-                        <div>
-                            <label>Nova Senha</label>
-                            <input type="password" name="senha_usuarios" placeholder="Deixe em branco para não alterar" />
-                            <small class="small-note">Mínimo de 6 caracteres</small>
-                        </div>
-                        <div>
-                            <label>Confirmar Nova Senha</label>
-                            <input type="password" name="confirmar_senha" placeholder="Confirme a nova senha" />
+                <div class="k-data-section">
+                    <div class="k-input-group full-width">
+                        <label>NOME COMPLETO</label>
+                        <div class="input-wrapper">
+                            <i class="fa fa-user gold-icon"></i>
+                            <input type="text" name="nome_usuarios" value="<?= htmlspecialchars($usuario['nome_usuarios'] ?? '') ?>" required placeholder="Seu nome oficial" />
                         </div>
                     </div>
 
-                    <div class="actions">
-                        <button type="submit" class="save-btn"><i class="fa fa-save"></i> Salvar Alterações</button>
-                        <a href="/backend/cliente/dashboard" class="cancel-btn"><i class="fa fa-times"></i> Cancelar</a>
+                    <div class="k-input-group full-width">
+                        <label>EMAIL DE ACESSO</label>
+                        <div class="input-wrapper">
+                            <i class="fa fa-envelope gold-icon"></i>
+                            <input type="email" name="email_usuarios" value="<?= htmlspecialchars($usuario['email_usuarios'] ?? '') ?>" required placeholder="seu@email.com" />
+                        </div>
+                    </div>
+
+                    <div class="k-grid-inputs">
+                        <div class="k-input-group">
+                            <label>NOVA SENHA</label>
+                            <div class="input-wrapper">
+                                <i class="fa fa-lock gold-icon"></i>
+                                <input type="password" name="senha_usuarios" placeholder="••••••••" />
+                            </div>
+                            <span class="k-hint">Opcional</span>
+                        </div>
+                        <div class="k-input-group">
+                            <label>CONFIRMAÇÃO</label>
+                            <div class="input-wrapper">
+                                <i class="fa fa-shield-alt gold-icon"></i>
+                                <input type="password" name="confirmar_senha" placeholder="••••••••" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="k-form-actions">
+                        <button type="submit" class="k-btn-gold">
+                            SALVAR DADOS
+                        </button>
                     </div>
                 </div>
             </div>
@@ -53,89 +76,189 @@
 
 <script>
 function previewFoto(event) {
-    const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            document.getElementById('preview-foto').src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-    }
+    const reader = new FileReader();
+    reader.onload = function(){
+        const output = document.getElementById('preview-foto');
+        output.src = reader.result;
+    };
+    reader.readAsDataURL(event.target.files[0]);
 }
 </script>
 
 <style>
-    :root{
-        --bg:#11121a;
-        --card:#1f1f23;
-        --muted:#a8a9ad;
-        --accent:#ffd700;
-        --accent-2:#ffed4e;
-        --input:#2a2a2f;
-        --glass: rgba(255,255,255,0.03);
+    @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Montserrat:wght@300;400;600&display=swap');
+
+    :root {
+        --k-gold: #f2cc7d;
+        --k-gold-dark: #b8860b;
+        /* Using variables linked to global theme */
+        --bg-body-custom: var(--bg-main);
+        --bg-card-custom: var(--bg-card);
+        --input-bg-custom:rgba(255,255,255,0.05);
+        --text-color-custom: var(--text-main);
+        --border-custom: var(--border-color);
+        --k-text-muted: var(--text-muted);
     }
 
-    .profile-page{
-        min-height: calc(100vh - 40px);
-        display:flex;
-        align-items:flex-start;
-        justify-content:center;
-        padding:30px 20px;
-        background: linear-gradient(180deg,var(--bg),#141416);
-        color:#eee;
+    .luxury-profile-page {
+        font-family: 'Montserrat', sans-serif;
+        color: var(--text-color-custom);
+        padding: 40px;
+        display: flex;
+        justify-content: center;
+        background-color: var(--bg-body-custom);
+        min-height: 100vh;
     }
 
-    .profile-card{
-        width:100%;
-        max-width:980px;
-        background: linear-gradient(180deg,var(--card), #2a2a2a);
-        border-radius:12px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-        overflow: hidden;
-        border-top:4px solid var(--accent);
+    .k-profile-card {
+        width: 100%;
+        max-width: 800px;
+        background: var(--bg-card-custom);
+        border: 1px solid var(--border-custom);
+        border-radius: 16px;
+        box-shadow: var(--shadow-md);
+        margin-top: 20px;
     }
 
-    .profile-header{
-        display:flex;
-        align-items:center;
-        justify-content:space-between;
-        padding:20px 28px;
-        border-bottom:1px solid rgba(255,255,255,0.03);
-        backdrop-filter: blur(4px);
+    .k-header-luxury {
+        padding: 20px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid var(--border-custom);
+        background: rgba(125,125,125,0.02);
     }
 
-    .profile-header h2{font-size:20px; color:#fff; margin:0}
-    .back-btn{color:var(--muted); text-decoration:none; font-weight:600;}
+    .h-title { display: flex; align-items: center; gap: 15px; }
+    .gold-line { width: 3px; height: 20px; background: var(--k-gold); }
+    .h-title h2 { font-family: 'Oswald', sans-serif; font-size: 1.2rem; letter-spacing: 2px; margin: 0; color: var(--text-color-custom); }
 
-    .profile-body{display:flex; gap:30px; padding:30px}
+    .k-back-link { 
+        color: var(--k-text-muted); 
+        text-decoration: none; 
+        font-size: 0.75rem; 
+        font-weight: 700; 
+        letter-spacing: 1px;
+        display: flex; align-items: center; gap: 8px;
+        transition: 0.3s;
+    }
+    .k-back-link:hover { color: var(--k-gold); }
 
-    .left-col{width:260px; display:flex; justify-content:center}
+    .k-profile-body { padding: 40px; }
 
-    .avatar-wrap{position:relative; text-align:center}
-    .avatar{width:170px; height:170px; border-radius:50%; object-fit:cover; border:6px solid rgba(255,215,0,0.16); box-shadow: 0 8px 20px rgba(0,0,0,0.6)}
+    /* Foto */
+    .k-photo-section { 
+        display: flex; 
+        justify-content: center; 
+        margin-bottom: 40px; 
+    }
 
-    .edit-photo{position:absolute; right:6px; bottom:6px; background:linear-gradient(180deg,var(--accent),var(--accent-2)); color:#111; width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 6px 14px rgba(0,0,0,0.5);}
-    .edit-photo i{font-size:16px}
-    .avatar-wrap input[type=file]{display:none}
-    .hint{color:var(--muted); font-size:12px; margin-top:10px}
+    .k-avatar-container { position: relative; width: 140px; height: 140px; }
+    
+    .k-avatar-main { 
+        width: 100%; height: 100%; 
+        border-radius: 50%;
+        object-fit: cover; 
+        border: 3px solid var(--k-gold);
+        background: var(--bg-card-custom);
+        box-shadow: 0 0 20px rgba(242, 204, 125, 0.2);
+    }
 
-    .right-col{flex:1}
-    .field-row{margin-bottom:16px}
-    .field-row label{display:block; color:var(--muted); font-weight:600; margin-bottom:6px}
-    .field-row input{width:100%; padding:12px 14px; border-radius:8px; border:1px solid rgba(255,255,255,0.03); background:var(--input); color:#fff}
-    .field-row .small-note{display:block; color:var(--muted); margin-top:6px; font-size:12px}
+    .k-upload-trigger {
+        position: absolute;
+        bottom: 0;
+        right: -10px;
+        background: var(--k-gold);
+        color: #000;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer;
+        transition: 0.3s;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    }
+    .k-upload-trigger:hover { transform: scale(1.1); background: #fff; }
 
-    .two-cols{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+    /* Formulário */
+    .k-data-section { max-width: 600px; margin: 0 auto; }
 
-    .actions{display:flex; gap:12px; margin-top:6px}
-    .save-btn{background:linear-gradient(90deg,var(--accent),var(--accent-2)); border:none; color:#111; padding:12px 18px; border-radius:10px; font-weight:700; cursor:pointer}
-    .cancel-btn{background:transparent; border:1px solid rgba(255,255,255,0.06); color:var(--muted); padding:12px 18px; border-radius:10px; text-decoration:none; display:inline-flex; align-items:center}
+    .k-input-group { margin-bottom: 25px; }
+    .k-input-group label { 
+        display: block; 
+        font-size: 0.7rem; 
+        font-weight: 700; 
+        color: var(--k-text-muted); 
+        letter-spacing: 1px; 
+        margin-bottom: 8px; 
+    }
 
-    /* responsive */
-    @media(max-width:800px){
-        .profile-body{flex-direction:column; padding:20px}
-        .left-col{width:100%; order:1; display:flex; justify-content:center}
-        .right-col{order:2}
-        .two-cols{grid-template-columns:1fr}
+    .input-wrapper { position: relative; }
+
+    .gold-icon {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--k-gold);
+        font-size: 1rem;
+        opacity: 0.8;
+    }
+
+    .k-input-group input {
+        width: 100%;
+        background: var(--bg-body-custom); /* Better contrast on light/dark */
+        border: 1px solid var(--border-custom);
+        padding: 14px 14px 14px 45px;
+        border-radius: 10px;
+        color: var(--text-color-custom);
+        font-family: 'Montserrat', sans-serif;
+        font-size: 0.95rem;
+        transition: 0.3s;
+        box-sizing: border-box;
+    }
+
+    .k-input-group input:focus { 
+        border-color: var(--k-gold); 
+        outline: none; 
+        box-shadow: 0 0 10px rgba(242, 204, 125, 0.1);
+    }
+
+    .k-grid-inputs { 
+        display: grid; 
+        grid-template-columns: 1fr 1fr; 
+        gap: 20px; 
+    }
+
+    .k-hint { float: right; font-size: 0.65rem; color: var(--k-text-muted); margin-top: 5px; }
+
+    .k-form-actions { 
+        margin-top: 30px; 
+        text-align: center;
+    }
+
+    .k-btn-gold {
+        background: linear-gradient(135deg, var(--k-gold), var(--k-gold-dark));
+        color: #000;
+        border: none;
+        padding: 15px 50px;
+        border-radius: 30px;
+        font-weight: 800;
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: 0.3s;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    }
+    .k-btn-gold:hover { 
+        transform: translateY(-2px); 
+        box-shadow: 0 15px 30px rgba(242, 204, 125, 0.3);
+        filter: brightness(1.1);
+    }
+
+    @media (max-width: 700px) {
+        .k-grid-inputs { grid-template-columns: 1fr; }
+        .k-profile-body { padding: 25px; }
+        .luxury-profile-page { padding: 10px; }
     }
 </style>

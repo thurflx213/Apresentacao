@@ -1,5 +1,5 @@
 <?php
-namespace App\backend\models;
+namespace App\Koketsu\Models;
 use PDO;
 class Avaliacao {
     private $id_avaliacoes;
@@ -17,9 +17,13 @@ class Avaliacao {
         $this->db = $db;
     }
 
-    // Buscar todas as avaliações (não excluídas)
+    // Buscar todas as avaliações (não excluídas) com JOIN para nomes
     public function buscarAvaliacoes() {
-        $sql = "SELECT * FROM tbl_avaliacoes WHERE excluido_em IS NULL";
+        $sql = "SELECT a.*, p.nome_produtos as nome_produto, u.nome_usuarios as nome_cliente 
+                FROM tbl_avaliacoes a
+                LEFT JOIN tbl_produtos p ON a.id_produto = p.id_produto
+                LEFT JOIN tbl_usuarios u ON a.id_cliente = u.id_usuarios
+                WHERE a.excluido_em IS NULL";
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -27,7 +31,10 @@ class Avaliacao {
 
     // Buscar avaliações de um produto específico
     public function buscarPorProduto($id_produto) {
-        $sql = "SELECT * FROM tbl_avaliacoes WHERE id_produto = :id_produto AND excluido_em IS NULL";
+        $sql = "SELECT a.*, u.nome_usuarios as nome_cliente 
+                FROM tbl_avaliacoes a
+                LEFT JOIN tbl_usuarios u ON a.id_cliente = u.id_usuarios
+                WHERE a.id_produto = :id_produto AND a.excluido_em IS NULL";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':id_produto', $id_produto);
         $stmt->execute();
@@ -36,7 +43,10 @@ class Avaliacao {
 
     // Buscar avaliações de um cliente específico
     public function buscarPorCliente($id_cliente) {
-        $sql = "SELECT * FROM tbl_avaliacoes WHERE id_cliente = :id_cliente AND excluido_em IS NULL";
+        $sql = "SELECT a.*, p.nome_produtos as nome_produto 
+                FROM tbl_avaliacoes a
+                LEFT JOIN tbl_produtos p ON a.id_produto = p.id_produto
+                WHERE a.id_cliente = :id_cliente AND a.excluido_em IS NULL";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':id_cliente', $id_cliente);
         $stmt->execute();
@@ -82,5 +92,17 @@ class Avaliacao {
         $stmt->bindParam(':id_avaliacoes', $id_avaliacoes);
 
         return $stmt->execute();
+    }
+    // Buscar avaliação por ID
+    public function buscarPorId($id) {
+        $sql = "SELECT a.*, p.nome_produtos as nome_produto, u.nome_usuarios as nome_cliente 
+                FROM tbl_avaliacoes a
+                LEFT JOIN tbl_produtos p ON a.id_produto = p.id_produto
+                LEFT JOIN tbl_usuarios u ON a.id_cliente = u.id_usuarios
+                WHERE a.id_avaliacoes = :id AND a.excluido_em IS NULL";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }

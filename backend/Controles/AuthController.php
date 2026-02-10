@@ -24,13 +24,13 @@ class AuthController{
 
     }
     public function login(): void{
-        View::render('auth/login');
+        View::render('auth/login', [], false);
     }
     public function loginadmin(): void{
         View::render('admin/login');
     }
    public function register(): void {
-    View::render('auth/register');
+    View::render('auth/register', [], false);
 }
 
   public function logout(): void {

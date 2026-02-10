@@ -6,17 +6,19 @@ use App\Koketsu\Database\Database;
 use App\Koketsu\Core\View;
 use App\Koketsu\Core\Redirect;
 
-class AvaliacaoController {
+use App\Koketsu\Controles\Admin\AdminController;
+
+class AvaliacaoController extends AdminController {
     public $avaliacao;
     public $db;
     public function __construct() {
+        parent::__construct();
         $this->db = Database::getInstance();
         $this->avaliacao  = new Avaliacao($this->db);
     }
     // index
     public function index() {
-        $resultado = $this->avaliacao->buscarAvaliacoes();
-        return $resultado;
+        Redirect::redirecionarPara("/avaliacao/listar");
     }
 
     public function viewCriarAvaliacoes() {
@@ -29,14 +31,19 @@ class AvaliacaoController {
     }
 
     public function viewEditarAvaliacoes($id) {
-        // Warning: Model doesn't have buscarPorId, using generic search or skipping
-        // Assuming search needs implementation or use existent specific
-        // For now, render view
-        View::render("avaliacao/edit", ["id" => $id]);
+        $avaliacao = $this->avaliacao->buscarPorId($id);
+        if (!$avaliacao) {
+            Redirect::redirecionarComMensagem("/backend/avaliacao/listar", "error", "Avaliação não encontrada.");
+        }
+        View::render("avaliacao/edit", ["avaliacao" => $avaliacao]);
     }
 
     public function viewExcluirAvaliacoes($id) {
-        View::render("avaliacao/delete", ["id" => $id]);
+        $avaliacao = $this->avaliacao->buscarPorId($id);
+        if (!$avaliacao) {
+            Redirect::redirecionarComMensagem("/backend/avaliacao/listar", "error", "Avaliação não encontrada.");
+        }
+        View::render("avaliacao/delete", ["avaliacao" => $avaliacao]);
     }
 
     public function salvarAvaliacao() {
@@ -46,9 +53,9 @@ class AvaliacaoController {
             $_POST['nota'],
             $_POST['comentario']
         )) {
-            Redirect::redirecionarComMensagem("/backend/avaliacao/listar", "success", "Avaliação cadastrada com sucesso!");
+            Redirect::redirecionarComMensagem("/avaliacao/listar", "success", "Avaliação cadastrada com sucesso!");
         } else {
-            Redirect::redirecionarComMensagem("/backend/avaliacao/criar", "error", "Erro ao cadastrar avaliação.");
+            Redirect::redirecionarComMensagem("/avaliacao/criar", "error", "Erro ao cadastrar avaliação.");
         }
     }
 
@@ -58,17 +65,17 @@ class AvaliacaoController {
             $_POST['nota'],
             $_POST['comentario']
         )) {
-             Redirect::redirecionarComMensagem("/backend/avaliacao/listar", "success", "Avaliação atualizada com sucesso!");
+             Redirect::redirecionarComMensagem("/avaliacao/listar", "success", "Avaliação atualizada com sucesso!");
         } else {
-             Redirect::redirecionarComMensagem("/backend/avaliacao/editar/$id", "error", "Erro ao atualizar avaliação.");
+             Redirect::redirecionarComMensagem("/avaliacao/editar/$id", "error", "Erro ao atualizar avaliação.");
         }
     }
 
     public function deletarAvaliacao($id) {
         if ($this->avaliacao->excluirAvaliacao($id)) {
-            Redirect::redirecionarComMensagem("/backend/avaliacao/listar", "success", "Avaliação excluída com sucesso!");
+            Redirect::redirecionarComMensagem("/avaliacao/listar", "success", "Avaliação excluída com sucesso!");
         } else {
-            Redirect::redirecionarComMensagem("/backend/avaliacao/listar", "error", "Erro ao excluir avaliação.");
+            Redirect::redirecionarComMensagem("/avaliacao/listar", "error", "Erro ao excluir avaliação.");
         }
     }
 }

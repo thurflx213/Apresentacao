@@ -5,21 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Koketsu Store</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-dark: #050505;
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --accent: #c5a02d;
-            --accent-hover: #e0b840;
-            --text-main: #ffffff;
-            --text-muted: #888888;
-            --border: rgba(197, 160, 45, 0.15);
+            --card-bg: #0f0f0f;
+            --accent: #f2cc7d; /* Dourado Elite */
+            --accent-bright: #ffea00;
+            --text-main: #FFFFFF;
+            --text-muted: #777777;
+            --input-bg: rgba(255, 255, 255, 0.03);
+            --border-gold: rgba(242, 204, 125, 0.15);
         }
 
         body {
-            background: var(--bg-dark);
-            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            background-image: radial-gradient(circle at center, #111 0%, #000 100%);
+            font-family: 'Montserrat', sans-serif;
             margin: 0;
             display: flex;
             align-items: center;
@@ -29,62 +31,78 @@
             overflow: hidden;
         }
 
-        body::before {
-            content: '';
-            position: absolute;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(197, 160, 45, 0.05) 0%, transparent 70%);
-            top: -100px;
-            right: -100px;
-            z-index: -1;
-        }
-
+        /* Aura Dourada atrás do Card */
         .login-wrapper {
             width: 100%;
-            max-width: 450px;
+            max-width: 440px;
             padding: 20px;
             position: relative;
+            z-index: 1;
+        }
+
+        .login-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            background: var(--accent);
+            filter: blur(150px);
+            opacity: 0.1;
+            z-index: -1;
         }
 
         .logo-area {
             text-align: center;
             margin-bottom: 40px;
+            animation: fadeIn 1s ease;
         }
 
         .logo-area img {
-            height: 70px;
-            filter: drop-shadow(0 0 10px rgba(197, 160, 45, 0.2));
+            height: 90px;
+            filter: drop-shadow(0 0 20px rgba(242, 204, 125, 0.2));
+            transition: 0.5s;
         }
 
         .login-card {
             background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border);
+            border: 1px solid var(--border-gold);
             border-radius: 24px;
             padding: 50px 40px;
-            box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+            box-shadow: 0 40px 80px rgba(0,0,0,0.9);
+            backdrop-filter: blur(10px);
+            animation: slideUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .login-card h1 {
-            font-family: 'Outfit', sans-serif;
-            color: var(--text-main);
-            font-size: 1.8em;
-            margin-bottom: 10px;
-            font-weight: 800;
-            letter-spacing: -1px;
+            font-family: 'Oswald', sans-serif;
+            color: var(--accent);
+            font-size: 2.2rem;
+            margin: 0 0 10px 0;
+            font-weight: 700;
+            text-transform: uppercase;
             text-align: center;
+            letter-spacing: 4px;
         }
 
         .login-card p.subtitle {
             color: var(--text-muted);
-            font-size: 0.9em;
-            margin-bottom: 35px;
+            font-size: 0.85rem;
+            margin-bottom: 40px;
             text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 22px;
             position: relative;
         }
 
@@ -93,95 +111,101 @@
             left: 20px;
             top: 50%;
             transform: translateY(-50%);
-            color: var(--accent);
-            font-size: 1.1em;
-            opacity: 0.7;
+            color: #444;
+            transition: 0.3s;
         }
 
         .form-group input {
             width: 100%;
-            height: 56px;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 14px;
+            height: 60px;
+            background: var(--input-bg);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 16px;
             padding: 0 20px 0 55px;
             color: #fff;
-            font-size: 1em;
-            transition: 0.3s;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
             box-sizing: border-box;
         }
 
         .form-group input:focus {
             border-color: var(--accent);
+            background: rgba(242, 204, 125, 0.05);
             outline: none;
-            background: rgba(var(--accent), 0.05);
-            box-shadow: 0 0 20px rgba(197, 160, 45, 0.1);
+            box-shadow: 0 0 15px rgba(242, 204, 125, 0.1);
+        }
+
+        .form-group input:focus + i {
+            color: var(--accent);
         }
 
         .btn-submit {
             width: 100%;
-            height: 56px;
-            background: var(--accent);
+            height: 60px;
+            background: linear-gradient(135deg, #f2cc7d 0%, #b8860b 100%);
             color: #000;
             border: none;
-            border-radius: 14px;
-            font-size: 1em;
-            font-weight: 800;
+            border-radius: 16px;
+            font-size: 1rem;
+            font-family: 'Oswald', sans-serif;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
             cursor: pointer;
-            transition: 0.3s;
-            margin-top: 20px;
-            box-shadow: 0 10px 20px rgba(197, 160, 45, 0.15);
+            transition: all 0.4s ease;
+            margin-top: 15px;
         }
 
         .btn-submit:hover {
-            background: var(--accent-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 15px 30px rgba(197, 160, 45, 0.25);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(184, 134, 11, 0.4);
+            filter: brightness(1.1);
         }
 
         .links-area {
-            margin-top: 30px;
+            margin-top: 35px;
             text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
         }
 
         .links-area a {
             color: var(--accent);
             text-decoration: none;
-            font-size: 0.9em;
             font-weight: 600;
             transition: 0.3s;
+            margin-left: 5px;
         }
 
         .links-area a:hover {
             color: #fff;
+            text-shadow: 0 0 10px var(--accent);
         }
 
         .footer {
             margin-top: 40px;
             text-align: center;
-            font-size: 0.75em;
-            color: var(--text-muted);
-            letter-spacing: 1px;
+            font-size: 0.7rem;
+            color: #333;
             text-transform: uppercase;
+            letter-spacing: 3px;
         }
     </style>
 </head>
 <body>
     <div class="login-wrapper">
-        <div class="logo-area">
-            <a href="/"><img src="/img/logo.png" alt="Koketsu Logo"></a>
-        </div>
 
         <div class="login-card">
-            <h1>Bem-vindo de volta</h1>
-            <p class="subtitle">Acesse sua conta premium Koketsu</p>
+            <div class="logo-area">
+            <a href="/"><img src="/img/icons/logo.png" alt="Koketsu Logo"></a>
+        </div>
+            <h1>BEM-VINDO</h1>
+            <p class="subtitle">Acesse sua área exclusiva</p>
 
             <form action="/backend/login" method="POST">
                 <div class="form-group">
                     <i class="fa fa-envelope"></i>
-                    <input type="email" name="email_usuarios" placeholder="Seu email institucional" required>
+                    <input type="email" name="email_usuarios" placeholder="E-mail de acesso" required>
                 </div>
 
                 <div class="form-group">
@@ -189,16 +213,16 @@
                     <input type="password" name="senha_usuarios" placeholder="Sua senha secreta" required>
                 </div>
 
-                <button type="submit" class="btn-submit">Acessar Painel</button>
+                <button type="submit" class="btn-submit">Entrar no Painel</button>
             </form>
 
             <div class="links-area">
-                <a href="/backend/register">Não possui uma conta? <span style="font-weight: 800;">Registre-se</span></a>
+                Não faz parte da elite? <a href="/backend/register">Cadastre-se</a>
             </div>
         </div>
 
         <div class="footer">
-            &copy; <?= date('Y') ?> Koketsu Store • Excellence in Performance
+            &copy; <?= date('Y') ?> KOKETSU STORE &bull; LUXURY GRIFE
         </div>
     </div>
 </body>
