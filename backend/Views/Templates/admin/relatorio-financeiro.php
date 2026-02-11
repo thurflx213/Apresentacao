@@ -103,7 +103,7 @@
             <h1>💵 Relatório Financeiro</h1>
             <p>Análise de saúde financeira e desempenho de vendas.</p>
         </div>
-        <a href="/backend/relatorios" class="btn-back-rep"><i class="fas fa-arrow-left"></i> Voltar</a>
+        <a href="/backend/relatorios" class="btn-back-rep"><i class="fa fa-arrow-left"></i> Voltar</a>
     </header>
 
     <div class="resumo-grid">

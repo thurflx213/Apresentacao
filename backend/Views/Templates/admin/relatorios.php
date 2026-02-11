@@ -217,7 +217,6 @@
         .stat-card, .chart-container {
             animation: fadeIn 0.6s ease-out forwards;
         }
-    </style>
 
         @media (max-width: 1024px) {
             .charts-grid { grid-template-columns: 1fr; }
