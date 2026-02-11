@@ -27,7 +27,11 @@
     .user-table thead th { color: var(--text-muted) !important; text-transform: uppercase; font-size: 11px; padding: 10px 15px; letter-spacing: 1.5px; font-weight: 800; }
     .user-table tbody tr { background: var(--bg-card); transition: all 0.2s ease; box-shadow: var(--shadow-sm); border: 1px solid var(--border-color); }
     .user-table tbody tr:hover { transform: scale(1.005); box-shadow: var(--shadow-md); border-color: var(--accent); }
-    .user-table tbody tr.tr-inativo { opacity: 0.7; border-left: 4px solid #ff4444; }
+    .user-table tbody tr.tr-inativo { 
+        opacity: 0.9; 
+        border-left: 4px solid #dc3545; 
+        background: rgba(220, 53, 69, 0.04) !important; 
+    }
     .user-table td { padding: 16px 15px !important; border: none; vertical-align: middle; }
     .user-table td:first-child { border-radius: 12px 0 0 12px; border-left: 1px solid var(--border-color); }
     .user-table td:last-child { border-radius: 0 12px 12px 0; border-right: 1px solid var(--border-color); }
@@ -35,7 +39,7 @@
     
     .badge-status { padding: 6px 12px; border-radius: 20px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
     .badge-active { background: rgba(40, 167, 69, 0.1); color: #28a745; border: 1px solid rgba(40, 167, 69, 0.3); }
-    .badge-inactive { background: rgba(255, 68, 68, 0.1) !important; color: #ff4444 !important; border: 1px solid rgba(255, 68, 68, 0.3); }
+    .badge-inactive { background: rgba(220, 53, 69, 0.15) !important; color: #dc3545 !important; border: 1px solid rgba(220, 53, 69, 0.4); }
 
     .btn-action-small { padding: 8px 14px; border-radius: 8px; font-size: 11px; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: 0.3s; margin: 0 2px; }
     .btn-edit { background: var(--bg-main); color: var(--accent); border: 1px solid var(--accent); }
@@ -150,7 +154,7 @@
                 <?php $is_inativo = !empty($usuario['excluido_em']); ?>
                 <tr class="user-row <?= $is_inativo ? 'tr-inativo' : '' ?>"> 
                     <td class="id-column">#<?= $usuario['id_usuarios'] ?></td>
-                    <td class="user-name" style="font-weight: 700; color: #fff; font-size: 1.05em;">
+                    <td class="user-name" style="font-weight: 700; color: var(--text-main); font-size: 1.05em;">
                         <?= htmlspecialchars($usuario['nome_usuarios']) ?>
                     </td>
                     <td class="email-column" style="color: #888;"><?= htmlspecialchars($usuario['email_usuarios']) ?></td>

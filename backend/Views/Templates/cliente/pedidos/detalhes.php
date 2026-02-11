@@ -73,7 +73,7 @@
                                 <td>
                                     <div class="product-cell">
                                         <div class="product-icon"><i class="fa fa-tag"></i></div>
-                                        <span><?= htmlspecialchars($it['nome_products'] ?? 'Produto') ?></span>
+                                        <span><?= htmlspecialchars($it['nome_produtos'] ?? 'Produto') ?></span>
                                     </div>
                                 </td>
                                 <td class="text-center">

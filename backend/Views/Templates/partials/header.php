@@ -54,11 +54,11 @@ $current_uri = $_SERVER['REQUEST_URI'] ?? '/backend/admin/dashboard';
 .theme-light {
     --bg-main: #f4f7f9;
     --bg-sidebar: #ffffff;
-    --bg-top: #ffffff;
+    --bg-top: #e8e8e8; /* Cinza acinzentado solicitado */
     --bg-card: #ffffff;
     --text-main: #1a1a1c;
     --text-muted: #5d666e;
-    --border-color: #e2e8f0;
+    --border-color: #d1d9e6; /* Borda um pouco mais visível no claro */
     --accent: #c5a02d;
     --accent-hover: #a68421;
     --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
@@ -273,10 +273,10 @@ input, select, textarea {
 
 <div class="w3-bar w3-top w3-theme w3-large" style="z-index:4">
   <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-black" onclick="w3_open();"><i class="fa fa-bars"></i>  Menu</button>
-  <div class="w3-bar" style="background-color:#000; height:80px; display:flex; align-items:center; justify-content:center;">
+  <div class="w3-bar" style="background-color: var(--bg-top) !important; height:80px; display:flex; align-items:center; justify-content:center; border-bottom: 1px solid var(--border-color);">
     <a href="../../index.php">
-  <img src="/img/logo.png" alt="Koketsu Logo" height="80px" >
-  </a>
+      <img id="main-logo" src="/img/logo.png" alt="Koketsu Logo" height="80px">
+    </a>
   </div>
 </div>
 
@@ -404,6 +404,17 @@ foreach($mensagem as $key => $value){
             setTimeout(() => alert.remove(), 400); 
         } 
     }, 3000); 
+
+    // Lógica para troca de logo baseada no tema
+    function updateLogo() {
+        const logo = document.getElementById('main-logo');
+        if (!logo) return;
+        const isLight = document.documentElement.classList.contains('theme-light');
+        logo.src = isLight ? '/img/icons/logoBlack.png' : '/img/logo.png';
+    }
+
+    // Executa ao carregar e observa mudanças (se houver um switch dinâmico)
+    document.addEventListener('DOMContentLoaded', updateLogo);
 </script>
 </body>
 </html>

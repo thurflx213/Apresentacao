@@ -45,7 +45,7 @@ class PedidosController extends AuthenticatedController
             return;
         }
 
-        $pedidos = $this->pedidosModel->buscarPedidosPorCliente($perfil['id_perfil']);
+        $pedidos = $this->pedidosModel->buscarPedidosPorUsuario($usuarioId);
 
         View::render('cliente/pedidos/index', [
             'pedidos' => $pedidos,
@@ -69,9 +69,8 @@ class PedidosController extends AuthenticatedController
         }
 
         // Verifica se o pedido pertence ao usuário logado
-        $perfil = $this->perfilModel->buscarPerfilPorUsuario($usuarioId);
-        if (!$perfil || $pedido['id_perfil'] != $perfil['id_perfil']) {
-            Redirect::redirecionarComMensagem('/backend/cliente/pedidos', 'error', 'Acesso negado ao pedido solicitado.');
+        if ($pedido['id_usuarios'] != $usuarioId) {
+            Redirect::redirecionarComMensagem('/cliente/pedidos', 'error', 'Acesso negado ao pedido solicitado.');
             return;
         }
 

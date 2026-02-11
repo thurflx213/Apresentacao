@@ -30,18 +30,14 @@ class DashboardController extends AuthenticatedController{
         $usuario_id = $this->session->get('usuario_id');
         $perfil = $this->perfil->buscarPerfilPorUsuario($usuario_id);
         
-        $pedidosRecentes = [];
-        $totalPedidos = 0;
-
-        if ($perfil) {
-            $pedidosRecentes = $this->pedidos->buscarPedidosPorCliente($perfil['id_perfil']);
-            // Limitar a 5 pedidos recentes e ordenar (o modelo busca todos, vamos limitar no PHP ou aqui)
-            usort($pedidosRecentes, function($a, $b) {
-                return strtotime($b['data_pedido']) - strtotime($a['data_pedido']);
-            });
-            $totalPedidos = count($pedidosRecentes);
-            $pedidosRecentes = array_slice($pedidosRecentes, 0, 5);
-        }
+        $pedidosRecentes = $this->pedidos->buscarPedidosPorUsuario($usuario_id);
+        $totalPedidos = count($pedidosRecentes);
+        
+        // Ordenar e limitar
+        usort($pedidosRecentes, function($a, $b) {
+            return strtotime($b['data_pedido']) - strtotime($a['data_pedido']);
+        });
+        $pedidosRecentes = array_slice($pedidosRecentes, 0, 5);
 
         View::render('cliente/dashboard/index', [
             'nomeUsuario' => $this->session->get('usuario_nome'),
@@ -56,7 +52,7 @@ class DashboardController extends AuthenticatedController{
     public function viewEditarCliente(int $id){
         $dados = $this->usuario->buscarPorID($id);
         if (!$dados) {
-            Redirect::redirecionarComMensagem("/backend/cliente/dashboard", "error", "Cliente não encontrado.");
+            Redirect::redirecionarComMensagem("/cliente/dashboard", "error", "Cliente não encontrado.");
         }
         View::render("cliente/editar", ["usuario" => $dados]);
     }
@@ -64,7 +60,7 @@ class DashboardController extends AuthenticatedController{
     public function atualizarCliente(int $id) {
         $usuario = $this->usuario->buscarPorID($id);
         if (!$usuario) {
-            Redirect::redirecionarComMensagem("/backend/cliente/dashboard", "error", "Cliente não encontrado.");
+            Redirect::redirecionarComMensagem("/cliente/dashboard", "error", "Cliente não encontrado.");
         }
 
         $nome = $_POST['nome_usuarios'] ?? '';
@@ -127,7 +123,7 @@ class DashboardController extends AuthenticatedController{
                 $this->session->set('foto_usuarios', $fotoCaminho);
             }
 
-            Redirect::redirecionarComMensagem("/backend/cliente/dashboard", "success", "Perfil atualizado com sucesso!");
+            Redirect::redirecionarComMensagem("/cliente/dashboard", "success", "Perfil atualizado com sucesso!");
         } else {
             Redirect::redirecionarComMensagem("/backend/cliente/meu-perfil/$id", "error", "Erro ao atualizar perfil. Tente novamente.");
         }

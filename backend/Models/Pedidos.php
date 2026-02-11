@@ -36,7 +36,7 @@ class Pedidos {
     // Buscar pedido por ID
     public function buscarPedidoPorId(int $id) {
     
-        $sql = "SELECT tbl_pedidos.*, tbl_perfil.endereco_perfil, tbl_usuarios.nome_usuarios AS nome_cliente
+        $sql = "SELECT tbl_pedidos.*, tbl_perfil.endereco_perfil, tbl_perfil.id_usuarios, tbl_usuarios.nome_usuarios AS nome_cliente
                 FROM tbl_pedidos
                 LEFT JOIN tbl_perfil ON tbl_pedidos.id_perfil = tbl_perfil.id_perfil
                 LEFT JOIN tbl_usuarios ON tbl_perfil.id_usuarios = tbl_usuarios.id_usuarios
@@ -63,6 +63,17 @@ class Pedidos {
                 WHERE id_perfil = :id_perfil AND excluido_em IS NULL";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':id_perfil', $id_perfil);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Buscar todos os pedidos de um usuário (através de todos os seus perfis)
+    public function buscarPedidosPorUsuario(int $id_usuario) {
+        $sql = "SELECT p.* FROM tbl_pedidos p
+                JOIN tbl_perfil pf ON p.id_perfil = pf.id_perfil
+                WHERE pf.id_usuarios = :id_usuario AND p.excluido_em IS NULL";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

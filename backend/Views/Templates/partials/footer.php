@@ -10,39 +10,40 @@
 .rodape {
     width: 100%;
     text-align: center;
-    background-color: var(--cor-navbar); /* Preto escuro da navbar */
-    color: var(--cor-texto-claro); /* Texto branco/cinza claro */
-    padding: 10px 0; /* REDUZIDO: de 30px para 20px de padding vertical */
-    margin-top: 20px; /* Reduzido um pouco o espaçamento acima também */
-    font-size: 13px; /* REDUZIDO: Fonte base um pouco menor */
-    border-top: 2px solid var(--cor-primaria);
+    background-color: var(--bg-top); /* Usando a mesma cor da navbar para consistência */
+    color: var(--text-main); /* Texto dinâmico conforme o tema */
+    padding: 20px 0;
+    margin-top: 40px; 
+    font-size: 13px;
+    border-top: 1px solid var(--border-color);
     z-index: 1; 
 }
 
 .rodape h4 {
-    font-family: var(--font-titulo);
-    color: var(--cor-primaria);
-    font-size: 1.5em; /* REDUZIDO: Título H4 um pouco menor */
-    margin-bottom: 3px; /* Espaçamento menor */
-    letter-spacing: 1px;
+    font-family: inherit;
+    color: var(--text-main);
+    font-size: 1.4em;
+    margin-bottom: 5px;
+    letter-spacing: 2px;
     text-transform: uppercase;
+    font-weight: 700;
 }
 
 .rodape p {
-    color: #999;
+    color: var(--text-muted);
     margin: 0;
-    padding-top: 3px; /* Espaçamento menor */
-    font-size: 0.9em; /* REDUZIDO: Texto do parágrafo um pouco menor em relação à base do footer */
+    padding-top: 5px;
+    font-size: 0.9em;
 }
 
 .rodape a {
-    color: var(--cor-primaria);
+    color: var(--accent);
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
 .rodape a:hover {
-    color: var(--cor-secundaria);
+    color: var(--accent-hover);
     text-decoration: underline;
 }
 
@@ -51,9 +52,9 @@
 
 </style>
   <footer class="rodape">
- <h4 style="color:white">Koketsu Store</h4>
- <p>© 2025 Koketsu. Desenvolvido com <a href="https://www.w3schools.com/w3css/" target="_blank">HTML & CSS</a></p>
- </footer>
+    <h4>Koketsu Store</h4>
+    <p>© 2025 Koketsu. Desenvolvido com <a href="https://www.w3schools.com/w3css/" target="_blank">HTML & CSS</a></p>
+  </footer>
 
 </div>
 
