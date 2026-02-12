@@ -22,7 +22,8 @@ class Avaliacao {
         $sql = "SELECT a.*, p.nome_produtos as nome_produto, u.nome_usuarios as nome_cliente 
                 FROM tbl_avaliacoes a
                 LEFT JOIN tbl_produtos p ON a.id_produto = p.id_produto
-                LEFT JOIN tbl_usuarios u ON a.id_cliente = u.id_usuarios
+                LEFT JOIN tbl_perfil pf ON a.id_cliente = pf.id_perfil
+                LEFT JOIN tbl_usuarios u ON pf.id_usuarios = u.id_usuarios
                 WHERE a.excluido_em IS NULL";
         $stmt = $this->db->prepare($sql);
         $stmt->execute();
@@ -43,7 +44,7 @@ class Avaliacao {
 
     // Buscar avaliações de um cliente específico
     public function buscarPorCliente($id_cliente) {
-        $sql = "SELECT a.*, p.nome_produtos as nome_produto 
+        $sql = "SELECT a.*, p.nome_produtos as nome_produto, p.imagem_produtos 
                 FROM tbl_avaliacoes a
                 LEFT JOIN tbl_produtos p ON a.id_produto = p.id_produto
                 WHERE a.id_cliente = :id_cliente AND a.excluido_em IS NULL";
@@ -52,6 +53,20 @@ class Avaliacao {
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    // Buscar avaliações de um usuário específico (independente do perfil)
+    public function buscarPorUsuario($id_usuario) {
+        $sql = "SELECT DISTINCT a.*, p.nome_produtos as nome_produto, p.imagem_produtos 
+                FROM tbl_avaliacoes a
+                LEFT JOIN tbl_produtos p ON a.id_produto = p.id_produto
+                LEFT JOIN tbl_perfil perf ON a.id_cliente = perf.id_perfil
+                WHERE perf.id_usuarios = :id_usuario AND a.excluido_em IS NULL";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 
     // Inserir nova avaliação
     public function inserirAvaliacao($id_produto, $id_cliente, $nota, $comentario) {
@@ -98,7 +113,8 @@ class Avaliacao {
         $sql = "SELECT a.*, p.nome_produtos as nome_produto, u.nome_usuarios as nome_cliente 
                 FROM tbl_avaliacoes a
                 LEFT JOIN tbl_produtos p ON a.id_produto = p.id_produto
-                LEFT JOIN tbl_usuarios u ON a.id_cliente = u.id_usuarios
+                LEFT JOIN tbl_perfil pf ON a.id_cliente = pf.id_perfil
+                LEFT JOIN tbl_usuarios u ON pf.id_usuarios = u.id_usuarios
                 WHERE a.id_avaliacoes = :id AND a.excluido_em IS NULL";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':id', $id);

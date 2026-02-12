@@ -42,7 +42,13 @@ class AuthController{
     $email = $_POST['email_usuarios'] ?? null;
     $senha = $_POST['senha_usuarios'] ?? null;
     $usuario = $this->usuarioModel->checarCredenciais($email, $senha);
+
     if ($usuario) {
+        if ($usuario['nivel_acesso'] !== 'cliente') {
+            Redirect::redirecionarComMensagem('/login', 'error', 'Este login é apenas para clientes.');
+            return;
+        }
+
         session_regenerate_id(true);
         $this->session->set('usuario_id', $usuario['id_usuarios']);
         $this->session->set('usuario_nome', $usuario['nome_usuarios']);
@@ -57,7 +63,13 @@ public function authenticaradmin(): void {
     $email = $_POST['email_usuarios'] ?? null;
     $senha = $_POST['senha_usuarios'] ?? null;
     $usuario = $this->usuarioModel->checarCredenciais($email, $senha);
+
     if ($usuario) {
+        if ($usuario['nivel_acesso'] !== 'admin') {
+            Redirect::redirecionarComMensagem('/admin', 'error', 'Este login é restrito para administradores.');
+            return;
+        }
+
         session_regenerate_id(true);
         $this->session->set('usuario_id', $usuario['id_usuarios']);
         $this->session->set('usuario_nome', $usuario['nome_usuarios']);
@@ -65,7 +77,7 @@ public function authenticaradmin(): void {
         $this->session->set('foto_usuarios', $usuario['foto_usuarios'] ?? '/img/logoperf.jpg');
         Redirect::redirecionarPara('/admin/dashboard');
     } else {
-        Redirect::redirecionarComMensagem('/login', 'error', 'E-mail ou senha incorretos.');
+        Redirect::redirecionarComMensagem('/admin', 'error', 'E-mail ou senha incorretos.');
     }
 }
 

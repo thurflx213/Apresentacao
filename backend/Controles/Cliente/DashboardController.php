@@ -32,6 +32,10 @@ class DashboardController extends AuthenticatedController{
         
         $pedidosRecentes = $this->pedidos->buscarPedidosPorUsuario($usuario_id);
         $totalPedidos = count($pedidosRecentes);
+
+        // Contar avaliações do cliente (todos os perfis)
+        $avaliacaoModel = new \App\Koketsu\Models\Avaliacao($this->db);
+        $totalAvaliacoes = count($avaliacaoModel->buscarPorUsuario($usuario_id));
         
         // Ordenar e limitar
         usort($pedidosRecentes, function($a, $b) {
@@ -45,7 +49,8 @@ class DashboardController extends AuthenticatedController{
             'Tipo' => $this->session->get('usuario_tipo'),
             'perfil' => $perfil,
             'pedidosRecentes' => $pedidosRecentes,
-            'totalPedidos' => $totalPedidos
+            'totalPedidos' => $totalPedidos,
+            'totalAvaliacoes' => $totalAvaliacoes
         ]);
     }
 

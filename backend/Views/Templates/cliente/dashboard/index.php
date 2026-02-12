@@ -15,6 +15,11 @@
             </div>
             <div class="v-divider"></div>
             <div class="mini-stat">
+                <span class="v-label">AVALIAÇÕES</span>
+                <span class="v-value"><?= $totalAvaliacoes ?? 0 ?></span>
+            </div>
+            <div class="v-divider"></div>
+            <div class="mini-stat">
                 <span class="v-label">STATUS</span>
                 <span class="v-value gold-text"><i class="fa fa-crown"></i> VIP</span>
             </div>

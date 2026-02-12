@@ -74,6 +74,7 @@ class Rotas
                    '/api/estoque' => 'PublicApiController@getEstoque',
                    '/api/estoque/{id}' => 'PublicApiController@getEstoqueById',
                  "cliente/pedidos/detalhes/{id}" => "Cliente\PedidosController@detalhes",
+                 "cliente/avaliacoes" => "Cliente\AvaliacoesController@index",
               // Perfil
                  "/perfis"        => "PerfilController@index",
                  "/perfil/criar"  => "PerfilController@viewCriarPerfil",
@@ -217,6 +218,10 @@ class Rotas
                 "/avaliacao/salvar" => "AvaliacaoController@salvarAvaliacao",
                 "/avaliacao/atualizar/{id}" => "AvaliacaoController@atualizarAvaliacao",
                 "/avaliacao/deletar/{id}" => "AvaliacaoController@deletarAvaliacao",
+                //avaliacao cliente
+                "/cliente/avaliacao/salvar" => "Cliente\AvaliacoesController@salvar",
+                "/cliente/avaliacao/atualizar/{id}" => "Cliente\AvaliacoesController@atualizar",
+                "/cliente/avaliacao/excluir/{id}" => "Cliente\AvaliacoesController@excluir",
                 //carrinho
                 "/backend/carrinho/salvar" => "CarrinhoController@salvarCarrinho",
                 "/backend/carrinho/atualizar/{id}" => "CarrinhoController@atualizarCarrinho",                

@@ -338,7 +338,10 @@ input, select, textarea {
     <?php else: ?>
         <a href="/backend/cliente/dashboard" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/cliente/dashboard', $current_uri); ?>">
             <i class="fa fa-home fa-fw"></i> Início
-        
+        </a>
+        <a href="/backend/cliente/avaliacoes" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/cliente/avaliacoes', $current_uri); ?>">
+            <i class="fa fa-star fa-fw"></i> Avaliações
+        </a>
     <?php endif; ?>
 
     <a href="/backend/cliente/meu-perfil/<?= htmlspecialchars($session->get('usuario_id') ?? '0') ?>" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/cliente/meu-perfil', $current_uri); ?>">

@@ -391,4 +391,49 @@ return [
         return $result['total'] ?? 0;
     }
     
+    // Buscar produtos que o usuário comprou (independente do perfil) e ainda não avaliou
+    public function buscarProdutosCompradosPorUsuario($id_usuario) {
+        $sql = "SELECT DISTINCT p.id_produto, p.nome_produtos, p.imagem_produtos
+                FROM tbl_itens_pedidos ip
+                JOIN tbl_pedidos ped ON ip.id_pedido = ped.id_pedido
+                JOIN tbl_produtos p ON ip.id_produto = p.id_produto
+                JOIN tbl_perfil perf ON ped.id_perfil = perf.id_perfil
+                WHERE perf.id_usuarios = :id_usuario
+                  AND ped.status_pedido IN ('concluido', 'pago', 'Concluido', 'Pago', 'CONCLUIDO', 'PAGO')
+                  AND ped.excluido_em IS NULL
+                  AND p.id_produto NOT IN (
+                      SELECT a.id_produto 
+                      FROM tbl_avaliacoes a
+                      JOIN tbl_perfil perf2 ON a.id_cliente = perf2.id_perfil
+                      WHERE perf2.id_usuarios = :id_usuario2 
+                      AND a.excluido_em IS NULL
+                      AND a.id_produto IS NOT NULL
+                  )";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':id_usuario', $id_usuario, PDO::PARAM_INT);
+        $stmt->bindParam(':id_usuario2', $id_usuario, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    // Buscar produtos que o cliente comprou (pedidos concluidos/pagos) e ainda não avaliou
+    public function buscarProdutosCompradosPorPerfil($id_perfil) {
+        $sql = "SELECT DISTINCT p.id_produto, p.nome_produtos, p.imagem_produtos
+                FROM tbl_itens_pedidos ip
+                JOIN tbl_pedidos ped ON ip.id_pedido = ped.id_pedido
+                JOIN tbl_produtos p ON ip.id_produto = p.id_produto
+                WHERE ped.id_perfil = :id_perfil
+                  AND ped.status_pedido IN ('concluido', 'pago')
+                  AND ped.excluido_em IS NULL
+                  AND p.id_produto NOT IN (
+                      SELECT a.id_produto FROM tbl_avaliacoes a
+                      WHERE a.id_cliente = :id_perfil2 AND a.excluido_em IS NULL
+                  )";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':id_perfil', $id_perfil, PDO::PARAM_INT);
+        $stmt->bindParam(':id_perfil2', $id_perfil, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }

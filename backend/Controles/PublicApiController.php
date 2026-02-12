@@ -45,7 +45,8 @@ class PublicApiController {
         $dados = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         
         foreach ($dados as &$produto) {
-            $produto['caminho_imagem'] = '/backend/upload/' . $produto['imagem_produtos'];
+            $caminho = 'backend/upload/' . $produto['imagem_produtos'];
+            $produto['caminho_imagem'] = $this->converterParaBase64($caminho);
         }
         unset($produto);
         
@@ -70,7 +71,8 @@ class PublicApiController {
         
         header('Content-Type: application/json');
         if ($produto) {
-            $produto['caminho_imagem'] = '/backend/upload/' . $produto['imagem_produtos'];
+            $caminho = 'backend/upload/' . $produto['imagem_produtos'];
+            $produto['caminho_imagem'] = $this->converterParaBase64($caminho);
             http_response_code(200);
             echo json_encode(['status' => 'success', 'data' => $produto], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         } else {
@@ -703,6 +705,11 @@ class PublicApiController {
         $stmt->execute();
         $imagens = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         
+        foreach ($imagens as &$img) {
+            $img['caminho_imagem'] = $this->converterParaBase64($img['caminho_imagem']);
+        }
+        unset($img);
+        
         header('Content-Type: application/json');
         http_response_code(200);
         echo json_encode([
@@ -727,6 +734,7 @@ class PublicApiController {
         
         header('Content-Type: application/json');
         if ($imagem) {
+            $imagem['caminho_imagem'] = $this->converterParaBase64($imagem['caminho_imagem']);
             http_response_code(200);
             echo json_encode(['status' => 'success', 'data' => $imagem], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         } else {
@@ -893,6 +901,25 @@ class PublicApiController {
         exit;
     }
 
+
+    private function converterParaBase64($caminhoRelativo) {
+        if (empty($caminhoRelativo)) return null;
+
+        // Limpa o caminho se ele começar com /
+        $caminhoLimpo = ltrim($caminhoRelativo, '/');
+        
+        // __DIR__ é backend/Controles, precisamos subir 2 níveis para a raiz do projeto
+        $caminhoCompleto = __DIR__ . '/../../' . $caminhoLimpo;
+        
+        if (file_exists($caminhoCompleto) && is_file($caminhoCompleto)) {
+            $conteudo = file_get_contents($caminhoCompleto);
+            $tipo = mime_content_type($caminhoCompleto);
+            $base64 = base64_encode($conteudo);
+            return "data:$tipo;base64,$base64";
+        }
+        
+        return null;
+    }
 
     public function viewManutencao() {
         include __DIR__ . '/../Views/Templates/manutencao.php';
