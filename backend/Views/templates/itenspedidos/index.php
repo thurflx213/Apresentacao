@@ -180,36 +180,30 @@
         transform: scale(1.1);
     }
 
+    .btn-delete {
+        background: rgba(255, 71, 87, 0.1);
+        color: #ff4757;
+        border: 1px solid rgba(255, 71, 87, 0.3);
+    }
+
     .btn-delete:hover {
         background: #ff4757;
         color: white;
         border-color: #ff4757;
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(255, 71, 87, 0.3);
     }
 
     /* --- PAGINAÇÃO --- */
-    .koketsu-pagination {
-        margin-top: 30px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 15px 25px;
-        background: var(--bg-card);
-        border-radius: 15px;
-        border: 1px solid var(--border-color);
-    }
-
-    .nav-btn {
-        background: #111;
-        color: white;
-        padding: 8px 18px;
-        border-radius: 8px;
-        text-decoration: none;
-        font-size: 13px;
-        font-weight: 600;
-        border: 1px solid #333;
-    }
-
-    .nav-btn:hover { background: #222; border-color: var(--accent-gold); }
+    /* Pagination */
+    .pagination-container { display: flex; justify-content: space-between; align-items: center; margin-top: 30px; padding: 20px; background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-color); }
+    .pagination-info { color: var(--text-muted); font-size: 13px; font-weight: 600; }
+    .pagination-buttons { display: flex; align-items: center; gap: 8px; }
+    .page-link { padding: 8px 16px; background: var(--bg-main); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 13px; transition: 0.3s; }
+    .page-link:hover:not(.disabled) { border-color: var(--accent); color: var(--accent); }
+    .page-link.active { background: var(--accent); color: #000; border-color: var(--accent); }
+    .page-link.disabled { opacity: 0.3; cursor: not-allowed; }
+    .pagination-dots { color: var(--text-muted); padding: 0 5px; font-weight: bold; }
 </style>
 
 <div class="koketsu-header-section">
@@ -264,7 +258,7 @@
             <?php foreach ($itenspedidos as $itempedido): 
                 $subtotal = $itempedido['quantidade'] * $itempedido['preco_unitario'];
             ?>
-            <tr>
+            <tr class="item-row">
                 <td><span class="id-tag">#<?= $itempedido['id_itens_pedidos'] ?></span></td>
                 <td>
                     <a href="/backend/pedido/listar/<?= $itempedido['id_pedido'] ?>" class="pedido-link">
@@ -274,7 +268,7 @@
                 </td>
                 <td>
                     <div class="prod-info-box">
-                        <span class="prod-name"><?= htmlspecialchars($produtos['nome_produtos'] ?? 'Produto não identificado') ?></span>
+                        <span class="prod-name"><?= htmlspecialchars($itempedido['nome_produto'] ?? 'Produto não identificado') ?></span>
                         <span class="prod-desc">SKU: PROD-00<?= $itempedido['id_produto'] ?></span>
                     </div>
                 </td>
@@ -300,20 +294,9 @@
         </tbody>
     </table>
     
-    <div class="koketsu-pagination">
-        <span style="color: #666; font-size: 13px; font-weight: 600;">
-            Página <span style="color: var(--accent-gold);"><?= $paginacao['pagina_atual'] ?></span> de <?= $paginacao['ultima_pagina'] ?>
-        </span>
-        
-        <div style="display: flex; gap: 10px;">
-            <?php if ($paginacao['pagina_atual'] > 1): ?>
-                <a href="/backend/itenspedidos/listar/<?= $paginacao['pagina_atual'] - 1 ?>" class="nav-btn"><i class="fa fa-chevron-left"></i> Anterior</a>
-            <?php endif; ?>
-            
-            <?php if ($paginacao['pagina_atual'] < $paginacao['ultima_pagina']): ?>
-                <a href="/backend/itenspedidos/listar/<?= $paginacao['pagina_atual'] + 1 ?>" class="nav-btn">Próximo <i class="fa fa-chevron-right"></i></a>
-            <?php endif; ?>
-        </div>
+    <div class="pagination-container">
+        <div class="pagination-info" id="paginationInfo">Carregando...</div>
+        <div class="pagination-buttons" id="paginationButtons"></div>
     </div>
     
     <?php else: ?>
@@ -327,3 +310,42 @@
         </div>
     <?php endif; ?>
 </div>
+
+<script>
+const rowsPerPage = 10;
+let currentPage = 1;
+function displayTable() {
+    const rows = Array.from(document.querySelectorAll(".item-row"));
+    const totalPages = Math.ceil(rows.length / rowsPerPage);
+    if (currentPage > totalPages && totalPages > 0) currentPage = totalPages;
+    const start = (currentPage - 1) * rowsPerPage;
+    rows.forEach(row => row.style.display = "none");
+    rows.slice(start, start + rowsPerPage).forEach(row => row.style.display = "");
+    updatePaginationButtons(totalPages, rows.length);
+}
+function updatePaginationButtons(totalPages, total) {
+    const container = document.getElementById("paginationButtons");
+    const info = document.getElementById("paginationInfo");
+    if (!container) return;
+    container.innerHTML = "";
+    info.innerText = `P\u00e1gina ${currentPage} de ${totalPages || 1} (${total} itens)`;
+    if (totalPages <= 1) return;
+    const createBtn = (text, page, active = false, disabled = false) => {
+        const btn = document.createElement("button");
+        btn.innerHTML = text;
+        btn.className = `page-link ${active ? 'active' : ''} ${disabled ? 'disabled' : ''}`;
+        if (!disabled) btn.onclick = () => { currentPage = page; displayTable(); };
+        return btn;
+    };
+    container.appendChild(createBtn('<i class="fa fa-chevron-left"></i>', currentPage - 1, false, currentPage === 1));
+    for (let i = 1; i <= totalPages; i++) {
+        if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+            if (i === currentPage - 1 && i > 2) { const d = document.createElement("span"); d.className = "pagination-dots"; d.innerText = "..."; container.appendChild(d); }
+            container.appendChild(createBtn(i, i, i === currentPage));
+            if (i === currentPage + 1 && i < totalPages - 1) { const d = document.createElement("span"); d.className = "pagination-dots"; d.innerText = "..."; container.appendChild(d); }
+        }
+    }
+    container.appendChild(createBtn('<i class="fa fa-chevron-right"></i>', currentPage + 1, false, currentPage === totalPages));
+}
+document.addEventListener("DOMContentLoaded", displayTable);
+</script>

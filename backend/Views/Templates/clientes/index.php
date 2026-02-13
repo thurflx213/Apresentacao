@@ -157,8 +157,10 @@
     .btn-view:hover { background: #4dabf7; color: #000; }
     .btn-edit { background: var(--bg-main); color: var(--accent); border: 1px solid var(--accent); }
     .btn-edit:hover { background: var(--accent); color: #000; }
-    .btn-toggle { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); }
-    .btn-toggle:hover { border-color: #ff4444; color: #ff4444; background: rgba(255, 68, 68, 0.05); }
+    .btn-toggle { background: rgba(220, 53, 69, 0.1); border: 1px solid rgba(220, 53, 69, 0.3); color: #dc3545; }
+    .btn-toggle:hover { background: #dc3545; color: #fff; transform: scale(1.05); box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2); }
+    .btn-activate { background: rgba(40, 167, 69, 0.1); border: 1px solid rgba(40, 167, 69, 0.3); color: #28a745; }
+    .btn-activate:hover { background: #28a745 !important; color: #fff !important; transform: scale(1.05); box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2); }
 
     .client-avatar {
         width: 45px;
@@ -169,7 +171,8 @@
         box-shadow: var(--shadow-sm);
     }
 
-    .tr-inativo { opacity: 0.5; filter: grayscale(0.8); border-left: 4px solid #dc3545 !important; }
+    .tr-inativo td { background: rgba(220, 53, 69, 0.08) !important; }
+    .tr-inativo td:first-child { border-left: 4px solid #dc3545 !important; }
 </style>
 </style>
 
@@ -229,6 +232,7 @@
                     <th style="width: 60px;">Foto</th>
                     <th>Nome</th>
                     <th>Email</th>
+                    <th>Telefone</th>
                     <th>Cadastro</th>
                     <th style="text-align: center;">Status</th>
                     <th style="text-align: center;">Ações</th>
@@ -254,6 +258,15 @@
                             <?= htmlspecialchars($cliente['nome_usuarios']) ?>
                         </td>
                         <td class="client-email"><?= htmlspecialchars($cliente['email_usuarios']) ?></td>
+                        <td class="client-phone">
+                            <?php if (!empty($cliente['telefone_perfil'])): ?>
+                                <a href="https://wa.me/<?= preg_replace('/\D/', '', $cliente['telefone_perfil']) ?>" target="_blank" style="color: #25d366; text-decoration: none;">
+                                    <i class="fa fa-whatsapp"></i> <?= htmlspecialchars($cliente['telefone_perfil']) ?>
+                                </a>
+                            <?php else: ?>
+                                <span style="color: var(--text-muted);">Não inf.</span>
+                            <?php endif; ?>
+                        </td>
                         <td style="color: var(--text-muted); font-size: 13px;">
                             <?= date('d/m/Y', strtotime($cliente['criado_em'])) ?>
                         </td>
@@ -272,7 +285,7 @@
                             </a>
                             
                             <?php if ($is_inativo): ?>
-                                <a href="/backend/usuario/ativar/<?= $cliente['id_usuarios'] ?>" class="btn-action-small btn-toggle">
+                                <a href="/backend/usuario/ativar/<?= $cliente['id_usuarios'] ?>" class="btn-action-small btn-activate">
                                     <i class="fa fa-check"></i> Ativar
                                 </a>
                             <?php else: ?>
@@ -300,7 +313,7 @@
 
 <script>
 function filterClients() {
-    var input, filter, table, tr, td_name, td_email, i, nameValue, emailValue;
+    var input, filter, table, tr, td_name, td_email, td_phone, i, nameValue, emailValue, phoneValue;
     input = document.getElementById("clientInput");
     filter = input.value.toUpperCase();
     table = document.getElementById("clientTable");
@@ -309,12 +322,16 @@ function filterClients() {
     for (i = 1; i < tr.length; i++) {
         td_name = tr[i].getElementsByClassName("client-name")[0];
         td_email = tr[i].getElementsByClassName("client-email")[0];
+        td_phone = tr[i].getElementsByClassName("client-phone")[0];
         
-        if (td_name || td_email) {
+        if (td_name || td_email || td_phone) {
             nameValue = td_name ? (td_name.textContent || td_name.innerText) : "";
             emailValue = td_email ? (td_email.textContent || td_email.innerText) : "";
+            phoneValue = td_phone ? (td_phone.textContent || td_phone.innerText) : "";
             
-            if (nameValue.toUpperCase().indexOf(filter) > -1 || emailValue.toUpperCase().indexOf(filter) > -1) {
+            if (nameValue.toUpperCase().indexOf(filter) > -1 || 
+                emailValue.toUpperCase().indexOf(filter) > -1 ||
+                phoneValue.toUpperCase().indexOf(filter) > -1) {
                 tr[i].style.display = "";
             } else {
                 tr[i].style.display = "none";

@@ -35,6 +35,52 @@
                     <label for="id_categoria">ID DA CATEGORIA:</label>
                     <input type="number" id="id_categoria" name="id_categoria" value="<?= $produtos['id_categoria']; ?>" required>
                 </div>
+
+                <!-- Cores -->
+                <div class="form-group">
+                    <label>CORES:</label>
+                    <div id="cores-container">
+                        <?php if (!empty($cores)): ?>
+                            <?php foreach ($cores as $cor): ?>
+                                <div class="variation-row">
+                                    <input type="text" name="cores[]" value="<?= htmlspecialchars($cor['cor_cores']); ?>" placeholder="Ex: Preto" class="flex-1">
+                                    <input type="number" name="quantidade_cores[]" value="<?= $cor['quantidade_cores']; ?>" placeholder="Qtd" style="width: 80px;">
+                                    <button type="button" class="btn-remove" onclick="this.parentElement.remove()"><i class="fa fa-times"></i></button>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <div class="variation-row">
+                                <input type="text" name="cores[]" placeholder="Ex: Preto" class="flex-1">
+                                <input type="number" name="quantidade_cores[]" placeholder="Qtd" style="width: 80px;">
+                                <button type="button" class="btn-remove" onclick="this.parentElement.remove()"><i class="fa fa-times"></i></button>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                    <button type="button" class="btn-add" onclick="addCor()"><i class="fa fa-plus"></i> Adicionar Cor</button>
+                </div>
+
+                <!-- Tamanhos -->
+                <div class="form-group">
+                    <label>TAMANHOS:</label>
+                    <div id="tamanhos-container">
+                        <?php if (!empty($tamanhos)): ?>
+                            <?php foreach ($tamanhos as $tamanho): ?>
+                                <div class="variation-row">
+                                    <input type="text" name="tamanhos[]" value="<?= htmlspecialchars($tamanho['tamanho_tamanhos']); ?>" placeholder="Ex: M" class="flex-1">
+                                    <input type="number" name="quantidade_tamanhos[]" value="<?= $tamanho['quantidade_tamanhos']; ?>" placeholder="Qtd" style="width: 80px;">
+                                    <button type="button" class="btn-remove" onclick="this.parentElement.remove()"><i class="fa fa-times"></i></button>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <div class="variation-row">
+                                <input type="text" name="tamanhos[]" placeholder="Ex: M" class="flex-1">
+                                <input type="number" name="quantidade_tamanhos[]" placeholder="Qtd" style="width: 80px;">
+                                <button type="button" class="btn-remove" onclick="this.parentElement.remove()"><i class="fa fa-times"></i></button>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                    <button type="button" class="btn-add" onclick="addTamanho()"><i class="fa fa-plus"></i> Adicionar Tamanho</button>
+                </div>
             </div>
 
             <div class="form-upload-section">
@@ -76,6 +122,30 @@ function previewImage(input) {
         }
         reader.readAsDataURL(input.files[0]);
     }
+}
+
+function addCor() {
+    const container = document.getElementById('cores-container');
+    const row = document.createElement('div');
+    row.className = 'variation-row';
+    row.innerHTML = `
+        <input type="text" name="cores[]" placeholder="Ex: Preto" class="flex-1">
+        <input type="number" name="quantidade_cores[]" placeholder="Qtd" style="width: 80px;">
+        <button type="button" class="btn-remove" onclick="this.parentElement.remove()"><i class="fa fa-times"></i></button>
+    `;
+    container.appendChild(row);
+}
+
+function addTamanho() {
+    const container = document.getElementById('tamanhos-container');
+    const row = document.createElement('div');
+    row.className = 'variation-row';
+    row.innerHTML = `
+        <input type="text" name="tamanhos[]" placeholder="Ex: M" class="flex-1">
+        <input type="number" name="quantidade_tamanhos[]" placeholder="Qtd" style="width: 80px;">
+        <button type="button" class="btn-remove" onclick="this.parentElement.remove()"><i class="fa fa-times"></i></button>
+    `;
+    container.appendChild(row);
 }
 </script>
 
@@ -148,6 +218,40 @@ function previewImage(input) {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 15px;
+}
+
+/* Variações */
+.variation-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.btn-add {
+    background: transparent;
+    color: #f2cc7d;
+    border: 1px dashed #f2cc7d;
+    padding: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    width: 100%;
+    margin-top: 5px;
+    transition: 0.3s;
+}
+
+.btn-add:hover {
+    background: rgba(242, 204, 125, 0.1);
+}
+
+.btn-remove {
+    background: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 /* Seção de Upload */

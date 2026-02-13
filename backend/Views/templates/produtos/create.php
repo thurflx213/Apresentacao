@@ -66,6 +66,36 @@
             </div>
         </div>
 
+        <div class="form-grid">
+            <div class="form-column">
+                <div class="form-group">
+                    <label>Variações de Cores:</label>
+                    <div id="cores-container">
+                        <div class="variation-row">
+                            <input type="text" name="cores[]" placeholder="Ex: Preto" class="flex-1">
+                            <input type="number" name="quantidade_cores[]" placeholder="Qtd" style="width: 80px;">
+                            <button type="button" class="btn-remove" onclick="this.parentElement.remove()"><i class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-add" onclick="addCor()"><i class="fa fa-plus"></i> Adicionar Cor</button>
+                </div>
+            </div>
+
+            <div class="form-column">
+                <div class="form-group">
+                    <label>Variações de Tamanhos:</label>
+                    <div id="tamanhos-container">
+                        <div class="variation-row">
+                            <input type="text" name="tamanhos[]" placeholder="Ex: M" class="flex-1">
+                            <input type="number" name="quantidade_tamanhos[]" placeholder="Qtd" style="width: 80px;">
+                            <button type="button" class="btn-remove" onclick="this.parentElement.remove()"><i class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-add" onclick="addTamanho()"><i class="fa fa-plus"></i> Adicionar Tamanho</button>
+                </div>
+            </div>
+        </div>
+
         <div class="actions-container">
             <button type="submit" class="btn-save">
                 <i class="fa fa-save"></i> Salvar Produto
@@ -79,6 +109,40 @@
 </div>
 
 <style>
+    /* Estilos para as variações */
+    .variation-row {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+        align-items: center;
+    }
+
+    .btn-add {
+        background: transparent;
+        color: #f2cc7d;
+        border: 1px dashed #f2cc7d;
+        padding: 8px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 12px;
+        width: 100%;
+        margin-top: 5px;
+        transition: 0.3s;
+    }
+
+    .btn-add:hover {
+        background: rgba(242, 204, 125, 0.1);
+    }
+
+    .btn-remove {
+        background: #ff4d4d;
+        color: white;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
     /* Base e Alinhamento Centralizado como no Edit Usuário */
     .page-wrapper {
         padding: 40px 20px;
@@ -273,6 +337,30 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
+
+function addCor() {
+    const container = document.getElementById('cores-container');
+    const row = document.createElement('div');
+    row.className = 'variation-row';
+    row.innerHTML = `
+        <input type="text" name="cores[]" placeholder="Ex: Preto" class="flex-1">
+        <input type="number" name="quantidade_cores[]" placeholder="Qtd" style="width: 80px;">
+        <button type="button" class="btn-remove" onclick="this.parentElement.remove()"><i class="fa fa-times"></i></button>
+    `;
+    container.appendChild(row);
+}
+
+function addTamanho() {
+    const container = document.getElementById('tamanhos-container');
+    const row = document.createElement('div');
+    row.className = 'variation-row';
+    row.innerHTML = `
+        <input type="text" name="tamanhos[]" placeholder="Ex: M" class="flex-1">
+        <input type="number" name="quantidade_tamanhos[]" placeholder="Qtd" style="width: 80px;">
+        <button type="button" class="btn-remove" onclick="this.parentElement.remove()"><i class="fa fa-times"></i></button>
+    `;
+    container.appendChild(row);
+}
 
 // Funções auxiliares (getAverageColor e compressImage) permanecem as mesmas que você forneceu...
 // [As funções de compressão que você enviou entram aqui]

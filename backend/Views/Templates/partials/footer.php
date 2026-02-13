@@ -1,81 +1,107 @@
+</div> <!-- Fim da div w3-main aberta no header.php -->
 
-
-
-</div>
+<footer class="koketsu-footer">
+    <div class="footer-container">
+        <div class="footer-info">
+            <p>&copy; <?= date('Y'); ?> <span class="accent-text">Koketsu Grife</span>. Todos os direitos reservados.</p>
+        </div>
+        <div class="footer-meta">
+            <span class="system-tag">Sistema de Gestão v2.1</span>
+        </div>
+    </div>
+</footer>
 
 <style>
-/* =================================================================== */
-/* 5. Rodapé (Footer) - Ajustado (Menor) */
-/* =================================================================== */
-.rodape {
-    width: 100%;
-    text-align: center;
-    background-color: var(--bg-top); /* Usando a mesma cor da navbar para consistência */
-    color: var(--text-main); /* Texto dinâmico conforme o tema */
-    padding: 20px 0;
-    margin-top: 40px; 
-    font-size: 13px;
-    border-top: 1px solid var(--border-color);
-    z-index: 1; 
-}
+    .koketsu-footer {
+        background-color: var(--bg-card);
+        color: var(--text-muted);
+        padding: 25px 20px;
+        border-top: 1px solid var(--border-color);
+        font-family: 'Segoe UI', sans-serif;
+        margin-top: 40px;
+    }
 
-.rodape h4 {
-    font-family: inherit;
-    color: var(--text-main);
-    font-size: 1.4em;
-    margin-bottom: 5px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    font-weight: 700;
-}
+    .footer-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
 
-.rodape p {
-    color: var(--text-muted);
-    margin: 0;
-    padding-top: 5px;
-    font-size: 0.9em;
-}
+    .footer-info p {
+        margin: 0;
+        font-size: 13px;
+        letter-spacing: 0.5px;
+    }
 
-.rodape a {
-    color: var(--accent);
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
+    .accent-text {
+        color: var(--accent);
+        font-weight: 700;
+    }
 
-.rodape a:hover {
-    color: var(--accent-hover);
-    text-decoration: underline;
-}
+    .system-tag {
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 11px;
+        background: var(--bg-main);
+        padding: 4px 10px;
+        border-radius: 4px;
+        border: 1px solid var(--border-color);
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
 
-
-
-
+    @media (max-width: 600px) {
+        .footer-container {
+            flex-direction: column;
+            text-align: center;
+        }
+    }
 </style>
-  <footer class="rodape">
-    <h4>Koketsu Store</h4>
-    <p>© 2025 Koketsu. Desenvolvido com <a href="https://www.w3schools.com/w3css/" target="_blank">HTML & CSS</a></p>
-  </footer>
 
-</div>
+<script> 
+    // Funções para abrir/fechar o menu lateral em telas pequenas
+    function w3_open() {
+        const mySidebar = document.getElementById('mySidebar');
+        const myOverlay = document.getElementById('myOverlay');
+        if (mySidebar.style.display === 'block') {
+            w3_close();
+        } else {
+            mySidebar.style.display = 'block';
+            myOverlay.style.display = 'block';
+        }
+    }
 
-<script>
-var mySidebar = document.getElementById("mySidebar");
-var overlayBg = document.getElementById("myOverlay");
+    function w3_close() {
+        const mySidebar = document.getElementById('mySidebar');
+        const myOverlay = document.getElementById('myOverlay');
+        mySidebar.style.display = 'none';
+        myOverlay.style.display = 'none';
+    }
 
-function w3_open() {
-  if (mySidebar.style.display === 'block') {
-    mySidebar.style.display = 'none';
-    overlayBg.style.display = "none";
-  } else {
-    mySidebar.style.display = 'block';
-    overlayBg.style.display = "block";
-  }
-}
-function w3_close() {
-  mySidebar.style.display = "none";
-  overlayBg.style.display = "none";
-}
+    // Script para desaparecer as mensagens de alerta/flash
+    setTimeout(() => { 
+        const alert = document.querySelector('.alert'); 
+        if(alert){ 
+            alert.style.opacity = '0'; 
+            alert.style.transform = 'translateY(-20px)'; 
+            setTimeout(() => alert.remove(), 400); 
+        } 
+    }, 3000); 
+
+    // Lógica para troca de logo baseada no tema
+    function updateLogo() {
+        const logo = document.getElementById('main-logo');
+        if (!logo) return;
+        const isLight = document.documentElement.classList.contains('theme-light');
+        logo.src = isLight ? '/img/icons/logoBlack.png' : '/img/logo.png';
+    }
+
+    // Executa ao carregar e observa mudanças (se houver um switch dinâmico)
+    document.addEventListener('DOMContentLoaded', updateLogo);
 </script>
-
 </body>
 </html>

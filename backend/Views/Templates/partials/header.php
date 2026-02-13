@@ -274,8 +274,8 @@ input, select, textarea {
 <div class="w3-bar w3-top w3-theme w3-large" style="z-index:4">
   <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-black" onclick="w3_open();"><i class="fa fa-bars"></i>  Menu</button>
   <div class="w3-bar" style="background-color: var(--bg-top) !important; height:80px; display:flex; align-items:center; justify-content:center; border-bottom: 1px solid var(--border-color);">
-    <a href="../../index.php">
-      <img id="main-logo" src="/img/logo.png" alt="Koketsu Logo" height="80px">
+    <a href="/">
+      <img id="main-logo" src="/img/logo.png" alt="Koketsu Logo" style="height: 70px; width: auto; max-width: 100%;">
     </a>
   </div>
 </div>
@@ -302,11 +302,13 @@ input, select, textarea {
          onerror="this.src='/img/logoperf.jpg';">
 </div>
   <h5 class="w3-margin-top">Bem-vindo, <strong><?= htmlspecialchars($session->get('usuario_nome')); ?></strong></h5>
+  <?php if ($session->get('usuario_tipo') != 'admin'): ?>
   <div class="w3-margin-top">
     <a href="#" title="Mensagens"><i class="fa fa-envelope w3-hover-text-yellow"></i></a>
     <a href="/backend/cliente/meu-perfil/<?= htmlspecialchars($session->get('usuario_id') ?? '0') ?>" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/cliente/meu-perfil', $current_uri); ?>" title="Perfil" style="margin: 0 10px;"><i class="fa fa-user w3-hover-text-yellow"></i></a>
     <a href="#" title="Configurações"><i class="fa fa-cog w3-hover-text-yellow"></i></a>
   </div>
+  <?php endif; ?>
 </div>
 <hr style="border-color:#333;"> 
   <div class="w3-container">
@@ -344,9 +346,11 @@ input, select, textarea {
         </a>
     <?php endif; ?>
 
+    <?php if ($session->get('usuario_tipo') != 'admin'): ?>
     <a href="/backend/cliente/meu-perfil/<?= htmlspecialchars($session->get('usuario_id') ?? '0') ?>" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/cliente/meu-perfil', $current_uri); ?>">
         <i class="fa fa-user-circle fa-fw"></i> Perfil
     </a>
+    <?php endif; ?>
 
     <a href="/backend/configuracoes" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/configuracoes', $current_uri); ?>">
         <i class="fa fa-cog fa-fw"></i> Configurações
@@ -377,47 +381,3 @@ foreach($mensagem as $key => $value){
 }
 }
 ?>
-
-<script> 
-    // Funções para abrir/fechar o menu lateral em telas pequenas
-    function w3_open() {
-        const mySidebar = document.getElementById('mySidebar');
-        const myOverlay = document.getElementById('myOverlay');
-        if (mySidebar.style.display === 'block') {
-            w3_close();
-        } else {
-            mySidebar.style.display = 'block';
-            myOverlay.style.display = 'block';
-        }
-    }
-
-    function w3_close() {
-        const mySidebar = document.getElementById('mySidebar');
-        const myOverlay = document.getElementById('myOverlay');
-        mySidebar.style.display = 'none';
-        myOverlay.style.display = 'none';
-    }
-
-    // Script para desaparecer as mensagens de alerta/flash
-    setTimeout(() => { 
-        const alert = document.querySelector('.alert'); 
-        if(alert){ 
-            alert.style.opacity = '0'; 
-            alert.style.transform = 'translateY(-20px)'; 
-            setTimeout(() => alert.remove(), 400); 
-        } 
-    }, 3000); 
-
-    // Lógica para troca de logo baseada no tema
-    function updateLogo() {
-        const logo = document.getElementById('main-logo');
-        if (!logo) return;
-        const isLight = document.documentElement.classList.contains('theme-light');
-        logo.src = isLight ? '/img/icons/logoBlack.png' : '/img/logo.png';
-    }
-
-    // Executa ao carregar e observa mudanças (se houver um switch dinâmico)
-    document.addEventListener('DOMContentLoaded', updateLogo);
-</script>
-</body>
-</html>

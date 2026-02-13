@@ -170,7 +170,6 @@ foreach ($pedidos as $p) {
         background: var(--bg-card);
         transition: all 0.2s ease;
         box-shadow: var(--shadow-sm);
-        position: relative;
         border: 1px solid var(--border-color);
     }
 
@@ -198,28 +197,19 @@ foreach ($pedidos as $p) {
     .btn-view:hover { background: #4dabf7; color: #000; }
     .btn-edit { background: var(--bg-main); color: var(--accent); border: 1px solid var(--accent); }
     .btn-edit:hover { background: var(--accent); color: #000; }
-    .btn-delete { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); }
-    .btn-delete:hover { border-color: #ff4444; color: #ff4444; background: rgba(255, 68, 68, 0.05); }
-    .btn-activate { background: transparent; border: 1px solid #4caf50; color: #4caf50; }
-    .btn-activate:hover { background: #4caf50; color: #fff; }
+    .btn-delete { background: rgba(220, 53, 69, 0.1); border: 1px solid rgba(220, 53, 69, 0.3); color: #dc3545; }
+    .btn-delete:hover { background: #dc3545; color: #fff; transform: scale(1.05); box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2); }
+    .btn-activate { background: rgba(40, 167, 69, 0.1); border: 1px solid rgba(40, 167, 69, 0.3); color: #28a745; }
+    .btn-activate:hover { background: #28a745 !important; color: #fff !important; transform: scale(1.05); box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2); }
 
     /* Pedidos Excluídos */
-    .tr-deleted { 
-        opacity: 0.5; 
-        filter: grayscale(0.8);
+    .tr-deleted td { 
+        background: rgba(220, 53, 69, 0.08) !important; 
+    }
+    .tr-deleted td:first-child { 
+        border-left: 4px solid #dc3545 !important;
     }
 
-    .tr-deleted::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: 4px;
-        background: #ff4444;
-        border-radius: 12px 0 0 12px;
-        z-index: 2;
-    }
 
     .tr-deleted .price-column {
         text-decoration: line-through;
@@ -234,6 +224,16 @@ foreach ($pedidos as $p) {
         font-size: 9px;
         margin-left: 5px;
     }
+
+    /* --- PAGINAÇÃO --- */
+    .pagination-container { display: flex; justify-content: space-between; align-items: center; margin-top: 30px; padding: 20px; background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-color); }
+    .pagination-info { color: var(--text-muted); font-size: 13px; font-weight: 600; }
+    .pagination-buttons { display: flex; align-items: center; gap: 8px; }
+    .page-link { padding: 8px 16px; background: var(--bg-main); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 13px; transition: 0.3s; }
+    .page-link:hover:not(.disabled) { border-color: var(--accent); color: var(--accent); }
+    .page-link.active { background: var(--accent); color: #000; border-color: var(--accent); }
+    .page-link.disabled { opacity: 0.3; cursor: not-allowed; }
+    .pagination-dots { color: var(--text-muted); padding: 0 5px; font-weight: bold; }
 </style>
 
 <div class="page-wrapper">
@@ -280,7 +280,7 @@ foreach ($pedidos as $p) {
                             $badge_class = 'badge-cancelado';
                         }
                     ?>
-                    <tr class="<?= $is_deleted ? 'tr-deleted' : '' ?>">
+                    <tr class="order-row <?= $is_deleted ? 'tr-deleted' : '' ?>">
                         <td class="id-column order-id">
                             #<?= $pedido['id_pedido'] ?>
                             <?php if ($is_deleted): ?>
@@ -330,33 +330,76 @@ foreach ($pedidos as $p) {
                 <?php endif; ?>
             </tbody>
         </table>
+        <div class="pagination-container">
+            <div class="pagination-info" id="paginationInfo">Carregando...</div>
+            <div class="pagination-buttons" id="paginationButtons"></div>
+        </div>
     </main>
 </div>
 
-<div style="height: 60px;"></div>
-
 <script>
-function filterOrders() {
-    var input, filter, table, tr, td_id, td_client, i, idValue, clientValue;
-    input = document.getElementById("orderInput");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("orderTable");
-    tr = table.getElementsByTagName("tr");
+const rowsPerPage = 10;
+let currentPage = 1;
 
-    for (i = 1; i < tr.length; i++) {
-        td_id = tr[i].getElementsByClassName("order-id")[0];
-        td_client = tr[i].getElementsByClassName("client-column")[0];
-        
-        if (td_id && td_client) {
-            idValue = td_id.textContent || td_id.innerText;
-            clientValue = td_client.textContent || td_client.innerText;
-            
-            if (idValue.toUpperCase().indexOf(filter) > -1 || clientValue.toUpperCase().indexOf(filter) > -1) {
-                tr[i].style.display = "";
-            } else {
-                tr[i].style.display = "none";
+function displayTable() {
+    const table = document.getElementById("orderTable");
+    const allRows = Array.from(table.querySelectorAll(".order-row"));
+    const filteredRows = allRows.filter(row => row.getAttribute('data-filtered') !== 'false');
+    const totalPages = Math.ceil(filteredRows.length / rowsPerPage);
+    if (currentPage > totalPages && totalPages > 0) currentPage = totalPages;
+    const start = (currentPage - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+    allRows.forEach(row => row.style.display = "none");
+    filteredRows.slice(start, end).forEach(row => row.style.display = "");
+    updatePaginationButtons(totalPages, filteredRows.length);
+}
+
+function updatePaginationButtons(totalPages, totalActive) {
+    const container = document.getElementById("paginationButtons");
+    const info = document.getElementById("paginationInfo");
+    container.innerHTML = "";
+    info.innerText = `Mostrando página ${currentPage} de ${totalPages || 1} (${totalActive} pedidos)`;
+    if (totalPages <= 1) return;
+    const createBtn = (text, page, isActive = false, isDisabled = false) => {
+        const btn = document.createElement("button");
+        btn.innerHTML = text;
+        btn.className = `page-link ${isActive ? 'active' : ''} ${isDisabled ? 'disabled' : ''}`;
+        if (!isDisabled) btn.onclick = () => { currentPage = page; displayTable(); };
+        return btn;
+    };
+    container.appendChild(createBtn('<i class="fa fa-chevron-left"></i>', currentPage - 1, false, currentPage === 1));
+    const range = 1;
+    for (let i = 1; i <= totalPages; i++) {
+        if (i === 1 || i === totalPages || (i >= currentPage - range && i <= currentPage + range)) {
+            if (i === currentPage - range && i > 2) {
+                const dots = document.createElement("span");
+                dots.className = "pagination-dots";
+                dots.innerText = "...";
+                container.appendChild(dots);
+            }
+            container.appendChild(createBtn(i, i, i === currentPage));
+            if (i === currentPage + range && i < totalPages - 1) {
+                const dots = document.createElement("span");
+                dots.className = "pagination-dots";
+                dots.innerText = "...";
+                container.appendChild(dots);
             }
         }
     }
+    container.appendChild(createBtn('<i class="fa fa-chevron-right"></i>', currentPage + 1, false, currentPage === totalPages));
 }
+
+function filterOrders() {
+    const filter = document.getElementById("orderInput").value.toUpperCase();
+    const rows = document.querySelectorAll(".order-row");
+    rows.forEach(row => {
+        const id = row.querySelector(".order-id") ? row.querySelector(".order-id").textContent.toUpperCase() : "";
+        const client = row.querySelector(".client-column") ? row.querySelector(".client-column").textContent.toUpperCase() : "";
+        row.setAttribute('data-filtered', (id.includes(filter) || client.includes(filter)) ? 'true' : 'false');
+    });
+    currentPage = 1;
+    displayTable();
+}
+
+document.addEventListener("DOMContentLoaded", displayTable);
 </script>

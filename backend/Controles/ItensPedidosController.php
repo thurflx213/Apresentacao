@@ -113,7 +113,12 @@ class ItensPedidosController extends AdminController {
     
     // public function excluirItemPedido(int $id) { ... }
     public function viewExcluirItemPedido(int $id) {
-        View::render("itenspedidos/delete", ["id" => $id]);
+        $item = $this->itenspedidos->buscarItemPedidoPorId($id);
+        if ($item) {
+            View::render("itenspedidos/delete", ["itempedido" => $item]);
+        } else {
+            Redirect::redirecionarComMensagem("/itenspedidos/listar", "error", "Item de Pedido não encontrado.");
+        }
     }
 
     public function deletarItemPedido(int $id) {

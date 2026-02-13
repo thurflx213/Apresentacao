@@ -68,7 +68,7 @@ $nomeUsuario = $_SESSION['usuario_nome'] ?? 'Cliente';
                         </div>
                     </div>
                     <div class="avaliacao-card-footer">
-                        <button class="btn-editar" onclick="abrirModalEditar(<?= $avaliacao['id_avaliacoes'] ?>, <?= $avaliacao['nota_avaliacoes'] ?>, '<?= addslashes(htmlspecialchars($avaliacao['comentario_avaliacoes'] ?? '')) ?>')">
+                        <button class="btn-editar" onclick="abrirModalEditar(<?= $avaliacao['id_avaliacoes'] ?>, <?= $avaliacao['id_produto'] ?>, <?= $avaliacao['nota_avaliacoes'] ?>, '<?= addslashes(htmlspecialchars($avaliacao['comentario_avaliacoes'] ?? '')) ?>')">
                             <i class="fa fa-pencil"></i> Editar Avaliação
                         </button>
                         <form action="/backend/cliente/avaliacao/excluir/<?= $avaliacao['id_avaliacoes'] ?>" method="POST" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja excluir esta avaliação?');">
@@ -130,7 +130,7 @@ $nomeUsuario = $_SESSION['usuario_nome'] ?? 'Cliente';
 
             <div class="modal-actions">
                 <button type="button" class="btn-cancelar" onclick="fecharModal()">Cancelar</button>
-                <button type="submit" class="btn-enviar">Enviar avaliação</button>
+                <button type="button" class="btn-enviar" onclick="validarESubmeter()">Enviar avaliação</button>
             </div>
         </form>
     </div>
@@ -545,17 +545,41 @@ function abrirModal() {
     document.body.style.overflow = 'hidden';
 }
 
-function abrirModalEditar(id, nota, comentario) {
+function abrirModalEditar(id, idProduto, nota, comentario) {
     modoEditar = true;
     document.getElementById('modalTitulo').textContent = 'Editar Avaliação';
     document.getElementById('formAvaliacao').action = '/backend/cliente/avaliacao/atualizar/' + id;
     document.getElementById('inputIdAvaliacao').value = id;
     document.getElementById('inputComentario').value = comentario;
     document.getElementById('charCount').textContent = comentario.length;
+    
+    // Configurar produto (mesmo que escondido, deve ter valor para não falhar o required se houver)
+    const selectProduto = document.getElementById('selectProduto');
+    selectProduto.value = idProduto;
+    selectProduto.required = false; // Desativa required no modo edição pois o campo some
+    
     document.getElementById('grupoProduto').style.display = 'none';
     setRating(nota);
     document.getElementById('modalAvaliacao').style.display = 'flex';
     document.body.style.overflow = 'hidden';
+}
+
+function validarESubmeter() {
+    const nota = document.getElementById('inputNota').value;
+    if (nota == 0) {
+        alert('Por favor, selecione uma nota de 1 a 5 estrelas.');
+        return;
+    }
+    
+    if (!modoEditar) {
+        const produto = document.getElementById('selectProduto').value;
+        if (!produto) {
+            alert('Por favor, selecione um produto.');
+            return;
+        }
+    }
+    
+    document.getElementById('formAvaliacao').submit();
 }
 
 function fecharModal() {

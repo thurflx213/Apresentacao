@@ -125,6 +125,9 @@ public function viewAtivarPedido(int $id){
         $id_pedido = $_POST["id_pedido"] ?? null;
         $total_pedido = $_POST["total_pedido"] ?? 0;
         $data_pedido = $_POST["data_pedido"] ?? null;
+        if ($data_pedido) {
+            $data_pedido = str_replace('T', ' ', $data_pedido);
+        }
         $status_pedido = $_POST["status_pedido"] ?? null;
         
         
@@ -145,6 +148,9 @@ public function viewAtivarPedido(int $id){
         $id_perfil = $_POST['id_perfil'] ?? NULL; 
         
         $data_pedido = $_POST['data_pedido'] ?? null;
+        if ($data_pedido) {
+            $data_pedido = str_replace('T', ' ', $data_pedido);
+        }
         $total_pedido_str = $_POST['total_pedido'] ?? '0.00';
         $total_pedido = (float)str_replace(',', '.', $total_pedido_str);
         $status_pedido = $_POST['status_pedido'] ?? 'pendente';

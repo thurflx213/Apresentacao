@@ -77,10 +77,14 @@
     .btn-del-cat:hover { background: #ff4757; color: #fff; }
 
     /* Pagination */
-    .pag-nav { margin-top: 30px; display: flex; justify-content: center; gap: 10px; align-items: center; }
-    .pag-link { padding: 8px 16px; border-radius: 10px; background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main); text-decoration: none; font-size: 0.9em; font-weight: 600; transition: 0.3s; }
-    .pag-link:hover { border-color: var(--accent); color: var(--accent); }
-    .pag-current { color: var(--accent); font-weight: 800; font-size: 0.95em; }
+    .pagination-container { display: flex; justify-content: space-between; align-items: center; margin-top: 30px; padding: 20px; background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-color); }
+    .pagination-info { color: var(--text-muted); font-size: 13px; font-weight: 600; }
+    .pagination-buttons { display: flex; align-items: center; gap: 8px; }
+    .page-link { padding: 8px 16px; background: var(--bg-main); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 13px; transition: 0.3s; }
+    .page-link:hover:not(.disabled) { border-color: var(--accent); color: var(--accent); }
+    .page-link.active { background: var(--accent); color: #000; border-color: var(--accent); }
+    .page-link.disabled { opacity: 0.3; cursor: not-allowed; }
+    .pagination-dots { color: var(--text-muted); padding: 0 5px; font-weight: bold; }
 </style>
 
 <div class="cat-wrapper">
@@ -123,7 +127,7 @@
             </thead>
             <tbody>
                 <?php foreach ($categorias as $categoria): ?>
-                <tr>
+                <tr class="cat-row">
                     <td style="font-family: monospace; font-weight: 700; color: var(--text-muted);">#<?= str_pad($categoria['id_categorias'], 3, '0', STR_PAD_LEFT) ?></td>
                     <td style="font-weight: 800;"><?= htmlspecialchars($categoria['nome_categorias']) ?></td>
                     <td style="color: var(--text-muted); font-size: 0.9em;"><?= htmlspecialchars($categoria['descricao_categorias'] ?: 'Sem descrição informada') ?></td>
@@ -146,16 +150,9 @@
         </table>
     </div>
 
-    <div class="pag-nav">
-        <?php if ($paginacao['pagina_atual'] > 1): ?>
-            <a href="/backend/categoria/listar/<?= $paginacao['pagina_atual'] - 1 ?>" class="pag-link"><i class="fa fa-chevron-left"></i> Anterior</a>
-        <?php endif; ?>
-        
-        <span class="pag-current">Página <?= $paginacao['pagina_atual'] ?> de <?= $paginacao['ultima_pagina'] ?></span>
-        
-        <?php if ($paginacao['pagina_atual'] < $paginacao['ultima_pagina']): ?>
-            <a href="/backend/categoria/listar/<?= $paginacao['pagina_atual'] + 1 ?>" class="pag-link">Próximo <i class="fa fa-chevron-right"></i></a>
-        <?php endif; ?>
+    <div class="pagination-container">
+        <div class="pagination-info" id="paginationInfo">Carregando...</div>
+        <div class="pagination-buttons" id="paginationButtons"></div>
     </div>
     
     <?php else: ?>
@@ -168,4 +165,45 @@
     <?php endif; ?>
 </div>
 
- 
+<script>
+const rowsPerPage = 10;
+let currentPage = 1;
+
+function displayTable() {
+    const rows = Array.from(document.querySelectorAll(".cat-row"));
+    const totalPages = Math.ceil(rows.length / rowsPerPage);
+    if (currentPage > totalPages && totalPages > 0) currentPage = totalPages;
+    const start = (currentPage - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+    rows.forEach(row => row.style.display = "none");
+    rows.slice(start, end).forEach(row => row.style.display = "");
+    updatePaginationButtons(totalPages, rows.length);
+}
+
+function updatePaginationButtons(totalPages, total) {
+    const container = document.getElementById("paginationButtons");
+    const info = document.getElementById("paginationInfo");
+    if (!container) return;
+    container.innerHTML = "";
+    info.innerText = `P\u00e1gina ${currentPage} de ${totalPages || 1} (${total} categorias)`;
+    if (totalPages <= 1) return;
+    const createBtn = (text, page, isActive = false, isDisabled = false) => {
+        const btn = document.createElement("button");
+        btn.innerHTML = text;
+        btn.className = `page-link ${isActive ? 'active' : ''} ${isDisabled ? 'disabled' : ''}`;
+        if (!isDisabled) btn.onclick = () => { currentPage = page; displayTable(); };
+        return btn;
+    };
+    container.appendChild(createBtn('<i class="fa fa-chevron-left"></i>', currentPage - 1, false, currentPage === 1));
+    for (let i = 1; i <= totalPages; i++) {
+        if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+            if (i === currentPage - 1 && i > 2) { const d = document.createElement("span"); d.className = "pagination-dots"; d.innerText = "..."; container.appendChild(d); }
+            container.appendChild(createBtn(i, i, i === currentPage));
+            if (i === currentPage + 1 && i < totalPages - 1) { const d = document.createElement("span"); d.className = "pagination-dots"; d.innerText = "..."; container.appendChild(d); }
+        }
+    }
+    container.appendChild(createBtn('<i class="fa fa-chevron-right"></i>', currentPage + 1, false, currentPage === totalPages));
+}
+
+document.addEventListener("DOMContentLoaded", displayTable);
+</script>

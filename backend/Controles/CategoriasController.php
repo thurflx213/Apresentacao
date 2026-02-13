@@ -50,7 +50,12 @@ class CategoriasController {
 
 
     public function viewExcluirCategoria($id){
-         view::render("categoria/delete", ["id_categorias" => $id]);
+         $dados = $this->categoria->buscarCategoriaPorId($id);
+         if ($dados) {
+             view::render("categoria/delete", ["categoria" => $dados]);
+         } else {
+             Redirect::redirecionarComMensagem("categoria/listar", "error", "Categoria não encontrada.");
+         }
     }
 
     public function relatorioCategoria($id, $data1, $data2){

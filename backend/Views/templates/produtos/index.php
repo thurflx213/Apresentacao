@@ -38,14 +38,25 @@
     .status-ativo { background: rgba(40, 167, 69, 0.1); color: #28a745; border: 1px solid rgba(40, 167, 69, 0.3); }
     .status-inativo { background: rgba(220, 53, 69, 0.1); color: #dc3545; border: 1px solid rgba(220, 53, 69, 0.3); }
 
-    .btn-edit { background: var(--bg-main); color: #2196F3; border: 1px solid #2196F3; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 13px; }
-    .btn-delete { background: var(--bg-main); color: #f44336; border: 1px solid #f44336; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 13px; }
+    .btn-edit { background: var(--bg-main); color: var(--accent); border: 1px solid var(--accent); padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 13px; transition: 0.3s; }
+    .btn-edit:hover { background: var(--accent); color: #000; }
     
-    /* --- PAGINAÇÃO --- */
+    .btn-delete { background: rgba(220, 53, 69, 0.1); color: #dc3545; border: 1px solid rgba(220, 53, 69, 0.3); padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 13px; transition: 0.3s; }
+    .btn-delete:hover { background: #dc3545; color: #fff; transform: scale(1.05); box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2); }
+    
+    .btn-activate { background: rgba(40, 167, 69, 0.1); border: 1px solid rgba(40, 167, 69, 0.3); color: #28a745; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 13px; transition: 0.3s; }
+    .btn-activate:hover { background: #28a745 !important; color: #fff !important; transform: scale(1.05); box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2); }
+    
+    /* --- PAGINAÇÃO (FIXED) --- */
     .pagination-container { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding: 20px; background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-color); }
-    .page-link { padding: 8px 16px; background: var(--bg-main); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 8px; cursor: pointer; font-weight: 700; transition: 0.3s; }
+    .pagination-buttons { display: flex; align-items: center; gap: 8px; }
+    .page-link { padding: 8px 16px; background: var(--bg-main); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 8px; cursor: pointer; font-weight: 700; transition: 0.3s; font-size: 13px; }
+    .page-link:hover:not(.disabled) { border-color: var(--accent); color: var(--accent); }
     .page-link.active { background: var(--accent); color: #000; border-color: var(--accent); }
     .page-link.disabled { opacity: 0.3; cursor: not-allowed; }
+    .pagination-dots { color: var(--text-muted); padding: 0 5px; font-weight: bold; }
+    .tr-inativo td { background: rgba(220, 53, 69, 0.08) !important; }
+    .tr-inativo td:first-child { border-left: 4px solid #dc3545 !important; }
 </style>
 
 <div class="page-wrapper">
@@ -84,7 +95,7 @@
                 <?php foreach ($produtos as $p): 
                     $is_inativo = !empty($p['excluido_em']); 
                 ?>
-                <tr class="item-produto"> 
+                <tr class="item-produto <?= $is_inativo ? 'tr-inativo' : '' ?>"> 
                     <td width="100">
                         <img src="/backend/upload/<?= htmlspecialchars($p['imagem_produtos']); ?>" class="prod-img" onerror="this.src='https://placehold.co/100x100?text=Sem+Foto'">
                     </td>
@@ -102,11 +113,11 @@
                     </td>
                     <td style="text-align: center;">
                         <div style="display: flex; gap: 8px; justify-content: center;">
-                            <a href="/backend/produtos/editar/<?= $p['id_produto']; ?>" class="btn-edit">Editar</a>
+                            <a href="/backend/produtos/editar/<?= $p['id_produto']; ?>" class="btn-edit" title="Editar"><i class="fa fa-pencil"></i></a>
                             <?php if ($is_inativo): ?>
-                                <a href="/backend/produtos/ativar/<?= $p['id_produto'] ?>" class="btn-edit" style="border-color: #4CAF50; color: #4CAF50;">Ativar</a>
+                                <a href="/backend/produtos/ativar/<?= $p['id_produto'] ?>" class="btn-activate" title="Ativar"><i class="fa fa-check"></i></a>
                             <?php else: ?>
-                                <a href="/backend/produtos/excluir/<?= $p['id_produto'] ?>" class="btn-delete">Inativar</a>
+                                <a href="/backend/produtos/excluir/<?= $p['id_produto'] ?>" class="btn-delete" title="Inativar" onclick="return confirm('Deseja inativar este produto?')"><i class="fa fa-trash-can"></i></a>
                             <?php endif; ?>
                         </div>
                     </td>
@@ -130,7 +141,6 @@
         const table = document.getElementById("tabelaProdutos");
         const allRows = Array.from(table.querySelectorAll("tbody .item-produto"));
         
-        // Filtra baseado no atributo data-filtered (setado na busca)
         const filteredRows = allRows.filter(row => row.getAttribute('data-filtered') !== 'false');
         
         const totalPages = Math.ceil(filteredRows.length / rowsPerPage);
@@ -147,8 +157,10 @@
 
     function renderButtons(totalPages, totalItems) {
         const container = document.getElementById("paginationButtons");
-        document.getElementById("paginationInfo").innerText = `Mostrando ${totalItems} produtos`;
+        const info = document.getElementById("paginationInfo");
         container.innerHTML = "";
+
+        info.innerText = `Mostrando ${totalItems} produtos (Página ${currentPage} de ${totalPages || 1})`;
 
         if (totalPages <= 1) return;
 
@@ -156,18 +168,40 @@
             const btn = document.createElement("button");
             btn.innerHTML = content;
             btn.className = `page-link ${active ? 'active' : ''} ${disabled ? 'disabled' : ''}`;
-            btn.onclick = () => { if(!disabled) { currentPage = targetPage; displayTable(); } };
+            if(!disabled) btn.onclick = () => { currentPage = targetPage; displayTable(); };
             return btn;
         };
 
+        // Botão Anterior
         container.appendChild(createBtn('<i class="fa fa-chevron-left"></i>', currentPage - 1, false, currentPage === 1));
 
+        const range = 1; // Quantidade de páginas adjacentes para exibir
+
         for (let i = 1; i <= totalPages; i++) {
-            if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+            // Lógica para mostrar: Primeira, Última, e as que rodeiam a atual
+            if (i === 1 || i === totalPages || (i >= currentPage - range && i <= currentPage + range)) {
+                
+                // Adiciona reticências à esquerda
+                if (i === currentPage - range && i > 2) {
+                    const dots = document.createElement("span");
+                    dots.className = "pagination-dots";
+                    dots.innerText = "...";
+                    container.appendChild(dots);
+                }
+
                 container.appendChild(createBtn(i, i, i === currentPage));
+
+                // Adiciona reticências à direita
+                if (i === currentPage + range && i < totalPages - 1) {
+                    const dots = document.createElement("span");
+                    dots.className = "pagination-dots";
+                    dots.innerText = "...";
+                    container.appendChild(dots);
+                }
             }
         }
 
+        // Botão Próximo
         container.appendChild(createBtn('<i class="fa fa-chevron-right"></i>', currentPage + 1, false, currentPage === totalPages));
     }
 
@@ -184,7 +218,7 @@
         displayTable();
     });
 
-    // Gráfico
+    // Gráfico - Mantido conforme original
     const dadosGrafico = <?php echo json_encode($produto); ?>; 
     if (dadosGrafico && dadosGrafico.length > 0) {
         const style = getComputedStyle(document.body);

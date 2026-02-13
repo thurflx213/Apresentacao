@@ -205,7 +205,7 @@ if ($busca) {
         OR LOWER(tbl_usuarios.nome_usuarios) LIKE LOWER(:busca)
         OR LOWER(tbl_perfil.endereco_perfil) LIKE LOWER(:busca)
     )
-    ORDER BY tbl_pedidos.excluido_em ASC, tbl_pedidos.id_pedido DESC
+    ORDER BY tbl_pedidos.data_pedido DESC
     LIMIT :limit OFFSET :offset";
     
     $dataStmt = $this->db->prepare($dataQuery);
@@ -220,7 +220,7 @@ if ($busca) {
     FROM tbl_pedidos 
     LEFT JOIN tbl_perfil ON tbl_pedidos.id_perfil = tbl_perfil.id_perfil
     LEFT JOIN tbl_usuarios ON tbl_perfil.id_usuarios = tbl_usuarios.id_usuarios
-    ORDER BY tbl_pedidos.excluido_em ASC, tbl_pedidos.id_pedido DESC
+    ORDER BY tbl_pedidos.data_pedido DESC
     LIMIT :limit OFFSET :offset";
     
     $dataStmt = $this->db->prepare($dataQuery);
@@ -384,7 +384,7 @@ return [
 }
 
     public static function contarPedidos($db) {
-        $sql = "SELECT COUNT(*) as total FROM tbl_pedidos WHERE excluido_em IS NULL";
+        $sql = "SELECT COUNT(*) as total FROM tbl_pedidos";
         $stmt = $db->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);

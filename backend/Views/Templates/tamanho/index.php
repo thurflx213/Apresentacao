@@ -61,6 +61,16 @@
 
     /* Size Badge */
     .size-badge { background: var(--bg-main); padding: 4px 10px; border-radius: 6px; border: 1px solid var(--border-color); color: var(--text-main); font-weight: 700; font-family: monospace; }
+
+    /* Pagination */
+    .pagination-container { display: flex; justify-content: space-between; align-items: center; margin-top: 30px; padding: 20px; background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-color); }
+    .pagination-info { color: var(--text-muted); font-size: 13px; font-weight: 600; }
+    .pagination-buttons { display: flex; align-items: center; gap: 8px; }
+    .page-link { padding: 8px 16px; background: var(--bg-main); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 13px; transition: 0.3s; }
+    .page-link:hover:not(.disabled) { border-color: var(--accent); color: var(--accent); }
+    .page-link.active { background: var(--accent); color: #000; border-color: var(--accent); }
+    .page-link.disabled { opacity: 0.3; cursor: not-allowed; }
+    .pagination-dots { color: var(--text-muted); padding: 0 5px; font-weight: bold; }
 </style>
 
 <div class="size-wrapper">
@@ -87,7 +97,7 @@
             </thead>
             <tbody>
                 <?php foreach ($tamanhos as $tamanho): ?>
-                <tr>
+                <tr class="size-row">
                     <td style="font-family: monospace; font-weight: 700; color: var(--text-muted);">#T<?= str_pad($tamanho['id_tamanhos'], 3, '0', STR_PAD_LEFT) ?></td>
                     <td style="font-family: monospace; color: var(--text-muted);">#P<?= str_pad($tamanho['id_produto'], 3, '0', STR_PAD_LEFT) ?></td>
                     <td><span class="size-badge"><?= htmlspecialchars($tamanho['tamanho_tamanhos']) ?></span></td>
@@ -115,6 +125,11 @@
             </tbody>
         </table>
     </div>
+
+    <div class="pagination-container">
+        <div class="pagination-info" id="paginationInfo">Carregando...</div>
+        <div class="pagination-buttons" id="paginationButtons"></div>
+    </div>
     
     <?php else: ?>
         <div style="background: var(--bg-card); border: 2px dashed var(--border-color); padding: 60px; text-align: center; border-radius: 16px;">
@@ -125,3 +140,42 @@
         </div>
     <?php endif; ?>
 </div>
+
+<script>
+const rowsPerPage = 10;
+let currentPage = 1;
+function displayTable() {
+    const rows = Array.from(document.querySelectorAll(".size-row"));
+    const totalPages = Math.ceil(rows.length / rowsPerPage);
+    if (currentPage > totalPages && totalPages > 0) currentPage = totalPages;
+    const start = (currentPage - 1) * rowsPerPage;
+    rows.forEach(row => row.style.display = "none");
+    rows.slice(start, start + rowsPerPage).forEach(row => row.style.display = "");
+    updatePaginationButtons(totalPages, rows.length);
+}
+function updatePaginationButtons(totalPages, total) {
+    const container = document.getElementById("paginationButtons");
+    const info = document.getElementById("paginationInfo");
+    if (!container) return;
+    container.innerHTML = "";
+    info.innerText = `P\u00e1gina ${currentPage} de ${totalPages || 1} (${total} tamanhos)`;
+    if (totalPages <= 1) return;
+    const createBtn = (text, page, active = false, disabled = false) => {
+        const btn = document.createElement("button");
+        btn.innerHTML = text;
+        btn.className = `page-link ${active ? 'active' : ''} ${disabled ? 'disabled' : ''}`;
+        if (!disabled) btn.onclick = () => { currentPage = page; displayTable(); };
+        return btn;
+    };
+    container.appendChild(createBtn('<i class="fa fa-chevron-left"></i>', currentPage - 1, false, currentPage === 1));
+    for (let i = 1; i <= totalPages; i++) {
+        if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+            if (i === currentPage - 1 && i > 2) { const d = document.createElement("span"); d.className = "pagination-dots"; d.innerText = "..."; container.appendChild(d); }
+            container.appendChild(createBtn(i, i, i === currentPage));
+            if (i === currentPage + 1 && i < totalPages - 1) { const d = document.createElement("span"); d.className = "pagination-dots"; d.innerText = "..."; container.appendChild(d); }
+        }
+    }
+    container.appendChild(createBtn('<i class="fa fa-chevron-right"></i>', currentPage + 1, false, currentPage === totalPages));
+}
+document.addEventListener("DOMContentLoaded", displayTable);
+</script>

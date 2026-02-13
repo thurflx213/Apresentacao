@@ -51,7 +51,19 @@ class CoresController {
     }
 
     public function viewExcluirCor(int $id){
-         view::render("cores/delete", ["id_cores" => $id]);
+         $dados = $this->cores->buscarCoresPorIdProduto($id);
+         $cor = null;
+         if ($dados) {
+             foreach($dados as $item){
+                 $cor = $item;
+             }
+         }
+
+         if ($cor) {
+             view::render("cores/delete", ["cor" => $cor]);
+         } else {
+             Redirect::redirecionarComMensagem("cor/listar", "error", "Cor não encontrada.");
+         }
     }
 
     public function relatorioCores($id, $data1, $data2){

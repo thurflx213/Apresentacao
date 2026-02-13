@@ -15,8 +15,8 @@
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="data_pedido">DATA DO PEDIDO:</label>
-                        <input type="date" id="data_pedido" name="data_pedido" value="<?= date('Y-m-d'); ?>" required>
+                        <label for="data_pedido">DATA E HORA DO PEDIDO:</label>
+                        <input type="datetime-local" id="data_pedido" name="data_pedido" value="<?= date('Y-m-d\TH:i'); ?>" required>
                     </div>
 
                     <div class="form-group">

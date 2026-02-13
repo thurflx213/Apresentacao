@@ -2,6 +2,8 @@
 namespace App\Koketsu\Controles;
 
 use App\Koketsu\Models\Produtos;
+use App\Koketsu\Models\Cor;
+use App\Koketsu\Models\Tamanho;
 use App\Koketsu\Database\Database;
 use App\Koketsu\Core\View;
 use App\Koketsu\Core\Redirect;
@@ -10,6 +12,8 @@ use App\Koketsu\Controles\Admin\AdminController;
 
 class ProdutosController extends AdminController{
 public $produtos;
+public $corModel;
+public $tamanhoModel;
 public $db;
  public $gerenciarImagem;
 
@@ -18,6 +22,8 @@ public function __construct() {
     parent::__construct();
     $this->db = Database::getInstance();
     $this->produtos = new Produtos($this->db);
+    $this->corModel = new Cor($this->db);
+    $this->tamanhoModel = new Tamanho($this->db);
     $this->gerenciarImagem = new FileManager('upload');
 }
 // index
@@ -101,6 +107,51 @@ public function atualizarProdutos() {
     }
 
     if ($this->produtos->atualizarProduto($id_produto, $nome, $descricao, $preco, $estoque, $imagem, $id_categoria)) {
+        
+        // Atualizar Cores (Soft Delete inicial para evitar quebra de FK e inconsistência)
+        $this->db->prepare("UPDATE tbl_cores SET excluido_em = NOW() WHERE id_produto = ?")->execute([$id_produto]);
+        if (!empty($_POST['cores'])) {
+            foreach ($_POST['cores'] as $index => $corNome) {
+                if (!empty($corNome)) {
+                    $qtd = $_POST['quantidade_cores'][$index] ?? 0;
+                    
+                    // Verificar se já existe (para reativar e manter o ID vinculado a imagens)
+                    $stmt = $this->db->prepare("SELECT id_cores FROM tbl_cores WHERE id_produto = ? AND cor_cores = ? LIMIT 1");
+                    $stmt->execute([$id_produto, $corNome]);
+                    $existente = $stmt->fetch();
+
+                    if ($existente) {
+                        $this->db->prepare("UPDATE tbl_cores SET quantidade_cores = ?, excluido_em = NULL, atualizado_em = NOW() WHERE id_cores = ?")
+                                 ->execute([$qtd, $existente['id_cores']]);
+                    } else {
+                        $this->corModel->inserirCor($id_produto, $corNome, $qtd);
+                    }
+                }
+            }
+        }
+
+        // Atualizar Tamanhos (Soft Delete inicial)
+        $this->db->prepare("UPDATE tbl_tamanhos SET excluido_em = NOW() WHERE id_produto = ?")->execute([$id_produto]);
+        if (!empty($_POST['tamanhos'])) {
+            foreach ($_POST['tamanhos'] as $index => $tamNome) {
+                if (!empty($tamNome)) {
+                    $qtd = $_POST['quantidade_tamanhos'][$index] ?? 0;
+                    
+                    // Verificar se já existe
+                    $stmt = $this->db->prepare("SELECT id_tamanhos FROM tbl_tamanhos WHERE id_produto = ? AND tamanho_tamanhos = ? LIMIT 1");
+                    $stmt->execute([$id_produto, $tamNome]);
+                    $existente = $stmt->fetch();
+
+                    if ($existente) {
+                        $this->db->prepare("UPDATE tbl_tamanhos SET quantidade_tamanhos = ?, excluido_em = NULL, atualizado_em = NOW() WHERE id_tamanhos = ?")
+                                 ->execute([$qtd, $existente['id_tamanhos']]);
+                    } else {
+                        $this->tamanhoModel->inserirTamanho($id_produto, $tamNome, $qtd);
+                    }
+                }
+            }
+        }
+
         Redirect::redirecionarComMensagem("/produtos/listar/", "success", "Produto atualizado com sucesso!");
     } else {
         Redirect::redirecionarComMensagem("/produtos/editar/" . $id_produto, "error", "Erro ao atualizar produto!");
@@ -127,7 +178,7 @@ if (empty($_POST["nome_produtos"]) || empty($_FILES['imagem_produtos']['name']))
 
         $imagem = $this->gerenciarImagem->salvarArquivo($_FILES['imagem_produtos'], 'produtos');
 
-        if ($this->produtos->inserirProduto(
+        if ($id_produto = $this->produtos->inserirProduto(
             $_POST["nome_produtos"],
             $_POST["descricao_produtos"],
             $_POST['preco_produtos'],
@@ -135,6 +186,26 @@ if (empty($_POST["nome_produtos"]) || empty($_FILES['imagem_produtos']['name']))
             $_POST['id_categoria'],
             $imagem
         )) {
+            // Salvar Cores
+            if (!empty($_POST['cores'])) {
+                foreach ($_POST['cores'] as $index => $corNome) {
+                    if (!empty($corNome)) {
+                        $qtd = $_POST['quantidade_cores'][$index] ?? 0;
+                        $this->corModel->inserirCor($id_produto, $corNome, $qtd);
+                    }
+                }
+            }
+
+            // Salvar Tamanhos
+            if (!empty($_POST['tamanhos'])) {
+                foreach ($_POST['tamanhos'] as $index => $tamNome) {
+                    if (!empty($tamNome)) {
+                        $qtd = $_POST['quantidade_tamanhos'][$index] ?? 0;
+                        $this->tamanhoModel->inserirTamanho($id_produto, $tamNome, $qtd);
+                    }
+                }
+            }
+
             Redirect::redirecionarComMensagem("/produtos/listar", "success", "Produtos cadastrado com sucesso!");
         } else {
             Redirect::redirecionarComMensagem("/produtos/criar", "error", "Erro ao cadastrar produtos.");
@@ -147,6 +218,13 @@ if (empty($_POST["nome_produtos"]) || empty($_FILES['imagem_produtos']['name']))
             Redirect::redirecionarComMensagem("/produtos/listar", "error", "Produto não encontrado.");
         }
         
-        View::render("produtos/edit", ["produtos" => $produtos]);
+        $cores = $this->corModel->buscarCoresPorIdProduto($id);
+        $tamanhos = $this->tamanhoModel->buscarTamanhosPorIdProduto($id);
+        
+        View::render("produtos/edit", [
+            "produtos" => $produtos,
+            "cores" => $cores,
+            "tamanhos" => $tamanhos
+        ]);
     }
 }

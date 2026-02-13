@@ -159,6 +159,16 @@
     .btn-delete { background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); }
     .btn-delete:hover { border-color: #ff4444; color: #ff4444; background: rgba(255, 68, 68, 0.05); }
 
+    /* --- PAGINAÇÃO --- */
+    .pagination-container { display: flex; justify-content: space-between; align-items: center; margin-top: 30px; padding: 20px; background: var(--bg-card); border-radius: 12px; border: 1px solid var(--border-color); }
+    .pagination-info { color: var(--text-muted); font-size: 13px; font-weight: 600; }
+    .pagination-buttons { display: flex; align-items: center; gap: 8px; }
+    .page-link { padding: 8px 16px; background: var(--bg-main); border: 1px solid var(--border-color); color: var(--text-main); border-radius: 8px; cursor: pointer; font-weight: 700; font-size: 13px; transition: 0.3s; }
+    .page-link:hover:not(.disabled) { border-color: var(--accent); color: var(--accent); }
+    .page-link.active { background: var(--accent); color: #000; border-color: var(--accent); }
+    .page-link.disabled { opacity: 0.3; cursor: not-allowed; }
+    .pagination-dots { color: var(--text-muted); padding: 0 5px; font-weight: bold; }
+
 </style>
 
 <div class="page-wrapper">
@@ -233,7 +243,7 @@
             <tbody>
                 <?php if (count($avaliacoes) > 0): ?>
                     <?php foreach ($avaliacoes as $avaliacao): ?>
-                    <tr> 
+                    <tr class="valuation-row"> 
                         <td class="id-column">#<?= $avaliacao['id_avaliacoes'] ?></td>
                         <td class="product-name product-column">
                             <?= htmlspecialchars($avaliacao['nome_produto'] ?? 'Produto não encontrado') ?>
@@ -278,33 +288,77 @@
                 <?php endif; ?>
             </tbody>
         </table>
+
+        <div class="pagination-container">
+            <div class="pagination-info" id="paginationInfo">Carregando...</div>
+            <div class="pagination-buttons" id="paginationButtons"></div>
+        </div>
     </main>
 </div>
 
-<div style="height: 60px;"></div>
-
 <script>
-function filterValuations() {
-    var input, filter, table, tr, td_product, td_customer, i, productValue, customerValue;
-    input = document.getElementById("valuationInput");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("valuationTable");
-    tr = table.getElementsByTagName("tr");
+const rowsPerPage = 10;
+let currentPage = 1;
 
-    for (i = 1; i < tr.length; i++) {
-        td_product = tr[i].getElementsByClassName("product-name")[0];
-        td_customer = tr[i].getElementsByClassName("customer-name")[0];
-        
-        if (td_product || td_customer) {
-            productValue = td_product ? (td_product.textContent || td_product.innerText) : "";
-            customerValue = td_customer ? (td_customer.textContent || td_customer.innerText) : "";
-            
-            if (productValue.toUpperCase().indexOf(filter) > -1 || customerValue.toUpperCase().indexOf(filter) > -1) {
-                tr[i].style.display = "";
-            } else {
-                tr[i].style.display = "none";
+function displayTable() {
+    const table = document.getElementById("valuationTable");
+    const allRows = Array.from(table.querySelectorAll(".valuation-row"));
+    const filteredRows = allRows.filter(row => row.getAttribute('data-filtered') !== 'false');
+    const totalPages = Math.ceil(filteredRows.length / rowsPerPage);
+    if (currentPage > totalPages && totalPages > 0) currentPage = totalPages;
+    const start = (currentPage - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+    allRows.forEach(row => row.style.display = "none");
+    filteredRows.slice(start, end).forEach(row => row.style.display = "");
+    updatePaginationButtons(totalPages, filteredRows.length);
+}
+
+function updatePaginationButtons(totalPages, totalActive) {
+    const container = document.getElementById("paginationButtons");
+    const info = document.getElementById("paginationInfo");
+    container.innerHTML = "";
+    info.innerText = `Mostrando página ${currentPage} de ${totalPages || 1} (${totalActive} avaliações)`;
+    if (totalPages <= 1) return;
+    const createBtn = (text, page, isActive = false, isDisabled = false) => {
+        const btn = document.createElement("button");
+        btn.innerHTML = text;
+        btn.className = `page-link ${isActive ? 'active' : ''} ${isDisabled ? 'disabled' : ''}`;
+        if (!isDisabled) btn.onclick = () => { currentPage = page; displayTable(); };
+        return btn;
+    };
+    container.appendChild(createBtn('<i class="fa fa-chevron-left"></i>', currentPage - 1, false, currentPage === 1));
+    const range = 1;
+    for (let i = 1; i <= totalPages; i++) {
+        if (i === 1 || i === totalPages || (i >= currentPage - range && i <= currentPage + range)) {
+            if (i === currentPage - range && i > 2) {
+                const dots = document.createElement("span");
+                dots.className = "pagination-dots";
+                dots.innerText = "...";
+                container.appendChild(dots);
+            }
+            container.appendChild(createBtn(i, i, i === currentPage));
+            if (i === currentPage + range && i < totalPages - 1) {
+                const dots = document.createElement("span");
+                dots.className = "pagination-dots";
+                dots.innerText = "...";
+                container.appendChild(dots);
             }
         }
     }
+    container.appendChild(createBtn('<i class="fa fa-chevron-right"></i>', currentPage + 1, false, currentPage === totalPages));
 }
+
+function filterValuations() {
+    const filter = document.getElementById("valuationInput").value.toUpperCase();
+    const rows = document.querySelectorAll(".valuation-row");
+    rows.forEach(row => {
+        const product = row.querySelector(".product-name") ? row.querySelector(".product-name").textContent.toUpperCase() : "";
+        const customer = row.querySelector(".customer-name") ? row.querySelector(".customer-name").textContent.toUpperCase() : "";
+        row.setAttribute('data-filtered', (product.includes(filter) || customer.includes(filter)) ? 'true' : 'false');
+    });
+    currentPage = 1;
+    displayTable();
+}
+
+document.addEventListener("DOMContentLoaded", displayTable);
 </script>

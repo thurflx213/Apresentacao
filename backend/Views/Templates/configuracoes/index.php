@@ -190,7 +190,7 @@
             dois_fatores_ativo: document.getElementsByName('dois_fatores_ativo')[0].checked
         };
 
-        fetch('/configuracoes/salvar', {
+        fetch('/backend/configuracoes/salvar', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
@@ -211,7 +211,7 @@
     }
 
     function toggleMaintenance(status) {
-        fetch('/configuracoes/manutencao', {
+        fetch('/backend/configuracoes/manutencao', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ status: status })

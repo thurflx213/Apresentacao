@@ -79,9 +79,10 @@ function buscarUsuariosAdmin() {
 
     public function paginacaoClientes(int $pagina = 1, int $porPagina = 50) {
         $offset = ($pagina - 1) * $porPagina;
-        $sql = "SELECT id_usuarios, nome_usuarios, email_usuarios, nivel_acesso, excluido_em, foto_usuarios, criado_em 
-                FROM tbl_usuarios 
-                WHERE nivel_acesso = 'cliente'
+        $sql = "SELECT u.id_usuarios, u.nome_usuarios, u.email_usuarios, u.nivel_acesso, u.excluido_em, u.foto_usuarios, u.criado_em, p.telefone_perfil 
+                FROM tbl_usuarios u
+                LEFT JOIN tbl_perfil p ON u.id_usuarios = p.id_usuarios
+                WHERE u.nivel_acesso = 'cliente'
                 LIMIT :offset, :porPagina";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
@@ -236,7 +237,7 @@ VALUES (:nome, :email, :senha, :nivel, :imagem, NOW())";
 }
 
     public static function contarClientes($db) {
-        $sql = "SELECT COUNT(*) as total FROM tbl_usuarios WHERE nivel_acesso = 'cliente' AND excluido_em IS NULL";
+        $sql = "SELECT COUNT(*) as total FROM tbl_usuarios WHERE nivel_acesso = 'cliente'";
         $stmt = $db->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);

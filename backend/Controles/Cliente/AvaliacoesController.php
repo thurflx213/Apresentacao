@@ -125,10 +125,16 @@ class AvaliacoesController extends AuthenticatedController
         }
 
         // Verificar se a avaliação pertence ao usuario
-        $perfilId = $this->getPerfilId();
         $avaliacao = $this->avaliacaoModel->buscarPorId($id);
-        if (!$avaliacao || $avaliacao['id_cliente'] != $perfilId) {
-            Redirect::redirecionarComMensagem('/cliente/avaliacoes', 'error', 'Avaliação não encontrada ou acesso negado.');
+        if (!$avaliacao) {
+            Redirect::redirecionarComMensagem('/cliente/avaliacoes', 'error', 'Avaliação não encontrada.');
+            return;
+        }
+
+        // Buscar o perfil da avaliação para ver a quem pertence
+        $perfilAvaliacao = $this->perfilModel->buscarPerfisPorId($avaliacao['id_cliente']);
+        if (!$perfilAvaliacao || $perfilAvaliacao['id_usuarios'] != $usuarioId) {
+            Redirect::redirecionarComMensagem('/cliente/avaliacoes', 'error', 'Acesso negado.');
             return;
         }
 
@@ -160,10 +166,16 @@ class AvaliacoesController extends AuthenticatedController
         }
 
         // Verificar se a avaliação pertence ao usuario
-        $perfilId = $this->getPerfilId();
         $avaliacao = $this->avaliacaoModel->buscarPorId($id);
-        if (!$avaliacao || $avaliacao['id_cliente'] != $perfilId) {
-            Redirect::redirecionarComMensagem('/cliente/avaliacoes', 'error', 'Avaliação não encontrada ou acesso negado.');
+        if (!$avaliacao) {
+            Redirect::redirecionarComMensagem('/cliente/avaliacoes', 'error', 'Avaliação não encontrada.');
+            return;
+        }
+
+        // Buscar o perfil da avaliação para ver a quem pertence
+        $perfilAvaliacao = $this->perfilModel->buscarPerfisPorId($avaliacao['id_cliente']);
+        if (!$perfilAvaliacao || $perfilAvaliacao['id_usuarios'] != $usuarioId) {
+            Redirect::redirecionarComMensagem('/cliente/avaliacoes', 'error', 'Acesso negado.');
             return;
         }
 
