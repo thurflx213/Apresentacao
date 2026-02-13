@@ -261,6 +261,37 @@ input, select, textarea {
   background-color: #555;
 }
 
+/* ======= RESPONSIVIDADE DASHBOARD ======= */
+@media (max-width: 992px) {
+    .w3-main {
+        margin-left: 0 !important;
+        padding: 20px !important;
+        margin-top: 70px !important;
+    }
+
+    .w3-sidebar {
+        width: 280px !important;
+    }
+
+    #main-logo {
+        height: 50px !important;
+    }
+
+    .w3-top, .w3-bar.w3-top {
+        height: 70px;
+    }
+}
+
+@media (max-width: 600px) {
+    .w3-main {
+        padding: 15px !important;
+    }
+    
+    .w3-container.w3-row {
+        padding: 0 !important;
+    }
+}
+
 </style>
 </head>
 <body class="">
