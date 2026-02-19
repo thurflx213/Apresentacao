@@ -50,6 +50,23 @@
                         </div>
                     </div>
 
+                    <div class="k-grid-inputs">
+                        <div class="k-input-group">
+                            <label>TELEFONE</label>
+                            <div class="input-wrapper">
+                                <i class="fa fa-phone gold-icon"></i>
+                                <input type="text" name="telefone_perfil" value="<?= htmlspecialchars($perfil['telefone_perfil'] ?? '') ?>" placeholder="(00) 00000-0000" />
+                            </div>
+                        </div>
+                        <div class="k-input-group">
+                            <label>ENDEREÇO COMPLETO</label>
+                            <div class="input-wrapper">
+                                <i class="fa fa-map-marker-alt gold-icon"></i>
+                                <input type="text" name="endereco_perfil" value="<?= htmlspecialchars($perfil['endereco_perfil'] ?? '') ?>" placeholder="Rua, Número, Bairro, Cidade - UF" />
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="form-section-title">Segurança da Conta</div>
 
                     <div class="k-grid-inputs">

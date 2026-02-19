@@ -182,7 +182,7 @@
     <div class="reg-wrapper">
         <div class="reg-card">
             <div class="logo-area">
-                 <a href="/"><img src="/img/icons/logo.png" alt="Koketsu Logo"></a>
+                 <a href="/"><img src="/assets/img/logo2026.png" alt="Koketsu Logo"></a>
             </div>
             
             <h1>CRIAR CONTA</h1>

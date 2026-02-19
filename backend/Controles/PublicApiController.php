@@ -110,6 +110,71 @@ class PublicApiController {
         exit;
     }
 
+    public function getProdutosVitrine() {
+        header('Content-Type: application/json; charset=utf-8');
+        
+        try {
+            // 1. Buscar todas as categorias ativas
+            $sqlCat = "SELECT id_categorias, nome_categorias FROM tbl_categorias WHERE excluido_em IS NULL";
+            $stmtCat = $this->db->prepare($sqlCat);
+            $stmtCat->execute();
+            $categorias = $stmtCat->fetchAll(\PDO::FETCH_ASSOC);
+
+            $resultado = [];
+
+            foreach ($categorias as $cat) {
+                $itemCategoria = [
+                    'categoria' => $cat['nome_categorias'],
+                    'itens' => []
+                ];
+
+                // 2. Buscar produtos da categoria
+                $sqlProd = "SELECT id_produto, nome_produtos, preco_produtos, imagem_produtos, estoque_produtos 
+                           FROM tbl_produtos 
+                           WHERE id_categoria = ? AND excluido_em IS NULL AND estoque_produtos > 0";
+                $stmtProd = $this->db->prepare($sqlProd);
+                $stmtProd->execute([$cat['id_categorias']]);
+                $produtos = $stmtProd->fetchAll(\PDO::FETCH_ASSOC);
+
+                foreach ($produtos as $prod) {
+                    // 3. Buscar Tamanhos
+                    $sqlTamanhos = "SELECT tamanho_tamanhos FROM tbl_tamanhos WHERE id_produto = ? AND excluido_em IS NULL";
+                    $stmtT = $this->db->prepare($sqlTamanhos);
+                    $stmtT->execute([$prod['id_produto']]);
+                    $tamanhos = $stmtT->fetchAll(\PDO::FETCH_COLUMN);
+
+                    // 4. Buscar Cores
+                    $sqlCores = "SELECT cor_cores FROM tbl_cores WHERE id_produto = ? AND excluido_em IS NULL";
+                    $stmtC = $this->db->prepare($sqlCores);
+                    $stmtC->execute([$prod['id_produto']]);
+                    $cores = $stmtC->fetchAll(\PDO::FETCH_COLUMN);
+
+                    // 5. Formatar item
+                    $itemCategoria['itens'][] = [
+                        'id' => (int)$prod['id_produto'],
+                        'nome' => $prod['nome_produtos'],
+                        'preco' => (float)$prod['preco_produtos'],
+                        'img' => $this->converterParaBase64('backend/upload/' . $prod['imagem_produtos']),
+                        'tamanhos' => $tamanhos,
+                        'cores' => $cores,
+                        'oferta' => null, // Opcional, se tiver lógica futura
+                        'desconto' => null
+                    ];
+                }
+
+                if (!empty($itemCategoria['itens'])) {
+                    $resultado[] = $itemCategoria;
+                }
+            }
+
+            echo json_encode($resultado, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        } catch (\Exception $e) {
+            http_response_code(500);
+            echo json_encode(['error' => $e->getMessage()]);
+        }
+        exit;
+    }
+
     // ==================== PEDIDOS ====================
     public function getPedidos() {
         $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
@@ -623,49 +688,48 @@ class PublicApiController {
 
     // ==================== AVALIAÇÕES ====================
     public function getAvaliacoes() {
-        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
-        $registros_por_pagina = 10;
-        $offset = ($page - 1) * $registros_por_pagina;
-        
-        // Total de registros
-        $sqlCount = "SELECT COUNT(*) as total FROM tbl_avaliacoes WHERE excluido_em IS NULL";
-        $stmtCount = $this->db->prepare($sqlCount);
-        $stmtCount->execute();
-        $total = $stmtCount->fetch(\PDO::FETCH_ASSOC)['total'];
-        $total_paginas = ceil($total / $registros_por_pagina);
-        
-        // Dados paginados
-        $sql = "SELECT id_avaliacoes, id_cliente, id_produto, nota_avaliacoes, comentario_avaliacoes FROM tbl_avaliacoes WHERE excluido_em IS NULL LIMIT " . intval($registros_por_pagina) . " OFFSET " . intval($offset);
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute();
-        $avaliacoes = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $avaliacaoModel = new \App\Koketsu\Models\Avaliacao(Database::getInstance());
+        $avaliacoes = $avaliacaoModel->buscarAvaliacoes();
         
         header('Content-Type: application/json');
-        http_response_code(200);
-        echo json_encode([
-            'status' => 'success',
-            'data' => $avaliacoes,
-            'paginacao' => [
-                'pagina_atual' => $page,
-                'registros_por_pagina' => $registros_por_pagina,
-                'total_registros' => $total,
-                'total_paginas' => $total_paginas
-            ]
-        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        echo json_encode(['status' => 'success', 'data' => $avaliacoes]);
+        exit;
+    }
+
+    public function getRatingStatsByProduto($id_produto) {
+        $avaliacaoModel = new \App\Koketsu\Models\Avaliacao(Database::getInstance());
+        $stats = $avaliacaoModel->getStatsPorProduto($id_produto);
+        
+        header('Content-Type: application/json');
+        echo json_encode(['status' => 'success', 'data' => $stats]);
+        exit;
+    }
+
+    public function getAvaliacoesByProduto($id_produto) {
+        $avaliacaoModel = new \App\Koketsu\Models\Avaliacao(Database::getInstance());
+        $avaliacoes = $avaliacaoModel->buscarPorProduto($id_produto);
+        
+        header('Content-Type: application/json');
+        echo json_encode(['status' => 'success', 'data' => $avaliacoes]);
+        exit;
+    }
+
+    public function getLatestAvaliacoes() {
+        $avaliacaoModel = new \App\Koketsu\Models\Avaliacao(Database::getInstance());
+        $avaliacoes = $avaliacaoModel->buscarUltimasAvaliacoes(6);
+        
+        header('Content-Type: application/json');
+        echo json_encode(['status' => 'success', 'data' => $avaliacoes]);
         exit;
     }
 
     public function getAvaliacaoById($id) {
-        $id = (int)$id;
-        $sql = "SELECT id_avaliacoes, id_cliente, id_produto, nota_avaliacoes, comentario_avaliacoes FROM tbl_avaliacoes WHERE id_avaliacoes = ? AND excluido_em IS NULL";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute([$id]);
-        $avaliacao = $stmt->fetch(\PDO::FETCH_ASSOC);
+        $avaliacaoModel = new \App\Koketsu\Models\Avaliacao(Database::getInstance());
+        $avaliacao = $avaliacaoModel->buscarPorId($id);
         
         header('Content-Type: application/json');
         if ($avaliacao) {
-            http_response_code(200);
-            echo json_encode(['status' => 'success', 'data' => $avaliacao], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+            echo json_encode(['status' => 'success', 'data' => $avaliacao]);
         } else {
             http_response_code(404);
             echo json_encode(['status' => 'error', 'message' => 'Avaliação não encontrada']);
@@ -673,17 +737,49 @@ class PublicApiController {
         exit;
     }
 
-    public function createAvaliacao() {
+    public function createPublicAvaliacao() {
         header('Content-Type: application/json');
         $data = json_decode(file_get_contents('php://input'), true);
-        if (empty($data)) {
+        
+        if (!$data || !isset($data['id_produto']) || !isset($data['id_usuarios']) || !isset($data['nota_avaliacoes'])) {
             http_response_code(400);
-            echo json_encode(['status' => 'error', 'message' => 'Dados inválidos']);
+            echo json_encode(['status' => 'error', 'message' => 'Dados incompletos']);
             exit;
         }
-        http_response_code(201);
-        echo json_encode(['status' => 'success', 'message' => 'Avaliação criada com sucesso']);
+
+        $db = Database::getInstance();
+        $avaliacaoModel = new \App\Koketsu\Models\Avaliacao($db);
+        
+        $stmt = $db->prepare("SELECT id_perfil FROM tbl_perfil WHERE id_usuarios = :id_usuario LIMIT 1");
+        $stmt->bindParam(':id_usuario', $data['id_usuarios']);
+        $stmt->execute();
+        $perfil = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+        if (!$perfil) {
+            http_response_code(403);
+            echo json_encode(['status' => 'error', 'message' => 'Perfil do usuário não encontrado']);
+            exit;
+        }
+
+        $res = $avaliacaoModel->inserirAvaliacao(
+            $data['id_produto'],
+            $perfil['id_perfil'],
+            $data['nota_avaliacoes'],
+            $data['comentario_avaliacoes'] ?? ''
+        );
+
+        if ($res) {
+            echo json_encode(['status' => 'success', 'message' => 'Avaliação enviada!']);
+        } else {
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'message' => 'Erro ao salvar avaliação. Certifique-se de que o produto já foi entregue.']);
+        }
         exit;
+    }
+
+    public function createAvaliacao() {
+        // Redireciona para o método público mais robusto
+        return $this->createPublicAvaliacao();
     }
 
     // ==================== IMAGENS ====================

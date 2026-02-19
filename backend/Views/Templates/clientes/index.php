@@ -177,10 +177,10 @@
 </style>
 
 <div class="page-wrapper">
-    <h3 class="page-title"><i class="fa fa-handshake-o" style="color: #f2cc7d;"></i> Gerenciar Clientes</h3>
+    <h3 class="page-title"><i class="fas fa-handshake" style="color: #f2cc7d;"></i> Gerenciar Clientes</h3>
 
     <header class="header-breadcrumb">
-        <h5><b><i class="fa fa-dashboard"></i> Painel de Controle - Koketsu</b></h5>
+        <h5><b><i class="fas fa-tachometer-alt"></i> Painel de Controle - Koketsu</b></h5>
     </header>
 
     <div class="dashboard-grid">
@@ -189,7 +189,7 @@
                 <h3><?php echo $total_clientes; ?></h3>
                 <p>Clientes Totais</p>
             </div>
-            <div class="stat-icon"><i class="fa fa-users"></i></div>
+            <div class="stat-icon"><i class="fas fa-users"></i></div>
         </div>
         
         <div class="stat-card" style="border-left: 4px solid #4caf50;">
@@ -201,7 +201,7 @@
                 <h3><?php echo $ativos; ?></h3>
                 <p>Ativos na Página</p>
             </div>
-            <div class="stat-icon"><i class="fa fa-check-circle"></i></div>
+            <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
         </div>
 
         <div class="stat-card" style="border-left: 4px solid #e63946;">
@@ -213,13 +213,13 @@
                 <h3><?php echo $inativos; ?></h3>
                 <p>Inativos na Página</p>
             </div>
-            <div class="stat-icon"><i class="fa fa-user-times"></i></div>
+            <div class="stat-icon"><i class="fas fa-user-times"></i></div>
         </div>
     </div>
 
     <div class="actions-bar">
         <div class="search-container">
-            <i class="fa fa-search"></i>
+            <i class="fas fa-search"></i>
             <input type="text" id="clientInput" onkeyup="filterClients()" placeholder="Buscar cliente por nome ou email..." class="search-input">
         </div>
     </div>
@@ -261,7 +261,17 @@
                         <td class="client-phone">
                             <?php if (!empty($cliente['telefone_perfil'])): ?>
                                 <a href="https://wa.me/<?= preg_replace('/\D/', '', $cliente['telefone_perfil']) ?>" target="_blank" style="color: #25d366; text-decoration: none;">
-                                    <i class="fa fa-whatsapp"></i> <?= htmlspecialchars($cliente['telefone_perfil']) ?>
+                                    <?php 
+                                        $tel = preg_replace('/\D/', '', $cliente['telefone_perfil']);
+                                        if (strlen($tel) == 11) {
+                                            $formatted = '(' . substr($tel, 0, 2) . ') ' . substr($tel, 2, 1) . ' ' . substr($tel, 3, 4) . '-' . substr($tel, 7);
+                                        } elseif (strlen($tel) == 10) {
+                                            $formatted = '(' . substr($tel, 0, 2) . ') ' . substr($tel, 2, 4) . '-' . substr($tel, 6);
+                                        } else {
+                                            $formatted = $cliente['telefone_perfil'];
+                                        }
+                                    ?>
+                                    <i class="fab fa-whatsapp"></i> <?= htmlspecialchars($formatted) ?>
                                 </a>
                             <?php else: ?>
                                 <span style="color: var(--text-muted);">Não inf.</span>
@@ -281,16 +291,16 @@
                         
                         <td style="text-align: center;">
                             <a href="/backend/usuario/editar/<?= $cliente['id_usuarios'] ?>" class="btn-action-small btn-edit">
-                                <i class="fa fa-pencil"></i> Editar
+                                <i class="fas fa-pencil-alt"></i> Editar
                             </a>
                             
                             <?php if ($is_inativo): ?>
                                 <a href="/backend/usuario/ativar/<?= $cliente['id_usuarios'] ?>" class="btn-action-small btn-activate">
-                                    <i class="fa fa-check"></i> Ativar
+                                    <i class="fas fa-check"></i> Ativar
                                 </a>
                             <?php else: ?>
                                 <a href="/backend/usuario/excluir/<?= $cliente['id_usuarios'] ?>" class="btn-action-small btn-toggle">
-                                    <i class="fa fa-power-off"></i> Inativar
+                                    <i class="fas fa-power-off"></i> Inativar
                                 </a>
                             <?php endif; ?>
                         </td>
@@ -299,7 +309,7 @@
                 <?php else: ?>
                     <tr>
                         <td colspan="7" style="text-align: center; padding: 50px; color: #666;">
-                            <i class="fa fa-user-times" style="font-size: 48px; display: block; margin-bottom: 10px;"></i>
+                            <i class="fas fa-user-times" style="font-size: 48px; display: block; margin-bottom: 10px;"></i>
                             Nenhum cliente encontrado.
                         </td>
                     </tr>

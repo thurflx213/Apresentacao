@@ -1,77 +1,82 @@
-# Koketsu Shop
+# Projeto Apresentacao / Koketsu
 
-Este é um projeto de e-commerce de roupas desenvolvido em PHP com uma arquitetura MVC personalizada. O projeto inclui funcionalidades de gestão de usuários, produtos, pedidos, categorias, e relatórios, com áreas distintas para clientes e administradores.
+Este projeto é uma plataforma de apresentação de produtos (Vitrine Virtual) com um backend em PHP e uma interface administrativa desktop desenvolvida com Electron.
 
-## 📋 Requisitos
+## 📁 Estrutura de Arquivos
 
-- **PHP**: 7.4 ou superior
-- **Composer**: Gerenciador de dependências PHP
-- **MySQL**: Banco de dados
-- **Node.js & NPM**: Para gerenciamento de dependências de frontend (opcional, dependendo do uso)
+A estrutura simplificada do projeto é a seguinte:
+
+```
+Apresentacao/
+├── api-vitrine.php       # API Endpoint para fornecer produtos ao frontend
+├── backend/              # Framework MVC customizado em PHP (API + Admin)
+│   ├── Config/           # Configurações (Banco de dados, App)
+│   ├── Controles/        # Controladores (Lógica de requisição)
+│   ├── Database/         # Classe de conexão com DB
+│   ├── Models/           # Modelos de dados
+│   ├── Rotas/            # Definição de rotas do backend
+│   └── Views/            # Telas do painel administrativo (PHP/HTML)
+├── koketsu/              # Aplicação Desktop (Electron + Vite)
+│   ├── package.json      # Dependências do Electron
+│   └── src/              # Código fonte do app desktop
+├── vendor/               # Dependências PHP (Composer)
+├── img/                  # Imagens dos produtos e assets
+├── css/ & styles/        # Estilos CSS do frontend
+├── script.js             # Lógica principal do frontend (Carrossel, Fetch dados)
+├── composer.json         # Definição de dependências PHP
+└── *.html                # Páginas do site (index, catalogo, carrinho, etc.)
+```
 
 ## 🚀 Como Executar
 
-1.  **Instalar Dependências PHP**:
-    Execute o comando na raiz do projeto:
+### Pré-requisitos
+*   PHP 7.4 ou superior.
+*   Composer (para dependências do backend).
+*   Node.js & NPM (para o app Electron).
+*   Banco de Dados (MySQL configurado em `backend/Config`).
+
+### Passos
+1.  **Instalar Dependências PHP:**
     ```bash
     composer install
     ```
 
-2.  **Configurar Banco de Dados**:
-    -   Crie um banco de dados MySQL chamado `koketsu`.
-    -   Importe o esquema do banco de dados (caso disponivel).
-    -   Verifique as credenciais em `backend/Database/Config.php`.
-
-3.  **Iniciar o Servidor**:
-    Você pode usar o script configurado no `package.json` ou rodar o servidor embutido do PHP:
+2.  **Iniciar o Servidor Web:**
+    Na raiz do projeto, execute:
     ```bash
-    php -S localhost:8000 -t .
+    php -S localhost:4000
     ```
-    Ou se preferir o comando npm:
+    Acesse [`http://localhost:4000`](http://localhost:4000) no navegador.
+
+3.  **Executar o App Desktop (Koketsu):**
+    Entre na pasta `koketsu`:
     ```bash
-    npm run dev
+    cd koketsu
+    npm install
+    npm start
     ```
 
-4.  **Acessar**:
-    -   Frontend/Estático: `http://localhost:8000`
-    -   Backend/Admin: `http://localhost:8000/backend/index.php` (dependendo da rota configurada)
+## 🛠️ Tecnologias Utilizadas
 
-## 📂 Estrutura do Projeto
+*   **Frontend Web:** HTML5, CSS3, JavaScript (Vanilla), Bootstrap 5.
+*   **Backend:** PHP (MVC Customizado), PDO, library `bramus/router`.
+*   **Desktop:** Electron, Vite.
+*   **Banco de Dados:** MySQL (suporte a SQLite, SQL Server, Postgre configurável).
 
-A estrutura de pastas principal é organizada da seguinte forma:
+## 📝 Documentação Técnica e Análise
 
-```
-ApresentacaoArthur/
-├── backend/                  # Núcleo da aplicação PHP (MVC)
-│   ├── Config/               # Configurações de e-mail, upload, etc.
-│   ├── Controles/            # Controllers (Lógica de negócios e fluxo)
-│   ├── Core/                 # Componentes centrais (Router, View, Session)
-│   ├── Database/             # Conexão com banco e configuração DB
-│   ├── Models/               # Modelos de dados (Acesso ao DB)
-│   ├── Rotas/                # Definição das rotas da aplicação
-│   ├── Validadores/          # Classes de validação de dados
-│   ├── Views/                # Templates e visualização (HTML/PHP)
-│   └── index.php             # Ponto de entrada (Entry Point) da aplicação
-├── css/                      # Estilos globais (se houver, ou na raiz)
-├── img/                      # Imagens do projeto
-├── js/                       # Scripts JavaScript frontend
-├── vendor/                   # Dependências do Composer
-├── node_modules/             # Dependências do NPM
-├── index.html                # Página inicial (versão estática/frontend)
-└── ...                       # Outros arquivos HTML/CSS estáticos na raiz
-```
+Para uma visão detalhada sobre a arquitetura, segurança e pontos de atenção do código, consulte o arquivo [TECHNICAL_ANALYSIS.md](./TECHNICAL_ANALYSIS.md).
 
-## 🛠 Tecnologias Utilizadas
+### Principais Funcionalidades
+*   **Vitrine Dinâmica:** Os produtos são carregados via API (`/api/vitrine`), com fallback para dados locais em caso de falha.
+*   **Categorização:** Agrupamento automático de produtos por categoria.
+*   **Admin Panel:** O diretório `backend` contém a lógica para gerenciar usuários e produtos (acessível via rotas administrativas).
 
--   **Backend**: PHP (MVC Customizado)
--   **Roteamento**: `bramus/router`
--   **Banco de Dados**: MySQL (via PDO)
--   **Frontend**: HTML5, CSS3, JavaScript (Vanilla), Bootstrap (via npm)
+## 💡 Sugestões de Melhoria
 
-## 💡 Fluxo da Informação
+1.  **Centralização de Rotas:** Redirecionar todo o tráfego para um router central para evitar endpoints soltos na raiz.
+2.  **Segurança:** Restringir o acesso direto a pastas como `backend/` e arquivos de configuração.
+3.  **Refatoração do Frontend:** Mover o array de fallback do `script.js` para um arquivo JSON separado para facilitar a manutenção.
 
-1.  **Requisição**: O servidor recebe a requisição em `backend/index.php`.
-2.  **Roteamento**: O `Bramus\Router` analisa a URL com base nas regras em `backend/Rotas/Rotas.php`.
-3.  **Controller**: A rota aciona um método em um Controller específico (ex: `UsuarioController`).
-4.  **Model**: O Controller interage com o Model (ex: `Usuario`) para buscar ou salvar dados no banco.
-5.  **View**: O Controller passa os dados para a classe `View`, que renderiza o template correspondente em `backend/Views`.
+---
+**Desenvolvido por:** Gregz747

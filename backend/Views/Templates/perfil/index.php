@@ -69,33 +69,33 @@
 
 <div class="page-wrapper">
     <header class="header-breadcrumb">
-        <h5><b><i class="fa fa-vcard"></i> Gerenciar Perfis de Usuários - Koketsu</b></h5>
+        <h5><b><i class="fas fa-id-card"></i> Gerenciar Perfis de Usuários - Koketsu</b></h5>
     </header>
 
     <div class="dashboard-grid">
         <div class="stat-card">
-            <div class="stat-icon"><i class="fa fa-tags"></i></div>
+            <div class="stat-icon"><i class="fas fa-tags"></i></div>
             <div class="stat-info">
                 <h3>120</h3>
                 <p>Produtos</p>
             </div>
         </div>
         <div class="stat-card">
-            <div class="stat-icon"><i class="fa fa-shopping-cart"></i></div>
+            <div class="stat-icon"><i class="fas fa-shopping-cart"></i></div>
             <div class="stat-info">
                 <h3>87</h3>
                 <p>Pedidos</p>
             </div>
         </div>
         <div class="stat-card">
-            <div class="stat-icon"><i class="fa fa-users"></i></div>
+            <div class="stat-icon"><i class="fas fa-users"></i></div>
             <div class="stat-info">
                 <h3>56</h3>
                 <p>Clientes</p>
             </div>
         </div>
         <div class="stat-card">
-            <div class="stat-icon"><i class="fa fa-star"></i></div>
+            <div class="stat-icon"><i class="fas fa-star"></i></div>
             <div class="stat-info">
                 <h3>4.8★</h3>
                 <p>Avaliações</p>
@@ -117,7 +117,19 @@
         <tbody>
             <?php foreach ($perfil as $p): ?>
             <tr>
-                <td style="font-weight: 700; color: var(--text-main);"><?= htmlspecialchars($p['telefone_perfil']) ?></td>
+                <td style="font-weight: 700; color: var(--text-main);">
+                    <?php 
+                        $tel = preg_replace('/\D/', '', $p['telefone_perfil']);
+                        if (strlen($tel) == 11) {
+                            $formatted = '(' . substr($tel, 0, 2) . ') ' . substr($tel, 2, 1) . ' ' . substr($tel, 3, 4) . '-' . substr($tel, 7);
+                        } elseif (strlen($tel) == 10) {
+                            $formatted = '(' . substr($tel, 0, 2) . ') ' . substr($tel, 2, 4) . '-' . substr($tel, 6);
+                        } else {
+                            $formatted = $p['telefone_perfil'];
+                        }
+                        echo htmlspecialchars($formatted);
+                    ?>
+                </td>
                 <td style="max-width: 300px; color: var(--text-muted); font-size: 13px;"><?= htmlspecialchars($p['endereco_perfil']) ?></td>
                 <td><?= date('d/m/Y', strtotime($p['data_cadastro'])) ?></td>
                 <td>
@@ -140,16 +152,16 @@
         <span>Mostrando página <?= $paginacao['pagina_atual'] ?> de <?= $paginacao['ultima_pagina'] ?></span>
         <div style="display: flex; gap: 10px;">
             <?php if ($paginacao['pagina_atual'] > 1): ?>
-                <a class="page-nav-link" href="/backend/perfil/listar/<?= $paginacao['pagina_atual'] - 1 ?>"><i class="fa fa-chevron-left"></i> Anterior</a>
+                <a class="page-nav-link" href="/backend/perfil/listar/<?= $paginacao['pagina_atual'] - 1 ?>"><i class="fas fa-chevron-left"></i> Anterior</a>
             <?php endif; ?>
             <?php if ($paginacao['pagina_atual'] < $paginacao['ultima_pagina']): ?>
-                <a class="page-nav-link" href="/backend/perfil/listar/<?= $paginacao['pagina_atual'] + 1 ?>">Próximo <i class="fa fa-chevron-right"></i></a>
+                <a class="page-nav-link" href="/backend/perfil/listar/<?= $paginacao['pagina_atual'] + 1 ?>">Próximo <i class="fas fa-chevron-right"></i></a>
             <?php endif; ?>
         </div>
     </div>
     <?php else: ?>
         <div style="text-align: center; padding: 50px; color: var(--text-muted);">
-            <i class="fa fa-user-circle-o" style="font-size: 48px; margin-bottom: 15px; opacity: 0.3;"></i>
+            <i class="fas fa-user-circle" style="font-size: 48px; margin-bottom: 15px; opacity: 0.3;"></i>
             <p>Nenhum perfil de usuário encontrado.</p>
         </div>
     <?php endif; ?>

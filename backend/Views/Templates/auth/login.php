@@ -197,7 +197,7 @@
 
         <div class="login-card">
             <div class="logo-area">
-            <a href="/"><img src="/img/icons/logo.png" alt="Koketsu Logo"></a>
+            <a href="/"><img src="/assets/img/logo2026.png" alt="Koketsu Logo"></a>
         </div>
             <h1>BEM-VINDO</h1>
             <p class="subtitle">Acesse sua área exclusiva</p>

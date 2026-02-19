@@ -105,7 +105,7 @@
 
 <div class="login-wrapper">
     <div class="login-card">
-        <img src="/img/logo.png" alt="Logo" height="130" style="margin-bottom: 20px;">
+        <img src="/assets/img/logo2026.png" alt="Logo" height="130" style="margin-bottom: 20px;">
         
         <h1>Acesso Restrito</h1>
 

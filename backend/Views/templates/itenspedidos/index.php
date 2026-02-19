@@ -12,10 +12,11 @@
     /* --- ESTRUTURA E CABEÇALHO --- */
     .koketsu-header-section {
         padding: 30px 15px;
-        background: linear-gradient(90deg, rgba(26,26,26,1) 0%, rgba(10,10,10,1) 100%);
+        background: var(--bg-card);
         border-radius: 20px;
         margin-bottom: 25px;
-        border: 1px solid var(--border-subtle);
+        border: 1px solid var(--border-color);
+        box-shadow: var(--shadow-sm);
     }
 
     .page-title-main {
@@ -87,8 +88,9 @@
 
     .koketsu-table-itens tbody tr:hover {
         transform: translateY(-3px);
-        background-color: #222 !important;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        background-color: var(--bg-main) !important;
+        box-shadow: var(--shadow-md);
+        border-color: var(--accent-gold) !important;
     }
 
     .koketsu-table-itens td {
@@ -109,12 +111,13 @@
 
     /* --- COMPONENTES INTERNOS --- */
     .id-tag {
-        background: rgba(255,255,255,0.05);
+        background: var(--accent-dim);
         padding: 5px 10px;
         border-radius: 8px;
         font-family: 'JetBrains Mono', monospace;
         font-size: 12px;
         color: var(--accent-gold);
+        font-weight: 700;
     }
 
     .pedido-link {
@@ -133,17 +136,17 @@
         flex-direction: column;
     }
 
-    .prod-name { font-weight: 800; color: #fff; font-size: 15px; }
-    .prod-desc { font-size: 12px; color: #666; }
+    .prod-name { font-weight: 800; color: var(--text-main); font-size: 15px; }
+    .prod-desc { font-size: 12px; color: var(--text-muted); }
 
     .qty-badge {
-        background: #000;
+        background: var(--bg-main);
         color: var(--accent-gold);
         padding: 4px 12px;
         border-radius: 20px;
         font-weight: 800;
         font-size: 13px;
-        border: 1px solid var(--accent-dim);
+        border: 1px solid var(--accent-gold);
     }
 
     .subtotal-value {
@@ -167,9 +170,9 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background: #111;
-        border: 1px solid #333;
-        color: #aaa;
+        background: var(--bg-main);
+        border: 1px solid var(--border-color);
+        color: var(--text-muted);
         transition: 0.2s;
         text-decoration: none;
     }
@@ -213,7 +216,7 @@
                 <i class="fa fa-boxes-stacked" style="color: var(--accent-gold); margin-right: 10px;"></i>
                 GERENCIAR ITENS
             </h3>
-            <span style="color: #666; font-size: 14px;">Painel de controle de inventário e pedidos</span>
+            <span style="color: var(--text-muted); font-size: 14px;">Painel de controle de inventário e pedidos</span>
         </div>
         
         <a href="/backend/itenspedidos/criar" class="w3-button btn-novo-item" style="display: flex; align-items: center; gap: 10px; background: var(--accent-gold); color: #000; font-weight: 800; padding: 12px 25px; border-radius: 12px; text-transform: uppercase; font-size: 13px;">
@@ -226,15 +229,15 @@
     <div class="summary-card">
         <div class="summary-icon"><i class="fa fa-list-ol"></i></div>
         <div>
-            <div style="color: #666; font-size: 12px; font-weight: 700; text-transform: uppercase;">Total Itens</div>
-            <div style="font-size: 20px; font-weight: 900;"><?= count($itenspedidos) ?></div>
+            <div style="color: var(--text-muted); font-size: 12px; font-weight: 700; text-transform: uppercase;">Total Itens</div>
+            <div style="font-size: 20px; font-weight: 900; color: var(--text-main);"><?= count($itenspedidos) ?></div>
         </div>
     </div>
     <div class="summary-card" style="border-left: 3px solid var(--accent-gold);">
         <div class="summary-icon"><i class="fa fa-chart-line"></i></div>
         <div>
-            <div style="color: #666; font-size: 12px; font-weight: 700; text-transform: uppercase;">Fluxo Ativo</div>
-            <div style="font-size: 20px; font-weight: 900;">Premium</div>
+            <div style="color: var(--text-muted); font-size: 12px; font-weight: 700; text-transform: uppercase;">Fluxo Ativo</div>
+            <div style="font-size: 20px; font-weight: 900; color: var(--accent-gold);">Premium</div>
         </div>
     </div>
 </div>
@@ -262,7 +265,7 @@
                 <td><span class="id-tag">#<?= $itempedido['id_itens_pedidos'] ?></span></td>
                 <td>
                     <a href="/backend/pedido/listar/<?= $itempedido['id_pedido'] ?>" class="pedido-link">
-                        <i class="fa fa-file-invoice" style="color: #444;"></i>
+                        <i class="fa fa-file-invoice" style="color: var(--accent-gold);"></i>
                         PED-<?= $itempedido['id_pedido'] ?>
                     </a>
                 </td>
@@ -276,8 +279,8 @@
                     <span class="qty-badge"><?= $itempedido['quantidade'] ?></span>
                 </td>
                 <td>
-                    <span style="color: #888; font-size: 14px;">R$</span> 
-                    <span style="color: #ccc; font-weight: 600;"><?= number_format($itempedido['preco_unitario'], 2, ',', '.') ?></span>
+                    <span style="color: var(--text-muted); font-size: 14px;">R$</span> 
+                    <span style="color: var(--text-main); font-weight: 600;"><?= number_format($itempedido['preco_unitario'], 2, ',', '.') ?></span>
                 </td>
                 <td style="text-align: right;">
                     <span class="subtotal-value">R$ <?= number_format($subtotal, 2, ',', '.') ?></span>

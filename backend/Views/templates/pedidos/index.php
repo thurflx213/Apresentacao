@@ -237,19 +237,19 @@ foreach ($pedidos as $p) {
 </style>
 
 <div class="page-wrapper">
-    <h3 class="page-title"><i class="fa fa-shopping-cart" style="color: #f2cc7d;"></i> Gerenciar Pedidos</h3>
+    <h3 class="page-title"><i class="fas fa-shopping-cart" style="color: #f2cc7d;"></i> Gerenciar Pedidos</h3>
 
     <header class="header-breadcrumb">
-        <h5><b><i class="fa fa-dashboard"></i> Painel de Controle - Koketsu</b></h5>
+        <h5><b><i class="fas fa-tachometer-alt"></i> Painel de Controle - Koketsu</b></h5>
     </header>
 
     <div class="actions-bar">
         <a href="/backend/pedido/criar" class="btn-main-action">
-            <i class="fa fa-plus-circle"></i> Novo Pedido
+            <i class="fas fa-plus-circle"></i> Novo Pedido
         </a>
 
         <div class="search-container">
-            <i class="fa fa-search"></i>
+            <i class="fas fa-search"></i>
             <input type="text" id="orderInput" onkeyup="filterOrders()" placeholder="Buscar pedido por ID ou cliente..." class="search-input">
         </div>
     </div>
@@ -302,19 +302,19 @@ foreach ($pedidos as $p) {
                         
                         <td style="text-align: center;">
                             <a href="/backend/pedido/detalhes/<?= $pedido['id_pedido'] ?>" class="btn-action-small btn-view">
-                                <i class="fa fa-eye"></i> Ver
+                                <i class="fas fa-eye"></i> Ver
                             </a>
                             
                             <?php if (!$is_deleted): ?>
                                 <a href="/backend/pedido/editar/<?= $pedido['id_pedido'] ?>" class="btn-action-small btn-edit">
-                                    <i class="fa fa-pencil"></i> Editar
+                                    <i class="fas fa-pencil-alt"></i> Editar
                                 </a>
                                 <a href="/backend/pedido/excluir/<?= $pedido['id_pedido'] ?>" class="btn-action-small btn-delete">
-                                    <i class="fa fa-trash"></i> Excluir
+                                    <i class="fas fa-trash-alt"></i> Excluir
                                 </a>
                             <?php else: ?>
                                 <a href="/backend/pedido/ativar/<?= $pedido['id_pedido'] ?>" class="btn-action-small btn-activate">
-                                    <i class="fa fa-check"></i> Ativar
+                                    <i class="fas fa-check"></i> Ativar
                                 </a>
                             <?php endif; ?>
                         </td>
@@ -323,7 +323,7 @@ foreach ($pedidos as $p) {
                 <?php else: ?>
                     <tr>
                         <td colspan="7" style="text-align: center; padding: 40px; color: #666;">
-                            <i class="fa fa-folder-open-o" style="font-size: 48px; display: block; margin-bottom: 15px;"></i>
+                            <i class="fas fa-folder-open" style="font-size: 48px; display: block; margin-bottom: 15px;"></i>
                             Nenhum pedido encontrado.
                         </td>
                     </tr>
@@ -367,7 +367,7 @@ function updatePaginationButtons(totalPages, totalActive) {
         if (!isDisabled) btn.onclick = () => { currentPage = page; displayTable(); };
         return btn;
     };
-    container.appendChild(createBtn('<i class="fa fa-chevron-left"></i>', currentPage - 1, false, currentPage === 1));
+    container.appendChild(createBtn('<i class="fas fa-chevron-left"></i>', currentPage - 1, false, currentPage === 1));
     const range = 1;
     for (let i = 1; i <= totalPages; i++) {
         if (i === 1 || i === totalPages || (i >= currentPage - range && i <= currentPage + range)) {
@@ -386,7 +386,7 @@ function updatePaginationButtons(totalPages, totalActive) {
             }
         }
     }
-    container.appendChild(createBtn('<i class="fa fa-chevron-right"></i>', currentPage + 1, false, currentPage === totalPages));
+    container.appendChild(createBtn('<i class="fas fa-chevron-right"></i>', currentPage + 1, false, currentPage === totalPages));
 }
 
 function filterOrders() {

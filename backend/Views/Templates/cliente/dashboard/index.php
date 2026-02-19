@@ -21,51 +21,51 @@
             <div class="v-divider"></div>
             <div class="mini-stat">
                 <span class="v-label">STATUS</span>
-                <span class="v-value gold-text"><i class="fa fa-crown"></i> VIP</span>
+                <span class="v-value gold-text"><i class="fas fa-crown"></i> VIP</span>
             </div>
         </div>
     </header>
 
     <section class="luxury-grid">
         <a href="/backend/cliente/meu-perfil/<?= htmlspecialchars($usuarioId ?? '0') ?>" class="k-card">
-            <div class="k-icon"><i class="fa fa-user"></i></div>
+            <div class="k-icon"><i class="fas fa-user"></i></div>
             <div class="k-info">
                 <h3>Meu Perfil</h3>
                 <p>Dados e Segurança</p>
             </div>
-            <i class="fa fa-arrow-right k-arrow"></i>
+            <i class="fas fa-arrow-right k-arrow"></i>
         </a>
 
         <a href="/backend/cliente/pedidos" class="k-card">
-            <div class="k-icon"><i class="fa fa-shopping-bag"></i></div>
+            <div class="k-icon"><i class="fas fa-shopping-bag"></i></div>
             <div class="k-info">
                 <h3>Meus Pedidos</h3>
                 <p>Histórico de Compras</p>
             </div>
-            <i class="fa fa-arrow-right k-arrow"></i>
+            <i class="fas fa-arrow-right k-arrow"></i>
         </a>
 
         <a href="/backend/configuracoes" class="k-card">
-            <div class="k-icon"><i class="fa fa-cog"></i></div>
+            <div class="k-icon"><i class="fas fa-cog"></i></div>
             <div class="k-info">
                 <h3>Preferências</h3>
                 <p>Ajustes da Conta</p>
             </div>
-            <i class="fa fa-arrow-right k-arrow"></i>
+            <i class="fas fa-arrow-right k-arrow"></i>
         </a>
     </section>
 
     <div class="main-content-row">
         <div class="content-box recent-orders">
             <div class="box-header">
-                <h3><i class="fa fa-list-ul gold-text"></i> ÚLTIMAS AQUISIÇÕES</h3>
+                <h3><i class="fas fa-list-ul gold-text"></i> ÚLTIMAS AQUISIÇÕES</h3>
                 <a href="/backend/cliente/pedidos" class="gold-link">VER TUDO</a>
             </div>
 
             <div class="table-container">
                 <?php if (empty($pedidosRecentes)): ?>
                     <div class="k-empty">
-                        <i class="fa fa-shopping-cart"></i>
+                        <i class="fas fa-shopping-cart"></i>
                         <p>Nenhum pedido encontrado no seu histórico.</p>
                         <a href="/" class="btn-gold-sm">EXPLORAR LOJA</a>
                     </div>
@@ -105,7 +105,7 @@
                                 </td>
                                 <td>
                                     <a href="/backend/cliente/pedidos/detalhes/<?= $pedido['id_pedido'] ?>" class="btn-eye">
-                                        <i class="fa fa-eye"></i>
+                                        <i class="fas fa-eye"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -120,8 +120,8 @@
             <h3>CONCEIRGE KOKETSU</h3>
             <p>Atendimento prioritário para membros.</p>
             <div class="support-links">
-                <a href="#" class="s-link"><i class="fa fa-whatsapp"></i> ATENDIMENTO VIA WHATSAPP</a>
-                <a href="#" class="s-link"><i class="fa fa-envelope"></i> SUPORTE VIA E-MAIL</a>
+                <a href="#" class="s-link"><i class="fab fa-whatsapp"></i> ATENDIMENTO VIA WHATSAPP</a>
+                <a href="#" class="s-link"><i class="fas fa-envelope"></i> SUPORTE VIA E-MAIL</a>
             </div>
         </div>
     </div>

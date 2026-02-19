@@ -62,35 +62,35 @@
 </style>
 
 <div class="page-wrapper">
-    <h3 class="page-title"><i class="fa fa-users" style="color: #f2cc7d;"></i> Gerenciar Usuários</h3>
+    <h3 class="page-title"><i class="fas fa-users" style="color: #f2cc7d;"></i> Gerenciar Usuários</h3>
 
     <header class="header-breadcrumb">
-        <h5><b><i class="fa fa-dashboard"></i> Painel de Controle - Koketsu</b></h5>
+        <h5><b><i class="fas fa-tachometer-alt"></i> Painel de Controle - Koketsu</b></h5>
     </header>
 
     <div class="dashboard-grid">
         <div class="stat-card" style="border-left: 4px solid #f2cc7d;">
             <div class="stat-info"><h3><?= $total_admin; ?></h3><p>Admins</p></div>
-            <div class="stat-icon"><i class="fa fa-shield"></i></div>
+            <div class="stat-icon"><i class="fas fa-user-shield"></i></div>
         </div>
         <div class="stat-card" style="border-left: 4px solid #28a745;">
             <div class="stat-info"><h3><?= $total_ativos; ?></h3><p>Ativos</p></div>
-            <div class="stat-icon" style="color:#28a745; background:rgba(40,167,69,0.1);"><i class="fa fa-signal"></i></div>
+            <div class="stat-icon" style="color:#28a745; background:rgba(40,167,69,0.1);"><i class="fas fa-signal"></i></div>
         </div>
         <div class="stat-card" style="border-left: 4px solid #ff4444;">
             <div class="stat-info"><h3><?= $total_inativos; ?></h3><p style="color: #ff4444;">Inativos</p></div>
-            <div class="stat-icon" style="color:#ff4444; background:rgba(255,68,68,0.1);"><i class="fa fa-exclamation-triangle"></i></div>
+            <div class="stat-icon" style="color:#ff4444; background:rgba(255,68,68,0.1);"><i class="fas fa-exclamation-triangle"></i></div>
         </div>
         <div class="stat-card" style="border-left: 4px solid #f2cc7d;">
             <div class="stat-info"><h3><?= $total_usuarios; ?></h3><p>Total Geral</p></div>
-            <div class="stat-icon"><i class="fa fa-users"></i></div>
+            <div class="stat-icon"><i class="fas fa-users"></i></div>
         </div>
     </div>
 
     <div class="actions-bar">
-        <a href="/backend/usuario/criar" class="btn-main-action"><i class="fa fa-user-plus"></i> Novo Usuário</a>
+        <a href="/backend/usuario/criar" class="btn-main-action"><i class="fas fa-user-plus"></i> Novo Usuário</a>
         <div class="search-container">
-            <i class="fa fa-search"></i>
+            <i class="fas fa-search"></i>
             <input type="text" id="userInput" onkeyup="filterUsers()" placeholder="Buscar usuário por nome ou email..." class="search-input">
         </div>
     </div>
@@ -114,17 +114,17 @@
                     <td class="id-column">#<?= $usuario['id_usuarios'] ?></td>
                     <td class="user-name" style="font-weight: 700; color: var(--text-main);"><?= htmlspecialchars($usuario['nome_usuarios']) ?></td>
                     <td class="email-column" style="color: #888;"><?= htmlspecialchars($usuario['email_usuarios']) ?></td>
-                    <td><span style="color: #f2cc7d; font-size: 12px; font-weight: 800;"><i class="fa fa-circle" style="font-size: 8px;"></i> <?= strtoupper($usuario['nivel_acesso']) ?></span></td>
+                    <td><span style="color: #f2cc7d; font-size: 12px; font-weight: 800;"><i class="fas fa-circle" style="font-size: 8px;"></i> <?= strtoupper($usuario['nivel_acesso']) ?></span></td>
                     <td style="text-align: center;">
                         <span class="badge-status <?= $is_inativo ? 'badge-inactive' : 'badge-active' ?>"><?= $is_inativo ? 'Inativo' : 'Ativo' ?></span>
                     </td>
                     <td style="text-align: center;">
                         <div style="display: flex; justify-content: center; gap: 5px;">
-                            <a href="/backend/usuario/editar/<?= $usuario['id_usuarios'] ?>" class="btn-action-small btn-edit" title="Editar"><i class="fa fa-pencil"></i></a>
+                            <a href="/backend/usuario/editar/<?= $usuario['id_usuarios'] ?>" class="btn-action-small btn-edit" title="Editar"><i class="fas fa-pencil-alt"></i></a>
                             <?php if ($is_inativo): ?>
-                                <a href="/backend/usuario/ativar/<?= $usuario['id_usuarios'] ?>" class="btn-action-small btn-activate" title="Ativar"><i class="fa fa-check"></i></a>
+                                <a href="/backend/usuario/ativar/<?= $usuario['id_usuarios'] ?>" class="btn-action-small btn-activate" title="Ativar"><i class="fas fa-check"></i></a>
                             <?php else: ?>
-                                <a href="/backend/usuario/excluir/<?= $usuario['id_usuarios'] ?>" class="btn-action-small btn-toggle" title="Desativar" onclick="return confirm('Deseja inativar este usuário?')"><i class="fa fa-power-off"></i></a>
+                                <a href="/backend/usuario/excluir/<?= $usuario['id_usuarios'] ?>" class="btn-action-small btn-toggle" title="Desativar" onclick="return confirm('Deseja inativar este usuário?')"><i class="fas fa-power-off"></i></a>
                             <?php endif; ?>
                         </div>
                     </td>
@@ -182,7 +182,7 @@ function updatePaginationButtons(totalPages, totalActive) {
     };
 
     // Anterior
-    container.appendChild(createBtn('<i class="fa fa-chevron-left"></i>', currentPage - 1, false, currentPage === 1));
+    container.appendChild(createBtn('<i class="fas fa-chevron-left"></i>', currentPage - 1, false, currentPage === 1));
 
     // Lógica Inteligente: Página 1 sempre aparece
     const range = 1; // Quantidade ao redor da atual
@@ -211,7 +211,7 @@ function updatePaginationButtons(totalPages, totalActive) {
     }
 
     // Próximo
-    container.appendChild(createBtn('<i class="fa fa-chevron-right"></i>', currentPage + 1, false, currentPage === totalPages));
+    container.appendChild(createBtn('<i class="fas fa-chevron-right"></i>', currentPage + 1, false, currentPage === totalPages));
 }
 
 function filterUsers() {

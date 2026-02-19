@@ -55,11 +55,17 @@ class DashboardController extends AuthenticatedController{
     }
 
     public function viewEditarCliente(int $id){
-        $dados = $this->usuario->buscarPorID($id);
-        if (!$dados) {
+        $usuario = $this->usuario->buscarPorID($id);
+        if (!$usuario) {
             Redirect::redirecionarComMensagem("/cliente/dashboard", "error", "Cliente não encontrado.");
         }
-        View::render("cliente/editar", ["usuario" => $dados]);
+        
+        $perfil = $this->perfil->buscarPerfilPorUsuario($id);
+        
+        View::render("cliente/editar", [
+            "usuario" => $usuario,
+            "perfil" => $perfil
+        ]);
     }
 
     public function atualizarCliente(int $id) {
@@ -106,6 +112,29 @@ class DashboardController extends AuthenticatedController{
         // Atualizar usuário
         $senhaHash = empty($senha) ? $usuario['senha_usuarios'] : password_hash($senha, PASSWORD_DEFAULT);
 
+        // Inserir/Atualizar perfil
+        $telefone = $_POST['telefone_perfil'] ?? '';
+        $endereco = $_POST['endereco_perfil'] ?? '';
+        $perfilExistente = $this->perfil->buscarPerfilPorUsuario($id);
+
+        if ($perfilExistente) {
+            $this->perfil->atualizarPerfil(
+                $perfilExistente['id_perfil'],
+                $telefone,
+                $endereco,
+                $perfilExistente['data_cadastro'],
+                $id
+            );
+        } else {
+            $this->perfil->inserirPerfil(
+                $telefone,
+                $endereco,
+                date('Y-m-d H:i:s'),
+                $id
+            );
+        }
+
+        // Atualizar usuário
         $sql = "UPDATE tbl_usuarios SET 
                 nome_usuarios = :nome,
                 email_usuarios = :email,

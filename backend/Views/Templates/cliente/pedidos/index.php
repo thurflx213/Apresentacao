@@ -4,16 +4,54 @@ $nomeUsuario = $_SESSION['usuario_nome'] ?? 'Cliente';
 ?>
 <div class="pedidos-container">
     <header class="pedidos-header">
-        <a href="/backend/cliente/dashboard" class="back-btn"><i class="fa fa-arrow-left"></i> Voltar</a>
-        <h1><i class="fa fa-shopping-bag"></i> Meus Pedidos</h1>
+        <a href="/backend/cliente/dashboard" class="back-btn"><i class="fas fa-arrow-left"></i> Voltar</a>
+        <h1><i class="fas fa-shopping-bag"></i> Meus Pedidos</h1>
         <div></div>
     </header>
 
-    <div id="pedidosContent">
-        <div class="loading">
-            <div class="spinner"></div>
-            <p>Carregando seus pedidos...</p>
-        </div>
+    <div id="pedidosContent" class="pedidos-content">
+        <?php if (empty($pedidos)): ?>
+            <div class="empty-state">
+                <div class="empty-icon">📦</div>
+                <h2>Nenhum pedido encontrado</h2>
+                <p>Você ainda não fez nenhum pedido no seu histórico.</p>
+                <a href="/" class="continue-shopping">Ir para a Loja</a>
+            </div>
+        <?php else: 
+            // Ordenar pedidos do mais recente para o mais antigo
+            usort($pedidos, function($a, $b) {
+                return strtotime($b['data_pedido']) - strtotime($a['data_pedido']);
+            });
+            
+            foreach ($pedidos as $p): 
+                $statusPuro = strtolower($p['status_pedido'] ?? 'pendente');
+                $statusClass = "status-" . $statusPuro;
+                $totalFormatted = "R$ " . number_format($p['total_pedido'] ?? 0, 2, ',', '.');
+                $dataFormatted = date('d/m/Y', strtotime($p['data_pedido']));
+        ?>
+            <div class="pedido-card">
+                <div class="pedido-header">
+                    <div>
+                        <div class="pedido-numero">Pedido #<?= $p['id_pedido'] ?></div>
+                        <div class="pedido-data"><?= $dataFormatted ?></div>
+                    </div>
+                    <span class="k-badge <?= $statusClass ?>"><?= strtoupper($p['status_pedido'] ?? 'pendente') ?></span>
+                </div>
+                <div class="pedido-body">
+                    <div class="pedido-info">
+                        <div class="info-row"><strong>ID:</strong> <?= $p['id_pedido'] ?></div>
+                        <div class="info-row"><strong>Status:</strong> <?= ucfirst($p['status_pedido'] ?? 'pendente') ?></div>
+                    </div>
+                    <div class="pedido-total">
+                        <div class="total-label">Total</div>
+                        <div class="total-valor"><?= $totalFormatted ?></div>
+                    </div>
+                </div>
+                <div class="pedido-footer">
+                    <a href="/backend/cliente/pedidos/detalhes/<?= $p['id_pedido'] ?>" class="btn-detalhes">Ver Detalhes</a>
+                </div>
+            </div>
+        <?php endforeach; endif; ?>
     </div>
 </div>
 
@@ -191,86 +229,3 @@ $nomeUsuario = $_SESSION['usuario_nome'] ?? 'Cliente';
     }
 </style>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    carregarPedidos();
-});
-
-function carregarPedidos() {
-    const usuarioId = <?= $usuarioId ?>;
-    const container = document.getElementById('pedidosContent');
-
-    if (!usuarioId) {
-        mostrarVazio();
-        return;
-    }
-    
-    // Simulate API call or real one
-    fetch(`/backend/api/pedidos?page=1`)
-        .then(response => response.ok ? response.json() : Promise.reject(response.status))
-        .then(data => {
-            if (data.status === 'success' && data.data) {
-                const pedidosUsuario = data.data.filter(p => parseInt(p.id_usuarios) === usuarioId);
-                if (pedidosUsuario.length > 0) {
-                    exibirPedidos(pedidosUsuario);
-                } else {
-                    mostrarVazio();
-                }
-            } else {
-                mostrarVazio();
-            }
-        })
-        .catch(err => {
-            console.error(err);
-            // Fallback for demo if API fails
-            mostrarVazio(); 
-        });
-}
-
-function exibirPedidos(pedidos) {
-    const container = document.getElementById('pedidosContent');
-    const html = pedidos
-        .sort((a, b) => new Date(b.data_pedido) - new Date(a.data_pedido))
-        .map(p => {
-            const statusClass = `status-${p.status_pedido?.toLowerCase() || 'pendente'}`;
-            const total = parseFloat(p.total_pedido || 0).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'});
-            const date = new Date(p.data_pedido).toLocaleDateString('pt-BR');
-            
-            return `
-            <div class="pedido-card">
-                <div class="pedido-header">
-                    <div>
-                        <div class="pedido-numero">Pedido #${p.id_pedido}</div>
-                        <div class="pedido-data">${date}</div>
-                    </div>
-                    <span class="k-badge ${statusClass}">${p.status_pedido}</span>
-                </div>
-                <div class="pedido-body">
-                    <div class="pedido-info">
-                        <div class="info-row"><strong>ID:</strong> ${p.id_pedido}</div>
-                        <div class="info-row"><strong>Status:</strong> ${p.status_pedido}</div>
-                    </div>
-                    <div class="pedido-total">
-                        <div class="total-label">Total</div>
-                        <div class="total-valor">${total}</div>
-                    </div>
-                </div>
-                <div class="pedido-footer">
-                    <a href="/backend/cliente/pedidos/detalhes/${p.id_pedido}" class="btn-detalhes">Ver Detalhes</a>
-                </div>
-            </div>`;
-        }).join('');
-    container.innerHTML = html;
-}
-
-function mostrarVazio() {
-    document.getElementById('pedidosContent').innerHTML = `
-        <div class="empty-state">
-            <div class="empty-icon">📦</div>
-            <h2>Nenhum pedido encontrado</h2>
-            <p>Você ainda não fez nenhum pedido.</p>
-            <a href="/" class="continue-shopping">Ir para a Loja</a>
-        </div>
-    `;
-}
-</script>

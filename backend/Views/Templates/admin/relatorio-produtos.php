@@ -233,21 +233,21 @@
 
     <div class="stats-flex">
         <div class="card-stat">
-            <div class="card-icon"><i class="fa fa-box"></i></div>
+            <div class="card-icon"><i class="fas fa-box"></i></div>
             <div class="card-info">
                 <span>Itens Analisados</span>
                 <strong><?php echo $totalProdutos; ?> Produtos</strong>
             </div>
         </div>
         <div class="card-stat">
-            <div class="card-icon"><i class="fa fa-dollar-sign"></i></div>
+            <div class="card-icon"><i class="fas fa-dollar-sign"></i></div>
             <div class="card-info">
                 <span>Receita Acumulada</span>
                 <strong style="color: var(--accent);">R$ <?php echo number_format($totalReceita, 2, ',', '.'); ?></strong>
             </div>
         </div>
         <div class="card-stat">
-            <div class="card-icon"><i class="fa fa-calendar-check"></i></div>
+            <div class="card-icon"><i class="fas fa-calendar-check"></i></div>
             <div class="card-info">
                 <span>Data do Relatório</span>
                 <strong><?php echo date('d/m/Y H:i'); ?></strong>

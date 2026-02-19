@@ -115,11 +115,11 @@
 
     /* Card Premium */
     .premium-card {
-        background: #111;
-        border: 1px solid #222;
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
         border-radius: 20px;
         padding: 45px;
-        box-shadow: 0 30px 60px rgba(0,0,0,0.7);
+        box-shadow: var(--shadow-md);
     }
 
     .card-header { text-align: center; margin-bottom: 40px; }
@@ -132,24 +132,24 @@
         letter-spacing: 2px;
         margin: 0;
     }
-    .subtitle { color: #666; font-size: 13px; margin-top: 8px; }
+    .subtitle { color: var(--text-muted); font-size: 13px; margin-top: 8px; }
 
     /* Seções do Formulário */
     .form-section { margin-bottom: 35px; }
     .section-title {
-        color: #555;
+        color: var(--text-muted);
         font-size: 14px;
         text-transform: uppercase;
         letter-spacing: 1px;
         margin-bottom: 20px;
-        border-bottom: 1px solid #222;
+        border-bottom: 1px solid var(--border-color);
         padding-bottom: 10px;
     }
     .highlight-section {
-        background: #161616;
+        background: var(--bg-main);
         padding: 25px;
         border-radius: 15px;
-        border: 1px dashed #333;
+        border: 1px dashed var(--border-color);
     }
 
     /* Inputs e Grid */
@@ -169,14 +169,14 @@
     .icon-inner, .currency-label {
         position: absolute;
         left: 15px;
-        color: #555;
+        color: var(--text-muted);
         font-size: 13px;
     }
 
     .input-dark {
-        background: #1a1a1a !important;
-        border: 1px solid #333;
-        color: #fff;
+        background: var(--bg-card) !important;
+        border: 1px solid var(--border-color);
+        color: var(--text-main);
         padding: 14px 15px;
         border-radius: 10px;
         width: 100%;
@@ -194,9 +194,9 @@
 
     /* Select Customizado */
     .select-luxury {
-        background: #1a1a1a;
-        color: #fff;
-        border: 1px solid #333;
+        background: var(--bg-card);
+        color: var(--text-main);
+        border: 1px solid var(--border-color);
         padding: 14px;
         border-radius: 10px;
         width: 100%;
@@ -218,7 +218,7 @@
         letter-spacing: 2px;
         cursor: pointer;
         transition: 0.3s;
-        box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        box-shadow: var(--shadow-md);
     }
     .btn-save-gold:hover {
         transform: translateY(-2px);

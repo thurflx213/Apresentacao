@@ -60,13 +60,13 @@
 </style>
 
 <div class="page-wrapper">
-    <h3 class="page-title"><i class="fa fa-cubes" style="color: #f2cc7d;"></i> Gerenciar Produtos</h3>
+    <h3 class="page-title"><i class="fas fa-cubes" style="color: #f2cc7d;"></i> Gerenciar Produtos</h3>
     <header class="header-breadcrumb">
-        <h5><b><i class="fa fa-dashboard"></i> Painel de produtos - Koketsu</b></h5>
+        <h5><b><i class="fas fa-tachometer-alt"></i> Painel de produtos - Koketsu</b></h5>
     </header>
 
     <div class="chart-container-card">
-        <h4 style="color: #f2cc7d; margin-top: 0; font-weight: 700;"><i class="fa fa-bar-chart"></i> Estoque por Categoria</h4>
+        <h4 style="color: #f2cc7d; margin-top: 0; font-weight: 700;"><i class="fas fa-chart-bar"></i> Estoque por Categoria</h4>
         <div style="height: 300px;">
             <canvas id="vendasChart"></canvas>
         </div>
@@ -74,10 +74,10 @@
 
     <div class="actions-bar">
         <div class="search-group">
-            <i class="fa fa-search"></i>
+            <i class="fas fa-search"></i>
             <input type="text" id="inputBusca" class="search-input" placeholder="Buscar produto por nome...">
         </div>
-        <a href="/backend/produtos/criar" class="btn-main-action"><i class="fa fa-plus-circle"></i> Novo Produto</a>
+        <a href="/backend/produtos/criar" class="btn-main-action"><i class="fas fa-plus-circle"></i> Novo Produto</a>
     </div>
 
     <main>
@@ -113,11 +113,11 @@
                     </td>
                     <td style="text-align: center;">
                         <div style="display: flex; gap: 8px; justify-content: center;">
-                            <a href="/backend/produtos/editar/<?= $p['id_produto']; ?>" class="btn-edit" title="Editar"><i class="fa fa-pencil"></i></a>
+                            <a href="/backend/produtos/editar/<?= $p['id_produto']; ?>" class="btn-edit" title="Editar"><i class="fas fa-pencil-alt"></i></a>
                             <?php if ($is_inativo): ?>
-                                <a href="/backend/produtos/ativar/<?= $p['id_produto'] ?>" class="btn-activate" title="Ativar"><i class="fa fa-check"></i></a>
+                                <a href="/backend/produtos/ativar/<?= $p['id_produto'] ?>" class="btn-activate" title="Ativar"><i class="fas fa-check"></i></a>
                             <?php else: ?>
-                                <a href="/backend/produtos/excluir/<?= $p['id_produto'] ?>" class="btn-delete" title="Inativar" onclick="return confirm('Deseja inativar este produto?')"><i class="fa fa-trash-can"></i></a>
+                                <a href="/backend/produtos/excluir/<?= $p['id_produto'] ?>" class="btn-delete" title="Inativar" onclick="return confirm('Deseja inativar este produto?')"><i class="fas fa-trash-alt"></i></a>
                             <?php endif; ?>
                         </div>
                     </td>
@@ -173,7 +173,7 @@
         };
 
         // Botão Anterior
-        container.appendChild(createBtn('<i class="fa fa-chevron-left"></i>', currentPage - 1, false, currentPage === 1));
+        container.appendChild(createBtn('<i class="fas fa-chevron-left"></i>', currentPage - 1, false, currentPage === 1));
 
         const range = 1; // Quantidade de páginas adjacentes para exibir
 
@@ -202,7 +202,7 @@
         }
 
         // Botão Próximo
-        container.appendChild(createBtn('<i class="fa fa-chevron-right"></i>', currentPage + 1, false, currentPage === totalPages));
+        container.appendChild(createBtn('<i class="fas fa-chevron-right"></i>', currentPage + 1, false, currentPage === totalPages));
     }
 
     document.getElementById('inputBusca').addEventListener('keyup', function() {

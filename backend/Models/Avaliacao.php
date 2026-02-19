@@ -30,14 +30,33 @@ class Avaliacao {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Buscar avaliações de um produto específico
+    // Buscar avaliações de um produto específico com detalhes do cliente
     public function buscarPorProduto($id_produto) {
-        $sql = "SELECT a.*, u.nome_usuarios as nome_cliente 
+        $sql = "SELECT a.*, u.nome_usuarios as nome_cliente, u.foto_usuarios, p.imagem_produtos as foto_produto
                 FROM tbl_avaliacoes a
-                LEFT JOIN tbl_usuarios u ON a.id_cliente = u.id_usuarios
-                WHERE a.id_produto = :id_produto AND a.excluido_em IS NULL";
+                LEFT JOIN tbl_produtos p ON a.id_produto = p.id_produto
+                LEFT JOIN tbl_perfil pf ON a.id_cliente = pf.id_perfil
+                LEFT JOIN tbl_usuarios u ON pf.id_usuarios = u.id_usuarios
+                WHERE a.id_produto = :id_produto AND a.excluido_em IS NULL
+                ORDER BY a.data_avaliacao_avaliacoes DESC";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':id_produto', $id_produto);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Buscar as últimas avaliações para o carrossel da home
+    public function buscarUltimasAvaliacoes($limit = 5) {
+        $sql = "SELECT a.*, p.nome_produtos as nome_produto, p.imagem_produtos as foto_produto, u.nome_usuarios as nome_cliente, u.foto_usuarios 
+                FROM tbl_avaliacoes a
+                LEFT JOIN tbl_produtos p ON a.id_produto = p.id_produto
+                LEFT JOIN tbl_perfil pf ON a.id_cliente = pf.id_perfil
+                LEFT JOIN tbl_usuarios u ON pf.id_usuarios = u.id_usuarios
+                WHERE a.excluido_em IS NULL
+                ORDER BY a.data_avaliacao_avaliacoes DESC
+                LIMIT :limit";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':limit', (int) $limit, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -108,6 +127,25 @@ class Avaliacao {
 
         return $stmt->execute();
     }
+
+    // Buscar estatísticas de avaliação de um produto (média e total)
+    public function getStatsPorProduto($id_produto) {
+        $sql = "SELECT 
+                    COUNT(*) as total,
+                    AVG(nota_avaliacoes) as media
+                FROM tbl_avaliacoes 
+                WHERE id_produto = :id_produto AND excluido_em IS NULL";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':id_produto', $id_produto);
+        $stmt->execute();
+        $stats = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        return [
+            'total' => (int)($stats['total'] ?? 0),
+            'media' => round((float)($stats['media'] ?? 0), 1)
+        ];
+    }
+
     // Buscar avaliação por ID
     public function buscarPorId($id) {
         $sql = "SELECT a.*, p.nome_produtos as nome_produto, u.nome_usuarios as nome_cliente 

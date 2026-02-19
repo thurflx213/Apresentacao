@@ -112,7 +112,7 @@
 </head>
 <body>
     <div class="container">
-        <img src="/img/logo.png" alt="Koketsu" class="logo">
+        <img src="/assets/img/logo2026.png" alt="Koketsu" class="logo">
         <div class="icon-wrapper">
             <i class="fa fa-screwdriver-wrench icon"></i>
         </div>

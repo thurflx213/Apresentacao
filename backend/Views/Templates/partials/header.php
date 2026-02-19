@@ -24,7 +24,7 @@ $current_uri = $_SERVER['REQUEST_URI'] ?? '/backend/admin/dashboard';
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script>
     // Script bloqueante para evitar flash de cor incorreta
     (function() {
@@ -147,31 +147,6 @@ html, body {
   text-align: center;
 }
 
-/* Ícones do perfil (mensagem, usuário, configurações) */
-.w3-container .w3-margin-top a {
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  width: 40px;
-  height: 40px;
-  margin: 0 6px;
-  background-color: var(--bg-sidebar);
-  border-radius: 50%;
-  border: 1px solid var(--border-color);
-  color: var(--accent);
-  transition: all 0.3s ease-in-out;
-}
-
-.w3-container .w3-margin-top a:hover {
-  background-color: var(--accent);
-  color: var(--bg-sidebar);
-  box-shadow: 0 0 10px var(--accent);
-  transform: translateY(-3px);
-}
-
-.w3-container .w3-margin-top i {
-  font-size: 18px;
-}
 
 
 /* ====== BOTÃO SAIR ====== */
@@ -306,7 +281,7 @@ input, select, textarea {
   <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-black" onclick="w3_open();"><i class="fa fa-bars"></i>  Menu</button>
   <div class="w3-bar" style="background-color: var(--bg-top) !important; height:80px; display:flex; align-items:center; justify-content:center; border-bottom: 1px solid var(--border-color);">
     <a href="/">
-      <img id="main-logo" src="/img/logo.png" alt="Koketsu Logo" style="height: 70px; width: auto; max-width: 100%;">
+      <img id="main-logo" src="/assets/img/logo2026.png" alt="Koketsu Logo" style="height: 70px; width: auto; max-width: 100%;">
     </a>
   </div>
 </div>
@@ -333,13 +308,6 @@ input, select, textarea {
          onerror="this.src='/img/logoperf.jpg';">
 </div>
   <h5 class="w3-margin-top">Bem-vindo, <strong><?= htmlspecialchars($session->get('usuario_nome')); ?></strong></h5>
-  <?php if ($session->get('usuario_tipo') != 'admin'): ?>
-  <div class="w3-margin-top">
-    <a href="#" title="Mensagens"><i class="fa fa-envelope w3-hover-text-yellow"></i></a>
-    <a href="/backend/cliente/meu-perfil/<?= htmlspecialchars($session->get('usuario_id') ?? '0') ?>" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/cliente/meu-perfil', $current_uri); ?>" title="Perfil" style="margin: 0 10px;"><i class="fa fa-user w3-hover-text-yellow"></i></a>
-    <a href="#" title="Configurações"><i class="fa fa-cog w3-hover-text-yellow"></i></a>
-  </div>
-  <?php endif; ?>
 </div>
 <hr style="border-color:#333;"> 
   <div class="w3-container">
@@ -348,47 +316,52 @@ input, select, textarea {
   <div class="w3-bar-block">
     <?php if ($session->get('usuario_tipo') == 'admin'): ?>
         <a href="/backend/admin/dashboard" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/admin/dashboard', $current_uri); ?>">
-            <i class="fa fa-home fa-fw"></i> Início (Admin)
+            <i class="fas fa-home fa-fw"></i> Início (Admin)
         </a>
         <a href="/backend/usuario/listar" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/usuario/listar', $current_uri); ?>">
-            <i class="fa fa-users fa-fw"></i> Usuários
+            <i class="fas fa-users fa-fw"></i> Usuários
         </a>
         <a href="/backend/produtos/listar" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/produtos/listar', $current_uri); ?>">
-            <i class="fa fa-tags fa-fw"></i> Produtos
+            <i class="fas fa-tags fa-fw"></i> Produtos
         </a>
         <a href="/backend/pedido/listar" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/pedido/listar', $current_uri); ?>">
-            <i class="fa fa-shopping-cart fa-fw"></i> Todos Pedidos
+            <i class="fas fa-shopping-cart fa-fw"></i> Todos Pedidos
         </a>
         <a href="/backend/itenspedidos/listar" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/itenspedidos/listar', $current_uri); ?>">
-            <i class="fa fa-dropbox fa-fw"></i> Itens Pedidos
+            <i class="fab fa-dropbox fa-fw"></i> Itens Pedidos
         </a>
         <a href="/backend/cliente/listar" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/cliente/listar', $current_uri); ?>">
-            <i class="fa fa-address-book fa-fw"></i> Clientes
+            <i class="fas fa-address-book fa-fw"></i> Clientes
         </a>
         <a href="/backend/avaliacao/listar" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/avaliacao/listar', $current_uri); ?>">
-            <i class="fa fa-star fa-fw"></i> Avaliações
+            <i class="fas fa-star fa-fw"></i> Avaliações
         </a>
     <?php else: ?>
         <a href="/backend/cliente/dashboard" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/cliente/dashboard', $current_uri); ?>">
-            <i class="fa fa-home fa-fw"></i> Início
+            <i class="fas fa-home fa-fw"></i> Início
         </a>
         <a href="/backend/cliente/avaliacoes" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/cliente/avaliacoes', $current_uri); ?>">
-            <i class="fa fa-star fa-fw"></i> Avaliações
+            <i class="fas fa-star fa-fw"></i> Avaliações
         </a>
     <?php endif; ?>
 
     <?php if ($session->get('usuario_tipo') != 'admin'): ?>
     <a href="/backend/cliente/meu-perfil/<?= htmlspecialchars($session->get('usuario_id') ?? '0') ?>" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/cliente/meu-perfil', $current_uri); ?>">
-        <i class="fa fa-user-circle fa-fw"></i> Perfil
+        <i class="fas fa-user-circle fa-fw"></i> Perfil
     </a>
     <?php endif; ?>
 
     <a href="/backend/configuracoes" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/configuracoes', $current_uri); ?>">
-        <i class="fa fa-cog fa-fw"></i> Configurações
+        <i class="fas fa-cog fa-fw"></i> Configurações
     </a>
-    <br><br>
+    <?php if ($session->get('usuario_tipo') != 'admin'): ?>
+    <a href="/" class="w3-bar-item w3-button w3-padding">
+        <i class="fas fa-shopping-bag fa-fw"></i> Continuar Comprando
+    </a>
+    <?php endif; ?>
+    <br>
     <a href="/backend/logout" class="w3-bar-item w3-button w3-padding" style="color: #e74c3c !important;">
-        <i class="fa fa-sign-out fa-fw"></i> Sair
+        <i class="fas fa-sign-out-alt fa-fw"></i> Sair
     </a>
   </div>
 </nav>
