@@ -825,17 +825,20 @@ main {
 .card-img-container {
   position: relative;
   overflow: hidden;
-  background-color: var(--color-text-secondary);
+  background-color: #f6f6f6;
+  /* Fundo cinza claro uniforme */
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 450px;
+  height: 450px;
+  /* Altura fixa para padronização */
 }
 
 .card-img-container img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
+  /* Preenchimento total do container */
   display: block;
   transition: transform var(--transition-normal), filter var(--transition-normal);
 }
@@ -848,7 +851,11 @@ main {
 /* Body do Card */
 .card-body {
   padding: var(--spacing-md);
-  flex-shrink: 0;
+  flex-grow: 1;
+  /* Permite que o body cresça para preencher o card */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   text-align: left;
 }
 

@@ -2,38 +2,38 @@
 
 namespace App\Koketsu\Database;
 
-class Config
-{
+class Config {
     public static function get()
     {
-        return [
-            'database' => [
-          'driver' => 'mysql',
-            'mysql' =>[
-              'host' =>  'localhost',
-              'db_name' =>  'koketsu',
-              'username' =>  'root',
-              'password' =>  '',
-              'charset' => 'utf8',
-              'port' => '3306',
-            ]
-            ]
-            ];
-        }
+    //     return [
+    //         'database' => [
+    //       'driver' => 'mysql',
+    //         'mysql' =>[
+    //           'host' =>  'localhost',
+    //           'db_name' =>  'koketsu',
+    //           'username' =>  'root',
+    //           'password' =>  '',
+    //           'charset' => 'utf8',
+    //           'port' => '3306',
+    //         ]
+    //         ]
+    //         ];
+    //     }
 
-//         return [
-//             'database' => array (
-//   'driver' => 'mysql',
-//   'mysql' =>
-//   array (
-//     'host' => '216.172.172.207',
-//     'db_name' => 'faust537_time6_ti29',
-//     'username' => 'faust537_time6_ti29',
-//     'password' => 'zSXibN6l$.R}',
-//     'charset' => 'utf8',
-//     'port' => '3306',
-//   ),
-// )
-//         ];
+        return [
+            'database' => array (
+  'driver' => 'mysql',
+  'mysql' =>
+  array (
+    'host' => '69.6.213.160',
+    'db_name' => 'hg6c6727_time6_ti29',
+    'username' => 'hg6c6727_time6_ti29',
+    'password' => 'd?XdX5uP%?JX',
+    'charset' => 'utf8',
+    'port' => '3306'
+  ),
+)
+        ];
+}
 }
 
