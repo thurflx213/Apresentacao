@@ -40,4 +40,18 @@ class EmailService{
             return false;
         }
     }
+
+    /**
+     * Adiciona uma imagem embutida (CID) ao e-mail
+     */
+    public function embedImage(string $path, string $cid): bool {
+        try {
+            if (file_exists($path)) {
+                return $this->mailer->addEmbeddedImage($path, $cid);
+            }
+            return false;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
 }

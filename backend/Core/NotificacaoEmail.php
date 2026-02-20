@@ -1,5 +1,5 @@
 <?php
-namespace App\koketsu\Core;
+namespace App\Koketsu\Core;
 use App\Koketsu\Core\EmailService;
 class NotificacaoEmail{
     private EmailService $emailService;
@@ -31,7 +31,29 @@ class NotificacaoEmail{
 
         $this->emailService->send($email, $assunto, $mensagem);
     }
-    public function enviarEmailDeEsqueciASenha( array $userData ){
-        
+    public function enviarPromocao(string $email, string $assunto, string $mensagem, string $imagem_url = '', string $local_caminho = ''): bool {
+        try {
+            $templatePath = __DIR__ . '/../Views/Templates/emails/newsletter_promo.php';
+            
+            // Se tiver imagem local, embutir via CID no PHPMailer
+            if (!empty($local_caminho) && file_exists($local_caminho)) {
+                $this->emailService->embedImage($local_caminho, 'promo_banner');
+            }
+
+            if (file_exists($templatePath)) {
+                ob_start();
+                require $templatePath;
+                $corpo = ob_get_clean();
+            } else {
+                $corpo = "<h2>$assunto</h2><p>" . nl2br($mensagem) . "</p>";
+                if ($imagem_url) {
+                    $corpo .= "<img src='cid:promo_banner' style='max-width:100%'>";
+                }
+            }
+
+            return $this->emailService->send($email, $assunto, $corpo);
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 }

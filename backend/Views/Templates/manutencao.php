@@ -6,6 +6,7 @@
     <title>Manutenção - Koketsu Store</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Outfit:wght@400;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/assets/img/logo2026.png">
     <style>
         :root {
             --bg-dark: #050505;

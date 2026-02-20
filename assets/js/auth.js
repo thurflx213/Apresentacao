@@ -124,6 +124,11 @@
             const data = await res.json();
 
             if (data.success && data.user) {
+                if (data.redirect_url) {
+                    // Admin: redireciona para o painel
+                    window.location.href = data.redirect_url;
+                    return;
+                }
                 closeModal();
                 showLoggedIn(data.user);
                 // Limpar form

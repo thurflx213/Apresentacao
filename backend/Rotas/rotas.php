@@ -1,6 +1,6 @@
 <?php
 
-namespace App\koketsu\Rotas;
+namespace App\Koketsu\Rotas;
 
 class Rotas
 {
@@ -151,7 +151,7 @@ class Rotas
                  "/backend/Imagens/excluir/{id}" => "ImagensController@viewExcluirImagem",
                   "/backend/cliente/listar" => "ClientesController@index",
                   "/backend/cliente/listar/{pagina}" => "ClientesController@index",
-               
+                
 
               // Login
                  '/register' => 'AuthController@register',
@@ -163,7 +163,10 @@ class Rotas
                  '/configuracoes/exportar' => 'ConfiguracoesController@exportarDados',
                  '/configuracoes/excluir' => 'ConfiguracoesController@excluirConta',
                  '/manutencao' => 'PublicApiController@viewManutencao',
-           ],
+                 '/admin/newsletter' => 'NewsletterController@listar',
+                 '/admin/newsletter/excluir/{id}' => 'NewsletterController@excluir',
+                 '/admin/newsletter/exportar' => 'NewsletterController@exportar',
+            ],
 
         "POST" => [
                  "/api/pedidos" => 'PublicApiController@salvarPedido',
@@ -237,8 +240,10 @@ class Rotas
                 
                 // Login
                 '/register' => 'AuthController@cadastrarUsuario',
-                '/login' => 'AuthController@authenticar',
+                '/login' => 'AuthController@authenticarUnificado',
                 '/adminlogin' => 'AuthController@authenticaradmin',
+                '/api/newsletter/inscrever' => 'NewsletterController@inscrever',
+                '/admin/newsletter/enviar' => 'NewsletterController@enviarFila',
             ]
         ];
     }

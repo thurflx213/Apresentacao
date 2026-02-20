@@ -1,3 +1,11 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) session_start();
+$flash = null;
+if (isset($_SESSION['flash'])) {
+    $flash = $_SESSION['flash'];
+    unset($_SESSION['flash']);
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -6,6 +14,7 @@
     <title>Login - Koketsu Store</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/assets/img/logo2026.png">
     <style>
         :root {
             --bg-dark: #050505;
@@ -190,9 +199,83 @@
             text-transform: uppercase;
             letter-spacing: 3px;
         }
+
+        /* Toast Notification */
+        .toast-balloon {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            background: #1a1a1a;
+            border-radius: 16px;
+            padding: 18px 24px;
+            min-width: 300px;
+            max-width: 420px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+            border-left: 4px solid;
+            animation: toastIn 0.5s cubic-bezier(0.2,0.8,0.2,1) forwards;
+            opacity: 0;
+        }
+        .toast-balloon.success { border-color: #4ade80; }
+        .toast-balloon.error   { border-color: #f87171; }
+        .toast-balloon.erros   { border-color: #fb923c; }
+        .toast-icon { font-size: 1.6rem; flex-shrink: 0; }
+        .toast-balloon.success .toast-icon { color: #4ade80; }
+        .toast-balloon.error   .toast-icon { color: #f87171; }
+        .toast-balloon.erros   .toast-icon { color: #fb923c; }
+        .toast-body p { margin: 0; color: #fff; font-size: 0.9rem; line-height: 1.5; }
+        .toast-body strong {
+            display: block; font-size: 0.78rem; text-transform: uppercase;
+            letter-spacing: 1.5px; margin-bottom: 4px;
+        }
+        .toast-balloon.success .toast-body strong { color: #4ade80; }
+        .toast-balloon.error   .toast-body strong { color: #f87171; }
+        .toast-balloon.erros   .toast-body strong { color: #fb923c; }
+        .toast-close {
+            background: none; border: none; color: #555; font-size: 1.2rem;
+            cursor: pointer; margin-left: auto; flex-shrink: 0; transition: color 0.2s;
+        }
+        .toast-close:hover { color: #fff; }
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateX(50px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes toastOut {
+            from { opacity: 1; transform: translateX(0); }
+            to   { opacity: 0; transform: translateX(50px); }
+        }
     </style>
 </head>
 <body>
+
+<?php if ($flash): ?>
+    <?php
+        $type  = htmlspecialchars($flash['type']);
+        $msg   = $flash['message'];
+        $icon  = ($type === 'success') ? '&#10003;' : (($type === 'erros') ? '&#9888;' : '&#10005;');
+        $label = ($type === 'success') ? 'Sucesso' : (($type === 'erros') ? 'Atenção' : 'Erro');
+    ?>
+    <div class="toast-balloon <?= $type ?>" id="toastMsg">
+        <div class="toast-icon"><?= $icon ?></div>
+        <div class="toast-body">
+            <strong><?= $label ?></strong>
+            <p><?= $msg ?></p>
+        </div>
+        <button class="toast-close" onclick="dismissToast()">&times;</button>
+    </div>
+    <script>
+        function dismissToast() {
+            const t = document.getElementById('toastMsg');
+            t.style.animation = 'toastOut 0.4s ease forwards';
+            setTimeout(() => t.remove(), 400);
+        }
+        setTimeout(dismissToast, 5000);
+    </script>
+<?php endif; ?>
+
     <div class="login-wrapper">
 
         <div class="login-card">

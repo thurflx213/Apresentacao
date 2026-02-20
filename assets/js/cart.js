@@ -161,7 +161,7 @@ const CartManager = (() => {
               <span class="text-uppercase small">Subtotal</span>
               <span id="miniCartSubtotal" class="fw-bold gold-text">R$ 0,00</span>
             </div>
-            <a href="pages/carrinho.html" class="btn btn-outline-light w-100 py-3 fw-bold">VER CARRINHO</a>
+            <a href="carrinho.html" class="btn btn-outline-light w-100 py-3 fw-bold">VER CARRINHO</a>
             <button id="btn-finalizar-pedido" class="btn btn-primary-gold w-100 py-3 mt-2 fw-bold">
               <i class="bi bi-check-circle-fill me-2"></i> FINALIZAR PEDIDO
             </button>

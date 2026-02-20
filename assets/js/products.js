@@ -147,8 +147,18 @@ const ProductManager = (() => {
 
     productsData.forEach(category => {
       // Pula categoria de lançamentos se estiver vazia ou se explicitamente solicitado
-      if (category.categoria.toLowerCase().includes('lançamentos') ||
-        category.categoria.toLowerCase().includes('lancamentos')) {
+      const catLower = category.categoria.toLowerCase();
+      // Pula categorias específicas solicitadas pelo usuário para a HOME
+      if (catLower.includes('lançamentos') ||
+        catLower.includes('lancamentos') ||
+        catLower.includes('vestidos') ||
+        catLower.includes('saias') ||
+        catLower.includes('shorts') ||
+        catLower.includes('polos') ||
+        catLower.includes('acessórios') ||
+        catLower.includes('acessorios') ||
+        catLower.includes('bonés') ||
+        catLower.includes('bones')) {
         return;
       }
 

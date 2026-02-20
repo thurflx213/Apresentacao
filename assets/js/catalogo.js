@@ -144,7 +144,7 @@ const CatalogManager = (() => {
         container.innerHTML = '';
 
         // Atualiza contador
-        const countEl = document.querySelector('.mb-5 .small b');
+        const countEl = document.querySelector('.product-count b');
         if (countEl) countEl.textContent = products.length;
 
         if (products.length === 0) {

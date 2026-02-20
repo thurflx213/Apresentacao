@@ -34,7 +34,16 @@ class AuthController{
 }
 
   public function logout(): void {
+    $tipo = $this->session->get('usuario_tipo');
     $this->session->destroy();
+
+    if ($tipo === 'admin') {
+        // Admin vai para a página inicial do site
+        header('Location: /');
+        exit;
+    }
+
+    // Cliente vai para o login com mensagem
     Redirect::redirecionarComMensagem('/login', 'success', 'Você saiu com segurança.');
 }
 
@@ -57,6 +66,29 @@ class AuthController{
         Redirect::redirecionarPara('/cliente/dashboard');
     } else {
         Redirect::redirecionarComMensagem('/login', 'error', 'E-mail ou senha incorretos.');
+    }
+}
+
+  public function authenticarUnificado(): void {
+    $email = $_POST['email_usuarios'] ?? null;
+    $senha = $_POST['senha_usuarios'] ?? null;
+    $usuario = $this->usuarioModel->checarCredenciais($email, $senha);
+
+    if (!$usuario) {
+        Redirect::redirecionarComMensagem('/login', 'error', 'E-mail ou senha incorretos.');
+        return;
+    }
+
+    session_regenerate_id(true);
+    $this->session->set('usuario_id', $usuario['id_usuarios']);
+    $this->session->set('usuario_nome', $usuario['nome_usuarios']);
+    $this->session->set('usuario_tipo', $usuario['nivel_acesso']);
+    $this->session->set('foto_usuarios', $usuario['foto_usuarios'] ?? '/img/logoperf.jpg');
+
+    if ($usuario['nivel_acesso'] === 'admin') {
+        Redirect::redirecionarPara('/admin/dashboard');
+    } else {
+        Redirect::redirecionarPara('/cliente/dashboard');
     }
 }
 public function authenticaradmin(): void {

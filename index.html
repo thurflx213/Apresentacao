@@ -20,6 +20,7 @@
   <link rel="stylesheet" href="assets/css/components/home-modern.css">
   <link rel="stylesheet" href="assets/css/components/reviews.css">
   <link rel="stylesheet" href="assets/css/components/auth.css">
+  <link rel="icon" type="image/png" href="assets/img/logo2026.png">
 </head>
 
 <body>
@@ -86,7 +87,7 @@
 
     <div class="offcanvas offcanvas-start" tabindex="-1" id="menuOffcanvas" aria-labelledby="menuOffcanvasLabel">
       <div class="offcanvas-header border-bottom border-dark">
-        <h5 class="offcanvas-title fw-bold text-white" id="menuOffcanvasLabel">CATEGORIAS</h5>
+        <h5 class="offcanvas-title fw-bold text-yellow" id="menuOffcanvasLabel">CATEGORIAS</h5>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
 
@@ -302,22 +303,7 @@
           </div>
         </a>
 
-        <a href="pages/catalogo.html?cat=Chapéus e Bonés" class="category-card-new reveal reveal-delay-3">
-          <div class="category-image">
-            <img src="assets/img/bone.jpg" alt="Chapéus e Bonés">
-            <div class="category-overlay">
-              <div class="category-hover-content">
-                <i class="bi bi-arrow-right-circle"></i>
-                <span>VER COLEÇÃO</span>
-              </div>
-            </div>
-          </div>
-          <div class="category-info">
-            <span class="category-tag">FINAL TOUCH</span>
-            <h3 class="category-name">CHAPÉUS & BONÉS</h3>
-            <p class="category-desc">O toque final de elite</p>
-          </div>
-        </a>
+
 
         <a href="pages/catalogo.html?cat=Tenis" class="category-card-new reveal reveal-delay-4">
           <div class="category-image">
@@ -352,7 +338,7 @@
 
   <section class="brand-story">
     <div class="story-content">
-      <h2 class="story-title">L'essentiel est invisible pour les yeux</h2>
+      <h2 class="story-title">O essencial é invisível aos olhos</h2>
       <div class="gold-divider mx-auto mb-4"></div>
       <p class="story-text">
         "A Koketsu nasceu da necessidade de expressar a alma urbana através do luxo silencioso.
@@ -435,10 +421,10 @@
       <div class="coluna-footer newsletter">
         <h3 class="titulo">Faça parte da nossa família e receba acessos exclusivos e novidades.</h3>
         <p>Inscreva-se para ter acesso a exclusivo á venda antecipada, novidades promoções.</p>
-        <form class="form-email">
+        <form class="form-email" id="formNewsletter">
           <div class="input-group">
-            <input type="email" placeholder="Seu e-mail" required />
-            <button type="submit">OK</button>
+            <input type="email" id="newsletterEmail" name="email_newsletter" placeholder="Seu e-mail" required />
+            <button type="submit" id="btnNewsletter">OK</button>
           </div>
         </form>
         <div class="redes-sociais-icones mt-4">
@@ -525,6 +511,7 @@
   <script src="assets/js/products.js?v=1.1"></script>
   <script src="assets/js/reviews.js?v=1.1"></script>
   <script src="assets/js/auth.js?v=1.1"></script>
+  <script src="assets/js/newsletter.js?v=1.1"></script>
 
 </body>
 

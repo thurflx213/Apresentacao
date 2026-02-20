@@ -1001,6 +1001,15 @@ class PublicApiController {
     private function converterParaBase64($caminhoRelativo) {
         if (empty($caminhoRelativo)) return null;
 
+        // Se o caminho contiver http, assume que é uma URL externa
+        if (strpos($caminhoRelativo, 'http') !== false) {
+            // Extrai a URL real se estiver prefixada por backend/upload/
+            if (preg_match('/(https?:\/\/[^\s]+)/', $caminhoRelativo, $matches)) {
+                return $matches[1];
+            }
+            return $caminhoRelativo;
+        }
+
         // Limpa o caminho se ele começar com /
         $caminhoLimpo = ltrim($caminhoRelativo, '/');
         

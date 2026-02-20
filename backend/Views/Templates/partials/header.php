@@ -25,6 +25,7 @@ $current_uri = $_SERVER['REQUEST_URI'] ?? '/backend/admin/dashboard';
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/5/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="icon" type="image/png" href="/assets/img/logo2026.png">
 <script>
     // Script bloqueante para evitar flash de cor incorreta
     (function() {
@@ -245,7 +246,9 @@ input, select, textarea {
     }
 
     .w3-sidebar {
-        width: 280px !important;
+        width: 260px !important;
+        display: none; /* Esconde por padrão no mobile */
+        z-index: 1001 !important;
     }
 
     #main-logo {
@@ -254,6 +257,9 @@ input, select, textarea {
 
     .w3-top, .w3-bar.w3-top {
         height: 70px;
+        line-height: normal;
+        display: flex;
+        align-items: center;
     }
 }
 
@@ -265,8 +271,17 @@ input, select, textarea {
     .w3-container.w3-row {
         padding: 0 !important;
     }
+
+    .w3-top {
+        padding: 0 10px;
+    }
 }
 
+/* Utilitário para tabelas responsivas globais */
+.w3-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
 </style>
 </head>
 <body class="">
@@ -335,6 +350,9 @@ input, select, textarea {
         </a>
         <a href="/backend/avaliacao/listar" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/avaliacao/listar', $current_uri); ?>">
             <i class="fas fa-star fa-fw"></i> Avaliações
+        </a>
+        <a href="/backend/admin/newsletter" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/admin/newsletter', $current_uri); ?>">
+            <i class="fas fa-envelope fa-fw"></i> Newsletter
         </a>
     <?php else: ?>
         <a href="/backend/cliente/dashboard" class="w3-bar-item w3-button w3-padding <?php echo isActive('/backend/cliente/dashboard', $current_uri); ?>">

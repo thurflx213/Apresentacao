@@ -38,13 +38,6 @@ try {
     $usuario = $usuarioModel->checarCredenciais($email, $senha);
 
     if ($usuario) {
-        // Verifica se é cliente
-        if ($usuario['nivel_acesso'] !== 'cliente') {
-            http_response_code(403);
-            echo json_encode(['success' => false, 'message' => 'Acesso negado. Área exclusiva para clientes.']);
-            exit;
-        }
-
         $session = new Session();
         session_regenerate_id(true);
         $session->set('usuario_id', $usuario['id_usuarios']);
@@ -57,11 +50,18 @@ try {
             $foto = '/backend/upload/' . $foto;
         }
 
+        // Admin vai para o painel, cliente fica no site
+        $redirectUrl = null;
+        if ($usuario['nivel_acesso'] === 'admin') {
+            $redirectUrl = '/backend/admin/dashboard';
+        }
+
         echo json_encode([
             'success' => true,
             'message' => 'Login realizado com sucesso!',
+            'redirect_url' => $redirectUrl,
             'user' => [
-                'id' => $usuario['id_usuarios'],
+                'id'   => $usuario['id_usuarios'],
                 'nome' => $usuario['nome_usuarios'],
                 'tipo' => $usuario['nivel_acesso'],
                 'foto' => $foto

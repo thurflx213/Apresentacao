@@ -671,6 +671,16 @@
    ======================================== */
 
 @media (max-width: 768px) {
+    .banner-hero-new {
+        padding-top: 70px;
+        /* Reduzido para o novo topo mobile */
+    }
+
+    .banner-hero-new .carousel-item {
+        height: 60vh;
+        min-height: 350px;
+    }
+
     .hero-content {
         padding: 80px 0 60px;
     }
@@ -703,8 +713,9 @@
     }
 
     .categories-grid-new {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr !important;
         gap: 20px;
+        padding: 0 15px;
     }
 
     .category-image {
