@@ -83,7 +83,7 @@ function buscarUsuariosAdmin() {
                 FROM tbl_usuarios u
                 LEFT JOIN tbl_perfil p ON u.id_usuarios = p.id_usuarios
                 WHERE u.nivel_acesso = 'cliente'
-                GROUP BY u.id_usuarios
+                GROUP BY u.id_usuarios, u.nome_usuarios, u.email_usuarios, u.nivel_acesso, u.excluido_em, u.foto_usuarios, u.criado_em, p.telefone_perfil
                 LIMIT :offset, :porPagina";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);

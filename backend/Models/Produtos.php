@@ -185,11 +185,15 @@ public function atualizarProduto(string $id_produto, string $nome, string $descr
     
 
     public function categoriasProdu() {
-    $sql = "SELECT COUNT(*) as total,nome_produtos as produto FROM `tbl_produtos` GROUP BY id_categoria";
-    $stmt = $this->db->prepare($sql);
-    $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
+        $sql = "SELECT COUNT(p.id_produto) as total, c.nome_categorias as produto 
+                FROM tbl_produtos p 
+                JOIN tbl_categorias c ON p.id_categoria = c.id_categorias 
+                WHERE p.excluido_em IS NULL
+                GROUP BY c.id_categorias, c.nome_categorias";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
     public static function contarProdutos($db) {
         $sql = "SELECT COUNT(*) as total FROM tbl_produtos";

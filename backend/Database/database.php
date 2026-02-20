@@ -42,6 +42,11 @@ class Database {
 
             if (in_array($driver, ['mysql', 'sqlite', 'sqlsrv', 'pgsql'])) {
                 $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                
+                // Correção Global: Desativa o modo ONLY_FULL_GROUP_BY para compatibilidade com queries legadas
+                if ($driver === 'mysql') {
+                    $this->conn->exec("SET SESSION sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''))");
+                }
             }
         } catch(PDOException $exception) {
             echo "Erro de conexão: " . $exception->getMessage();
