@@ -19,10 +19,28 @@ class PublicApiController {
     private $pedidosModel;
     private $db;
 
+    private $chaveAPI = "9D67A537A9329E0F1E9D088A1C991F1CC728EA87D3D154B409ED3320EA940303";
+
     public function __construct() {
         $this->db = Database::getInstance();
         $this->produtosModel = new Produtos($this->db);
         $this->pedidosModel = new Pedidos($this->db);
+    }
+
+    private function checkAuth() {
+        $headers = getallheaders();
+        $token = null;
+        if (isset($headers['Authorization'])) {
+            $parts = explode(" ", $headers['Authorization']);
+            $token = end($parts);
+        }
+        
+        if ($token !== $this->chaveAPI) {
+            header('Content-Type: application/json');
+            http_response_code(401);
+            echo json_encode(['status' => 'error', 'message' => 'Token de API inválido ou ausente']);
+            exit;
+        }
     }
 
     // ==================== PRODUTOS ====================
@@ -38,9 +56,11 @@ class PublicApiController {
         $total = $stmtCount->fetch(\PDO::FETCH_ASSOC)['total'];
         $total_paginas = ceil($total / $registros_por_pagina);
         
-        // Dados paginados
-        $sql = "SELECT * FROM tbl_produtos WHERE excluido_em IS NULL LIMIT " . intval($registros_por_pagina) . " OFFSET " . intval($offset);
+        // Dados paginados - CORREÇÃO: Usar placeholders para LIMIT/OFFSET
+        $sql = "SELECT * FROM tbl_produtos WHERE excluido_em IS NULL LIMIT :limit OFFSET :offset";
         $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':limit', (int)$registros_por_pagina, \PDO::PARAM_INT);
+        $stmt->bindValue(':offset', (int)$offset, \PDO::PARAM_INT);
         $stmt->execute();
         $dados = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         
@@ -83,6 +103,7 @@ class PublicApiController {
     }
 
     public function createProduto() {
+        $this->checkAuth();
         header('Content-Type: application/json');
         $data = json_decode(file_get_contents('php://input'), true);
         if (empty($data)) {
@@ -193,8 +214,10 @@ class PublicApiController {
                 FROM tbl_pedidos p 
                 LEFT JOIN tbl_perfil pf ON p.id_perfil = pf.id_perfil 
                 WHERE p.excluido_em IS NULL 
-                LIMIT " . intval($registros_por_pagina) . " OFFSET " . intval($offset);
+                LIMIT :limit OFFSET :offset";
         $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':limit', (int)$registros_por_pagina, \PDO::PARAM_INT);
+        $stmt->bindValue(':offset', (int)$offset, \PDO::PARAM_INT);
         $stmt->execute();
         $pedidos = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         
@@ -229,6 +252,7 @@ class PublicApiController {
     }
 
     public function salvarPedido() {
+        $this->checkAuth();
         header('Content-Type: application/json');
         $data = json_decode(file_get_contents('php://input'), true);
         
@@ -294,9 +318,11 @@ class PublicApiController {
         $total = $stmtCount->fetch(\PDO::FETCH_ASSOC)['total'];
         $total_paginas = ceil($total / $registros_por_pagina);
         
-        // Dados paginados
-        $sql = "SELECT id_usuarios, nome_usuarios, email_usuarios, senha_usuarios, nivel_acesso, foto_usuarios FROM tbl_usuarios WHERE excluido_em IS NULL LIMIT " . intval($registros_por_pagina) . " OFFSET " . intval($offset);
+        // Dados paginados - CORREÇÃO: REMOVIDO senha_usuarios
+        $sql = "SELECT id_usuarios, nome_usuarios, email_usuarios, nivel_acesso, foto_usuarios FROM tbl_usuarios WHERE excluido_em IS NULL LIMIT :limit OFFSET :offset";
         $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':limit', (int)$registros_por_pagina, \PDO::PARAM_INT);
+        $stmt->bindValue(':offset', (int)$offset, \PDO::PARAM_INT);
         $stmt->execute();
         $usuarios = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         
@@ -317,7 +343,8 @@ class PublicApiController {
 
     public function getUsuarioById($id) {
         $id = (int)$id;
-        $sql = "SELECT id_usuarios, nome_usuarios, email_usuarios, senha_usuarios, nivel_acesso, foto_usuarios FROM tbl_usuarios WHERE id_usuarios = ? AND excluido_em IS NULL";
+        // CORREÇÃO: REMOVIDO senha_usuarios
+        $sql = "SELECT id_usuarios, nome_usuarios, email_usuarios, nivel_acesso, foto_usuarios FROM tbl_usuarios WHERE id_usuarios = ? AND excluido_em IS NULL";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([$id]);
         $usuario = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -334,6 +361,7 @@ class PublicApiController {
     }
 
     public function createUsuario() {
+        $this->checkAuth();
         header('Content-Type: application/json');
         $data = json_decode(file_get_contents('php://input'), true);
         if (empty($data)) {
@@ -375,8 +403,10 @@ class PublicApiController {
         $total_paginas = ceil($total / $registros_por_pagina);
         
         // Dados paginados
-        $sql = "SELECT id_categorias, nome_categorias FROM tbl_categorias WHERE excluido_em IS NULL LIMIT " . intval($registros_por_pagina) . " OFFSET " . intval($offset);
+        $sql = "SELECT id_categorias, nome_categorias FROM tbl_categorias WHERE excluido_em IS NULL LIMIT :limit OFFSET :offset";
         $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':limit', (int)$registros_por_pagina, \PDO::PARAM_INT);
+        $stmt->bindValue(':offset', (int)$offset, \PDO::PARAM_INT);
         $stmt->execute();
         $categorias = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         
@@ -414,6 +444,7 @@ class PublicApiController {
     }
 
     public function createCategoria() {
+        $this->checkAuth();
         header('Content-Type: application/json');
         $data = json_decode(file_get_contents('php://input'), true);
         if (empty($data)) {
@@ -440,8 +471,10 @@ class PublicApiController {
         $total_paginas = ceil($total / $registros_por_pagina);
         
         // Dados paginados
-        $sql = "SELECT id_cores, cor_cores FROM tbl_cores WHERE excluido_em IS NULL LIMIT " . intval($registros_por_pagina) . " OFFSET " . intval($offset);
+        $sql = "SELECT id_cores, cor_cores FROM tbl_cores WHERE excluido_em IS NULL LIMIT :limit OFFSET :offset";
         $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':limit', (int)$registros_por_pagina, \PDO::PARAM_INT);
+        $stmt->bindValue(':offset', (int)$offset, \PDO::PARAM_INT);
         $stmt->execute();
         $cores = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         
@@ -479,6 +512,7 @@ class PublicApiController {
     }
 
     public function createCor() {
+        $this->checkAuth();
         header('Content-Type: application/json');
         $data = json_decode(file_get_contents('php://input'), true);
         if (empty($data)) {
@@ -505,8 +539,10 @@ class PublicApiController {
         $total_paginas = ceil($total / $registros_por_pagina);
         
         // Dados paginados
-        $sql = "SELECT id_perfil, endereco_perfil, id_usuarios FROM tbl_perfil WHERE excluido_em IS NULL LIMIT " . intval($registros_por_pagina) . " OFFSET " . intval($offset);
+        $sql = "SELECT id_perfil, endereco_perfil, id_usuarios FROM tbl_perfil WHERE excluido_em IS NULL LIMIT :limit OFFSET :offset";
         $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':limit', (int)$registros_por_pagina, \PDO::PARAM_INT);
+        $stmt->bindValue(':offset', (int)$offset, \PDO::PARAM_INT);
         $stmt->execute();
         $perfis = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         
@@ -544,6 +580,7 @@ class PublicApiController {
     }
 
     public function createPerfil() {
+        $this->checkAuth();
         header('Content-Type: application/json');
         $data = json_decode(file_get_contents('php://input'), true);
         if (empty($data)) {
@@ -570,8 +607,10 @@ class PublicApiController {
         $total_paginas = ceil($total / $registros_por_pagina);
         
         // Dados paginados
-        $sql = "SELECT id_tamanhos, tamanho_tamanhos FROM tbl_tamanhos WHERE excluido_em IS NULL LIMIT " . intval($registros_por_pagina) . " OFFSET " . intval($offset);
+        $sql = "SELECT id_tamanhos, tamanho_tamanhos FROM tbl_tamanhos WHERE excluido_em IS NULL LIMIT :limit OFFSET :offset";
         $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':limit', (int)$registros_por_pagina, \PDO::PARAM_INT);
+        $stmt->bindValue(':offset', (int)$offset, \PDO::PARAM_INT);
         $stmt->execute();
         $tamanhos = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         
@@ -609,6 +648,7 @@ class PublicApiController {
     }
 
     public function createTamanho() {
+        $this->checkAuth();
         header('Content-Type: application/json');
         $data = json_decode(file_get_contents('php://input'), true);
         if (empty($data)) {
@@ -635,8 +675,10 @@ class PublicApiController {
         $total_paginas = ceil($total / $registros_por_pagina);
         
         // Dados paginados
-        $sql = "SELECT id_itens_pedidos, id_pedido, id_produto, quantidade, preco_unitario FROM tbl_itens_pedidos WHERE excluido_em IS NULL LIMIT " . intval($registros_por_pagina) . " OFFSET " . intval($offset);
+        $sql = "SELECT id_itens_pedidos, id_pedido, id_produto, quantidade, preco_unitario FROM tbl_itens_pedidos WHERE excluido_em IS NULL LIMIT :limit OFFSET :offset";
         $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':limit', (int)$registros_por_pagina, \PDO::PARAM_INT);
+        $stmt->bindValue(':offset', (int)$offset, \PDO::PARAM_INT);
         $stmt->execute();
         $itens = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         
@@ -674,6 +716,7 @@ class PublicApiController {
     }
 
     public function createItemPedido() {
+        $this->checkAuth();
         header('Content-Type: application/json');
         $data = json_decode(file_get_contents('php://input'), true);
         if (empty($data)) {
@@ -796,8 +839,10 @@ class PublicApiController {
         $total_paginas = ceil($total / $registros_por_pagina);
         
         // Dados paginados
-        $sql = "SELECT id_imagem, caminho_imagem, id_produto FROM tbl_imagem WHERE excluido_em IS NULL LIMIT " . intval($registros_por_pagina) . " OFFSET " . intval($offset);
+        $sql = "SELECT id_imagem, caminho_imagem, id_produto FROM tbl_imagem WHERE excluido_em IS NULL LIMIT :limit OFFSET :offset";
         $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':limit', (int)$registros_por_pagina, \PDO::PARAM_INT);
+        $stmt->bindValue(':offset', (int)$offset, \PDO::PARAM_INT);
         $stmt->execute();
         $imagens = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         
@@ -841,6 +886,7 @@ class PublicApiController {
     }
 
     public function createImagem() {
+        $this->checkAuth();
         header('Content-Type: application/json');
         $data = json_decode(file_get_contents('php://input'), true);
         if (empty($data)) {
@@ -867,8 +913,10 @@ class PublicApiController {
         $total_paginas = ceil($total / $registros_por_pagina);
         
         // Dados paginados
-        $sql = "SELECT id_carrinho, id_perfil, total_carrinho, status_carrinho FROM tbl_carrinho WHERE excluido_em IS NULL LIMIT " . intval($registros_por_pagina) . " OFFSET " . intval($offset);
+        $sql = "SELECT id_carrinho, id_perfil, total_carrinho, status_carrinho FROM tbl_carrinho WHERE excluido_em IS NULL LIMIT :limit OFFSET :offset";
         $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':limit', (int)$registros_por_pagina, \PDO::PARAM_INT);
+        $stmt->bindValue(':offset', (int)$offset, \PDO::PARAM_INT);
         $stmt->execute();
         $carrinho = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         
@@ -906,6 +954,7 @@ class PublicApiController {
     }
 
     public function createCarrinho() {
+        $this->checkAuth();
         header('Content-Type: application/json');
         $data = json_decode(file_get_contents('php://input'), true);
         if (empty($data)) {
@@ -932,8 +981,10 @@ class PublicApiController {
         $total_paginas = ceil($total / $registros_por_pagina);
         
         // Dados paginados
-        $sql = "SELECT id_estoque_movimentacao, id_produto, descricao_estoque_movimentacao, quantidade_estoque_movimentacao, data_estoque_movimentacao FROM tbl_estoque_movimentacao WHERE excluido_em IS NULL LIMIT " . intval($registros_por_pagina) . " OFFSET " . intval($offset);
+        $sql = "SELECT id_estoque_movimentacao, id_produto, descricao_estoque_movimentacao, quantidade_estoque_movimentacao, data_estoque_movimentacao FROM tbl_estoque_movimentacao WHERE excluido_em IS NULL LIMIT :limit OFFSET :offset";
         $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':limit', (int)$registros_por_pagina, \PDO::PARAM_INT);
+        $stmt->bindValue(':offset', (int)$offset, \PDO::PARAM_INT);
         $stmt->execute();
         $estoque = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         
@@ -971,6 +1022,7 @@ class PublicApiController {
     }
 
     public function createEstoque() {
+        $this->checkAuth();
         header('Content-Type: application/json');
         $data = json_decode(file_get_contents('php://input'), true);
         if (empty($data)) {

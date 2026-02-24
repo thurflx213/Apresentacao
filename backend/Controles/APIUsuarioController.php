@@ -31,10 +31,12 @@ class APIUsuarioController{
         $registros_por_pagina = $pagina===0 ? 200 : 5;
         $pagina = $pagina===0 ? 1 : (int)$pagina;
        $dados = $this->usuarioModel->paginacaoAPI($pagina,$registros_por_pagina);
-       foreach ($dados['data'] as $usuario){
-        unset($usuario['senha_usuarios']);
+       
+       // CORREÇÃO: Usar referência &$usuario para realmente alterar o array
+       foreach ($dados['data'] as &$usuario){
+           unset($usuario['senha_usuarios']);
        }
-         unset($usuario);
+       unset($usuario); // Limpa referência
          header('Content-Type: application/json');
          http_response_code(200);
          echo json_encode([
@@ -48,6 +50,14 @@ class APIUsuarioController{
     
     public function salvarUsuario(){
         header('Content-Type: application/json');
+        
+        // CORREÇÃO: Proteção de autenticação na criação
+        if (!$this->buscaChaveAPI()){
+            http_response_code(401);
+            echo json_encode(['status' => 'error', 'message' => 'Não autorizado']);
+            exit;
+        }
+
         $usuario = json_decode(file_get_contents('php://input'), true);
         if(empty($usuario) || !is_array($usuario)) {
             echo json_encode(['status' => 'error', 'message' => 'Nenhum usuario salvo']);

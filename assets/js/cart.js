@@ -2,6 +2,16 @@ const CartManager = (() => {
   const CART_STORAGE_KEY = 'koketsu_cart';
 
   /**
+   * Gera um ID único para o item do carrinho baseado em ID, Tamanho e Cor
+   */
+  const generateCartItemId = (id, size, color) => {
+    const pid = String(id);
+    const sz = (size || 'M').toUpperCase();
+    const clr = color ? color : 'default';
+    return `${pid}-${sz}-${clr}`;
+  };
+
+  /**
    * Obtém e migra o carrinho do localStorage
    */
   const getCart = () => {
@@ -9,25 +19,42 @@ const CartManager = (() => {
       const stored = localStorage.getItem(CART_STORAGE_KEY);
       let cart = stored ? JSON.parse(stored) : [];
 
-      // MIGRATION: Garante que todos os itens tenham cartItemId e ID string
+      // MIGRATION: Garante consistência nos IDs e tipos de dados
       let migrated = false;
-      cart = cart.map(item => {
-        if (!item.cartItemId) {
-          const pid = String(item.id || item.productId);
-          item.id = pid;
-          item.cartItemId = `${pid}-${item.size || 'M'}`;
+      const seenIds = new Set();
+      const newCart = [];
+
+      cart.forEach(item => {
+        const pid = String(item.id || item.productId);
+        const size = (item.size || 'M').toUpperCase();
+        const color = item.color || null;
+
+        // Gera o ID padronizado
+        const correctId = generateCartItemId(pid, size, color);
+
+        // Garante tipos de dados corretos
+        item.id = pid;
+        item.quantidade = parseInt(item.quantidade) || 1;
+        item.preco = parseFloat(item.preco) || 0;
+
+        if (item.cartItemId !== correctId) {
+          item.cartItemId = correctId;
           migrated = true;
         }
-        // Garante que quantidade seja número
-        if (typeof item.quantidade !== 'number') {
-          item.quantidade = parseInt(item.quantidade) || 1;
+
+        // Se por acaso houver duplicados após normalização, agrupa-os
+        const existing = newCart.find(i => i.cartItemId === correctId);
+        if (existing) {
+          existing.quantidade += item.quantidade;
           migrated = true;
+        } else {
+          newCart.push(item);
         }
-        return item;
       });
 
       if (migrated) {
-        localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+        localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(newCart));
+        return newCart;
       }
       return cart;
     } catch (error) {
@@ -51,10 +78,9 @@ const CartManager = (() => {
   const addToCart = (product, quantity = 1, size = 'M', color = null) => {
     const cart = getCart();
 
-    // Converte ID para string para consistência
+    // Converte ID para string e normaliza atributos
     const pid = String(product.id);
-    // ID único considerando ID + Tamanho + Cor
-    const cartItemId = `${pid}-${size}-${color || 'default'}`;
+    const cartItemId = generateCartItemId(pid, size, color);
 
     // Procura por ID ÚNICO da variação
     const existingItem = cart.find(item => item.cartItemId === cartItemId);
@@ -161,7 +187,7 @@ const CartManager = (() => {
               <span class="text-uppercase small">Subtotal</span>
               <span id="miniCartSubtotal" class="fw-bold gold-text">R$ 0,00</span>
             </div>
-            <a href="carrinho.html" class="btn btn-outline-light w-100 py-3 fw-bold">VER CARRINHO</a>
+            <a href="pages/carrinho.html" class="btn btn-outline-light w-100 py-3 fw-bold">VER CARRINHO</a>
             <button id="btn-finalizar-pedido" class="btn btn-primary-gold w-100 py-3 mt-2 fw-bold">
               <i class="bi bi-check-circle-fill me-2"></i> FINALIZAR PEDIDO
             </button>

@@ -591,6 +591,15 @@
     letter-spacing: 1px;
     transition: all 0.3s ease;
     cursor: pointer;
+    color-scheme: dark;
+    /* Garante que o dropdown respeite o tema escuro do navegador */
+}
+
+.sort-select option {
+    background-color: #0c0c0c;
+    /* Fundo escuro para as opções */
+    color: #ffffff;
+    /* Texto branco para as opções */
 }
 
 .sort-select:hover {
@@ -818,11 +827,41 @@
 
 @media (max-width: 991px) {
     .mobile-filter-btn {
-        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        width: 100%;
+        background: var(--color-primary);
+        color: var(--color-dark);
+        border: none;
+        padding: 15px;
+        border-radius: 12px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 15px rgba(248, 211, 70, 0.2);
     }
 
     .filter-card {
         margin-bottom: 30px;
+    }
+
+    .offcanvas .filter-card {
+        background: transparent;
+        border: none;
+        box-shadow: none;
+        padding: 0;
+        backdrop-filter: none;
+    }
+
+    .offcanvas .filter-header {
+        display: none;
+        /* Já existe header no offcanvas */
+    }
+
+    .offcanvas .filter-group {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .catalog-toolbar {

@@ -42,17 +42,9 @@ if (file_exists($configFile)) {
 }
 // --- FIM MODO MANUTENÇÃO GLOBAL ---
 
-// Sanitização Global de $_POST e $_GET
-array_walk_recursive($_POST, function(&$item) {
-    if (is_string($item)) {
-        $item = htmlspecialchars($item, ENT_QUOTES, 'UTF-8');
-    }
-});
-array_walk_recursive($_GET, function(&$item) {
-    if (is_string($item)) {
-        $item = htmlspecialchars($item, ENT_QUOTES, 'UTF-8');
-    }
-});
+// Sanitização Global removida. 
+// Recomendação: Usar validação específica por campo nos Controllers/Validadores
+// e aplicar htmlspecialchars apenas na exibição (Views).
 
 use App\Koketsu\Core\Csrf;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -103,12 +95,18 @@ foreach ($rotas as $metodohttp => $rota) {
                 call_user_func_array([$controller, $methodName], $params);
                 
             } catch (\Throwable $e) {
-                // Tratamento de erro amigável
+                // Tratamento de erro seguro
                 http_response_code(500);
-                // Você pode carregar uma view de erro aqui se preferir
+                $isDev = (($_SERVER['REMOTE_ADDR'] ?? '') === '127.0.0.1' || ($_SERVER['SERVER_NAME'] ?? '') === 'localhost');
+                
                 echo "<div style='font-family: sans-serif; padding: 20px; border: 1px solid #f44336; background: #ffebee; color: #b71c1c; border-radius: 5px;'>";
                 echo "<h3>Ops! Ocorreu um erro ao processar sua requisição.</h3>";
-                echo "<p><strong>Detalhes técnicos:</strong> " . htmlspecialchars($e->getMessage()) . "</p>";
+                if ($isDev) {
+                    echo "<p><strong>Detalhes técnicos (Modo Dev):</strong> " . htmlspecialchars($e->getMessage()) . "</p>";
+                    echo "<p>No arquivo: " . $e->getFile() . " linha " . $e->getLine() . "</p>";
+                } else {
+                    echo "<p>O administrador foi notificado. Por favor, tente novamente mais tarde.</p>";
+                }
                 echo "</div>";
             }
         });

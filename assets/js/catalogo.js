@@ -59,6 +59,106 @@ const CatalogManager = (() => {
             // Renderiza padrão se não houver categoria na URL
             applyFilters();
         }
+
+        // Setup Mobile Offcanvas Filters
+        setupMobileFilters();
+    };
+
+    /**
+     * Clona os filtros para o contêiner mobile
+     */
+    const setupMobileFilters = () => {
+        const desktopFilters = document.querySelector('aside .filter-card');
+        const mobileContainer = document.getElementById('mobile-filter-container');
+
+        if (desktopFilters && mobileContainer) {
+            // Clona o conteúdo dos filtros
+            const mobileFilters = desktopFilters.cloneNode(true);
+
+            // Remove IDs para evitar duplicidade ou altera eles
+            mobileFilters.querySelectorAll('[id]').forEach(el => {
+                el.id = 'mobile-' + el.id;
+            });
+
+            // Ajustar labels para apontar para os novos IDs
+            mobileFilters.querySelectorAll('label[for]').forEach(label => {
+                label.setAttribute('for', 'mobile-' + label.getAttribute('for'));
+            });
+
+            // Ajustar data-bs-target dos collapses
+            mobileFilters.querySelectorAll('[data-bs-target]').forEach(el => {
+                const target = el.getAttribute('data-bs-target');
+                if (target.startsWith('#')) {
+                    el.setAttribute('data-bs-target', '#mobile-' + target.substring(1));
+                }
+            });
+
+            mobileFilters.querySelectorAll('.collapse').forEach(el => {
+                const id = el.id;
+                // Os IDs já foram alterados acima pelo querySelectorAll('[id]')
+            });
+
+            mobileContainer.appendChild(mobileFilters);
+
+            // Adicionar listeners aos filtros mobile
+            setupFilterListeners(mobileFilters);
+        }
+    };
+
+    /**
+     * Adiciona listeners de evento a um contêiner de filtros
+     */
+    const setupFilterListeners = (container) => {
+        // Categoria Checkboxes
+        container.querySelectorAll('#mobile-collapseCat .form-check-input').forEach(cb => {
+            cb.addEventListener('change', () => {
+                const label = container.querySelector(`label[for="${cb.id}"]`).textContent.trim();
+                const desktopId = cb.id.replace('mobile-', '');
+                const desktopCb = document.getElementById(desktopId);
+                if (desktopCb) desktopCb.checked = cb.checked;
+
+                if (cb.checked) {
+                    if (!activeFilters.categories.includes(label)) activeFilters.categories.push(label);
+                } else {
+                    activeFilters.categories = activeFilters.categories.filter(c => c !== label);
+                }
+                applyFilters();
+            });
+        });
+
+        // Tamanho Checkboxes
+        container.querySelectorAll('.size-input').forEach(input => {
+            input.addEventListener('change', () => {
+                const label = container.querySelector(`label[for="${input.id}"]`).textContent.trim().toUpperCase();
+                const desktopId = input.id.replace('mobile-', '');
+                const desktopInput = document.getElementById(desktopId);
+                if (desktopInput) desktopInput.checked = input.checked;
+
+                if (input.checked) {
+                    if (!activeFilters.sizes.includes(label)) activeFilters.sizes.push(label);
+                } else {
+                    activeFilters.sizes = activeFilters.sizes.filter(s => s !== label);
+                }
+                applyFilters();
+            });
+        });
+
+        // Preço Range
+        const priceRange = container.querySelector('.gold-range');
+        if (priceRange) {
+            priceRange.addEventListener('input', (e) => {
+                const value = e.target.value;
+                const desktopRange = document.getElementById('rangePreco');
+                if (desktopRange) desktopRange.value = value;
+
+                // Update label in mobile
+                const maxLabel = container.querySelector('#mobile-maxPriceLabel');
+                if (maxLabel) maxLabel.textContent = `R$ ${value}`;
+
+                activeFilters.maxPrice = parseInt(value);
+                applyFilters();
+            });
+        }
     };
 
 

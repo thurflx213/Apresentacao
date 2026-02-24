@@ -118,7 +118,7 @@ const ProductManager = (() => {
       if (i === 0) carouselItem.classList.add('active');
 
       const row = document.createElement('div');
-      row.className = 'row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4';
+      row.className = 'row row-cols-2 row-cols-md-2 row-cols-lg-4 g-4';
 
       const slideItems = category.itens.slice(i, i + PRODUCTS_PER_SLIDE);
 

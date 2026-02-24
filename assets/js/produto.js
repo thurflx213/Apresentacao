@@ -84,7 +84,15 @@ const ProductDetailManager = (() => {
 
         // Imagem
         const mainImg = document.getElementById('main-product-img');
+        const imgContainer = mainImg ? mainImg.parentElement : null;
+
         if (mainImg) {
+            // Quando a imagem carregar de fato
+            mainImg.onload = () => {
+                if (imgContainer) imgContainer.classList.remove('loading-skeleton');
+                mainImg.classList.remove('opacity-0');
+                mainImg.classList.add('fade-in');
+            };
             mainImg.src = product.img;
             mainImg.alt = product.nome;
         }
@@ -249,19 +257,32 @@ const ProductDetailManager = (() => {
         // Botão de adicionar ao carrinho
         const addCartBtn = document.getElementById('btn-add-to-cart');
         if (addCartBtn) {
-            addCartBtn.addEventListener('click', () => {
+            addCartBtn.addEventListener('click', function handleAddClick() {
+                // Prevenção de cliques múltiplos rápidos
+                if (addCartBtn.disabled) return;
+
                 const qtyInput = document.getElementById('buy-qty');
-                const qty = parseInt(qtyInput.value);
+                const qty = parseInt(qtyInput.value) || 1;
 
                 const sizeInput = document.querySelector('input[name="size"]:checked');
                 const size = sizeInput ? sizeInput.id.replace('size-', '').toUpperCase() : 'M';
 
                 const colorInput = document.querySelector('input[name="color"]:checked');
-                const color = colorInput ? document.querySelector(`label[for="${colorInput.id}"]`).textContent : null;
+                // Se não houver cor selecionada (ainda carregando ou sem cores), tenta pegar a primeira disponível ou null
+                let color = null;
+                if (colorInput) {
+                    const label = document.querySelector(`label[for="${colorInput.id}"]`);
+                    color = label ? label.textContent.trim() : null;
+                }
 
                 // Integração real com CartManager
                 const cartManager = window.CartManager || CartManager;
                 if (cartManager) {
+                    // Feedback visual temporário no botão
+                    const originalText = addCartBtn.innerHTML;
+                    addCartBtn.disabled = true;
+                    addCartBtn.innerHTML = '<i class="bi bi-check-lg"></i> ADICIONADO';
+
                     cartManager.addToCart({
                         id: currentProduct.id,
                         nome: currentProduct.nome,
@@ -276,13 +297,13 @@ const ProductDetailManager = (() => {
                     // Abrir o mini-carrinho após adicionar
                     if (typeof cartManager.openDrawer === 'function') {
                         cartManager.openDrawer();
-                    } else if (window.bootstrap) {
-                        const miniCartEl = document.getElementById('miniCartOffcanvas');
-                        if (miniCartEl) {
-                            const bsOffcanvas = bootstrap.Offcanvas.getOrCreateInstance(miniCartEl);
-                            bsOffcanvas.show();
-                        }
                     }
+
+                    // Reabilitar após 1.5s
+                    setTimeout(() => {
+                        addCartBtn.disabled = false;
+                        addCartBtn.innerHTML = originalText;
+                    }, 1500);
                 } else {
                     console.error('CartManager não encontrado!');
                 }
