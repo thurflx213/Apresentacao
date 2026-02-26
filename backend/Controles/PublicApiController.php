@@ -35,12 +35,22 @@ class PublicApiController {
             $token = end($parts);
         }
         
-        if ($token !== $this->chaveAPI) {
-            header('Content-Type: application/json');
-            http_response_code(401);
-            echo json_encode(['status' => 'error', 'message' => 'Token de API inválido ou ausente']);
-            exit;
+        // Se o token for válido, OK
+        if ($token === $this->chaveAPI) {
+            return true;
         }
+
+        // Caso contrário, verifica se há uma sessão de usuário ativa (para uso via site)
+        $session = new \App\Koketsu\Core\Session();
+        if ($session->has('usuario_id')) {
+            return true;
+        }
+
+        // Se nenhum dos dois, retorna erro
+        header('Content-Type: application/json');
+        http_response_code(401);
+        echo json_encode(['status' => 'error', 'message' => 'Não autorizado: Token ausente ou sessão expirada']);
+        exit;
     }
 
     // ==================== PRODUTOS ====================
@@ -198,6 +208,7 @@ class PublicApiController {
 
     // ==================== PEDIDOS ====================
     public function getPedidos() {
+        $this->checkAuth();
         $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
         $registros_por_pagina = 10;
         $offset = ($page - 1) * $registros_por_pagina;
@@ -237,6 +248,7 @@ class PublicApiController {
     }
 
     public function getPedidoById($id) {
+        $this->checkAuth();
         $id = (int)$id;
         $pedido = $this->pedidosModel->buscarPedidoPorId($id);
         
@@ -307,6 +319,7 @@ class PublicApiController {
 
     // ==================== USUARIOS ====================
     public function getUsuarios() {
+        $this->checkAuth();
         $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
         $registros_por_pagina = 10;
         $offset = ($page - 1) * $registros_por_pagina;
@@ -342,6 +355,7 @@ class PublicApiController {
     }
 
     public function getUsuarioById($id) {
+        $this->checkAuth();
         $id = (int)$id;
         // CORREÇÃO: REMOVIDO senha_usuarios
         $sql = "SELECT id_usuarios, nome_usuarios, email_usuarios, nivel_acesso, foto_usuarios FROM tbl_usuarios WHERE id_usuarios = ? AND excluido_em IS NULL";
@@ -527,6 +541,7 @@ class PublicApiController {
 
     // ==================== PERFIS ====================
     public function getPerfis() {
+        $this->checkAuth();
         $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
         $registros_por_pagina = 10;
         $offset = ($page - 1) * $registros_por_pagina;
@@ -562,6 +577,7 @@ class PublicApiController {
     }
 
     public function getPerfilById($id) {
+        $this->checkAuth();
         $id = (int)$id;
         $sql = "SELECT id_perfil, endereco_perfil, id_usuarios FROM tbl_perfil WHERE id_perfil = ? AND excluido_em IS NULL";
         $stmt = $this->db->prepare($sql);

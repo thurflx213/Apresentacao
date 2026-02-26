@@ -162,6 +162,8 @@ class Rotas
                  '/configuracoes' => 'ConfiguracoesController@index',
                  '/configuracoes/exportar' => 'ConfiguracoesController@exportarDados',
                  '/configuracoes/excluir' => 'ConfiguracoesController@excluirConta',
+                 '/backend/configuracoes/exportar' => 'ConfiguracoesController@exportarDados',
+                 '/backend/configuracoes/excluir' => 'ConfiguracoesController@excluirConta',
                  '/manutencao' => 'PublicApiController@viewManutencao',
                  '/admin/newsletter' => 'NewsletterController@listar',
                  '/admin/newsletter/excluir/{id}' => 'NewsletterController@excluir',

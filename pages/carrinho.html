@@ -213,6 +213,31 @@
             <span id="totalFinal" class="gold-text">R$ 0,00</span>
           </div>
 
+          <!-- MELHORIA: Cálculo de Frete e Cupom -->
+          <div class="cart-extra-options mt-4">
+            <div class="extra-field mb-3">
+              <label class="small text-secondary mb-1">Calcular Frete</label>
+              <div class="input-group">
+                <input type="text" id="inputCep" class="form-control bg-dark text-white border-secondary"
+                  placeholder="00000-000">
+                <button class="btn btn-outline-secondary" type="button"
+                  onclick="CartManager.calculateShipping()">OK</button>
+              </div>
+              <div id="cepFeedback" class="small mt-1" style="display: none;"></div>
+            </div>
+
+            <div class="extra-field mb-4">
+              <label class="small text-secondary mb-1">Cupom de Desconto</label>
+              <div class="input-group">
+                <input type="text" id="inputCoupon" class="form-control bg-dark text-white border-secondary"
+                  placeholder="CUPOM20">
+                <button class="btn btn-outline-secondary" type="button"
+                  onclick="CartManager.applyCoupon()">APLICAR</button>
+              </div>
+              <div id="couponFeedback" class="small mt-1" style="display: none;"></div>
+            </div>
+          </div>
+
           <button class="btn-checkout" id="btn-finalizar-pedido" onclick="CartManager.handleCheckout()">
             <i class="bi bi-check-circle-fill me-2"></i> FINALIZAR PEDIDO
           </button>

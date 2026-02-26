@@ -269,9 +269,6 @@
                         </td>
                         
                         <td style="text-align: center;">
-                            <a href="/backend/avaliacao/editar/<?= $avaliacao['id_avaliacoes'] ?>" class="btn-action-small btn-edit">
-                                <i class="fa fa-pencil"></i> Editar
-                            </a>
                             <a href="/backend/avaliacao/excluir/<?= $avaliacao['id_avaliacoes'] ?>" class="btn-action-small btn-delete">
                                 <i class="fa fa-trash"></i> Excluir
                             </a>

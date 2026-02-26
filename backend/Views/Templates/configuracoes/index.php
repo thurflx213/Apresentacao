@@ -142,10 +142,10 @@
                         <a href="/backend/cliente/meu-perfil/<?= $usuarioId ?? 0 ?>" class="action-link">
                             <i class="fa fa-key"></i> Alterar Senha de Acesso
                         </a>
-                        <a href="/configuracoes/exportar" class="action-link" target="_blank">
+                        <a href="/backend/configuracoes/exportar" class="action-link" target="_blank">
                             <i class="fa fa-file-export"></i> Solicitar Meus Dados (LGPD)
                         </a>
-                        <a href="/configuracoes/excluir" class="action-link danger" onclick="return confirm('ATENÇÃO: Essa ação excluirá permanentemente sua conta e histórico. Tem certeza?')">
+                        <a href="/backend/configuracoes/excluir" class="action-link danger" onclick="return confirm('ATENÇÃO: Essa ação excluirá permanentemente sua conta e histórico. Tem certeza?')">
                             <i class="fa fa-user-slash"></i> Excluir Minha Conta
                         </a>
                     </div>

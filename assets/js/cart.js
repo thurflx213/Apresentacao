@@ -263,15 +263,7 @@ const CartManager = (() => {
     });
   };
 
-  const updateCartBadge = () => {
-    const count = getItemCount();
-    const badges = document.querySelectorAll('.cart-badge');
-    badges.forEach(badge => {
-      badge.textContent = count;
-      badge.style.display = count > 0 ? 'inline-flex' : 'none';
-    });
-    renderMiniCart();
-  };
+
 
   // URL da API de Perfil
   const PERFIL_API = '/api/perfil_api.php';
@@ -546,7 +538,129 @@ const CartManager = (() => {
     window.addEventListener('cartUpdated', updateCartBadge);
   });
 
-  const instance = { getCart, addToCart, removeFromCart, updateQuantity, getItemCount, handleCheckout };
+  let shippingValue = 0;
+  let discountValue = 0;
+  let activeCoupon = null;
+
+  const calculateShipping = async () => {
+    const input = document.getElementById('inputCep');
+    const feedback = document.getElementById('cepFeedback');
+    if (!input) return;
+
+    const cep = input.value;
+    feedback.style.display = 'block';
+    feedback.className = 'small mt-1 text-secondary';
+    feedback.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Calculando...';
+
+    const result = await window.Utils.buscarCep(cep);
+
+    if (result.error) {
+      feedback.className = 'small mt-1 error';
+      feedback.textContent = result.error;
+      shippingValue = 0;
+    } else {
+      feedback.className = 'small mt-1 success';
+      feedback.textContent = `Enviando para: ${result.localidade} - ${result.uf}`;
+      // Simulação de valor de frete baseado no estado
+      const fretes = { 'SP': 15, 'RJ': 22, 'MG': 25, 'ES': 25, 'SC': 30, 'PR': 30, 'RS': 35 };
+      shippingValue = fretes[result.uf] || 45;
+    }
+
+    updateCartBadge();
+  };
+
+  const applyCoupon = () => {
+    const input = document.getElementById('inputCoupon');
+    const feedback = document.getElementById('couponFeedback');
+    if (!input) return;
+
+    const code = input.value.toUpperCase().trim();
+    if (!code) return;
+
+    // Simulação de cupons
+    const coupons = {
+      'BEMVINDO': 0.10, // 10%
+      'KOKETSU20': 0.20,
+      'OFF50': 0.50
+    };
+
+    if (coupons[code]) {
+      activeCoupon = code;
+      const cart = getCart();
+      const subtotal = cart.reduce((acc, item) => acc + (item.preco * item.quantidade), 0);
+      discountValue = subtotal * coupons[code];
+
+      feedback.style.display = 'block';
+      feedback.className = 'small mt-1 success';
+      feedback.textContent = `Cupom ${code} aplicado! Desconto de ${window.Utils.formatCurrency(discountValue)}`;
+    } else {
+      feedback.style.display = 'block';
+      feedback.className = 'small mt-1 error';
+      feedback.textContent = 'Cupom inválido ou expirado.';
+      discountValue = 0;
+      activeCoupon = null;
+    }
+
+    updateCartBadge();
+  };
+
+  const updateCartBadge = () => {
+    const count = getItemCount();
+    const badges = document.querySelectorAll('.cart-badge');
+    badges.forEach(badge => {
+      badge.textContent = count;
+      badge.style.display = count > 0 ? 'inline-flex' : 'none';
+    });
+
+    // Atualiza resumo se estiver na página de carrinho
+    const subtotalEl = document.getElementById('subtotal');
+    const freteEl = document.getElementById('frete');
+    const totalFinalEl = document.getElementById('totalFinal');
+
+    if (subtotalEl) {
+      const cart = getCart();
+      const subtotal = cart.reduce((acc, item) => acc + (item.preco * item.quantidade), 0);
+
+      // Se houver cupom ativo, recalcula o desconto baseado no subtotal atual
+      if (activeCoupon) {
+        const coupons = { 'BEMVINDO': 0.10, 'KOKETSU20': 0.20, 'OFF50': 0.50 };
+        discountValue = subtotal * coupons[activeCoupon];
+      }
+
+      const total = subtotal + shippingValue - discountValue;
+
+      subtotalEl.textContent = window.Utils.formatCurrency(subtotal);
+      freteEl.textContent = shippingValue === 0 ? 'R$ 0,00' : window.Utils.formatCurrency(shippingValue);
+      totalFinalEl.textContent = window.Utils.formatCurrency(total);
+
+      // Adicionar linha de desconto se houver
+      let discountRow = document.getElementById('discount-row');
+      if (discountValue > 0) {
+        if (!discountRow) {
+          discountRow = document.createElement('div');
+          discountRow.id = 'discount-row';
+          discountRow.className = 'summary-row text-success small';
+          subtotalEl.parentElement.insertAdjacentElement('afterend', discountRow);
+        }
+        discountRow.innerHTML = `<span>Desconto (${activeCoupon})</span> <span>- ${window.Utils.formatCurrency(discountValue)}</span>`;
+      } else if (discountRow) {
+        discountRow.remove();
+      }
+    }
+
+    renderMiniCart();
+  };
+
+  const instance = {
+    getCart,
+    addToCart,
+    removeFromCart,
+    updateQuantity,
+    getItemCount,
+    handleCheckout,
+    calculateShipping,
+    applyCoupon
+  };
   window.CartManager = instance;
   return instance;
 })();
