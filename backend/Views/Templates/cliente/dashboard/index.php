@@ -120,8 +120,8 @@
             <h3>CONCEIRGE KOKETSU</h3>
             <p>Atendimento prioritário para membros.</p>
             <div class="support-links">
-                <a href="#" class="s-link"><i class="fab fa-whatsapp"></i> ATENDIMENTO VIA WHATSAPP</a>
-                <a href="#" class="s-link"><i class="fas fa-envelope"></i> SUPORTE VIA E-MAIL</a>
+                <a href="https://tr.ee/KpgDxrWumK" class="s-link" target="_blank"><i class="fab fa-whatsapp"></i> ATENDIMENTO VIA WHATSAPP</a>
+                <a href="mailto:sac@koketsu.com.br" class="s-link"><i class="fas fa-envelope"></i> SUPORTE VIA E-MAIL</a>
             </div>
         </div>
     </div>

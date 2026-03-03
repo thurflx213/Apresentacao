@@ -9,8 +9,9 @@
         <div class="footer-min-right">
             <span class="version-tag-min">System v2.5.0</span>
             <div class="social-min">
-                <a href="#"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://www.instagram.com/koketsu_grifeofc/" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://tr.ee/KpgDxrWumK" target="_blank"><i class="fab fa-facebook"></i></a>
+                <a href="https://tr.ee/KpgDxrWumK" target="_blank"><i class="fab fa-whatsapp"></i></a>
             </div>
         </div>
     </div>

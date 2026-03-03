@@ -146,3 +146,59 @@
     background: rgba(255, 255, 255, 0.02);
     transform: translateX(5px);
 }
+
+/* --- MOBILE REFINEMENTS --- */
+@media (max-width: 768px) {
+    .review-card-modern .row {
+        flex-direction: column !important;
+    }
+
+    .review-card-modern .col-md-4 {
+        display: block !important;
+        width: 100% !important;
+        text-align: center;
+        padding-top: 20px;
+    }
+
+    .review-img-wrapper {
+        width: 120px !important;
+        height: 120px !important;
+        border-radius: 50% !important;
+        margin: 0 auto;
+        border: 2px solid var(--gold-primary);
+        overflow: hidden;
+    }
+
+    .review-product-img {
+        width: 100% !important;
+        height: 100% !important;
+        border-radius: 50% !important;
+        object-fit: cover !important;
+        opacity: 1 !important;
+    }
+
+    .reviewer-avatar {
+        width: 60px !important;
+        height: 60px !important;
+        min-width: 60px !important;
+        max-width: 60px !important;
+        min-height: 60px !important;
+        max-height: 60px !important;
+        border-radius: 50% !important;
+        object-fit: cover !important;
+    }
+
+    .reviewer-avatar-wrapper {
+        width: 60px !important;
+        height: 60px !important;
+    }
+
+    .review-card-modern .col-md-8 {
+        text-align: center;
+        padding: 20px !important;
+    }
+
+    .reviewer-meta {
+        justify-content: center;
+    }
+}

@@ -49,9 +49,9 @@
                     <p><b>Koketsu Grife &copy; 2026. Todos os direitos reservados.</b></p>
                     <p>Você recebeu este e-mail porque se cadastrou em nossa newsletter.</p>
                     <div style="margin-top: 15px;">
-                        <a href="#" class="social-link">Instagram</a> | 
-                        <a href="#" class="social-link">Facebook</a> | 
-                        <a href="#" class="social-link">WhatsApp</a>
+                        <a href="https://www.instagram.com/koketsu_grifeofc/" class="social-link">Instagram</a> | 
+                        <a href="https://tr.ee/KpgDxrWumK" class="social-link">Facebook</a> | 
+                        <a href="https://tr.ee/KpgDxrWumK" class="social-link">WhatsApp</a>
                     </div>
                 </td>
             </tr>

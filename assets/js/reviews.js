@@ -76,10 +76,10 @@ const ReviewManager = (() => {
                 <div class="review-header d-flex justify-content-between align-items-start mb-3">
                     <div class="reviewer-info d-flex align-items-center">
                         <div class="reviewer-avatar-mini me-3">
-                            <img src="${review.foto_usuarios ? '/backend/upload/' + review.foto_usuarios : '/assets/img/manutencao.png'}" 
-                                 class="rounded-circle" 
-                                 style="width: 40px; height: 40px; object-fit: cover; border: 1px solid var(--gold-primary);"
-                                 onerror="this.onerror=null; this.src='/assets/img/manutencao.png'">
+                            ${review.foto_usuarios ? 
+                                `<img src="/backend/upload/${review.foto_usuarios}" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover; border: 1px solid var(--gold-primary);" onerror="this.parentElement.innerHTML='<div class=\'rounded-circle bg-dark d-flex align-items-center justify-content-center\' style=\'width: 40px; height: 40px; border: 1px solid var(--gold-primary);\'><i class=\'bi bi-person-fill text-secondary\'></i></div>'">` : 
+                                `<div class="rounded-circle bg-dark d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; border: 1px solid var(--gold-primary);"><i class="bi bi-person-fill text-secondary"></i></div>`
+                            }
                         </div>
                         <div>
                             <span class="reviewer-name fw-bold text-white d-block mb-1">${review.nome_cliente}</span>

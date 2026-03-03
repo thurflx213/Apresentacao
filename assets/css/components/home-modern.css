@@ -677,9 +677,9 @@
         padding-top: 60px;
     }
 
-    /* No mobile: altura fixa do slide e imagem recortada */
     .banner-hero-new .carousel-item {
-        height: 70vh;
+        height: 60vh;
+        /* Increased to show more of the image content as requested */
         min-height: 400px;
         overflow: hidden;
     }
@@ -691,21 +691,20 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
-        object-position: 65% center;
-        /* desloca para direita para mostrar o modelo */
+        object-position: center;
+        /* Centered instead of 65% to avoid weird cropping */
     }
 
-    /* Texto do banner fica na parte inferior */
     .carousel-caption-custom {
         position: absolute;
-        top: auto !important;
-        bottom: 50px;
+        top: 50% !important;
         left: 50%;
-        transform: translateX(-50%) !important;
+        transform: translate(-50%, -50%) !important;
         width: 92%;
-        text-align: left;
-        background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
-        padding: 30px 20px 10px;
+        text-align: center;
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(5px);
+        padding: 20px;
         border-radius: 12px;
     }
 
@@ -751,8 +750,19 @@
     }
 
     .benefits-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .benefit-card {
+        padding: 20px 10px;
+    }
+
+    .benefit-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+        margin-bottom: 12px;
     }
 
     .categories-grid-new {
