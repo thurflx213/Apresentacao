@@ -8,8 +8,10 @@ class NotificacaoEmail{
     }
     public function esqueciASenha(string $email, string $token): void {
         $assunto = "Redefinição de Senha";
+        $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
+        $host = $_SERVER['HTTP_HOST'] ?? 'localhost:4000';
         $mensagem = "Clique no link abaixo para redefinir sua senha: ";
-        $mensagem .= "http://localhost:4000/backend/redefinir-senha?token=" . urlencode($token);
+        $mensagem .= "{$protocol}://{$host}/backend/redefinir-senha?token=" . urlencode($token);
         $this->emailService->send($email, $assunto, $mensagem);
     }
     public function boasVindas(string $email, string $nome): void {
@@ -41,6 +43,10 @@ class NotificacaoEmail{
             }
 
             if (file_exists($templatePath)) {
+                $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
+                $host = $_SERVER['HTTP_HOST'] ?? 'localhost:4000';
+                $baseUrl = "{$protocol}://{$host}";
+
                 ob_start();
                 require $templatePath;
                 $corpo = ob_get_clean();

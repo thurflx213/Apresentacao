@@ -41,7 +41,7 @@
                         <?= nl2br($mensagem) ?>
                     </div>
                     
-                    <a href="http://localhost:4000" class="button">Ver Coleção Completa</a>
+                    <a href="<?= $baseUrl ?? 'https://koketsu.com.br' ?>" class="button">Ver Coleção Completa</a>
                 </td>
             </tr>
             <tr>

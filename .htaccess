@@ -1,0 +1,15 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Se o arquivo existir fisicamente, sirva-o (imagens, css, js, html)
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^ - [L]
+
+    # Redireciona tudo para o backend/index.php se for uma rota de sistema
+    RewriteCond %{REQUEST_URI} ^/(api|backend|admin|cliente|login|register) [NC]
+    RewriteRule ^ backend/index.php [L,QSA]
+
+    # Caso contrário, serve o index.html por padrão (Single Page Application feel)
+    RewriteRule ^ index.html [L]
+</IfModule>
