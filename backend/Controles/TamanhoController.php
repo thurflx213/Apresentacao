@@ -1,12 +1,12 @@
 <?php
-namespace App\Koketsu\controles;
+namespace App\Koketsu\Controles;
 
 use App\Koketsu\Controles\Admin\AdminController;
 use App\Koketsu\Models\Tamanho;
 use App\Koketsu\Database\Database;
 use App\Koketsu\Core\View;
 use App\Koketsu\Core\Redirect;
-use App\koketsu\Validadores\UsuarioValidador;
+use App\Koketsu\Validadores\UsuarioValidador;
 use App\Koketsu\Controles\Admin\AuthenticatedController;
 
 class TamanhoController extends AdminController {

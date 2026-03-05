@@ -1,5 +1,5 @@
 <?php
-namespace App\Koketsu\controles;
+namespace App\Koketsu\Controles;
 
 
 use App\Koketsu\Controles\Admin\AdminController;

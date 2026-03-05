@@ -1,14 +1,14 @@
 <?php
 namespace App\Koketsu\Controles; 
 
-use App\Koketsu\Database\database;
+use App\Koketsu\Database\Database;
 use App\Koketsu\Models\Usuario;
 
 class APIUsuarioController{
     private $usuarioModel;
     private $chaveAPI = "9D67A537A9329E0F1E9D088A1C991F1CC728EA87D3D154B409ED3320EA940303";
     public function __construct() {
-        $db = database::getInstance();
+        $db = Database::getInstance();
         $this->usuarioModel = new Usuario($db);
     }
 
