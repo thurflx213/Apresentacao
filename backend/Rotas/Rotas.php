@@ -36,9 +36,9 @@ class Rotas
                  "/cliente/listar/{pagina}" => "ClientesController@index",
                  "/cliente/editar/{id}" => "ClientesController@viewEditarCliente",
                  "/cliente/excluir/{id}" => "ClientesController@viewExcluirCliente",
-                 "cliente/dashboard" => "Cliente\DashboardController@index",
+                 "/cliente/dashboard" => "Cliente\DashboardController@index",
                  "/cliente/meu-perfil/{id}" => "Cliente\DashboardController@viewEditarCliente",
-                 "cliente/pedidos" => "Cliente\PedidosController@index",
+                 "/cliente/pedidos" => "Cliente\PedidosController@index",
                    // --- API REST UNIVERSAL ---
                    // Produtos
                    '/api/produtos/{id}' => 'PublicApiController@getProdutoById',
@@ -73,8 +73,8 @@ class Rotas
                    // Estoque
                    '/api/estoque' => 'PublicApiController@getEstoque',
                    '/api/estoque/{id}' => 'PublicApiController@getEstoqueById',
-                 "cliente/pedidos/detalhes/{id}" => "Cliente\PedidosController@detalhes",
-                 "cliente/avaliacoes" => "Cliente\AvaliacoesController@index",
+                 "/cliente/pedidos/detalhes/{id}" => "Cliente\PedidosController@detalhes",
+                 "/cliente/avaliacoes" => "Cliente\AvaliacoesController@index",
               // Perfil
                  "/perfis"        => "PerfilController@index",
                  "/perfil/criar"  => "PerfilController@viewCriarPerfil",
